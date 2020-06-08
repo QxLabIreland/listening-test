@@ -3,7 +3,7 @@ import {useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
-import {CardContent, TextField} from "@material-ui/core";
+import {CardContent, TextField, Typography} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,6 +11,7 @@ import FileDropZone from "../components/FileDropZone";
 import {observable} from "mobx";
 import {observer} from "mobx-react";
 import CardHeader from "@material-ui/core/CardHeader";
+import SurveySetUp from "../SurveySetUp/SurverySetUp";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -51,9 +52,7 @@ export const AudioAbView = observer(() => {
   return (
     <Grid container spacing={3} justify="center" alignItems="center">
       <Grid item xs={12}>
-        <TextField fullWidth label="Test Name" name="testName" type="text"
-                   value={id}
-                   variant="outlined"/>
+        <SurveySetUp/>
       </Grid>
       {tests.map((v, i) =>
         <Grid item xs={12} key={v.id}>
@@ -66,7 +65,7 @@ export const AudioAbView = observer(() => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <TextField fullWidth variant="standard" name={v.id + 'Question'} label="Question for this example"/>
+                  <TextField fullWidth variant="filled" name={v.id + 'Question'} label="Question for this example"/>
                 </Grid>
                 {v.files.map((f, i) =>
                   <Grid item xs={6} key={i}><FileDropZone classes={classes} file={f}/></Grid>)}

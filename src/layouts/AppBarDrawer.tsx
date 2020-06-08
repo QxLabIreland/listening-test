@@ -13,7 +13,6 @@ import SettingsPage from "../views/SettingsPage";
 import ListItemNavLink from "./components/ListItemNavLink";
 import useStyles from "./components/LayoutStyle";
 import AppBarLayout from "./components/AppBarLayout";
-import ToolBarLayout from "./components/ToolBarLayout";
 import {AudioAbView} from "../views/AudioAb/AudioAbView";
 import MushraPage from "../views/MushraPage";
 
@@ -83,7 +82,7 @@ export default function AppBarDrawer(props: any) {
         </Route>
 
         <Route path={`${path}/audio-ab/:id`}>
-          <ToolBarLayout title='An Audio Test'><AudioAbView/></ToolBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} title='An Audio Test'><AudioAbView/></AppBarLayout>
         </Route>
 
       </Switch>

@@ -15,6 +15,7 @@ import CardContent from "@material-ui/core/CardContent";
 import AudioExampleRadio from "./AudioExampleRadio";
 import CardHeader from "@material-ui/core/CardHeader";
 import {AudioModel} from "../../shared/models/AudioModel";
+import SurveyCard from "../components/SurveryCard";
 
 export default observer(function AbTaskPage() {
   const [theTest] = useState(observable({
@@ -36,7 +37,7 @@ export default observer(function AbTaskPage() {
         isPlaying: false,
         selected: false
       }] as AudioModel[]
-    },{
+    }, {
       id: 1,
       answer: null,
       audios: [{
@@ -55,11 +56,19 @@ export default observer(function AbTaskPage() {
     }]
   }));
 
+  const [survey] = useState(observable([
+    {type: 0, question: 'Text test'},
+    {type: 1, question: 'Radio test', options: ['1', '2', '3']},
+    {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
+  ]));
+
   return (
     <Grid container spacing={3} direction="column">
       <Grid item xs={12}><Typography variant="h2" gutterBottom>
-          Audio AB Test: {'example 1'}
-      </Typography></Grid>
+        Audio AB Test: {'example 1'}
+      </Typography>
+        <SurveyCard items={survey}/>
+      </Grid>
       <Grid item xs={12}>
         <Card>
           <CardHeader title="A survey before the tests"/>
@@ -73,7 +82,7 @@ export default observer(function AbTaskPage() {
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
               {ex.answer && <Icon>check</Icon>}
-              <Typography variant="h6" style={{marginLeft:8}}>Example {i+1}</Typography>
+              <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={3}>

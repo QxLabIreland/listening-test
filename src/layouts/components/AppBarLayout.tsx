@@ -5,27 +5,39 @@ import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import useStyles from "./LayoutStyle";
+import {Container} from "@material-ui/core";
+import {useHistory} from "react-router";
 
-export default function AppBarLayout (props: any) {
+export default function AppBarLayout(props: any) {
   const {handleDrawerToggle} = props;
+  const {title} = props;
+  const history = useHistory();
+
   const classes = useStyles();
 
   return (
     <React.Fragment>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle}
-                      className={classes.menuButton}>
-            <Icon>menu</Icon>
-          </IconButton>
+          {!title
+            ? <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle}
+                          className={classes.menuButton}>
+              <Icon>menu</Icon>
+            </IconButton>
+            : <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={() => history.goBack()}>
+              <Icon>arrow_back</Icon>
+            </IconButton>
+          }
           <Typography variant="h6" noWrap>
-            Responsive drawer
+            {title ? title : 'Listening Test'}
           </Typography>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
         <div className={classes.toolbar}/>
-        {props.children}
+        <Container maxWidth="md">
+          {props.children}
+        </Container>
       </main>
     </React.Fragment>
   )

@@ -32,7 +32,7 @@ export default makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      paddingTop: theme.spacing(2),
     },
     active: {
       color: theme.palette.primary.main,
