@@ -10,21 +10,24 @@ import {observable} from "mobx";
 
 export default observer(function SurveySetUp(props) {
   // Create an array for survey
-  const [items] = useState(observable([
-    {type: 0, question: 'Text test'},
-    {type: 1, question: 'Radio test', options: ['1', '2', '3']},
-    {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
-  ] as SurveyControlModel[]));
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const {items} = props;
+  // const [items] = useState(observable([
+  //   {type: 0, question: 'Text test'},
+  //   {type: 1, question: 'Radio test', options: ['1', '2', '3']},
+  //   {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
+  // ] as SurveyControlModel[]));
 
+  // When menu clicked
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleAdd = (type: SurveyControlType) => {
+    // Check controls types
     if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
-      items.push({type: type, question: 'Your question', options: ['Add your options!']});
-    else items.push({type: type, question: 'Your question'});
+      items.push({type: type, question: 'Untitled question', options: ['Add your options!']});
+    else items.push({type: type, question: 'Untitled question'});
     // Close the adding menu
     setAnchorEl(null);
   }

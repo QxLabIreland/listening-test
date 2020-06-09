@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useRef} from "react";
 import {Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {observer} from "mobx-react";
-import {AudioModel} from "../../shared/models/AudioModel";
+import {AudioFileModel} from "../../shared/models/AudioFileModel";
 
-export default observer(function FileDropZone(props: {file: AudioModel, classes: any}) {
+export default observer(function FileDropZone(props: {file: AudioFileModel, classes: any, label?: string}) {
   const {file, classes} = props;
+  let {label} = props
+  const fileRef = useRef<HTMLInputElement>();
+
+  if (!label) label = 'Click to choose or Drop a file';
 
   function handleFileDrop(event: any) {
     event.preventDefault();
@@ -17,7 +21,7 @@ export default observer(function FileDropZone(props: {file: AudioModel, classes:
     //todo File upload handle
     file.filename = files[0].name;
     // Clear file input
-    file.ref.current.value = null;
+    fileRef.current.value = null;
   }
 
   function stopDefault(event: any) {
@@ -27,12 +31,12 @@ export default observer(function FileDropZone(props: {file: AudioModel, classes:
 
   return (
     <React.Fragment>
-      <input type="file" ref={file.ref} onChange={handleFileDrop} hidden={true}/>
-      <div className={classes.paper} onClick={() => file.ref.current.click()}
+      <input type="file" ref={fileRef} onChange={handleFileDrop} hidden={true}/>
+      <div className={classes.paper} onClick={() => fileRef.current.click()}
            onDragOver={stopDefault}
            onDrop={handleFileDrop}>
         {file.filename ? <Typography>{file.filename}</Typography>
-          : <Typography>Click to choose a file or Drag and drop a file</Typography>}
+          : <Typography>{label}</Typography>}
         <Icon>file_copy</Icon>
       </div>
     </React.Fragment>

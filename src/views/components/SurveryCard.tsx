@@ -34,19 +34,13 @@ export default observer(function SurveyCard(props) {
     }
   }
 
-  return <Card>
-    <CardHeader title="AB test Survey"/>
-    <CardContent>
-      <Grid container spacing={3}>
-        {items.map((c, i) =>
-          <Grid item xs={12} key={i}>
-            {renderControl(c)}
-          </Grid>
-        )}
+  return <Grid container spacing={3}>
+    {items.map((c, i) =>
+      <Grid item xs={12} key={i}>
+        {renderControl(c)}
       </Grid>
-    </CardContent>
-  </Card>
-
+    )}
+  </Grid>
 })
 
 const SurveyRadio = observer((props: { control: SurveyControlModel }) => {
