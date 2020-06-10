@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -7,15 +7,14 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import AudioController from "../components/AudioController";
+import SurveyAudioController from "../components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import AudioExampleRadio from "./AudioExampleRadio";
 import CardHeader from "@material-ui/core/CardHeader";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import SurveyCard from "../components/SurveryCard";
+import SurveyCardView from "../components/SurveyCardView";
 import {CardActions} from "@material-ui/core";
 
 export default observer(function AbTaskPage() {
@@ -29,37 +28,51 @@ export default observer(function AbTaskPage() {
     examples: [{
       id: 0,
       answer: null,
-      audios: [{
+      audioA:{
+        id: 1,
         filename: 'audio-a',
         src: '/test/A Himitsu - Lost Within.mp3',
         isPlaying: false,
         selected: false
-      }, {
+      },
+      audioB:{
+        id: 2,
         filename: 'audio-b',
         src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
         isPlaying: false,
         selected: false
-      }] as AudioFileModel[]
+      },
+      audioRef: null
     }, {
       id: 1,
       answer: null,
-      audios: [{
+      audioA:{
+        id: 1,
         filename: 'audio-a',
         src: '/test/A Himitsu - Lost Within.mp3',
         isPlaying: false,
         selected: false
-      }, {
+      },
+      audioB:{
+        id: 2,
         filename: 'audio-b',
         src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
         isPlaying: false,
         selected: false
-      }] as AudioFileModel[]
+      },
+      audioRef:{
+        id: 3,
+        filename: 'audio-b',
+        src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
+        isPlaying: false,
+        selected: false
+      }
     }]
   }));
 
   const [openedPanel, setOpenedPanel] = useState(null);
 
-  function handlePanelChange(e, v, index) {
+  function handlePanelChange(v, index) {
     if (v) setOpenedPanel(index);
     else setOpenedPanel(null);
   }
@@ -76,7 +89,7 @@ export default observer(function AbTaskPage() {
         <Card>
           <CardHeader title="AB test Survey"/>
           <CardContent>
-            <SurveyCard items={theTest.survey}/>
+            <SurveyCardView items={theTest.survey}/>
           </CardContent>
           <CardActions style={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button color="primary" onClick={() => setOpenedPanel(0)}>Goto Example</Button>
@@ -85,21 +98,21 @@ export default observer(function AbTaskPage() {
       </Grid>
       {theTest.examples.map((ex, i) =>
         <Grid item xs={12} key={ex.id}>
-          <ExpansionPanel expanded={openedPanel === i} onChange={(e, v) => handlePanelChange(e, v, i)}>
+          <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
               {ex.answer && <Icon>check</Icon>}
               <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={3}>
-                <AudioController audios={ex.audios}/>
+                <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
                 <AudioExampleRadio example={ex}/>
               </Grid>
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
               {i !== theTest.examples.length - 1 &&
               <Button size="small" color="primary"
-                      onClick={(e) => handlePanelChange(e, true, i + 1)}>Next Example</Button>}
+                      onClick={() => handlePanelChange(true, i + 1)}>Next Example</Button>}
             </ExpansionPanelActions>
           </ExpansionPanel>
         </Grid>

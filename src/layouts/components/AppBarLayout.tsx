@@ -4,9 +4,31 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import useStyles from "./LayoutStyle";
 import {Container} from "@material-ui/core";
 import {useHistory} from "react-router";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
+export const drawerWidth = 240;
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    paddingTop: theme.spacing(2)
+  }
+}));
 
 export default function AppBarLayout(props: any) {
   const {handleDrawerToggle} = props;
@@ -29,7 +51,7 @@ export default function AppBarLayout(props: any) {
             </IconButton>
           }
           <Typography variant="h6" noWrap>
-            {title ? title : 'Listening Test'}
+            {title ? title : 'Listening Tests Dashboard'}
           </Typography>
         </Toolbar>
       </AppBar>

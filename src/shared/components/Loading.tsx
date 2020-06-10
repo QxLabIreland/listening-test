@@ -7,7 +7,7 @@ export default class Loading extends React.Component<{error?: boolean, message?:
     const error = <React.Fragment>
       <Icon fontSize="large">error</Icon>
       <Typography style={{marginLeft: 16,}}>
-        {this.props['message'] ? this.props['message'] : 'Something bad happened'}
+        {this.props['message'] ? this.props['message'] : 'Something bad happened. Please try again'}
       </Typography>
     </React.Fragment>
 

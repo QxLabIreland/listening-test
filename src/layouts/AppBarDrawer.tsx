@@ -4,17 +4,32 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
-import {useTheme} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
 import Loading from "../shared/components/Loading";
 import AudioAbList from "../views/AudioAb/AudioAbList";
 import DashboardPage from "../views/DashboardPage";
 import SettingsPage from "../views/SettingsPage";
 import ListItemNavLink from "./components/ListItemNavLink";
-import useStyles from "./components/LayoutStyle";
-import AppBarLayout from "./components/AppBarLayout";
-import {AudioAbView} from "../views/AudioAb/AudioAbView";
+import AppBarLayout, {drawerWidth} from "./components/AppBarLayout";
+import AudioAbDetail from "../views/AudioAb/AudioAbDetail";
 import MushraPage from "../views/MushraPage";
+import TestResponsePage from "../views/TestResponses/TestResponsePage";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  }
+}));
 
 export default function AppBarDrawer(props: any) {
   let {path} = useRouteMatch();
@@ -28,16 +43,16 @@ export default function AppBarDrawer(props: any) {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <List>
-      <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
-      <ListItemNavLink to={`${path}/audio-ab`} icon='headset'>Audio AB Test</ListItemNavLink>
-      <ListItemNavLink to={`${path}/mushra`} icon='headset'>MUSHRA Test</ListItemNavLink>
-      <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
-      <Divider/>
-      <ListItemNavLink to='/' icon='exit_to_app'>Sign out</ListItemNavLink>
-    </List>
-  );
+  const drawer = <List>
+    <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
+    <ListItemNavLink to={`${path}/test-responses`} icon='assignment'>Test Responses</ListItemNavLink>
+    <Divider/>
+    <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
+    <Divider/>
+    <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
+    <ListItemNavLink to='/' icon='exit_to_app'>Sign out</ListItemNavLink>
+  </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -61,28 +76,25 @@ export default function AppBarDrawer(props: any) {
         <Redirect exact from={`${path}`} to={`${path}/dashboard`}/>
         {/*Navigation page*/}
         <Route exact path={`${path}/dashboard`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <DashboardPage/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><DashboardPage/></AppBarLayout>
         </Route>
-        <Route exact path={`${path}/audio-ab`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <AudioAbList/>
-          </AppBarLayout>
+        <Route exact path={`${path}/test-responses`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><TestResponsePage/></AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/ab-test`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbList/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <MushraPage/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><MushraPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <SettingsPage/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><SettingsPage/></AppBarLayout>
         </Route>
 
-        <Route path={`${path}/audio-ab/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} title='An Audio Test'><AudioAbView/></AppBarLayout>
+        <Route path={`${path}/ab-test/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} title='An AB Test'>
+            <AudioAbDetail/>
+          </AppBarLayout>
         </Route>
 
       </Switch>

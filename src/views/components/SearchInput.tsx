@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {Paper, Input, Icon, Theme, createStyles, makeStyles} from '@material-ui/core';
-import {observer} from "mobx-react";
+import {createStyles, Icon, Input, makeStyles, Paper, Theme} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default observer(function SearchInput(props) {
+export default function (props) {
   const { className, onChange, style, ...rest } = props;
 
   const classes = useStyles();
@@ -38,4 +37,4 @@ export default observer(function SearchInput(props) {
       />
     </Paper>
   );
-});
+};

@@ -10,7 +10,8 @@ import React from "react";
 
 export default observer(function (props: any) {
   const {example} = props;
-  function handleSelectChange(event: any, example: any) {
+
+  const handleSelectChange =  (event: any, example: any) => {
     example.answer = event.target.value;
   }
   return (
@@ -21,10 +22,8 @@ export default observer(function (props: any) {
         </FormLabel>
         <RadioGroup row aria-label="select better one" name="selectAudio" value={example.answer}
                     onChange={(e) => handleSelectChange(e, example)}>
-          {example.audios.map((v: any, i: any) =>
-            <FormControlLabel key={v.filename} value={v.filename} control={<Radio/>}
-                              label={'Audio' + (i + 1)}/>
-          )}
+          <FormControlLabel value={example.audioA.filename} control={<Radio/>} label="Audio A"/>
+          <FormControlLabel value={example.audioB.filename} control={<Radio/>} label="Audio B"/>
           <FormControlLabel value="*" control={<Radio/>} label="They are the same"/>
         </RadioGroup>
       </FormControl>

@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   main: {
     marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
+    color: 'white'
   },
   footer: {
     padding: theme.spacing(3, 2),
@@ -24,13 +25,19 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
   },
+  background: {
+    backgroundImage: 'url(/images/wolfgang-hasselmann-hym0ngq6IbY-unsplash.jpg)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    overflow: 'auto'
+  }
 }));
 
 export default function Home() {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
+    <div className={classes.background}>
       <CssBaseline />
       <Container component="main" className={classes.main} maxWidth="sm">
         <Typography variant="h2" component="h1" gutterBottom>
@@ -41,6 +48,7 @@ export default function Home() {
           {'The footer will move as the main element of the page grows.'}
         </Typography>
         <Typography variant="body1">Sticky footer placeholder.</Typography>
+        <Typography variant="body2"><small>Photo by Wolfgang Hasselmann on Unsplash</small></Typography>
       </Container>
       <footer className={classes.footer}>
         <Container maxWidth="sm">
@@ -48,6 +56,6 @@ export default function Home() {
           <Copyright />
         </Container>
       </footer>
-    </React.Fragment>
+    </div>
   );
 }

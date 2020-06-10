@@ -13,7 +13,7 @@ export default function TaskContainer() {
       <Container maxWidth="md">
         <Suspense fallback={<Loading/>}>
           <Switch>
-            <Route exact path={`${path}/audio-ab/:id`} component={AbSurveyPage}/>
+            <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
           </Switch>
         </Suspense>
       </Container>
