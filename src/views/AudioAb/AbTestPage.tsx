@@ -82,12 +82,12 @@ export default function AbTestPage () {
   )
 }
 
-function useAjaxGetAll<T>(url: string) {
+function useAjaxGetAll<T extends any[]>(url: string) {
   const [data, setData] = useState<T>(null);
   const [error, setError] = useState(undefined);
 
   useEffect(() => {
-    Axios.get<T>(url)
+    Axios.get<T>(url, {withCredentials: true})
       .then((res) => setData(res.data), (reason) => setError(reason));
   }, [url])
 

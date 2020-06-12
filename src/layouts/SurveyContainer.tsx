@@ -4,6 +4,7 @@ import Container from "@material-ui/core/Container";
 import Loading from "../shared/components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {AbSurveyPage} from "../views/AbTask/AbSurveyPage";
+import {Redirect} from "react-router-dom";
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
@@ -14,6 +15,7 @@ export default function SurveyContainer() {
         <Suspense fallback={<Loading/>}>
           <Switch>
             <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
+            <Redirect to="/not-found" />
           </Switch>
         </Suspense>
       </Container>

@@ -1,19 +1,24 @@
 import React from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Checkbox, FormHelperText, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useStyles} from "./SignInUpStyles";
 import {useFormik} from "formik";
 import {email, maxLength, minLength, mustBeTrue, pipeValidator, required} from "../../shared/FormikValidator";
+import Axios from "axios";
 
 export default function SignUp() {
   const classes = useStyles();
+  const history = useHistory();
   const formik = useFormik({
-    initialValues: {yourName: '', email: '', password: '', policy: false},
+    initialValues: {name: '', email: '', password: '', policy: false},
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      Axios.post('/api/sign_up', values).then(() => history.push('/user'), (reason) => {
+        console.log(reason.response)
+        alert(reason.response.statusText)
+      })
     },
     validate: pipeValidator({
-      yourName: [required(), maxLength(128)],
+      name: [required(), maxLength(128)],
       email: [email(), required()],
       password: [required(), minLength(6)],
       policy: [mustBeTrue()],
@@ -43,8 +48,8 @@ export default function SignUp() {
                 <Typography color="textSecondary" gutterBottom className={classes.suggestion}>
                   Use your email to create new account
                 </Typography>
-                <TextField className={classes.textField} error={!!formik.errors.yourName} fullWidth
-                           helperText={formik.errors.yourName} label="Your Name" name="yourName"
+                <TextField className={classes.textField} error={!!formik.errors.name} fullWidth
+                           helperText={formik.errors.name} label="Your Name" name="name"
                            onChange={formik.handleChange} type="text" variant="outlined"/>
 
                 <TextField className={classes.textField} error={!!formik.errors.email} fullWidth

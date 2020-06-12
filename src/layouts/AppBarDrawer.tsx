@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react'; // {lazy,
+import React, {Suspense, useState} from 'react'; // {lazy,
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,7 +7,6 @@ import List from '@material-ui/core/List';
 import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
 import Loading from "../shared/components/Loading";
-import AudioAbList from "../views/AudioAb/AudioAbList";
 import DashboardPage from "../views/DashboardPage";
 import SettingsPage from "../views/SettingsPage";
 import ListItemNavLink from "./components/ListItemNavLink";
@@ -16,6 +15,7 @@ import {AudioAbDetail} from "../views/AudioAb/AudioAbDetail";
 import MushraPage from "../views/MushraPage";
 import TestResponsePage from "../views/TestResponses/TestResponsePage";
 import AbTestPage from "../views/AudioAb/AbTestPage";
+import { AppBarTitleContext } from '../shared/ReactContexts';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -39,6 +39,7 @@ export default function AppBarDrawer(props: any) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [newTitle, setNewTitle] = useState<string>();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -52,7 +53,7 @@ export default function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
-    <ListItemNavLink to='/' icon='exit_to_app'>Sign out</ListItemNavLink>
+    <ListItemNavLink to='/sign-in' icon='exit_to_app'>Sign out</ListItemNavLink>
   </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -91,12 +92,14 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><SettingsPage/></AppBarLayout>
         </Route>
-
-        <Route exact path={`${path}/ab-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} title='An AB Test'>
-            <AudioAbDetail/>
-          </AppBarLayout>
-        </Route>
+        {/*Detail with back arrow button. Aka: no navigation page*/}
+        <AppBarTitleContext.Provider value={{title: newTitle, setTitle: title => setNewTitle(title)}}>
+          <Route exact path={`${path}/ab-test/:id`}>
+            <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbDetail/></AppBarLayout>
+          </Route>
+          {/*Context make this not working*/}
+          <Redirect to="/not-found" />
+        </AppBarTitleContext.Provider>
 
       </Switch>
     </Suspense>

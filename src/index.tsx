@@ -8,9 +8,12 @@ import Loading from "./shared/components/Loading";
 import PublicMain from "./layouts/PublicMain";
 import AppBarDrawer from "./layouts/AppBarDrawer";
 import SurveyContainer from "./layouts/SurveyContainer";
+import XsrfAuth from "./shared/components/XsrfAuth";
+import NotFoundView from "./layouts/NotFoundView";
 
 ReactDOM.render(
   <React.StrictMode>
+    <XsrfAuth/>
     <BrowserRouter>
       <Suspense fallback={<Loading/>}>
         <Switch>
@@ -18,6 +21,7 @@ ReactDOM.render(
           {/*Dashboard administration pages*/}
           <Route path="/user" component={AppBarDrawer}/>
           {/*Outside pages*/}
+          <Route path="/not-found" component={NotFoundView}/>
           <Route path="/" component={PublicMain}/>
         </Switch>
       </Suspense>

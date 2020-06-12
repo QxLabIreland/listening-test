@@ -1,9 +1,14 @@
 ## Dependencies
 
-npm install --save react-router-dom @material-ui/core @material-ui/icons mobx mobx-react
-
+npm install --save react-router-dom @material-ui/core mobx mobx-react
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Some Rules
+
+- Database (MongoDB) and React.js are using `camelCase naming`.
+For Python script, variables are wrote in the `snake_case naming` style,
+and you can find that back-end api urls are using `snake_case naming`.
 
 ## Available Scripts
 

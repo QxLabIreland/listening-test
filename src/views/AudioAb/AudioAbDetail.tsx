@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -15,6 +15,7 @@ import {SurveySetUpView} from "../components/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
+import {AppBarTitleContext} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -30,15 +31,17 @@ export const AudioAbDetail = observer(function () {
   const classes = useStyles();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
+  const {setTitle} = useContext(AppBarTitleContext);
 
   useEffect(() => {
+    setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
     // If it is edit page, get data from back end
     if (+id !== 0) Axios.get<AbTestModel>('/api/user/ab-test', {params: {id: id}})
       .then((res) => setTests(observable(res.data)),
         () => setIsError(true));
     // If in creation page
     else setTests(observable({id: 0, name: '', examples: [], survey: []}));
-  }, [id]);
+  }, [setTitle, id]);
 
   function addExample() {
     tests.examples.push({
@@ -96,3 +99,15 @@ export const AudioAbDetail = observer(function () {
     </Grid>
   )
 })
+
+function useAjaxGet<T>(url: string, id: string) {
+  const [data, setData] = useState<T>(null);
+  const [error, setError] = useState(undefined);
+
+  useEffect(() => {
+    Axios.get<T>(url, {withCredentials: true, params: {id}})
+      .then((res) => setData(res.data), (reason) => setError(reason));
+  }, [url, id])
+
+  return {data, error}
+}

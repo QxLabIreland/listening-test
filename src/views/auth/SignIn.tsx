@@ -4,6 +4,7 @@ import {Button, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useStyles} from "./SignInUpStyles";
 import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
+import Axios from "axios";
 
 export default function SignIn() {
   const classes = useStyles();
@@ -12,8 +13,13 @@ export default function SignIn() {
   const formik = useFormik({
     initialValues: {email: '', password: ''},
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-      history.push('/user')
+      Axios.post('/api/login', values, {withCredentials: true}).then(() => {
+        history.push('/user');
+      }, (reason) => {
+        console.log(reason.response)
+        alert(reason.response.statusText)
+      })
+
     },
     validate: pipeValidator({
       password: [required(), minLength(6)],
