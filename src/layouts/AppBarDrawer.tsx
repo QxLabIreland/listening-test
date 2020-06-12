@@ -15,6 +15,7 @@ import AppBarLayout, {drawerWidth} from "./components/AppBarLayout";
 import AudioAbDetail from "../views/AudioAb/AudioAbDetail";
 import MushraPage from "../views/MushraPage";
 import TestResponsePage from "../views/TestResponses/TestResponsePage";
+import AbTestPage from "../views/AudioAb/AbTestPage";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export default function AppBarDrawer(props: any) {
-  let {path} = useRouteMatch();
+  const {path} = useRouteMatch();
 
   const {window} = props;
   const classes = useStyles();
@@ -45,7 +46,7 @@ export default function AppBarDrawer(props: any) {
 
   const drawer = <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
-    <ListItemNavLink to={`${path}/test-responses`} icon='assignment'>Test Responses</ListItemNavLink>
+    <ListItemNavLink to={`${path}/responses`} icon='assignment'>Test Responses</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
@@ -78,11 +79,11 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/dashboard`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><DashboardPage/></AppBarLayout>
         </Route>
-        <Route exact path={`${path}/test-responses`}>
+        <Route path={`${path}/responses`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><TestResponsePage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbList/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><MushraPage/></AppBarLayout>
@@ -91,7 +92,7 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><SettingsPage/></AppBarLayout>
         </Route>
 
-        <Route path={`${path}/ab-test/:id`}>
+        <Route exact path={`${path}/ab-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} title='An AB Test'>
             <AudioAbDetail/>
           </AppBarLayout>

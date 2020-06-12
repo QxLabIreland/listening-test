@@ -1,18 +1,19 @@
 import React from "react";
 import {CircularProgress, Icon, Typography} from "@material-ui/core";
 
-export default class Loading extends React.Component<{error?: boolean, message?: string}>{
+export default class Loading extends React.Component<{ error?: boolean, message?: string}> {
   render() {
+    const {error, message} = this.props;
 
-    const error = <React.Fragment>
+    const errorNode = <React.Fragment>
       <Icon fontSize="large">error</Icon>
       <Typography style={{marginLeft: 16,}}>
-        {this.props['message'] ? this.props['message'] : 'Something bad happened. Please try again'}
+        {`Something bad happened. ${message ? message : ''}. Please try again`}
       </Typography>
     </React.Fragment>
 
-    const loading = <React.Fragment>
-      <CircularProgress />
+    const loadingNode = <React.Fragment>
+      <CircularProgress/>
       <Typography style={{
         marginLeft: 16,
       }}>Loading...</Typography>
@@ -27,7 +28,7 @@ export default class Loading extends React.Component<{error?: boolean, message?:
         alignItems: 'center',
         margin: '0 auto'
       }}>
-        {this.props['error'] ? error : loading}
+        {error ? errorNode : loadingNode}
       </div>
     );
   }

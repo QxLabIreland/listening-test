@@ -5,7 +5,7 @@ import Loading from "../shared/components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import AbSurveyPage from "../views/AbTask/AbSurveyPage";
 
-export default function TaskContainer() {
+export default function SurveyContainer() {
   const {path} = useRouteMatch();
   return (
     <React.Fragment>

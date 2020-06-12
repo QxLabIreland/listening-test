@@ -2,11 +2,10 @@ import React from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useStyles} from "./SignInUpStyles";
-import {observer} from "mobx-react";
 import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
 
-export default observer(function SignIn() {
+export default function SignIn() {
   const classes = useStyles();
   const history = useHistory();
 
@@ -86,4 +85,4 @@ export default observer(function SignIn() {
       </Grid>
     </div>
   );
-})
+}

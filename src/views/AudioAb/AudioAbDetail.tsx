@@ -15,7 +15,6 @@ import SurveySetUpView from "../components/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
-import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default observer(function () {
+export default observer(function AudioAbDetail () {
   const {id} = useParams();
   const classes = useStyles();
   const [tests, setTests] = useState<AbTestModel>(null);
@@ -36,9 +35,9 @@ export default observer(function () {
     // If it is edit page, get data from back end
     if (+id !== 0) Axios.get<AbTestModel>('/api/user/ab-test', {params: {id: id}})
       .then((res) => setTests(observable(res.data)),
-          () => setIsError(true));
+        () => setIsError(true));
     // If in creation page
-    else setTests(observable({id: 0, examples: [], survey: []}));
+    else setTests(observable({id: 0, name: '', examples: [], survey: []}));
   }, [id]);
 
   function addExample() {
@@ -56,13 +55,15 @@ export default observer(function () {
 
   return (
     <Grid container spacing={3} justify="center" alignItems="center">
-      <Grid item xs={12} style={{display: 'flex'}}>
-        <span style={{flexGrow: 1}}/>
-        <Button color="primary" variant="contained">
-          Submit
-        </Button>
-      </Grid>
       {tests ? <React.Fragment>
+        <Grid item xs={12} style={{display: 'flex'}}>
+          <span style={{flexGrow: 1}}/>
+          <Button color="primary" variant="contained">Submit</Button>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
+                     label="Test Name" fullWidth/>
+        </Grid>
         <Grid item xs={12}>
           <SurveySetUpView items={tests.survey}/>
         </Grid>
@@ -79,9 +80,9 @@ export default observer(function () {
                   <Grid item xs={12}>
                     <TextField fullWidth variant="filled" name={v.id + 'Question'} label="Question for this example"/>
                   </Grid>
-                  <Grid item xs={12} md={5} key={i}><FileDropZone classes={classes} file={v.audioA}/></Grid>
-                  <Grid item xs={12} md={5} key={i}><FileDropZone classes={classes} file={v.audioB}/></Grid>
-                  <Grid item xs={12} md={2} key={i}><FileDropZone classes={classes} file={v.audioRef}
+                  <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioA}/></Grid>
+                  <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioB}/></Grid>
+                  <Grid item xs={12} md={2}><FileDropZone classes={classes} file={v.audioRef}
                                                                   label="Reference"/></Grid>
                 </Grid>
               </CardContent>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -26,7 +26,7 @@ export default observer(function AbTaskPage() {
       {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
     ],
     examples: [{
-      id: 0,
+      id: 1,
       answer: null,
       audioA:{
         id: 1,
@@ -44,7 +44,7 @@ export default observer(function AbTaskPage() {
       },
       audioRef: null
     }, {
-      id: 1,
+      id: 2,
       answer: null,
       audioA:{
         id: 1,
@@ -71,6 +71,10 @@ export default observer(function AbTaskPage() {
   }));
 
   const [openedPanel, setOpenedPanel] = useState(null);
+
+  useEffect(() => {
+
+  }, [])
 
   function handlePanelChange(v, index) {
     if (v) setOpenedPanel(index);
@@ -105,6 +109,7 @@ export default observer(function AbTaskPage() {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={3}>
+                {/*TODO Expose the pause*/}
                 <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
                 <AudioExampleRadio example={ex}/>
               </Grid>

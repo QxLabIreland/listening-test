@@ -13,21 +13,24 @@ export default observer(function (props: { audios: AudioFileModel[], audioRef: A
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
   const refAudioRef = useRef<HTMLAudioElement>();
 
+  // Include the reference audio for player controller, make sure they work in the same way
+  const includeAudioRef = () => {
+    return {allAudio: audioRef ? [...audios, audioRef] : audios, allRefs: audioRef ? [...refs, refAudioRef] : refs}
+  }
+
   function handlePause() {
-    audios.forEach((a, i) => {
+    // Deconstruction for all including reference audio
+    const {allAudio, allRefs} = includeAudioRef();
+    allAudio.forEach((a, i) => {
       a.isPlaying = false;
-      refs[i].current.pause();
+      allRefs[i].current.pause();
     });
-    if (audioRef) {
-      audioRef.isPlaying = false;
-      refAudioRef.current.pause();
-    }
   }
 
   function dragSlider(event, newValue) {
+    const {allRefs} = includeAudioRef();
     // Set all audios time
-    refs.forEach(r => r.current.currentTime = newValue ? newValue : 0);
-    if (audioRef) refAudioRef.current.currentTime = newValue ? newValue : 0;
+    allRefs.forEach(r => r.current.currentTime = newValue ? newValue : 0);
   }
 
   function handleTimeUpdate() {
@@ -35,18 +38,14 @@ export default observer(function (props: { audios: AudioFileModel[], audioRef: A
   }
 
   function handlePlay(v) {
-    audios.forEach((a, i) => {
+    const {allAudio, allRefs} = includeAudioRef();
+    allAudio.forEach((a, i) => {
       // Adjust properties
       a.isPlaying = a === v;
-      refs[i].current.volume = a === v ? 1 : 0;
+      allRefs[i].current.volume = a === v ? 1 : 0;
       // Play after
-      refs[i].current.play().then();
+      allRefs[i].current.play().then();
     });
-    if (audioRef) {
-      audioRef.isPlaying = audioRef === v;
-      refAudioRef.current.volume = audioRef === v ? 1 : 0;
-      refAudioRef.current.play().then();
-    }
   }
 
   function handleSliderLabelFormat(num) {

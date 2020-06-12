@@ -68,7 +68,7 @@ export function pipeValidator(fields: Field) {
       if (!fields.hasOwnProperty(key)) continue;
       // For each operation
       for (const o of fields[key]) {
-        // If an operation is fail
+        // If an operation is fail, aka. the result of o() is true
         if (o(values[key], errors, key)) break;
       }
     }

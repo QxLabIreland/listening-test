@@ -10,7 +10,7 @@ import SignIn from "../views/auth/SignIn";
 import SignUp from "../views/auth/SingUp";
 import Loading from "../shared/components/Loading";
 
-export default class MainLayout extends React.Component {
+export default class PublicMain extends React.Component {
   render() {
     return (
       <Suspense fallback={<Loading/>}>
@@ -24,8 +24,8 @@ export default class MainLayout extends React.Component {
         </AppBar>
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/sign-in" component={SignIn}/>
-          <Route path="/sign-up" component={SignUp}/>
+          <Route exact path="/sign-in" component={SignIn}/>
+          <Route exact path="/sign-up" component={SignUp}/>
         </Switch>
       </Suspense>
     );

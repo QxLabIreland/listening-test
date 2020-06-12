@@ -6,6 +6,8 @@ export interface AbTestModel {
   user_id?: number;
   survey: SurveyControlModel[] | string;
   examples: AudioExample[];
+  createdAt?: Date;
+  name: string;
 }
 
 interface AudioExample {

@@ -17,19 +17,11 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
-  root: {},
   content: {
     padding: 0
   },
   inner: {
     minWidth: 1050
-  },
-  nameContainer: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  avatar: {
-    marginRight: theme.spacing(2)
   },
   actions: {
     justifyContent: 'flex-end'
@@ -69,66 +61,39 @@ export default function () {
   };
 
   return (
-    <Card
-      className={classes.root}
-    >
+    <Card>
       <CardContent className={classes.content}>
         <div className={classes.inner}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={responses.every(value => value.selected)}
-                    color="primary"
-                    indeterminate={responses.some(value => value.selected)}
-                    onChange={handleSelectAll}
-                  />
+                  <Checkbox checked={responses.every(value => value.selected)} color="primary"
+                            indeterminate={responses.some(value => value.selected)} onChange={handleSelectAll}/>
                 </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Test</TableCell>
                 <TableCell>Registration date</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {responses.slice(0, rowsPerPage).map(user => (
-                <TableRow
-                  hover
-                  key={user.id}
-                  selected={user.selected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox checked={user.selected}
-                              color="primary"
-                              onChange={event => handleSelectOne(event,user)}
-                              value="true"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    {user.name}
-                  </TableCell>
-                  <TableCell>
-                    <Link to="ab-test">{user.testRef}</Link>
-                  </TableCell>
-                  <TableCell>
-                    {user.createdAt}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            <TableBody>{responses.slice(0, rowsPerPage).map(user => (
+              <TableRow hover key={user.id} selected={user.selected}>
+                <TableCell padding="checkbox">
+                  <Checkbox checked={user.selected} color="primary" onChange={event => handleSelectOne(event, user)}
+                            value="true"/>
+                </TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell><Link to="ab-test">{user.testRef}</Link></TableCell>
+                <TableCell>{user.createdAt}</TableCell>
+              </TableRow>
+            ))}</TableBody>
           </Table>
         </div>
       </CardContent>
       <CardActions className={classes.actions}>
-        <TablePagination
-          component="div"
-          count={responses.length}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
+        <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
+                         onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
+                         rowsPerPageOptions={[5, 10, 25]}/>
       </CardActions>
     </Card>
   );
