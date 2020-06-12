@@ -7,11 +7,11 @@ import {CardContent, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import FileDropZone from "../components/FileDropZone";
+import {FileDropZone} from "../components/FileDropZone";
 import {observable} from "mobx";
 import {observer} from "mobx-react";
 import CardHeader from "@material-ui/core/CardHeader";
-import SurveySetUpView from "../components/SurveySetUpView";
+import {SurveySetUpView} from "../components/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default observer(function AudioAbDetail () {
+export const AudioAbDetail = observer(function () {
   const {id} = useParams();
   const classes = useStyles();
   const [tests, setTests] = useState<AbTestModel>(null);

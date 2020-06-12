@@ -8,7 +8,7 @@ import Radio from "@material-ui/core/Radio";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 
-export default observer(function (props: any) {
+export const SurveyExampleRadio = observer(function (props: any) {
   const {example} = props;
 
   const handleSelectChange =  (event: any, example: any) => {

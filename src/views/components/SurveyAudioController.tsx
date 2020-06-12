@@ -6,7 +6,7 @@ import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 
-export default observer(function (props: { audios: AudioFileModel[], audioRef: AudioFileModel }) {
+export const SurveyAudioController = observer(function (props: { audios: AudioFileModel[], audioRef: AudioFileModel }) {
   const {audios, audioRef} = props;
 
   const [currentTime, setCurrentTime] = useState(0);
@@ -18,7 +18,7 @@ export default observer(function (props: { audios: AudioFileModel[], audioRef: A
     return {allAudio: audioRef ? [...audios, audioRef] : audios, allRefs: audioRef ? [...refs, refAudioRef] : refs}
   }
 
-  function handlePause() {
+  const handlePause = () => {
     // Deconstruction for all including reference audio
     const {allAudio, allRefs} = includeAudioRef();
     allAudio.forEach((a, i) => {
@@ -27,17 +27,17 @@ export default observer(function (props: { audios: AudioFileModel[], audioRef: A
     });
   }
 
-  function dragSlider(event, newValue) {
+  const dragSlider = (event, newValue) => {
     const {allRefs} = includeAudioRef();
     // Set all audios time
     allRefs.forEach(r => r.current.currentTime = newValue ? newValue : 0);
   }
 
-  function handleTimeUpdate() {
+  const handleTimeUpdate = () => {
     setCurrentTime(refs[0].current.currentTime);
   }
 
-  function handlePlay(v) {
+  const handlePlay = (v) => {
     const {allAudio, allRefs} = includeAudioRef();
     allAudio.forEach((a, i) => {
       // Adjust properties
@@ -48,7 +48,7 @@ export default observer(function (props: { audios: AudioFileModel[], audioRef: A
     });
   }
 
-  function handleSliderLabelFormat(num) {
+  const handleSliderLabelFormat = (num) => {
     return isNaN(num) ? 0 : num.toFixed(0) + 's'
   }
 

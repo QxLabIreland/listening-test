@@ -7,17 +7,17 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import SurveyAudioController from "../components/SurveyAudioController";
+import {SurveyAudioController} from "../components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import AudioExampleRadio from "./AudioExampleRadio";
+import {SurveyExampleRadio} from "./SurveyExampleRadio";
 import CardHeader from "@material-ui/core/CardHeader";
-import SurveyCardView from "../components/SurveyCardView";
+import {SurveyCardView} from "../components/SurveyCardView";
 import {CardActions} from "@material-ui/core";
 
-export default observer(function AbTaskPage() {
+export const AbSurveyPage = observer(function () {
   const [theTest] = useState(observable({
     id: 0,
     survey: [
@@ -111,7 +111,7 @@ export default observer(function AbTaskPage() {
               <Grid container spacing={3}>
                 {/*TODO Expose the pause*/}
                 <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
-                <AudioExampleRadio example={ex}/>
+                <SurveyExampleRadio example={ex}/>
               </Grid>
             </ExpansionPanelDetails>
             <ExpansionPanelActions>

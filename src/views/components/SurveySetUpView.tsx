@@ -7,7 +7,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 
-export default observer(function (props) {
+export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
   const {items} = props;
   // const [items] = useState(observable([

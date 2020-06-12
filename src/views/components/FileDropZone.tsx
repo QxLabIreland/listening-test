@@ -4,7 +4,7 @@ import Icon from "@material-ui/core/Icon";
 import {observer} from "mobx-react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 
-export default observer(function (props: {file: AudioFileModel, classes: any, label?: string}) {
+export const FileDropZone = observer(function (props: {file: AudioFileModel, classes: any, label?: string}) {
   const {file, classes} = props;
   let {label} = props
   const fileRef = useRef<HTMLInputElement>();

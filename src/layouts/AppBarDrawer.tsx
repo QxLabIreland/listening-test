@@ -12,7 +12,7 @@ import DashboardPage from "../views/DashboardPage";
 import SettingsPage from "../views/SettingsPage";
 import ListItemNavLink from "./components/ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./components/AppBarLayout";
-import AudioAbDetail from "../views/AudioAb/AudioAbDetail";
+import {AudioAbDetail} from "../views/AudioAb/AudioAbDetail";
 import MushraPage from "../views/MushraPage";
 import TestResponsePage from "../views/TestResponses/TestResponsePage";
 import AbTestPage from "../views/AudioAb/AbTestPage";
