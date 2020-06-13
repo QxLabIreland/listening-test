@@ -5,12 +5,12 @@ import {Button} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 
-import Home from "../views/Home";
-import SignIn from "../views/Auth/SignIn";
-import SignUp from "../views/Auth/SingUp";
+import Home from "../views/PublicPages/Home";
+import SignIn from "../views/PublicPages/SignIn";
+import SignUp from "../views/PublicPages/SingUp";
 import Loading from "../shared/components/Loading";
 
-export default function PublicMain() {
+export default function PublicContainer() {
   return (
     <Suspense fallback={<Loading/>}>
       <AppBar position="sticky" color="default" elevation={3}>

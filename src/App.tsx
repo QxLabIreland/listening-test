@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";
 import AppBarDrawer from "./layouts/AppBarDrawer/AppBarDrawer";
 import NotFoundView from "./layouts/NotFoundView";
-import PublicMain from "./layouts/PublicMain";
+import PublicContainer from "./layouts/PublicContainer";
 import XsrfAuth from "./shared/components/XsrfAuth";
 import GlobalDialogProvider from "./shared/providers/GlobalDialogProvider";
 
@@ -21,7 +21,7 @@ export default function App() {
             <Route path="/user" component={AppBarDrawer}/>
             {/*Outside pages*/}
             <Route path="/not-found" component={NotFoundView}/>
-            <Route path="/" component={PublicMain}/>
+            <Route path="/" component={PublicContainer}/>
           </Switch>
         </Suspense>
       </BrowserRouter>
