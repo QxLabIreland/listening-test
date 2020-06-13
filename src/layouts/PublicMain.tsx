@@ -6,8 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 
 import Home from "../views/Home";
-import SignIn from "../views/auth/SignIn";
-import SignUp from "../views/auth/SingUp";
+import SignIn from "../views/Auth/SignIn";
+import SignUp from "../views/Auth/SingUp";
 import Loading from "../shared/components/Loading";
 
 export default function PublicMain() {

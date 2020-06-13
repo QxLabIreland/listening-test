@@ -15,7 +15,7 @@ import {SurveySetUpView} from "../components/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
-import {AppBarTitleContext} from "../../shared/ReactContexts";
+import {AppBarTitle} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -31,7 +31,7 @@ export const AudioAbDetail = observer(function () {
   const classes = useStyles();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
-  const {setTitle} = useContext(AppBarTitleContext);
+  const {setTitle} = useContext(AppBarTitle);
 
   useEffect(() => {
     setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);

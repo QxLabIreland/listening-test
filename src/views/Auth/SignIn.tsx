@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useStyles} from "./SignInUpStyles";
 import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
+import {GlobalDialog} from "../../shared/ReactContexts";
 
 export default function SignIn() {
   const classes = useStyles();
   const history = useHistory();
+  const openDialog = useContext(GlobalDialog);
 
   const formik = useFormik({
     initialValues: {email: '', password: ''},
@@ -17,7 +19,7 @@ export default function SignIn() {
         history.push('/user');
       }, (reason) => {
         console.log(reason.response)
-        alert(reason.response.statusText)
+        openDialog(reason.response.statusText);
       })
 
     },

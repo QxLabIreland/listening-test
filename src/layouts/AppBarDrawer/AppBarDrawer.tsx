@@ -6,16 +6,16 @@ import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
-import Loading from "../shared/components/Loading";
-import DashboardPage from "../views/DashboardPage";
-import SettingsPage from "../views/SettingsPage";
-import ListItemNavLink from "./components/ListItemNavLink";
-import AppBarLayout, {drawerWidth} from "./components/AppBarLayout";
-import {AudioAbDetail} from "../views/AudioAb/AudioAbDetail";
-import MushraPage from "../views/MushraPage";
-import TestResponsePage from "../views/TestResponses/TestResponsePage";
-import AbTestPage from "../views/AudioAb/AbTestPage";
-import { AppBarTitleContext } from '../shared/ReactContexts';
+import Loading from "../../shared/components/Loading";
+import DashboardPage from "../../views/DashboardPage";
+import SettingsPage from "../../views/SettingsPage";
+import ListItemNavLink from "./ListItemNavLink";
+import AppBarLayout, {drawerWidth} from "./AppBarLayout";
+import {AudioAbDetail} from "../../views/AbTest/AudioAbDetail";
+import MushraPage from "../../views/MushraPage";
+import TestResponsePage from "../../views/TestResponses/TestResponsePage";
+import AbTestPage from "../../views/AbTest/AbTestPage";
+import { AppBarTitle } from '../../shared/ReactContexts';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -93,13 +93,13 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><SettingsPage/></AppBarLayout>
         </Route>
         {/*Detail with back arrow button. Aka: no navigation page*/}
-        <AppBarTitleContext.Provider value={{title: newTitle, setTitle: title => setNewTitle(title)}}>
+        <AppBarTitle.Provider value={{title: newTitle, setTitle: title => setNewTitle(title)}}>
           <Route exact path={`${path}/ab-test/:id`}>
             <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbDetail/></AppBarLayout>
           </Route>
           {/*Context make this not working*/}
           <Redirect to="/not-found" />
-        </AppBarTitleContext.Provider>
+        </AppBarTitle.Provider>
 
       </Switch>
     </Suspense>

@@ -3,11 +3,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {Container} from "@material-ui/core";
-import {Switch, useHistory} from "react-router";
+import {useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AppBarTitleContext} from "../../shared/ReactContexts";
+import {AppBarTitle} from "../../shared/ReactContexts";
 
 export const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export default function AppBarLayout(props: any) {
   const {handleDrawerToggle} = props;
   const history = useHistory();
-  const {title} = useContext(AppBarTitleContext);
+  const {title} = useContext(AppBarTitle);
   const classes = useStyles();
 
   return (
