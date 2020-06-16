@@ -18,7 +18,7 @@ export const SurveyExampleRadio = observer(function (props: any) {
     <Grid item xs={12}>
       <FormControl component="fieldset">
         <FormLabel component="legend">
-          <Typography>Which one sounds better?</Typography>
+          <Typography>Which is your preference?</Typography>
         </FormLabel>
         <RadioGroup row aria-label="select better one" name="selectAudio" value={example.answer}
                     onChange={(e) => handleSelectChange(e, example)}>

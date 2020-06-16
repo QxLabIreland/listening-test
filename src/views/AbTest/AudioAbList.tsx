@@ -32,7 +32,6 @@ export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}
   const classes = useStyles();
   const {path} = useRouteMatch();
 
-
   return (
     <Card>
       <CardContent className={classes.content}>
@@ -56,7 +55,7 @@ export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}
               <TableCell>{test._id.$oid}</TableCell>
               <TableCell>{test.name}</TableCell>
               <TableCell>
-                {test.createdAt?.$date}
+                {new Date(test.createdAt?.$date).toLocaleString()}
                 {/*{moment(order.createdAt).format('DD/MM/YYYY')}*/}
               </TableCell>
               <TableCell>

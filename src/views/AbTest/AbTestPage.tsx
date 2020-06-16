@@ -33,24 +33,25 @@ export default function AbTestPage() {
   const [error, setError] = useState(undefined);
 
   useEffect(() => {
-    Axios.get<AbTestModel[]>('/api/ab-test', {withCredentials: true})
+    Axios.get<AbTestModel[]>('/api/ab_test', {withCredentials: true})
       .then((res) => {
         setData(res.data);
         setFiltered(res.data);
-      }, (reason) => setError(reason));
+      }, reason => setError(reason));
   }, [])
 
   const handleSearchChange = (event) =>
     setFiltered(data.filter(value =>
+      // Name searching
       value.name.toLowerCase().includes(event.target.value.toLowerCase())
+      // Date searching
       || value.createdAt.$date.toString().toLowerCase().includes(event.target.value.toLowerCase())
     ));
 
   const handleDelete = (obj: AbTestModel) =>
-    Axios.delete('/api/ab-test', {params: {_id: obj._id.$oid}}).then(() =>
+    Axios.delete('/api/ab_test', {params: {_id: obj._id.$oid}}).then(() =>
       setData(data.splice(data.indexOf(obj), 1))
     );
-
 
   return (
     <Grid container spacing={3}>

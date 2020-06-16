@@ -34,7 +34,7 @@ export const SurveySetUpView = observer(function (props) {
   const handleDelete = (control) => items.splice(items.indexOf(control), 1);
 
   return <Card>
-    <CardHeader title="AB test Survey"/>
+    <CardHeader title="A survey before the test"/>
     <CardContent>
       <Grid container spacing={3}>
         {items.map((c, i) =>
@@ -88,7 +88,10 @@ export const SurveySetUpView = observer(function (props) {
 const SurveyOptions = observer((props: { control: SurveyControlModel, type: SurveyControlType }) => {
   const {control, type} = props;
   // If it is not an options control
-  if (type !== SurveyControlType.checkbox && type !== SurveyControlType.radio) return null;
+  if (type === SurveyControlType.text) return (
+    <TextField fullWidth variant="outlined" label={control.question} value="Subject will answer the question here..."
+               disabled/>
+  );
 
   function handleDelete(index: number) {
     control.options.splice(index, 1);

@@ -15,7 +15,7 @@ import {SurveySetUpView} from "../components/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
-import {AppBarTitle} from "../../shared/ReactContexts";
+import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -33,23 +33,21 @@ export const AudioAbDetail = observer(function () {
   const [isError, setIsError] = useState(false);
   const {setTitle} = useContext(AppBarTitle);
   const history = useHistory();
+  const openDialog = useContext(GlobalDialog);
 
   useEffect(() => {
-    setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
+    setTitle(+id === 0 ? 'New AB Test' : 'AB Test: ' + id);
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/ab-test', {params: {_id: id}})
+    if (+id !== 0) Axios.get<AbTestModel>('/api/ab_test', {params: {_id: id}})
+      // Successful callback
       .then((res) => setTests(observable(res.data)),
         () => setIsError(true));
     // If in creation page
-    else setTests(observable({name: '', examples: [], survey: []}));
+    else setTests(observable({name: '', description: '', examples: [], survey: []}));
   }, [setTitle, id]);
 
   function addExample() {
-    tests.examples.push({
-      audioA: {filename: null, src: null},
-      audioB: {filename: null, src: null},
-      audioRef: {filename: null, src: null}
-    })
+    tests.examples.push({question: 'Briefly comment on your choice.', audioA: null, audioB: null});
   }
 
   function deleteExample(index) {
@@ -58,12 +56,10 @@ export const AudioAbDetail = observer(function () {
 
   const handleSubmit = () => {
     Axios.request({
-      method: +id === 0 ? 'POST' : 'PUT',
-      url: '/api/ab-test',
-      data: tests
+      method: +id === 0 ? 'POST' : 'PUT', url: '/api/ab_test', data: tests
     }).then(() => {
       history.push('./');
-    })
+    }, reason => openDialog(reason.response.statusText, 'Something wrong'))
   }
 
   return (
@@ -71,11 +67,16 @@ export const AudioAbDetail = observer(function () {
       {tests ? <React.Fragment>
         <Grid item xs={12} style={{display: 'flex'}}>
           <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
+          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
         </Grid>
         <Grid item xs={12}>
           <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
                      label="Test Name" fullWidth/>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField variant="outlined" label="Test Description" rowsMax={8} value={tests.description}
+                     onChange={(e) => tests.description = e.target.value} multiline fullWidth/>
+
         </Grid>
         <Grid item xs={12}>
           <SurveySetUpView items={tests.survey}/>
@@ -93,17 +94,22 @@ export const AudioAbDetail = observer(function () {
                   <Grid item xs={12}>
                     <TextField fullWidth variant="filled" name={'Question' + i} label="Question for this example"/>
                   </Grid>
-                  <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioA}/></Grid>
-                  <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioB}/></Grid>
-                  <Grid item xs={12} md={2}><FileDropZone classes={classes} file={v.audioRef}
-                                                                  label="Reference"/></Grid>
+                  <Grid item xs={12} md={5}>
+                    <FileDropZone classes={classes} fileModel={v.audioA} onChange={fm=>v.audioA=fm}/>
+                  </Grid>
+                  <Grid item xs={12} md={5}>
+                    <FileDropZone classes={classes} fileModel={v.audioB} onChange={fm=>v.audioB=fm}/>
+                  </Grid>
+                  <Grid item xs={12} md={2}>
+                    <FileDropZone classes={classes} fileModel={v.audioRef} onChange={fm=>v.audioRef=fm}
+                                  label="Reference"/></Grid>
                 </Grid>
               </CardContent>
             </Card>
           </Grid>
         )}
         <Grid item>
-          <Button variant="outlined" color="primary" onClick={addExample}>Add an Audio Example</Button>
+          <Button variant="outlined" color="primary" onClick={addExample}><Icon>add</Icon>Add an Audio Example</Button>
         </Grid>
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>

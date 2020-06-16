@@ -8,11 +8,13 @@ export interface AbTestModel {
   examples: AudioExample[];
   createdAt?: { $date: Date };
   name: string;
+  description: string;
 }
 
 interface AudioExample {
+  question: string;
   answer?: string;
-  audioA: AudioFileModel,
-  audioB: AudioFileModel,
-  audioRef?: AudioFileModel
+  audioA: AudioFileModel;
+  audioB: AudioFileModel;
+  audioRef?: AudioFileModel;
 }

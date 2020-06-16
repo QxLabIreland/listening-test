@@ -1,27 +1,31 @@
 import React, {useRef} from "react";
 import {Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
-import {observer} from "mobx-react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
+import Axios from "axios";
 
-export const FileDropZone = observer(function (props: {file: AudioFileModel, classes: any, label?: string}) {
-  const {file, classes} = props;
-  let {label} = props
+export function FileDropZone(props: {onChange, fileModel: AudioFileModel, classes: any, label?: string}) {
+  // Default label
+  const {onChange, fileModel, classes, label = 'Click to choose or Drop a file'} = props;
   const fileRef = useRef<HTMLInputElement>();
 
-  if (!label) label = 'Click to choose or Drop a file';
-
-  function handleFileDrop(event: any) {
+  const handleFileDrop = (event: any) => {
     event.preventDefault();
     let files = event.target.files;
     // If event is not a File Input Choose
-    if (!files) {
-      files = event.dataTransfer.files;
-    }
-    //todo File upload handle
-    file.filename = files[0].name;
-    // Clear file input
-    fileRef.current.value = null;
+    if (!files) files = event.dataTransfer.files;
+    const formData = new FormData();
+    formData.append("audioFile", files[0]);
+    // File upload handling
+    Axios.post('/api/audio_file', formData).then((res) => {
+      const newFileModel = {} as AudioFileModel;
+      // File fields
+      newFileModel.src = res.data;
+      newFileModel.filename = files[0].name;
+      onChange(newFileModel);
+      // Clear file input
+      fileRef.current.value = null;
+    })
   }
 
   function stopDefault(event: any) {
@@ -35,10 +39,10 @@ export const FileDropZone = observer(function (props: {file: AudioFileModel, cla
       <div className={classes.paper} onClick={() => fileRef.current.click()}
            onDragOver={stopDefault}
            onDrop={handleFileDrop}>
-        {file.filename ? <Typography>{file.filename}</Typography>
+        {fileModel?.filename ? <Typography>{fileModel.filename}</Typography>
           : <Typography>{label}</Typography>}
         <Icon>file_copy</Icon>
       </div>
     </React.Fragment>
   )
-})
+}

@@ -8,7 +8,6 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 
 export const SurveyAudioController = observer(function (props: { audios: AudioFileModel[], audioRef: AudioFileModel }) {
   const {audios, audioRef} = props;
-
   const [currentTime, setCurrentTime] = useState(0);
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
   const refAudioRef = useRef<HTMLAudioElement>();

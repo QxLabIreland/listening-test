@@ -70,7 +70,7 @@ export const AbSurveyPage = observer(function () {
     }]
   }));
 
-  const [openedPanel, setOpenedPanel] = useState(null);
+  const [openedPanel, setOpenedPanel] = useState(-1);
 
   useEffect(() => {
 
@@ -87,18 +87,24 @@ export const AbSurveyPage = observer(function () {
 
   return (
     <Grid container spacing={3} direction="column">
-      <Grid item xs={12}><Typography variant="h2" gutterBottom>
-        Audio AB Test: {'example 1'}
-      </Typography>
-        <Card>
-          <CardHeader title="AB test Survey"/>
-          <CardContent>
+      <Grid item xs={12}>
+        <Typography variant="h2" gutterBottom>
+          Audio AB Test: {'AB-1'}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
+          <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
+            <Typography variant="h6">A survey before test</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
             <SurveyCardView items={theTest.survey}/>
-          </CardContent>
-          <CardActions style={{display: 'flex', justifyContent: 'flex-end'}}>
-            <Button color="primary" onClick={() => setOpenedPanel(0)}>Goto Example</Button>
-          </CardActions>
-        </Card>
+          </ExpansionPanelDetails>
+          <ExpansionPanelActions>
+            <Button size="small" color="primary"
+                    onClick={() => setOpenedPanel(0)}>Next</Button>
+          </ExpansionPanelActions>
+        </ExpansionPanel>
       </Grid>
       {theTest.examples.map((ex, i) =>
         <Grid item xs={12} key={ex.id}>
@@ -117,7 +123,7 @@ export const AbSurveyPage = observer(function () {
             <ExpansionPanelActions>
               {i !== theTest.examples.length - 1 &&
               <Button size="small" color="primary"
-                      onClick={() => handlePanelChange(true, i + 1)}>Next Example</Button>}
+                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
             </ExpansionPanelActions>
           </ExpansionPanel>
         </Grid>
