@@ -3,9 +3,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
-import React, {useContext} from "react";
+import React, {Suspense, useContext, useState} from "react";
 import {Container} from "@material-ui/core";
-import {useHistory} from "react-router";
+import {Switch, useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AppBarTitle} from "../../shared/ReactContexts";
 
@@ -32,17 +32,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export default function AppBarLayout(props: any) {
-  const {handleDrawerToggle} = props;
+  const {handleDrawerToggle, fixed} = props;
   const history = useHistory();
-  const {title} = useContext(AppBarTitle);
+  const [title, setTitle] = useState<string>();
   const classes = useStyles();
 
   return (
-    <React.Fragment>
-      <AppBar position="fixed" className={classes.appBar}>
+    <AppBarTitle.Provider value={{title: title, setTitle: title => setTitle(title)}}>
 
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {!title
+          {fixed
             ? <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle}
                           className={classes.menuButton}>
               <Icon>menu</Icon>
@@ -52,7 +52,7 @@ export default function AppBarLayout(props: any) {
             </IconButton>
           }
           <Typography variant="h6" noWrap>
-            {title ? title : 'Listening Tests Dashboard'}
+            {fixed ? 'Listening Tests Dashboard' : title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -62,6 +62,6 @@ export default function AppBarLayout(props: any) {
           {props.children}
         </Container>
       </main>
-    </React.Fragment>
+    </AppBarTitle.Provider>
   )
 }

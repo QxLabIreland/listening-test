@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useParams} from 'react-router';
+import {useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -32,23 +32,23 @@ export const AudioAbDetail = observer(function () {
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
   const {setTitle} = useContext(AppBarTitle);
+  const history = useHistory();
 
   useEffect(() => {
     setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/user/ab-test', {params: {id: id}})
+    if (+id !== 0) Axios.get<AbTestModel>('/api/ab-test', {params: {_id: id}})
       .then((res) => setTests(observable(res.data)),
         () => setIsError(true));
     // If in creation page
-    else setTests(observable({id: 0, name: '', examples: [], survey: []}));
+    else setTests(observable({name: '', examples: [], survey: []}));
   }, [setTitle, id]);
 
   function addExample() {
     tests.examples.push({
-      id: 0,
-      audioA: {id: 0, filename: null, src: null},
-      audioB: {id: 0, filename: null, src: null},
-      audioRef: {id: 0, filename: null, src: null}
+      audioA: {filename: null, src: null},
+      audioB: {filename: null, src: null},
+      audioRef: {filename: null, src: null}
     })
   }
 
@@ -56,12 +56,22 @@ export const AudioAbDetail = observer(function () {
     tests.examples.splice(index, 1);
   }
 
+  const handleSubmit = () => {
+    Axios.request({
+      method: +id === 0 ? 'POST' : 'PUT',
+      url: '/api/ab-test',
+      data: tests
+    }).then(() => {
+      history.push('./');
+    })
+  }
+
   return (
     <Grid container spacing={3} justify="center" alignItems="center">
       {tests ? <React.Fragment>
         <Grid item xs={12} style={{display: 'flex'}}>
           <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained">Submit</Button>
+          <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
         </Grid>
         <Grid item xs={12}>
           <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
@@ -81,7 +91,7 @@ export const AudioAbDetail = observer(function () {
               <CardContent>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <TextField fullWidth variant="filled" name={v.id + 'Question'} label="Question for this example"/>
+                    <TextField fullWidth variant="filled" name={'Question' + i} label="Question for this example"/>
                   </Grid>
                   <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioA}/></Grid>
                   <Grid item xs={12} md={5}><FileDropZone classes={classes} file={v.audioB}/></Grid>

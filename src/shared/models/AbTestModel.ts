@@ -2,16 +2,15 @@ import {AudioFileModel} from "./AudioFileModel";
 import {SurveyControlModel} from "./SurveyControlModel";
 
 export interface AbTestModel {
-  id: number;
+  _id?: { $oid: string };
   user_id?: number;
   survey: SurveyControlModel[] | string;
   examples: AudioExample[];
-  createdAt?: Date;
+  createdAt?: { $date: Date };
   name: string;
 }
 
 interface AudioExample {
-  id: number;
   answer?: string;
   audioA: AudioFileModel,
   audioB: AudioFileModel,

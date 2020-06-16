@@ -25,42 +25,32 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function AbTestPage () {
+export default function AbTestPage() {
   const classes = useStyles();
   const {path} = useRouteMatch();
-  const [filtered, setFiltered] = useState(null);
-  const {data, error} = useAjaxGetAll<AbTestModel[]>('/api/user/ab-test');
+  const [data, setData] = useState<AbTestModel[]>(null);
+  const [filtered, setFiltered] = useState<AbTestModel[]>(null);
+  const [error, setError] = useState(undefined);
 
   useEffect(() => {
-    // Change it to test
-    setFiltered([
-      {
-        id: 1,
-        ref: 'CDD1049',
-        amount: 30.5,
-        name: 'Ekaterina Tankova',
-        createdAt: 1555016400000,
-      },
-      {
-        id: 2,
-        ref: 'CDD1048',
-        amount: 25.1,
-        name: 'Cao Yu',
-        createdAt: 1555016400000,
-      },
-      {
-        id: 3,
-        ref: 'CDD1047',
-        name: 'Alexa Richardson',
-        createdAt: 1554930000000,
-      }
-    ]);
-  }, [data, error])
+    Axios.get<AbTestModel[]>('/api/ab-test', {withCredentials: true})
+      .then((res) => {
+        setData(res.data);
+        setFiltered(res.data);
+      }, (reason) => setError(reason));
+  }, [])
 
   const handleSearchChange = (event) =>
     setFiltered(data.filter(value =>
-      value.createdAt.toDateString().toLowerCase().includes(event.target.value.toLowerCase())
+      value.name.toLowerCase().includes(event.target.value.toLowerCase())
+      || value.createdAt.$date.toString().toLowerCase().includes(event.target.value.toLowerCase())
     ));
+
+  const handleDelete = (obj: AbTestModel) =>
+    Axios.delete('/api/ab-test', {params: {_id: obj._id.$oid}}).then(() =>
+      setData(data.splice(data.indexOf(obj), 1))
+    );
+
 
   return (
     <Grid container spacing={3}>
@@ -74,22 +64,10 @@ export default function AbTestPage () {
         <SearchInput className={classes.button} placeholder="Search tests" onChange={handleSearchChange}/>
       </Grid>
       <Grid item xs={12}>
-        {filtered && <AudioAbList tests={filtered}/>}
+        {filtered && <AudioAbList tests={filtered} handleDelete={handleDelete}/>}
         {data ? null : <Loading error={!!error} message={error}/>}
       </Grid>
 
     </Grid>
   )
-}
-
-function useAjaxGetAll<T extends any[]>(url: string) {
-  const [data, setData] = useState<T>(null);
-  const [error, setError] = useState(undefined);
-
-  useEffect(() => {
-    Axios.get<T>(url, {withCredentials: true})
-      .then((res) => setData(res.data), (reason) => setError(reason));
-  }, [url])
-
-  return {data, error}
 }

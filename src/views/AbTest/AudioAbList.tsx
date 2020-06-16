@@ -14,6 +14,8 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Link} from "react-router-dom";
 import {useRouteMatch} from 'react-router';
 import {Icon, IconButton, Snackbar} from "@material-ui/core";
+import {AbTestModel} from "../../shared/models/AbTestModel";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -25,10 +27,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 
-export default function AudioAbList (props) {
-  const {tests} = props;
+export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}) {
+  const {tests, handleDelete} = props;
   const classes = useStyles();
   const {path} = useRouteMatch();
+
 
   return (
     <Card>
@@ -49,18 +52,18 @@ export default function AudioAbList (props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tests.map(test => <TableRow hover key={test.id}>
-              <TableCell>{test.id}</TableCell>
+            {tests.map(test => <TableRow hover key={test._id.$oid}>
+              <TableCell>{test._id.$oid}</TableCell>
               <TableCell>{test.name}</TableCell>
               <TableCell>
-                {test.createdAt}
+                {test.createdAt?.$date}
                 {/*{moment(order.createdAt).format('DD/MM/YYYY')}*/}
               </TableCell>
               <TableCell>
                 <IconButton className={classes.button} size="small" color="primary" component={Link}
-                            to={`${path}/${test.id}`}><Icon>edit</Icon></IconButton>
-                <ShareIconButton className={classes.button} url={`/task/ab-test/${test.id}`}/>
-                <IconButton className={classes.button} size="small" color="default">
+                            to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
+                <ShareIconButton className={classes.button} url={`/task/ab-test/${test._id.$oid}`}/>
+                <IconButton className={classes.button} size="small" color="default" onClick={() => handleDelete(test)}>
                   <Icon>delete</Icon></IconButton>
               </TableCell>
             </TableRow>)}
@@ -79,15 +82,15 @@ function ShareIconButton(props) {
     if (reason === 'clickaway') return
     setSnackbarOpen(false);
   };
-  const handleShareClick = (value) => {
-    navigator.clipboard.writeText(`http://localhost:3000/task/ab-test/${value.id}`)
+  const handleShareClick = () => {
+    navigator.clipboard.writeText(`http://localhost:3000${url}`)
       .then(() => setSnackbarOpen(true));
   }
 
   return (
     <React.Fragment>
       <IconButton {...rest} size="small" color="primary"
-                  onClick={() => handleShareClick(test)}><Icon>share</Icon></IconButton>
+                  onClick={handleShareClick}><Icon>share</Icon></IconButton>
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',

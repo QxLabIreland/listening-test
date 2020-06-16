@@ -15,7 +15,7 @@ import {AudioAbDetail} from "../../views/AbTest/AudioAbDetail";
 import MushraPage from "../../views/MushraPage";
 import TestResponsePage from "../../views/TestResponses/TestResponsePage";
 import AbTestPage from "../../views/AbTest/AbTestPage";
-import { AppBarTitle } from '../../shared/ReactContexts';
+import {AppBarTitle} from '../../shared/ReactContexts';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -39,7 +39,6 @@ export default function AppBarDrawer(props: any) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [newTitle, setNewTitle] = useState<string>();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -78,29 +77,26 @@ export default function AppBarDrawer(props: any) {
         <Redirect exact from={`${path}`} to={`${path}/dashboard`}/>
         {/*Navigation page*/}
         <Route exact path={`${path}/dashboard`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><DashboardPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><DashboardPage/></AppBarLayout>
         </Route>
         <Route path={`${path}/responses`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><TestResponsePage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><TestResponsePage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><AbTestPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><MushraPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><MushraPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><SettingsPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><SettingsPage/></AppBarLayout>
         </Route>
         {/*Detail with back arrow button. Aka: no navigation page*/}
-        <AppBarTitle.Provider value={{title: newTitle, setTitle: title => setNewTitle(title)}}>
-          <Route exact path={`${path}/ab-test/:id`}>
-            <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbDetail/></AppBarLayout>
-          </Route>
-          {/*Context make this not working*/}
-          <Redirect to="/not-found" />
-        </AppBarTitle.Provider>
-
+        <Route exact path={`${path}/ab-test/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbDetail/></AppBarLayout>
+        </Route>
+        {/*Context make this not working*/}
+        <Redirect to="/not-found"/>
       </Switch>
     </Suspense>
   </div>;
