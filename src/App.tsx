@@ -1,4 +1,4 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense} from 'react';
 import Loading from "./shared/components/Loading";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";

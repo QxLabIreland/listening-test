@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {GlobalDialog} from "../ReactContexts";
 

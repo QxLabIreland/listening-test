@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,7 +15,6 @@ import {Link} from "react-router-dom";
 import {useRouteMatch} from 'react-router';
 import {Icon, IconButton, Snackbar} from "@material-ui/core";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import Axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {

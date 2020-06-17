@@ -3,9 +3,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
-import React, {Suspense, useContext, useState} from "react";
+import React, {useState} from "react";
 import {Container} from "@material-ui/core";
-import {Switch, useHistory} from "react-router";
+import {useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AppBarTitle} from "../../shared/ReactContexts";
 
