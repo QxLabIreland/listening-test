@@ -22,7 +22,7 @@ export default class Loading extends React.Component<{ error?: boolean, message?
     return (
       <div style={{
         height: 240,
-        width: 240,
+        maxWidth: 480,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

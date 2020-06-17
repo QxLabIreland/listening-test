@@ -17,7 +17,7 @@ export function FileDropZone(props: {onChange, fileModel: AudioFileModel, classe
     const formData = new FormData();
     formData.append("audioFile", files[0]);
     // File upload handling
-    Axios.post('/api/audio_file', formData).then((res) => {
+    Axios.post('/api/audio-file', formData).then((res) => {
       const newFileModel = {} as AudioFileModel;
       // File fields
       newFileModel.src = res.data;

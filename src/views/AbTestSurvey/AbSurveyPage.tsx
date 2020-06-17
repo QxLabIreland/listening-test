@@ -16,65 +16,21 @@ import {SurveyExampleRadio} from "./SurveyExampleRadio";
 import CardHeader from "@material-ui/core/CardHeader";
 import {SurveyCardView} from "../components/SurveyCardView";
 import {CardActions} from "@material-ui/core";
+import {AbTestModel} from "../../shared/models/AbTestModel";
+import Axios from "axios";
+import {useParams} from "react-router";
+import Loading from "../../shared/components/Loading";
 
 export const AbSurveyPage = observer(function () {
-  const [theTest] = useState(observable({
-    id: 0,
-    survey: [
-      {type: 0, question: 'Text test'},
-      {type: 1, question: 'Radio test', options: ['1', '2', '3']},
-      {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
-    ],
-    examples: [{
-      id: 1,
-      answer: null,
-      audioA:{
-        id: 1,
-        filename: 'audio-a',
-        src: '/test/A Himitsu - Lost Within.mp3',
-        isPlaying: false,
-        selected: false
-      },
-      audioB:{
-        id: 2,
-        filename: 'audio-b',
-        src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
-        isPlaying: false,
-        selected: false
-      },
-      audioRef: null
-    }, {
-      id: 2,
-      answer: null,
-      audioA:{
-        id: 1,
-        filename: 'audio-a',
-        src: '/test/A Himitsu - Lost Within.mp3',
-        isPlaying: false,
-        selected: false
-      },
-      audioB:{
-        id: 2,
-        filename: 'audio-b',
-        src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
-        isPlaying: false,
-        selected: false
-      },
-      audioRef:{
-        id: 3,
-        filename: 'audio-b',
-        src: '/test/Hinkik A Himitsu - Realms.mp3', // /test/Hinkik A Himitsu - Realms.mp3
-        isPlaying: false,
-        selected: false
-      }
-    }]
-  }));
-
+  const [theTest, setTheTest] = useState<AbTestModel>(null);
+  const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
+  const {id} = useParams();
 
   useEffect(() => {
-
-  }, [])
+    Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
+      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.statusText))
+  }, [id]);
 
   function handlePanelChange(v, index) {
     if (v) setOpenedPanel(index);
@@ -82,57 +38,59 @@ export const AbSurveyPage = observer(function () {
   }
 
   function handleSubmit() {
-    alert(JSON.stringify(toJS(theTest)));
+    Axios.post('/api/task/ab-test', toJS(theTest)).then(() => alert('Thanks!'));
   }
 
   return (
-    <Grid container spacing={3} direction="column">
-      <Grid item xs={12}>
-        <Typography variant="h2" gutterBottom>
-          Audio AB Test: {'AB-1'}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
-          <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-            <Typography variant="h6">A survey before test</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <SurveyCardView items={theTest.survey}/>
-          </ExpansionPanelDetails>
-          <ExpansionPanelActions>
-            <Button size="small" color="primary"
-                    onClick={() => setOpenedPanel(0)}>Next</Button>
-          </ExpansionPanelActions>
-        </ExpansionPanel>
-      </Grid>
-      {theTest.examples.map((ex, i) =>
-        <Grid item xs={12} key={ex.id}>
-          <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
+    <>{theTest ?
+      <Grid container spacing={3} direction="column">
+
+        <Grid item xs={12}>
+          <Typography variant="h3" gutterBottom>{theTest.name}</Typography>
+          <Typography variant="body1" gutterBottom>{theTest.description}</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-              {ex.answer && <Icon>check</Icon>}
-              <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
+              <Typography variant="h6">A survey before test</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Grid container spacing={3}>
-                {/*TODO Expose the pause*/}
-                <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
-                <SurveyExampleRadio example={ex}/>
-              </Grid>
+              <SurveyCardView items={theTest.survey}/>
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
-              {i !== theTest.examples.length - 1 &&
               <Button size="small" color="primary"
-                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
+                      onClick={() => setOpenedPanel(0)}>Next</Button>
             </ExpansionPanelActions>
           </ExpansionPanel>
         </Grid>
-      )}
-      <Grid item xs={12}>
-        <Grid container justify="flex-end">
-          <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+        {theTest.examples.map((ex, i) =>
+          <Grid item xs={12} key={i}>
+            <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
+              <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
+                {ex.answer && <Icon>check</Icon>}
+                <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Grid container spacing={3}>
+                  {/*TODO Expose the pause*/}
+                  <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
+                  <SurveyExampleRadio example={ex}/>
+                </Grid>
+              </ExpansionPanelDetails>
+              <ExpansionPanelActions>
+                {i !== theTest.examples.length - 1 &&
+                <Button size="small" color="primary"
+                        onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
+              </ExpansionPanelActions>
+            </ExpansionPanel>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <Grid container justify="flex-end">
+            <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      : <Loading error={!!error} message={error}/>}</>
   )
 })

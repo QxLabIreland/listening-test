@@ -17,6 +17,7 @@ import {observer} from "mobx-react";
 
 export const SurveyCardView =  observer(function (props) {
   const {items} = props as { items: SurveyControlModel[]};
+  if (!items) return null;
 
   function renderControl(control: SurveyControlModel) {
     switch (control.type) {

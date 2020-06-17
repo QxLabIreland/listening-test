@@ -12,7 +12,7 @@ export default function SignUp() {
   const formik = useFormik({
     initialValues: {name: '', email: '', password: '', policy: false},
     onSubmit: values => {
-      Axios.post('/api/sign_up', values).then(() => history.push('/user'), (reason) => {
+      Axios.post('/api/sign-up', values).then(() => history.push('/user'), (reason) => {
         console.log(reason.response)
         alert(reason.response.statusText)
       })

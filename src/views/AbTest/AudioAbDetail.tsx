@@ -36,9 +36,9 @@ export const AudioAbDetail = observer(function () {
   const openDialog = useContext(GlobalDialog);
 
   useEffect(() => {
-    setTitle(+id === 0 ? 'New AB Test' : 'AB Test: ' + id);
+    setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/ab_test', {params: {_id: id}})
+    if (+id !== 0) Axios.get<AbTestModel>('/api/ab-test', {params: {_id: id}})
       // Successful callback
       .then((res) => setTests(observable(res.data)),
         () => setIsError(true));
@@ -56,7 +56,7 @@ export const AudioAbDetail = observer(function () {
 
   const handleSubmit = () => {
     Axios.request({
-      method: +id === 0 ? 'POST' : 'PUT', url: '/api/ab_test', data: tests
+      method: +id === 0 ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
     }).then(() => {
       history.push('./');
     }, reason => openDialog(reason.response.statusText, 'Something wrong'))
@@ -92,7 +92,8 @@ export const AudioAbDetail = observer(function () {
               <CardContent>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <TextField fullWidth variant="filled" name={'Question' + i} label="Question for this example"/>
+                    <TextField fullWidth variant="filled" name={'Question' + i} label="Question for this example"
+                               value={v.question} onChange={event => v.question=event.target.value}/>
                   </Grid>
                   <Grid item xs={12} md={5}>
                     <FileDropZone classes={classes} fileModel={v.audioA} onChange={fm=>v.audioA=fm}/>

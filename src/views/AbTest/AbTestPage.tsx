@@ -33,7 +33,7 @@ export default function AbTestPage() {
   const [error, setError] = useState(undefined);
 
   useEffect(() => {
-    Axios.get<AbTestModel[]>('/api/ab_test', {withCredentials: true})
+    Axios.get<AbTestModel[]>('/api/ab-test', {withCredentials: true})
       .then((res) => {
         setData(res.data);
         setFiltered(res.data);
@@ -49,7 +49,7 @@ export default function AbTestPage() {
     ));
 
   const handleDelete = (obj: AbTestModel) =>
-    Axios.delete('/api/ab_test', {params: {_id: obj._id.$oid}}).then(() =>
+    Axios.delete('/api/ab-test', {params: {_id: obj._id.$oid}}).then(() =>
       setData(data.splice(data.indexOf(obj), 1))
     );
 

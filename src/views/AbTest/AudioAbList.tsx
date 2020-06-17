@@ -38,8 +38,8 @@ export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Test No.</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Resp. Count</TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip enterDelay={300} title="Sort">
                   <TableSortLabel active direction="desc">
@@ -52,8 +52,8 @@ export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}
           </TableHead>
           <TableBody>
             {tests.map(test => <TableRow hover key={test._id.$oid}>
-              <TableCell>{test._id.$oid}</TableCell>
               <TableCell>{test.name}</TableCell>
+              <TableCell>{test.responses.length}</TableCell>
               <TableCell>
                 {new Date(test.createdAt?.$date).toLocaleString()}
                 {/*{moment(order.createdAt).format('DD/MM/YYYY')}*/}
