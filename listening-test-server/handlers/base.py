@@ -20,6 +20,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
     # The connection start
     def prepare(self):
+        pass
+
+    def set_default_headers(self) -> None:
         self.set_header("Content-Type", "application/json")
 
     def on_finish(self):
@@ -51,9 +54,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
     # if no login send 403, else return id with ObjectId
     def get_current_user(self):
-        id_user = self.get_secure_cookie("_user", None).decode("utf-8")
+        id_user = self.get_secure_cookie("_user", None)
         if not id_user:
-            self.send_error(403)
+            self.set_status(403)
             return None
         else:
-            return ObjectId(id_user)
+            return ObjectId(id_user.decode("utf-8"))

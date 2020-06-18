@@ -1,12 +1,14 @@
 import hashlib
 import os
-
+import csv
+from datetime import datetime
+from typing import List
 
 static_root_url = '/static'
 
 
 # Write a file in UUID name
-def write_in_md5(file, folder):
+def write_in_md5(file, folder: str):
     path = os.path.join(os.getcwd(), "static", folder)
     # If the folder exists, create nested dirs
     if not os.path.exists(path):
@@ -21,6 +23,24 @@ def write_in_md5(file, folder):
         up.write(file["body"])
     # Return the backend url path
     return f"{static_root_url}/{folder}/{file_name}"
+
+
+# Write data in scv file
+def write_data_in_csv(columns: List[str], data: List[dict], prefix_name: str = ''):
+    path = os.path.join(os.getcwd(), "csv_files")
+    # If the folder exists, create nested dirs
+    if not os.path.exists(path):
+        os.makedirs(path)
+    # Build filename
+    csv_file = prefix_name + datetime.now().strftime('%Y%m%d%H%M%S') + '.csv'
+    filename = os.path.join(path, csv_file)
+    # Open a file and write data into it.
+    with open(filename, 'w', newline='') as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=columns)
+        writer.writeheader()
+        # Start writing data
+        writer.writerows(data)
+    return filename
 
 
 # Write files in designated folder
