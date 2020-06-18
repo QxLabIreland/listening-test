@@ -39,8 +39,9 @@ export default function () {
       case 1: testType = 'mushra'; break;
       default: return
     }
-    Axios.post('/api/response', null, {params: {testType: testType}})
-      .then(res => window.open(res.data), reason => alert(reason.response.statusText));
+    const uri = Axios.getUri({url: 'http://localhost:8888/api/response-download', params: {testType: testType}});
+    // const uri = Axios.getUri({url: '/api/response-download', params: {testType: testType}})
+    window.open(uri);
   }
 
   return (

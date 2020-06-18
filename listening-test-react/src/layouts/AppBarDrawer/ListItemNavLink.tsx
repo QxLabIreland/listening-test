@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import {useTheme} from "@material-ui/core/styles";
 
 export default function ListItemNavLink(props: any) {
-  const {to, icon} = props;
+  const {to, icon, ...rest} = props;
   const [selected, setSelected] = useState(false)
   // Get pathname and current to
   const {pathname} = useLocation();
@@ -19,7 +19,7 @@ export default function ListItemNavLink(props: any) {
   }, [path, to, pathname])
 
   return (
-    <ListItem button key={props.children} component={NavLink} to={to} exact selected={selected}
+    <ListItem button key={props.children} component={NavLink} to={to} exact selected={selected} {...rest}
               activeStyle={{color: theme.palette.primary.main}}>
         <span style={{minWidth: 40}}>
           <Icon>{icon}</Icon>

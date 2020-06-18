@@ -5,7 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
-import {Redirect, Route, Switch, useRouteMatch} from "react-router";
+import {Redirect, Route, Switch, useHistory, useRouteMatch} from "react-router";
 import Loading from "../../shared/components/Loading";
 import DashboardPage from "../../views/DashboardPage";
 import SettingsPage from "../../views/SettingsPage";
@@ -15,6 +15,7 @@ import {AudioAbDetail} from "../../views/AbTest/AudioAbDetail";
 import MushraPage from "../../views/MushraPage";
 import TestResponsePage from "../../views/TestResponses/TestResponsePage";
 import AbTestPage from "../../views/AbTest/AbTestPage";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -33,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export default function AppBarDrawer(props: any) {
   const {path} = useRouteMatch();
-
   const {window} = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -43,6 +43,8 @@ export default function AppBarDrawer(props: any) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleSignOut = () => Axios.delete('/api/login').then()
+
   const drawer = <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <ListItemNavLink to={`${path}/responses`} icon='assignment'>Test Responses</ListItemNavLink>
@@ -51,7 +53,7 @@ export default function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
-    <ListItemNavLink to='/sign-in' icon='exit_to_app'>Sign out</ListItemNavLink>
+    <ListItemNavLink to="/sign-in" icon='exit_to_app' onClick={handleSignOut}>Sign out</ListItemNavLink>
   </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
