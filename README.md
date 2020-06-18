@@ -1,10 +1,26 @@
+# Listening test platform
+
+An open source platform for browser based speech and audio subjective quality tests. Version: `0.1.0`
+
+## Tornado python back-end
+
+The back-end of this platform is based on Tornado (a python web server) and MongoDB.
+
+### Some configuration
+
+`tornado.ini` is supervisor config file. After add it into `supervisord.conf`, the server should run automatically as along as supervisor configured properly (such as auto start of supervisord service).
+
+MongoDB config file.
 
 ### Naming styles
 
+We need to know what parts that we are manipulating, and different naming styles can help us.
+
 - Database (MongoDB) and React.js are using `camelCase naming` for everything.
-- For python script, variables are wrote in the `snake_case naming` style,
-and you can find that back-end **api urls** and **folders' name** are also in this naming style.
-- We need to know what parts that we are manipulating, and different naming styles can help us.
+- For python script, variables are wrote in the `snake_case naming` style, and `folder_name` are in this naming style.
+- `api-urls` are following RESTful style, using hyphens to separate words.
+
+## React front-end
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
