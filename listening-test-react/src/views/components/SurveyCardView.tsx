@@ -22,7 +22,8 @@ export const SurveyCardView =  observer(function (props) {
   function renderControl(control: SurveyControlModel) {
     switch (control.type) {
       case SurveyControlType.text:
-        return <TextField fullWidth variant="filled" label={control.question}/>
+        return <TextField fullWidth variant="filled" label={control.question}
+                          onChange={event => control.value = event.target.value}/>
       case SurveyControlType.radio:
         return <SurveyRadio control={control}/>
       case SurveyControlType.checkbox:
