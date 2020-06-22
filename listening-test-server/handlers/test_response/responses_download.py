@@ -1,4 +1,7 @@
 import os
+
+from bson import ObjectId
+
 from handlers.base import BaseHandler
 from handlers.test_response.test_responses import switch_collection
 from tools.file_helper import write_data_in_csv
@@ -14,7 +17,8 @@ class ResponsesDownloadHandler(BaseHandler):
         collection = switch_collection(self)
         if not collection:
             return
-        data = collection.find({'userId': self.user_id})
+        test_id = self.get_argument('testId')
+        data = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)})
         if not data:
             return
 

@@ -13,8 +13,8 @@ class AbTestHandler(BaseHandler):
             # Get all test in created ASC order
             data = self.db['abTests'].aggregate([
                 {'$match': {'userId': self.user_id}},
-                {'$lookup': {'from': "abTestSurveys", 'let': {'abTestId': '$_id'}, 'pipeline': [
-                    {'$match': {'$expr': {'$eq': ["$abTestId", "$$abTestId"]}}},
+                {'$lookup': {'from': "abTestSurveys", 'let': {'testId': '$_id'}, 'pipeline': [
+                    {'$match': {'$expr': {'$eq': ["$testId", "$$testId"]}}},
                     {'$project': {'_id': 1}}
                 ], 'as': "responses"}},
                 # {'$group': {'_id': "$responses", "numOfStudent": {'$sum': 1}}},

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Grid} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import AudioAbList from "./AudioAbList";
@@ -19,9 +19,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   spacer: {
     flexGrow: 1
-  },
-  button: {
-    marginRight: theme.spacing(1)
   }
 }));
 
@@ -62,7 +59,7 @@ export default function AbTestPage() {
         </Button>
       </Grid>
       <Grid item xs={12} className={classes.row}>
-        <SearchInput className={classes.button} placeholder="Search tests" onChange={handleSearchChange}/>
+        <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
       </Grid>
       <Grid item xs={12}>
         {filtered && <AudioAbList tests={filtered} handleDelete={handleDelete}/>}
