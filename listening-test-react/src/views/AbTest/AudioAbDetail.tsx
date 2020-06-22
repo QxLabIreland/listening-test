@@ -3,11 +3,11 @@ import {useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
-import {CardContent, TextField} from "@material-ui/core";
+import {Box, CardContent, Chip, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import {FileDropZone} from "../components/FileDropZone";
+import {FileDropZone} from "../../shared/components/FileDropZone";
 import {observable} from "mobx";
 import {observer} from "mobx-react";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     color: theme.palette.text.secondary,
     border: '1px dashed rgba(0, 0, 0, 0.3)'
   },
+  chipGroup: {
+    '& > *': {margin: theme.spacing(0.5)}
+  }
 }));
 
 export const AudioAbDetail = observer(function () {
@@ -44,7 +47,7 @@ export const AudioAbDetail = observer(function () {
         () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', examples: [], survey: []}));
-  }, [setTitle, id]);
+  }, []);
 
   function addExample() {
     tests.examples.push({question: 'Briefly comment on your choice.', audioA: null, audioB: null});
@@ -85,7 +88,12 @@ export const AudioAbDetail = observer(function () {
           <Grid item xs={12} key={i}>
             <Card>
               <CardHeader title={
-                <div style={{display: 'flex'}}>Example {i + 1} <span style={{flexGrow: 1}}/>
+                <div style={{display: 'flex'}}>Example {i + 1}
+                  <div className={classes.chipGroup}>
+                    <Chip size="small" label="The Label" onClick={() => {}} />
+                    <Chip size="small" variant="outlined" icon={<Icon>add</Icon>} label="Add Label" onClick={() => {}} />
+                  </div>
+                  <span style={{flexGrow: 1}}/>
                   <IconButton size="small" onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
                 </div>
               }/>

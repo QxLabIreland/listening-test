@@ -5,11 +5,10 @@ import SurveyContainer from "./layouts/SurveyContainer";
 import AppBarDrawer from "./layouts/AppBarDrawer/AppBarDrawer";
 import NotFoundView from "./layouts/NotFoundView";
 import PublicContainer from "./layouts/PublicContainer";
-import XsrfAuth from "./shared/components/XsrfAuth";
+import XsrfAuth from "./shared/providers/XsrfAuth";
 import GlobalDialogProvider from "./shared/providers/GlobalDialogProvider";
 
 export default function App() {
-
   return (
     <GlobalDialogProvider>
       <XsrfAuth/>

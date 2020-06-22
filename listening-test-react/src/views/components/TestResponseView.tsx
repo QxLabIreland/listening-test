@@ -28,11 +28,11 @@ import {
   Theme,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../../shared/components/SearchInput";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {
@@ -47,17 +47,18 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function TestResponseView(props: { testType: 'abTest' | 'mushra', prefix }) {
+export default function TestResponseView(props: { testType: 'abTest' | 'mushra' }) {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
-  const {testType, prefix} = props;
+  const {testType} = props;
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [responses, setResponse] = useState(null);
   const [error, setError] = useState(undefined);
+  const {id} = useParams();
 
   useEffect(() => {
-    Axios.get('/api/response', {params: {testType: testType}})
+    Axios.get('/api/response', {params: {testType: testType, testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.statusText));
   }, [testType])
 
@@ -74,29 +75,12 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
 
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
-    Axios.delete('/api/response', {params: {testType: testType}, data: deletedList})
+    Axios.delete('/api/response', {params: {testType: testType, testId: id}, data: deletedList})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
   const currentPageList = () => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (<Grid container spacing={1}>
-    <Grid item xs={12} container spacing={1}>
-      <Grid item xs={12} md={6}>
-        <SearchInput/>
-        <Box mt={1} ml={6} style={{position: 'absolute', zIndex: 1}}>
-          <Paper elevation={3}>
-            <List component="nav" aria-label="main mailbox folders">
-              <ListItem button>
-                <ListItemText primary="Inbox"/>
-              </ListItem>
-              <ListItem button>
-                <ListItemText primary="Drafts"/>
-              </ListItem>
-            </List>
-          </Paper>
-        </Box>
-      </Grid>
-    </Grid>
     <Grid item xs={12}>
       {responses ? <Card>
         <CardContent className={classes.content}>
@@ -121,7 +105,7 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
                 <TableCell>{r.name}</TableCell>
                 <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
                 <TableCell>
-                  <IconButton size="small" component={Link} to={`${prefix}/${r._id.$oid}`} className={classes.button}>
+                  <IconButton size="small" className={classes.button}>
                     <Icon>pageview</Icon>
                   </IconButton>
                 </TableCell>

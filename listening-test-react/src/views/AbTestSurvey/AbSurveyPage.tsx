@@ -7,7 +7,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import {SurveyAudioController} from "../components/SurveyAudioController";
+import {SurveyAudioController} from "../../shared/components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
 import {SurveyExampleRadio} from "./SurveyExampleRadio";

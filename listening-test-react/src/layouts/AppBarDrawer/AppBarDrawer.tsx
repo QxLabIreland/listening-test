@@ -16,6 +16,7 @@ import MushraPage from "../../views/MushraPage";
 import TestResponsePage from "../../views/TestResponses/TestResponsePage";
 import AbTestPage from "../../views/AbTest/AbTestPage";
 import Axios from "axios";
+import AbTestTab from "../../views/AbTest/AbTestTab";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -94,7 +95,7 @@ export default function AppBarDrawer(props: any) {
         </Route>
         {/*Detail with back arrow button. Aka: no navigation page*/}
         <Route exact path={`${path}/ab-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AudioAbDetail/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestTab/></AppBarLayout>
         </Route>
         {/*Context make this not working*/}
         <Redirect to="/not-found"/>
