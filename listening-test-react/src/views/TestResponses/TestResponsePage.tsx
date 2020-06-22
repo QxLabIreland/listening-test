@@ -1,19 +1,5 @@
 import React, {Suspense} from "react";
-import {
-  Box,
-  createStyles,
-  Fab,
-  Grid,
-  Icon,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Tab,
-  Tabs,
-  Theme,
-  Tooltip
-} from "@material-ui/core";
+import {Box, createStyles, Fab, Grid, Icon, Tab, Tabs, Theme, Tooltip} from "@material-ui/core";
 import TestResponseView from "../components/TestResponseView";
 import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
@@ -21,8 +7,6 @@ import {Link} from "react-router-dom";
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
 import Loading from "../../shared/components/Loading";
 import Axios from "axios";
-import {AbSurveyPage} from "../AbTestSurvey/AbSurveyPage";
-import SearchInput from "../../shared/components/SearchInput";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -2,6 +2,6 @@
 export interface AudioFileModel {
   filename: string | null;
   src: string | null;
-  tags: string[];
+  tags?: string;
   isPlaying?: boolean;
 }
