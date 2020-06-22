@@ -1,11 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   Checkbox,
-  createStyles, Grid, Icon, IconButton,
+  createStyles,
+  Divider,
+  FormControl,
+  Grid,
+  Icon,
+  IconButton,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -19,13 +32,11 @@ import {Link} from "react-router-dom";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
+import SearchInput from "../components/SearchInput";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {
     padding: 0
-  },
-  inner: {
-    minWidth: 1050
   },
   actions: {
     display: 'flex',
@@ -33,13 +44,10 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   },
   button: {
     marginLeft: 8,
-  },
-  iconButton: {
-    marginRight: 8
   }
 })));
 
-export default function TestResponseView(props: { testType: 'abTest' | 'mushra', prefix}) {
+export default function TestResponseView(props: { testType: 'abTest' | 'mushra', prefix }) {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
   const {testType, prefix} = props;
@@ -71,11 +79,27 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
   }
   const currentPageList = () => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  return (<Grid container spacing={3}>
+  return (<Grid container spacing={1}>
+    <Grid item xs={12} container spacing={1}>
+      <Grid item xs={12} md={6}>
+        <SearchInput/>
+        <Box mt={1} ml={6} style={{position: 'absolute', zIndex: 1}}>
+          <Paper elevation={3}>
+            <List component="nav" aria-label="main mailbox folders">
+              <ListItem button>
+                <ListItemText primary="Inbox"/>
+              </ListItem>
+              <ListItem button>
+                <ListItemText primary="Drafts"/>
+              </ListItem>
+            </List>
+          </Paper>
+        </Box>
+      </Grid>
+    </Grid>
     <Grid item xs={12}>
-    {responses ? <Card>
-      <CardContent className={classes.content}>
-        <div className={classes.inner}>
+      {responses ? <Card>
+        <CardContent className={classes.content}>
           <Table>
             <TableHead>
               <TableRow>
@@ -97,21 +121,19 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
                 <TableCell>{r.name}</TableCell>
                 <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
                 <TableCell>
-                  <IconButton size="small" component={Link} to={`${prefix}/${r._id.$oid}`} className={classes.iconButton}>
+                  <IconButton size="small" component={Link} to={`${prefix}/${r._id.$oid}`} className={classes.button}>
                     <Icon>pageview</Icon>
                   </IconButton>
                 </TableCell>
               </TableRow>
             )}</TableBody>
-          </Table>
-        </div>
-      </CardContent>
-      <CardActions className={classes.actions}>
-        <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
-                         onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
-                         rowsPerPageOptions={[10, 25, 50]}/>
-      </CardActions>
-    </Card> : <Loading error={!!error} message={error}/>}
+          </Table> </CardContent>
+        <CardActions className={classes.actions}>
+          <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
+                           onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
+                           rowsPerPageOptions={[10, 25, 50]}/>
+        </CardActions>
+      </Card> : <Loading error={!!error} message={error}/>}
     </Grid>
     <Grid item xs={12} className={classes.actions}>
       <Button variant="contained" className={classes.button} onClick={handleDelete}><Icon>delete</Icon>Delete</Button>

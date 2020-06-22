@@ -14,12 +14,12 @@ export default function ListItemNavLink(props: any) {
   const theme = useTheme();
 
   useEffect(() => {
-    // Render check firstly
-      return setSelected(`${path}/${to}` === pathname);
+    // Render check firstly. exact attribute means if the url is exactly same as to attribute.
+    return setSelected(pathname.includes(to));
   }, [path, to, pathname])
 
   return (
-    <ListItem button key={props.children} component={NavLink} to={to} exact selected={selected} {...rest}
+    <ListItem button key={props.children} component={NavLink} to={to} selected={selected} {...rest}
               activeStyle={{color: theme.palette.primary.main}}>
         <span style={{minWidth: 40}}>
           <Icon>{icon}</Icon>
