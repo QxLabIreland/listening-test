@@ -1,24 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   Checkbox,
   createStyles,
-  Divider,
-  FormControl,
   Grid,
   Icon,
   IconButton,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemText,
-  MenuItem,
-  Paper,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -28,11 +18,9 @@ import {
   Theme,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Axios from "axios";
-import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
-import SearchInput from "../../shared/components/SearchInput";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {

@@ -3,7 +3,7 @@ import {useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
-import {Box, CardContent, Chip, TextField} from "@material-ui/core";
+import {CardContent, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,6 +16,7 @@ import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
+import TagsGroup from "../../shared/components/TagsGroup";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -89,10 +90,7 @@ export const AudioAbDetail = observer(function () {
             <Card>
               <CardHeader title={
                 <div style={{display: 'flex'}}>Example {i + 1}
-                  <div className={classes.chipGroup}>
-                    <Chip size="small" label="The Label" onClick={() => {}} />
-                    <Chip size="small" variant="outlined" icon={<Icon>add</Icon>} label="Add Label" onClick={() => {}} />
-                  </div>
+                  <TagsGroup tags={v.tags} onChange={newTags => v.tags = newTags}/>
                   <span style={{flexGrow: 1}}/>
                   <IconButton size="small" onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
                 </div>
