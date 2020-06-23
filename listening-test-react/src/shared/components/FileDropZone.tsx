@@ -1,13 +1,13 @@
 import React, {useRef} from "react";
-import {Typography} from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
 import TagsGroup from "./TagsGroup";
 
-export function FileDropZone(props: { onChange, fileModel: AudioFileModel, classes: any, label?: string }) {
+export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value?: string, label?: string }) {
   // Default label
-  const {onChange, fileModel, classes, label = 'Click to choose or Drop a file'} = props;
+  const {onChange, fileModel, value, label = 'Click to choose or Drop a file'} = props;
   const fileRef = useRef<HTMLInputElement>();
 
   const handleFileDrop = (event: any) => {
@@ -24,6 +24,7 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, class
       // File fields
       newFileModel.src = res.data;
       newFileModel.filename = files[0].name;
+      newFileModel.value = value;
       onChange(newFileModel);
       // Clear file input
       fileRef.current.value = null;
@@ -42,13 +43,14 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, class
 
   return <React.Fragment>
     <input type="file" ref={fileRef} onChange={handleFileDrop} hidden={true}/>
-    <div className={classes.paper} onClick={() => fileRef.current.click()}
+    <Box p={2} style={{textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)'}}
+         onClick={() => fileRef.current.click()}
          onDragOver={stopDefault}
          onDrop={handleFileDrop}>
       {fileModel?.filename ? <Typography>{fileModel.filename}</Typography>
         : <Typography>{label}</Typography>}
       <Icon>file_copy</Icon>
-    </div>
+    </Box>
     {fileModel && <TagsGroup tags={fileModel.tags} onChange={handleTagsChange}/>}
   </React.Fragment>
 }

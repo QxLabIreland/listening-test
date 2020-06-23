@@ -35,10 +35,10 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function TestResponseView(props: { testType: 'abTest' | 'mushra' }) {
+export default function TestResponseView(props: { testType: 'abTest' | 'mushra', cellActions?: React.ReactNode}) {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
-  const {testType} = props;
+  const {testType, cellActions} = props;
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [responses, setResponse] = useState(null);
@@ -93,9 +93,7 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra' 
                 <TableCell>{r.name}</TableCell>
                 <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
                 <TableCell>
-                  <IconButton size="small" className={classes.button}>
-                    <Icon>pageview</Icon>
-                  </IconButton>
+                  {cellActions}
                 </TableCell>
               </TableRow>
             )}</TableBody>

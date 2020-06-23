@@ -69,7 +69,7 @@ export const AbSurveyPage = observer(function () {
               <ExpansionPanelDetails>
                 <Grid container spacing={3}>
                   {/*TODO Expose the pause*/}
-                  <SurveyAudioController audios={[ex.audioA, ex.audioB]} audioRef={ex.audioRef}/>
+                  <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
                   <SurveyExampleRadio example={ex}/>
                 </Grid>
               </ExpansionPanelDetails>
