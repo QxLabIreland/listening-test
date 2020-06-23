@@ -12,7 +12,6 @@ import {AbExampleModel} from "../../shared/models/AbTestModel";
 
 export const SurveyExampleRadio = observer(function (props: { example: AbExampleModel }) {
   const {example} = props;
-  const audios = [example.audioA, example.audioB];
 
   const handleSelectChange = (event: any, example: any) => {
     example.answer = event.target.value;
@@ -25,8 +24,8 @@ export const SurveyExampleRadio = observer(function (props: { example: AbExample
         </FormLabel>
         <RadioGroup row aria-label="select better one" name="selectAudio" value={example.answer}
                     onChange={(e) => handleSelectChange(e, example)}>
-          {audios.map((a, i) =>
-            <FormControlLabel key={i} value={a.filename} control={<Radio/>} label={"Audio " + (i + 1)}/>
+          {example.audios.map((a, i) =>
+            <FormControlLabel key={i} value={a.value} control={<Radio/>} label={"Audio " + (i + 1)}/>
           )}
           <FormControlLabel value="*" control={<Radio/>} label="They are the same"/>
         </RadioGroup>

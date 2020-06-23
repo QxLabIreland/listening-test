@@ -2,7 +2,7 @@ export interface SurveyControlModel {
   type: SurveyControlType;
   question: string;
   options?: string[];
-  value?: any;
+  value: any;
   required?: boolean;
   otherOption?: boolean;
 }

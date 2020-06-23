@@ -20,7 +20,6 @@ export interface AbExampleModel {
   comment?: string;
   // The answer is the name of audio
   answer?: string;
-  audioA: AudioFileModel;
-  audioB: AudioFileModel;
+  audios: AudioFileModel[];
   audioRef?: AudioFileModel;
 }

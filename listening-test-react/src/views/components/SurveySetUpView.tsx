@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlModel, SurveyControlType} from "../../shared/models/SurveyControlModel";
-import React from "react";
+import React, {useState} from "react";
 import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -25,7 +25,7 @@ export const SurveySetUpView = observer(function (props) {
   const handleAdd = (type: SurveyControlType) => {
     // Check controls types
     if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
-      items.push({type: type, question: 'Untitled question', options: ['Add your options!']});
+      items.push({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
     else items.push({type: type, question: 'Untitled question'});
     // Close the adding menu
     setAnchorEl(null);
@@ -87,6 +87,7 @@ export const SurveySetUpView = observer(function (props) {
 
 const SurveyOptions = observer((props: { control: SurveyControlModel, type: SurveyControlType }) => {
   const {control, type} = props;
+  const [autoFocus, setAutoFocus] = useState(false);
   // If it is not an options control
   if (type === SurveyControlType.text) return (
     <TextField fullWidth variant="outlined" label={control.question} value="Subject will answer the question here..."
@@ -98,6 +99,7 @@ const SurveyOptions = observer((props: { control: SurveyControlModel, type: Surv
   }
 
   const handleAdd = (event) => {
+    setAutoFocus(true);
     event.preventDefault();
     event.stopPropagation();
     control.options.push('Option ' + (control.options.length + 1));
@@ -114,7 +116,7 @@ const SurveyOptions = observer((props: { control: SurveyControlModel, type: Surv
           </IconButton>
         </Grid>
         <Grid item style={{flexGrow: 1, paddingRight: 16}}>
-          <TextField fullWidth variant="standard" value={o} autoFocus
+          <TextField fullWidth variant="standard" value={o} autoFocus={autoFocus}
                      onChange={(e) => control.options[i] = e.target.value}/>
         </Grid>
         <Grid item>

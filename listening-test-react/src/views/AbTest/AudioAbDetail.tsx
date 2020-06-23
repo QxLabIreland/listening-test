@@ -18,21 +18,8 @@ import Loading from "../../shared/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
 import TagsGroup from "../../shared/components/TagsGroup";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    border: '1px dashed rgba(0, 0, 0, 0.3)'
-  },
-  chipGroup: {
-    '& > *': {margin: theme.spacing(0.5)}
-  }
-}));
-
 export const AudioAbDetail = observer(function () {
   const {id} = useParams();
-  const classes = useStyles();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
   const {setTitle} = useContext(AppBarTitle);
@@ -51,7 +38,7 @@ export const AudioAbDetail = observer(function () {
   }, []);
 
   function addExample() {
-    tests.examples.push({question: 'Briefly comment on your choice.', audioA: null, audioB: null});
+    tests.examples.push({question: 'Briefly comment on your choice.', audios: [null, null]});
   }
 
   function deleteExample(index) {
@@ -102,13 +89,13 @@ export const AudioAbDetail = observer(function () {
                                value={v.question} onChange={event => v.question=event.target.value}/>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <FileDropZone classes={classes} fileModel={v.audioA} onChange={fm=>v.audioA=fm}/>
+                    <FileDropZone fileModel={v.audios[0]} onChange={fm=>v.audios[0]=fm} value="A"/>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <FileDropZone classes={classes} fileModel={v.audioB} onChange={fm=>v.audioB=fm}/>
+                    <FileDropZone fileModel={v.audios[1]} onChange={fm=>v.audios[1]=fm} value="B"/>
                   </Grid>
                   <Grid item xs={12} md={2}>
-                    <FileDropZone classes={classes} fileModel={v.audioRef} onChange={fm=>v.audioRef=fm}
+                    <FileDropZone fileModel={v.audioRef} onChange={fm=>v.audioRef=fm}
                                   label="Reference"/></Grid>
                 </Grid>
               </CardContent>
