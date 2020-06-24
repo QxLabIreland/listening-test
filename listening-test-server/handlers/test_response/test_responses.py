@@ -11,7 +11,7 @@ class TestResponsesHandler(BaseHandler):
 
     async def get(self):
         _id = self.get_argument('_id', None)
-        collection = switch_collection(self)
+        collection = switch_response_collection(self)
         if not collection:
             return
         # Get a list or a response
@@ -26,7 +26,7 @@ class TestResponsesHandler(BaseHandler):
     async def delete(self):
         # Multiple deletion
         _ids = self.loads_body()
-        collection = switch_collection(self)
+        collection = switch_response_collection(self)
         if not collection:
             return
         # Delete with a list
@@ -34,7 +34,7 @@ class TestResponsesHandler(BaseHandler):
             collection.delete_one({'userId': self.user_id, '_id': _id})
 
 
-def switch_collection(self: BaseHandler) -> Optional[Collection]:
+def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
     test_type = self.get_argument('testType')
     # Get right collection
     if test_type == 'abTest':

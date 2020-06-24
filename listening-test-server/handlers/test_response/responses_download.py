@@ -1,9 +1,10 @@
 import os
 
+import pymongo
 from bson import ObjectId
 
 from handlers.base import BaseHandler
-from handlers.test_response.test_responses import switch_collection
+from handlers.test_response.test_responses import switch_response_collection
 from tools.file_helper import write_data_in_csv
 from datetime import datetime
 
@@ -14,11 +15,14 @@ class ResponsesDownloadHandler(BaseHandler):
 
     # Download api
     async def get(self):
-        collection = switch_collection(self)
-        if not collection:
+        # Change collection
+        res_collection = switch_response_collection(self)
+        if not res_collection:
             return
+        # Get responses, based on 1 test
         test_id = self.get_argument('testId')
-        data = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)})
+        data = res_collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
+            .sort('createdAt', pymongo.DESCENDING)
         if not data:
             return
 
@@ -28,24 +32,30 @@ class ResponsesDownloadHandler(BaseHandler):
         self.set_header('Content-Type', 'application/octet-stream')
         self.set_header('Content-Disposition', f'attachment; filename="{csv_name}"')
 
-        # Set the header of base info
+        # Set build csv and write
         is_header_writen = False
-        self.write('Name,Date,')
         for row in data:
             if not is_header_writen:
                 # Questions header
-                header_list = [x['question'] for x in row['survey']]
-                self.write(','.join(header_list) + ',')
+                header_list = ['Name', 'Date'] + [x['question'] for x in row['survey']]
+                # Tags header: replace , for |. Add extra , for Comment field
+                tag_list = [(x['tags'].replace(',', '|') if 'tags' in x else '') + ',' for x in row['examples']]
+                # Tags label + blanks + tags for examples + next row
+                self.write('Tags' + ',' * (len(header_list)) + ','.join(tag_list) + '\n')
 
-                # Examples header
-                header_list = ['Example' + str(i + 1) for i in range(len(row['examples']))]
+                # Examples header: Example and Comment
+                header_list = header_list + [f'Example{i + 1},Comment' for i in range(len(row['examples']))]
                 self.write(','.join(header_list) + '\n')
                 is_header_writen = True
 
             # Build three different lists of data
             base_list = [row['name'], row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
-            survey_value_list = [x['value'] for x in row['survey'] if 'value' in x]
-            example_answer_list = [x['answer'] for x in row['examples'] if 'answer' in x]
+            survey_value_list = [x['value'] if 'value' in x else '' for x in row['survey']]
+            example_answer_list = []
+            for x in row['examples']:
+                example_answer_list.append(x['answer'] if 'answer' in x else '')
+                # Example tests have a comment field after answer
+                example_answer_list.append(x['comment'] if 'comment' in x else '')
 
             # Append these three list and write
             self.write(','.join(base_list + survey_value_list + example_answer_list) + '\n')
