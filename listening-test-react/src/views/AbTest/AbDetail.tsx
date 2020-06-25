@@ -18,7 +18,7 @@ import Loading from "../../shared/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
 import TagsGroup from "../../shared/components/TagsGroup";
 
-export const AudioAbDetail = observer(function () {
+export const AbDetail = observer(function () {
   const {id} = useParams();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);

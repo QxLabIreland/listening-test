@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 
-export default function AudioAbList (props: {tests: AbTestModel[], handleDelete}) {
+export default function AbTestList (props: {tests: AbTestModel[], handleDelete}) {
   const {tests, handleDelete} = props;
   const classes = useStyles();
   const {path} = useRouteMatch();

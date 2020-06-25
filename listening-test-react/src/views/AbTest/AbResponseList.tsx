@@ -21,6 +21,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
 import Axios from "axios";
 import Loading from "../../shared/components/Loading";
+import ResponsePreviewDialog from "../components/ResponsePreviewDialog";
+import {AbSurveyPage} from "../AbTestSurvey/AbSurveyPage";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {
@@ -35,10 +37,9 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function TestResponseView(props: { testType: 'abTest' | 'mushra', cellActions?: React.ReactNode}) {
+export default function AbResponseList() {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
-  const {testType, cellActions} = props;
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [responses, setResponse] = useState(null);
@@ -46,9 +47,9 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
   const {id} = useParams();
 
   useEffect(() => {
-    Axios.get('/api/response', {params: {testType: testType, testId: id}})
+    Axios.get('/api/response', {params: {testType: 'abTest', testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.statusText));
-  }, [testType])
+  }, [id])
 
   const handleSelectAll = event => {
     currentPageList().forEach(res => res.selected = event.target.checked);
@@ -58,14 +59,18 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
     res.selected = event.target.checked;
     setResponse([...responses]);
   }
+  // Page handle
   const handlePageChange = (event, page) => setPage(page);
   const handleRowsPerPageChange = event => setRowsPerPage(event.target.value);
 
+  // Batch delete checked items
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
-    Axios.delete('/api/response', {params: {testType: testType, testId: id}, data: deletedList})
+    Axios.delete('/api/response', {params: {testType: 'abTest', testId: id}, data: deletedList})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
+
+  // Get a list of items for current page
   const currentPageList = () => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (<Grid container spacing={1}>
@@ -93,7 +98,7 @@ export default function TestResponseView(props: { testType: 'abTest' | 'mushra',
                 <TableCell>{r.name}</TableCell>
                 <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
                 <TableCell>
-                  {cellActions}
+                  <ResponsePreviewDialog><AbSurveyPage/> </ResponsePreviewDialog>
                 </TableCell>
               </TableRow>
             )}</TableBody>
