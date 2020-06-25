@@ -2,9 +2,9 @@ import React from "react";
 import {Box, createStyles, Fab, Icon, Tab, Tabs, Theme, Tooltip} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import Axios from "axios";
-import {AbDetail} from "./AbDetail";
+import {AbTestDetail} from "./AbTestDetail";
 import {useParams} from "react-router";
-import AbResponseList from "./AbResponseList";
+import AbTestResponses from "./AbTestResponses";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,9 +38,9 @@ export default function AbTestTab() {
         <Tab label="Responses"/>
       </Tabs>
       <Box paddingTop={2}>
-        {value === 0 && <AbDetail/>}
+        {value === 0 && <AbTestDetail/>}
         {value === 1 && <React.Fragment>
-          <AbResponseList/>
+          <AbTestResponses/>
           <Tooltip title="Download All Responses For This Section">
             <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleDownload}>
               <Icon>get_app</Icon>
