@@ -10,21 +10,22 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import {SurveyAudioController} from "../../shared/components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
-import {SurveyExampleRadio} from "./SurveyExampleRadio";
+import {SurveyExampleRadio} from "../components/SurveyExampleRadio";
 import {SurveyCardView} from "../components/SurveyCardView";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../shared/components/Loading";
 
-export const AbSurveyPage = observer(function () {
-  const [theTest, setTheTest] = useState<AbTestModel>(null);
+export const AbSurveyPage = observer(function (props: {value?: AbTestModel}) {
+  const {value} = props;
+  const [theTest, setTheTest] = useState<AbTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
   const {id} = useParams();
 
   useEffect(() => {
-    Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
+    if (!value) Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
       .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.statusText))
   }, [id]);
 
@@ -81,7 +82,7 @@ export const AbSurveyPage = observer(function () {
             </ExpansionPanel>
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid item xs={12} hidden={!!value}>
           <Grid container justify="flex-end">
             <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
           </Grid>

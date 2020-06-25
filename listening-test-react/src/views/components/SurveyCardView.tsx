@@ -15,8 +15,8 @@ import {SurveyControlModel, SurveyControlType} from "../../shared/models/SurveyC
 import {observer} from "mobx-react";
 
 
-export const SurveyCardView =  observer(function (props) {
-  const {items} = props as { items: SurveyControlModel[]};
+export const SurveyCardView =  observer(function (props: {items: SurveyControlModel[]}) {
+  const {items} = props;
   if (!items) return null;
 
   function renderControl(control: SurveyControlModel) {

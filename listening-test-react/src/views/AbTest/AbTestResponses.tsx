@@ -22,7 +22,7 @@ import {useParams} from "react-router-dom";
 import Axios from "axios";
 import Loading from "../../shared/components/Loading";
 import ResponsePreviewDialog from "../components/ResponsePreviewDialog";
-import {AbSurveyPage} from "../AbTestSurvey/AbSurveyPage";
+import {AbSurveyPage} from "./AbSurveyPage";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function AbResponseList() {
+export default function AbTestResponses() {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -98,7 +98,7 @@ export default function AbResponseList() {
                 <TableCell>{r.name}</TableCell>
                 <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
                 <TableCell>
-                  <ResponsePreviewDialog><AbSurveyPage/> </ResponsePreviewDialog>
+                  <ResponsePreviewDialog><AbSurveyPage value={r}/></ResponsePreviewDialog>
                 </TableCell>
               </TableRow>
             )}</TableBody>
