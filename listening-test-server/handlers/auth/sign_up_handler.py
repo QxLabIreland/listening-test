@@ -12,5 +12,6 @@ class SignUpHandler(BaseHandler):
         else:
             body['createdAt'] = datetime.now()
             # Do insertion into users
-            user = self.db['users'].insert(body)
-            self.dumps_write(user)
+            user_oid = self.db['users'].insert(body)
+            self.set_secure_cookie("_user", str(user_oid), expires=7, httponly=True, secure=False)
+            self.dumps_write(user_oid)

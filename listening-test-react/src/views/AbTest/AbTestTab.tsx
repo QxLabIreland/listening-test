@@ -24,7 +24,7 @@ export default function AbTestTab() {
 
   const handleDownload = () => {
     const uri = Axios.getUri({
-      url: 'http://localhost:8888/api/response-download',
+      url: 'http://localhost:8889/api/response-download',
       params: {testType: 'abTest', testId: id}
     });
     // const uri = Axios.getUri({url: '/api/response-download', params: {testType: testType}})

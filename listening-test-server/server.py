@@ -7,7 +7,7 @@ from tornado.options import define, options
 from mongodbconnection import create_default_user
 from url import path
 
-define("port", default=8888, help="run on the given port", type=int)
+define("port", default=8889, help="run on the given port", type=int)
 
 
 class Application(tornado.web.Application):
@@ -32,5 +32,5 @@ if __name__ == "__main__":
     http_server.listen(options.port)
     # operations and information before starting
     create_default_user()
-    print("The server is now on http://localhost:8888")
+    print("The server is now on http://localhost:8889")
     tornado.ioloop.IOLoop.instance().start()
