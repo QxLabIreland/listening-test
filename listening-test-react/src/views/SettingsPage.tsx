@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, TextField} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
 import Axios from "axios";
-import {email, minLength, pipeValidator, required} from "../shared/FormikValidator";
+import {minLength, pipeValidator, required} from "../shared/FormikValidator";
 import {GlobalDialog} from "../shared/ReactContexts";
 
 export default function SettingsPage() {
@@ -78,7 +78,4 @@ export default function SettingsPage() {
       </Card>
     </Grid>
   </Grid>
-    ;
-
-
 }
