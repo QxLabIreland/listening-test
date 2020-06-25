@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import AudioAbList from "./AudioAbList";
+import AbTestList from "./AbTestList";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
@@ -62,7 +62,7 @@ export default function AbTestPage() {
         <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
       </Grid>
       <Grid item xs={12}>
-        {filtered && <AudioAbList tests={filtered} handleDelete={handleDelete}/>}
+        {filtered && <AbTestList tests={filtered} handleDelete={handleDelete}/>}
         {data ? null : <Loading error={!!error} message={error}/>}
       </Grid>
 

@@ -12,7 +12,6 @@ import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import MushraPage from "../../views/MushraPage";
-import TestResponsePage from "../../views/TestResponses/TestResponsePage";
 import AbTestPage from "../../views/AbTest/AbTestPage";
 import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
@@ -47,7 +46,6 @@ export default function AppBarDrawer(props: any) {
 
   const drawer = <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
-    <ListItemNavLink to={`${path}/responses`} icon='assignment'>Test Responses</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
@@ -79,9 +77,6 @@ export default function AppBarDrawer(props: any) {
         {/*Navigation page*/}
         <Route exact path={`${path}/dashboard`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><DashboardPage/></AppBarLayout>
-        </Route>
-        <Route path={`${path}/responses`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><TestResponsePage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><AbTestPage/></AppBarLayout>
