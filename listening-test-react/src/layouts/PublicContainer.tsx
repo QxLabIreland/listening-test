@@ -15,7 +15,7 @@ export default function PublicContainer() {
     <Suspense fallback={<Loading/>}>
       <AppBar position="sticky" color="default" elevation={3}>
         <Toolbar>
-          <Button component={Link} to='/'>Audio Test</Button>
+          <Button component={Link} to='/'>Listening Test</Button>
           {/*<Button component={Link} to='about'>About</Button>*/}
           <Typography style={{flexGrow: 1}}/>
           <Button component={Link} to='sign-in' color="primary" variant="outlined">Login</Button>
