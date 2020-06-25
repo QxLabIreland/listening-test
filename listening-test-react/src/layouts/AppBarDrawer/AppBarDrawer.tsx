@@ -48,7 +48,7 @@ export default function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
+    {/*<ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>*/}
     <Divider/>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
     <ListItemNavLink to="/sign-in" icon='exit_to_app' onClick={handleSignOut}>Sign out</ListItemNavLink>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -16,6 +16,7 @@ import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../shared/components/Loading";
+import {GlobalDialog} from "../../shared/ReactContexts";
 
 export const AbSurveyPage = observer(function (props: {value?: AbTestModel}) {
   const {value} = props;
@@ -23,6 +24,7 @@ export const AbSurveyPage = observer(function (props: {value?: AbTestModel}) {
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
   const {id} = useParams();
+  const globalDialog = useContext(GlobalDialog);
 
   useEffect(() => {
     if (!value) Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
@@ -35,7 +37,8 @@ export const AbSurveyPage = observer(function (props: {value?: AbTestModel}) {
   }
 
   function handleSubmit() {
-    Axios.post('/api/task/ab-test', toJS(theTest)).then(() => alert('Thanks!'));
+    Axios.post('/api/task/ab-test', toJS(theTest))
+      .then(() => globalDialog('Thanks for your submitting! The page will be closed.', 'Done')); // , () => window.close()
   }
 
   return (

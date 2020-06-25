@@ -76,6 +76,9 @@ export function pipeValidator(fields: Field) {
   }
 }
 
+
+// Value means what value will use type in. Errors means what error will be added. Name is the field name
+// About return. If there is an error, should return true. The return means are there errors?
 interface Field {
   [key: string]: ((value, errors, name) => boolean)[]
 }

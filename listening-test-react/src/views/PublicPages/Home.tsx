@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary">
-      Copyright © Your Website {new Date().getFullYear()}.
+      Copyright © Listening Test {new Date().getFullYear()}.
     </Typography>
   );
 }
@@ -41,18 +41,18 @@ export default function Home() {
       <CssBaseline />
       <Container component="main" className={classes.main} maxWidth="sm">
         <Typography variant="h2" component="h1" gutterBottom>
-          Sticky footer
+          Hello there!
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom>
-          {'Pin a footer to the bottom of the viewport.'}
-          {'The footer will move as the main element of the page grows.'}
+          Conduct listening test and collect information in an easy way!<br/>
+
         </Typography>
-        <Typography variant="body1">Sticky footer placeholder.</Typography>
+        <Typography variant="body1">Click sign in to start your tests.</Typography>
         <Typography variant="body2"><small>Photo by Wolfgang Hasselmann on Unsplash</small></Typography>
       </Container>
       <footer className={classes.footer}>
         <Container maxWidth="sm">
-          <Typography variant="body1">My sticky footer can be found here.</Typography>
+          <Typography variant="body1">by QxLab at University College Dublin</Typography>
           <Copyright />
         </Container>
       </footer>
