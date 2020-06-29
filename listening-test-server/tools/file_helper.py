@@ -4,12 +4,12 @@ import csv
 from datetime import datetime
 from typing import List
 
-static_root_url = '/static'
+static_root_url = '/static2'
 
 
 # Write a file in UUID name
 def write_in_md5(file, folder: str):
-    path = os.path.join(os.getcwd(), "static", folder)
+    path = os.path.join(os.getcwd(), "static2", folder)
     # If the folder exists, create nested dirs
     if not os.path.exists(path):
         os.makedirs(path)
@@ -45,7 +45,7 @@ def write_data_in_csv(columns: List[str], data: List[dict], prefix_name: str = '
 
 # Write files in designated folder
 def write_upload_files(file_metas, folder):
-    path = os.path.join(os.getcwd(), "static", folder)
+    path = os.path.join(os.getcwd(), "static2", folder)
     # Create nested dirs
     if not os.path.exists(path):
         os.makedirs(path)
@@ -60,7 +60,7 @@ def write_upload_files(file_metas, folder):
 
 # Get a list of files in designated folder
 def list_files(folder):
-    path = os.path.join(os.getcwd(), "static", folder)
+    path = os.path.join(os.getcwd(), "static2", folder)
     result = []
     # If the folder exists
     if os.path.exists(path):
@@ -78,7 +78,7 @@ def list_files(folder):
 
 
 def delete_file(folder, filename):
-    path = os.path.join(os.getcwd(), "static", folder, filename)
+    path = os.path.join(os.getcwd(), "static2", folder, filename)
     if os.path.exists(path):
         os.remove(path)
         return True

@@ -17,7 +17,8 @@ class Application(tornado.web.Application):
             xsrf_cookies=True,
             login_url="/login",
             debug=True,
-            static_path=os.path.join(os.path.dirname(__file__), "static"),
+            static_path=os.path.join(os.path.dirname(__file__), "static2"),
+            static_url_prefix='/static2/',
             xheaders=True,
         )
         super(Application, self).__init__(path, **settings)
