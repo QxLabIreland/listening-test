@@ -1,15 +1,27 @@
 import {observer} from "mobx-react";
 import {SurveyControlModel, SurveyControlType} from "../../shared/models/SurveyControlModel";
 import React, {useState} from "react";
-import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, TextField} from "@material-ui/core";
+import {
+  Button,
+  CardContent,
+  Grid,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
+import {useScrollToView} from "../../shared/ReactHooks";
 
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
   const {items} = props;
+  const {viewRef, scrollToView} = useScrollToView();
   // const [items] = useState(observable([
   //   {type: 0, question: 'Text test'},
   //   {type: 1, question: 'Radio test', options: ['1', '2', '3']},
@@ -25,25 +37,26 @@ export const SurveySetUpView = observer(function (props) {
   const handleAdd = (type: SurveyControlType) => {
     // Check controls types
     if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
-      items.push({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
-    else items.push({type: type, question: 'Untitled question'});
+      items.push({type: type, question: 'Untitled question ' + (items.length + 1), options: ['Add your options!'], value: null});
+    else items.push({type: type, question: 'Untitled question ' + (items.length + 1)});
     // Close the adding menu
     setAnchorEl(null);
+    scrollToView();
   }
 
   const handleDelete = (control) => items.splice(items.indexOf(control), 1);
 
   return <Card>
-    <CardHeader title="A survey before the test"/>
+    <CardHeader title="Create a survey before the test"/>
     <CardContent>
       <Grid container spacing={3}>
         {items.map((c, i) =>
-          <Grid item container spacing={3} key={i}>
+          <Grid item container spacing={3} key={i} ref={viewRef} style={{scrollMarginTop: 100}}>
             {/*Question input*/}
             <Grid item xs={12} container justify="space-between">
               <Grid item style={{flexGrow: 1, paddingRight: 16}}>
-                <TextField fullWidth variant="filled" label="Your question" value={c.question}
-                           onChange={(e) => c.question = e.target.value}/>
+                <TextField fullWidth variant="filled" label={'Your question ' + (i+1)} value={c.question}
+                           onChange={(e) => c.question = e.target.value} onFocus={event => event.target.select()}/>
               </Grid>
               <Grid item>
                 <IconButton size="small" onClick={() => handleDelete(c)}><Icon>delete</Icon></IconButton>
@@ -58,6 +71,9 @@ export const SurveySetUpView = observer(function (props) {
             {/*Adding menu Button*/}
             <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>add</Icon>Add a question</Button>
             <Menu anchorEl={anchorEl} keepMounted open={!!anchorEl} onClose={() => setAnchorEl(null)}>
+              <MenuItem disabled>
+                <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
+              </MenuItem>
               <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
                 <ListItemIcon>
                   <Icon fontSize="small">text_fields</Icon>
@@ -115,8 +131,9 @@ const SurveyOptions = observer((props: { control: SurveyControlModel, type: Surv
             {type === SurveyControlType.checkbox && <Icon>check_box_outline_blank</Icon>}
           </IconButton>
         </Grid>
+        {/*Options text field*/}
         <Grid item style={{flexGrow: 1, paddingRight: 16}}>
-          <TextField fullWidth variant="standard" value={o} autoFocus={autoFocus}
+          <TextField fullWidth variant="standard" value={o} autoFocus={autoFocus} onFocus={event=>event.target.select()}
                      onChange={(e) => control.options[i] = e.target.value}/>
         </Grid>
         <Grid item>

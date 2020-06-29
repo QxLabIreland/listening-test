@@ -15,7 +15,7 @@ export default function SignIn() {
   const formik = useFormik({
     initialValues: {email: '', password: ''},
     onSubmit: values => {
-      Axios.post('/api/login', values, {withCredentials: true}).then(() => {
+      Axios.post('/api/login', values).then(() => {
         history.push('/user');
       }, (reason) => {
         console.log(reason.response)
