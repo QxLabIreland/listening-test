@@ -62,6 +62,7 @@ export default function AppBarLayout(props: any) {
           {props.children}
         </Container>
       </main>
+
     </AppBarTitle.Provider>
   )
 }

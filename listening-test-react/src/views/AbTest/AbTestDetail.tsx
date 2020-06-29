@@ -22,14 +22,12 @@ export const AbTestDetail = observer(function () {
   const {id} = useParams();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
-  const {setTitle} = useContext(AppBarTitle);
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
   // Scroll properties
   const {viewRef, scrollToView} = useScrollToView();
 
   useEffect(() => {
-    setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
     // If it is edit page, get data from back end
     if (+id !== 0) Axios.get<AbTestModel>('/api/ab-test', {params: {_id: id}})
       // Successful callback
@@ -37,6 +35,8 @@ export const AbTestDetail = observer(function () {
         () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', examples: [], survey: []}));
+    // TODO Clean up and auto save
+    return () => {};
   }, []);
 
   function addExample() {
