@@ -29,7 +29,7 @@ class LoginHandler(BaseHandler):
 
         if str(body["password"]) == str(user["password"]):
             # Set_secure_cookie, which cannot be get by browser
-            self.set_secure_cookie("_user", str(user["_id"]), expires=7, httponly=True, secure=False)
+            self.set_secure_cookie("_user", str(user["_id"]), httponly=True, secure=False)
             del user['password']
             self.dumps_write(user)
             # self.redirect(self.get_argument("next", "/"))
