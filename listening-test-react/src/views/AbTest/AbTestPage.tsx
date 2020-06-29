@@ -4,26 +4,13 @@ import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import AbTestList from "./AbTestList";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  row: {
-    height: '42px',
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: theme.spacing(1)
-  },
-  spacer: {
-    flexGrow: 1
-  }
-}));
 
 export default function AbTestPage() {
-  const classes = useStyles();
   const {path} = useRouteMatch();
   const [data, setData] = useState<AbTestModel[]>(null);
   const [filtered, setFiltered] = useState<AbTestModel[]>(null);
@@ -52,14 +39,16 @@ export default function AbTestPage() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} className={classes.row}>
-        <span className={classes.spacer}/>
-        <Button color="primary" variant="contained" component={Link} to={`${path}/0`}>
-          Add test
-        </Button>
-      </Grid>
-      <Grid item xs={12} className={classes.row}>
-        <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
+      <Grid item container xs={12}>
+        <Grid item xs={12} md={6}>
+          <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
+        </Grid>
+        <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center'}}>
+          <span style={{flexGrow: 1}}/>
+          <Button color="primary" variant="contained" component={Link} to={`${path}/0`}>
+            Add test
+          </Button>
+        </Grid>
       </Grid>
       <Grid item xs={12}>
         {filtered && <AbTestList tests={filtered} handleDelete={handleDelete}/>}

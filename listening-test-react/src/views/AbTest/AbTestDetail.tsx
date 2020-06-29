@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
 import {CardContent, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
@@ -17,6 +16,7 @@ import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../shared/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
 import TagsGroup from "../../shared/components/TagsGroup";
+import {useScrollToView} from "../../shared/ReactHooks";
 
 export const AbTestDetail = observer(function () {
   const {id} = useParams();
@@ -25,6 +25,8 @@ export const AbTestDetail = observer(function () {
   const {setTitle} = useContext(AppBarTitle);
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
+  // Scroll properties
+  const {viewRef, scrollToView} = useScrollToView();
 
   useEffect(() => {
     setTitle(+id === 0 ? 'New AB Test' : 'AB Test ' + id);
@@ -39,6 +41,7 @@ export const AbTestDetail = observer(function () {
 
   function addExample() {
     tests.examples.push({question: 'Briefly comment on your choice.', audios: [null, null]});
+    scrollToView();
   }
 
   function deleteExample(index) {
@@ -73,7 +76,7 @@ export const AbTestDetail = observer(function () {
           <SurveySetUpView items={tests.survey}/>
         </Grid>
         {tests.examples.map((v, i) =>
-          <Grid item xs={12} key={i}>
+          <Grid item xs={12} key={i} ref={viewRef}>
             <Card>
               <CardHeader title={
                 <div style={{display: 'flex'}}>Example {i + 1}

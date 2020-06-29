@@ -5,6 +5,7 @@ import Axios from "axios";
 import {AbTestDetail} from "./AbTestDetail";
 import {useParams} from "react-router";
 import AbTestResponses from "./AbTestResponses";
+import {downloadFileTool} from "../../shared/ReactTools";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,20 +23,15 @@ export default function AbTestTab() {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => setValue(newValue)
   const {id} = useParams();
 
-  const handleDownload = () => {
-    const uri = Axios.getUri({
-      url: 'http://localhost:8889/api/response-download',
-      params: {testType: 'abTest', testId: id}
-    });
-    // const uri = Axios.getUri({url: '/api/response-download', params: {testType: testType}})
-    window.open(uri);
-  }
+  const handleDownload = () => downloadFileTool({
+    url: '/response-download', params: {testType: 'abTest', testId: id}
+  });
 
   return (
     <React.Fragment>
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
         <Tab label="Questions"/>
-        <Tab label="Responses"/>
+        <Tab label="Responses" disabled={id === '0'}/>
       </Tabs>
       <Box paddingTop={2}>
         {value === 0 && <AbTestDetail/>}
