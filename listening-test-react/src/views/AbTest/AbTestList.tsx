@@ -38,7 +38,7 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Resp. Count</TableCell>
+              <TableCell>Responses</TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip enterDelay={300} title="Sort">
                   <TableSortLabel active direction="desc">
@@ -50,9 +50,13 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
             </TableRow>
           </TableHead>
           <TableBody>
+            {/* TODO <TableCell colSpan={2}>Data Two Columns</TableCell>*/}
             {tests.map(test => <TableRow hover key={test._id.$oid}>
               <TableCell>{test.name}</TableCell>
-              <TableCell>{test.responses.length}</TableCell>
+              <TableCell>
+                <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
+                        color="primary">{test.responses.length}</Button>
+              </TableCell>
               <TableCell>
                 {new Date(test.createdAt?.$date).toLocaleString()}
                 {/*{moment(order.createdAt).format('DD/MM/YYYY')}*/}

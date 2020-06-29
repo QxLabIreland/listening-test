@@ -38,12 +38,12 @@ export default function AbTestPage() {
     );
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <Grid item container xs={12}>
         <Grid item xs={12} md={6}>
           <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
         </Grid>
-        <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center'}}>
+        <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
           <span style={{flexGrow: 1}}/>
           <Button color="primary" variant="contained" component={Link} to={`${path}/0`}>
             Add test
