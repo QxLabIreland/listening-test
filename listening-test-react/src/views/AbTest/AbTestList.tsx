@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-
 export default function AbTestList (props: {tests: AbTestModel[], handleDelete}) {
   const {tests, handleDelete} = props;
   const classes = useStyles();
@@ -50,8 +49,7 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* TODO <TableCell colSpan={2}>Data Two Columns</TableCell>*/}
-            {tests.map(test => <TableRow hover key={test._id.$oid}>
+            {tests.length ? tests.map(test => <TableRow hover key={test._id.$oid}>
               <TableCell>{test.name}</TableCell>
               <TableCell>
                 <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
@@ -68,7 +66,7 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
                 <IconButton className={classes.button} size="small" color="default" onClick={() => handleDelete(test)}>
                   <Icon>delete</Icon></IconButton>
               </TableCell>
-            </TableRow>)}
+            </TableRow>) : <TableCell colSpan={4}>There is no test here. You can add test by the button top right.</TableCell>}
           </TableBody>
         </Table>
       </CardContent>
