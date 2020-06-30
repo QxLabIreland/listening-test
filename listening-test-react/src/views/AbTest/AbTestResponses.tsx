@@ -15,7 +15,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Theme,
+  Theme, Typography,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function AbTestResponses() {
+export default function AbTestResponses(props) {
   const classes = useStyles();
   // Prefix is the router prefix of a detail
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -73,36 +73,35 @@ export default function AbTestResponses() {
   // Get a list of items for current page
   const currentPageList = () => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  return (<Grid container spacing={1}>
+  return (<Grid container spacing={2}>
     <Grid item xs={12}>
       {responses ? <Card>
-        <CardContent className={classes.content}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox checked={currentPageList().every(value => value.selected)} color="primary"
-                            indeterminate={currentPageList().some(value => value.selected) && !currentPageList().every(value => value.selected)}
-                            onChange={handleSelectAll}/>
-                </TableCell>
-                <TableCell>Test Name</TableCell>
-                <TableCell>Submitted At</TableCell>
-                <TableCell/>
-              </TableRow>
-            </TableHead>
-            <TableBody>{currentPageList().map(r =>
-              <TableRow hover key={r._id.$oid}>
-                <TableCell padding="checkbox">
-                  <Checkbox checked={!!r.selected} color="primary" onChange={event => handleSelectOne(event, r)}/>
-                </TableCell>
-                <TableCell>{r.name}</TableCell>
-                <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
-                <TableCell>
-                  <ResponsePreviewDialog><AbSurveyPage value={r}/></ResponsePreviewDialog>
-                </TableCell>
-              </TableRow>
-            )}</TableBody>
-          </Table> </CardContent>
+        <CardContent className={classes.content}><Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox checked={currentPageList().every(value => value.selected)} color="primary"
+                          indeterminate={currentPageList().some(value => value.selected) && !currentPageList().every(value => value.selected)}
+                          onChange={handleSelectAll}/>
+              </TableCell>
+              <TableCell>Test Name</TableCell>
+              <TableCell>Submitted At</TableCell>
+              <TableCell/>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentPageList().length ? currentPageList().map(r => <TableRow hover key={r._id.$oid}>
+              <TableCell padding="checkbox">
+                <Checkbox checked={!!r.selected} color="primary" onChange={event => handleSelectOne(event, r)}/>
+              </TableCell>
+              <TableCell>{r.name}</TableCell>
+              <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
+              <TableCell>
+                <ResponsePreviewDialog><AbSurveyPage value={r}/></ResponsePreviewDialog>
+              </TableCell>
+            </TableRow>) : <TableCell colSpan={4}>There is no response here for this page.</TableCell>}
+          </TableBody>
+        </Table></CardContent>
         <CardActions className={classes.actions}>
           <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
                            onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
@@ -111,7 +110,8 @@ export default function AbTestResponses() {
       </Card> : <Loading error={!!error} message={error}/>}
     </Grid>
     <Grid item xs={12} className={classes.actions}>
-      <Button variant="contained" className={classes.button} onClick={handleDelete}><Icon>delete</Icon>Delete</Button>
+      {props.children}
+      <Button variant="outlined" className={classes.button} onClick={handleDelete}><Icon>delete</Icon>Delete Selected</Button>
       {/*<Button variant="contained" color="primary" className={classes.button}><Icon>get_app</Icon>Download Responses</Button>*/}
     </Grid>
   </Grid>);

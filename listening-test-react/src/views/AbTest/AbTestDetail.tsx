@@ -57,7 +57,7 @@ export const AbTestDetail = observer(function () {
   }
 
   return (
-    <Grid container spacing={3} justify="center" alignItems="center">
+    <Grid container spacing={2} justify="center" alignItems="center">
       {tests ? <React.Fragment>
         <Grid item xs={12} style={{display: 'flex'}}>
           <span style={{flexGrow: 1}}/>
