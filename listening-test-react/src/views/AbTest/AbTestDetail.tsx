@@ -36,7 +36,6 @@ export const AbTestDetail = observer(function () {
     // If in creation page
     else setTests(observable({name: '', description: '', examples: [], survey: []}));
     // TODO Clean up and auto save
-    return () => {};
   }, []);
 
   function addExample() {
