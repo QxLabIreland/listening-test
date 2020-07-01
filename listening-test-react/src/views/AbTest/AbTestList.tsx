@@ -15,6 +15,7 @@ import {Link} from "react-router-dom";
 import {useRouteMatch} from 'react-router';
 import {Icon, IconButton, Snackbar} from "@material-ui/core";
 import {AbTestModel} from "../../shared/models/AbTestModel";
+import {getCurrentHost} from "../../shared/ReactTools";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -83,7 +84,7 @@ function ShareIconButton(props) {
     setSnackbarOpen(false);
   };
   const handleShareClick = () => {
-    navigator.clipboard.writeText(`http://localhost:3000${url}`)
+    navigator.clipboard.writeText(getCurrentHost() + url)
       .then(() => setSnackbarOpen(true));
   }
 

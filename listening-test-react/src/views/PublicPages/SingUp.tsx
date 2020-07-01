@@ -1,22 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Checkbox, FormHelperText, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useStyles} from "./SignInUpStyles";
 import {useFormik} from "formik";
 import {email, maxLength, minLength, mustBeTrue, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
+import {GlobalDialog} from "../../shared/ReactContexts";
 
 export default function SignUp() {
   const classes = useStyles();
   const history = useHistory();
+  const openDialog = useContext(GlobalDialog);
+  // Form initialization
   const formik = useFormik({
     initialValues: {name: '', email: '', password: '', policy: false},
-    onSubmit: values => {
-      Axios.post('/api/sign-up', values).then(() => history.push('/user'), (reason) => {
-        console.log(reason.response)
-        alert(reason.response.statusText)
-      })
-    },
+    onSubmit: values => Axios.post('/api/sign-up', values)
+      .then(() => history.push('/user'), (reason) => openDialog(reason.response.data)),
     validate: pipeValidator({
       name: [required(), maxLength(128)],
       email: [email(), required()],
@@ -39,7 +38,7 @@ export default function SignUp() {
         </Grid>
         <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
-            <div className={classes.contentHeader} />
+            <div className={classes.contentHeader}/>
             <div className={classes.contentBody}>
               <form className={classes.form} onSubmit={formik.handleSubmit}>
                 <Typography className={classes.title} variant="h2">

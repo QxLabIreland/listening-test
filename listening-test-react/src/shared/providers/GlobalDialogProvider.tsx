@@ -30,7 +30,7 @@ export default function GlobalDialogProvider(props) {
         <DialogTitle id="alert-dialog-title">{options.title ? options.title : 'Alert'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {options.description}
+            {options.description ? options.description : 'Unknown error'}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

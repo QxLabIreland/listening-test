@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useHistory, useParams} from 'react-router';
+import {Prompt, useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import {CardContent, TextField} from "@material-ui/core";
@@ -26,6 +26,7 @@ export const AbTestDetail = observer(function () {
   const openDialog = useContext(GlobalDialog);
   // Scroll properties
   const {viewRef, scrollToView} = useScrollToView();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
 
   useEffect(() => {
     // If it is edit page, get data from back end
@@ -48,15 +49,19 @@ export const AbTestDetail = observer(function () {
   }
 
   const handleSubmit = () => {
+    setIsSubmitted(true);
     Axios.request({
       method: +id === 0 ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
     }).then(() => {
       history.push('./');
-    }, reason => openDialog(reason.response.statusText, 'Something wrong'))
+    }, reason => openDialog(reason.response.data, 'Something wrong'))
   }
 
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
+      <Prompt when={!isSubmitted}
+              message='You have unsaved changes, are you sure you want to leave?'/>
+
       {tests ? <React.Fragment>
         <Grid item xs={12} style={{display: 'flex'}}>
           <span style={{flexGrow: 1}}/>
