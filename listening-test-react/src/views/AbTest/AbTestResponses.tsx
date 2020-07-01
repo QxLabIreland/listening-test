@@ -99,7 +99,9 @@ export default function AbTestResponses(props) {
               <TableCell>
                 <ResponsePreviewDialog><AbSurveyPage value={r}/></ResponsePreviewDialog>
               </TableCell>
-            </TableRow>) : <TableCell colSpan={4}>There is no response here for this page.</TableCell>}
+            </TableRow>) :<TableRow>
+              <TableCell colSpan={4}>There is no response here for this page.</TableCell>
+            </TableRow>}
           </TableBody>
         </Table></CardContent>
         <CardActions className={classes.actions}>
