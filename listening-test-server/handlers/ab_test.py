@@ -5,7 +5,7 @@ from handlers.base import BaseHandler
 
 class AbTestHandler(BaseHandler):
     def prepare(self):
-        self.user_id = self.get_current_user()
+        self.user_id = self.auth_current_user()
 
     async def get(self):
         _id = self.get_argument('_id', None)
