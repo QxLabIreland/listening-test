@@ -14,7 +14,7 @@ export default function SettingsPage() {
       Axios.put('/api/password', values, {withCredentials: true}).then(() => {
         alert('success');
       }, (reason) => {
-        openDialog(reason.response.statusText);
+        openDialog(reason.response.data);
       });
     },
     validate: pipeValidator({

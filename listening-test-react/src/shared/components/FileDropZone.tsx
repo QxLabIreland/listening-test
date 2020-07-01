@@ -22,6 +22,13 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value
     if (!files) files = event.dataTransfer.files;
     const formData = new FormData();
     formData.append("audioFile", files[0]);
+    // Config what to do when finished
+    const onUploadingFinished =() => {
+      // Clear file input
+      fileRef.current.value = null;
+      setIsUploading(false);
+      setProgress(0);
+    }
 
     // Uploading animation
     setIsUploading(true);
@@ -38,14 +45,8 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value
       newFileModel.filename = files[0].name;
       newFileModel.value = value;
       onChange(newFileModel);
-      // Clear file input
-      fileRef.current.value = null;
-      setIsUploading(false);
-    }, () => {
-      // Clear file input
-      fileRef.current.value = null;
-      setIsUploading(false);
-    })
+      onUploadingFinished();
+    }, onUploadingFinished)
   }
 
   function stopDefault(event: any) {

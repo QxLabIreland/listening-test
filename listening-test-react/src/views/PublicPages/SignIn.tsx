@@ -19,7 +19,7 @@ export default function SignIn() {
         history.push('/user');
       }, (reason) => {
         console.log(reason.response)
-        openDialog(reason.response.statusText);
+        openDialog(reason.response.data);
       })
 
     },

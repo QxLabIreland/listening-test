@@ -13,9 +13,10 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
   const refAudioRef = useRef<HTMLAudioElement>();
 
   // Include the reference audio for player controller, make sure they work in the same way
-  const includeAudioRef = () => {
-    return {allAudio: audioRef ? [...audios, audioRef] : audios, allRefs: audioRef ? [...refs, refAudioRef] : refs}
-  }
+  const includeAudioRef = () => Object.create({
+    allAudio: audioRef ? [...audios, audioRef] : audios,
+    allRefs: audioRef ? [...refs, refAudioRef] : refs
+  });
 
   const handlePause = () => {
     // Deconstruction for all including reference audio
@@ -61,6 +62,7 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
           <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
                   startIcon={<Icon>audiotrack</Icon>}
                   onClick={() => v.isPlaying ? handlePause() : handlePlay(v)}>Audio {i + 1}</Button>
+          <span>{refs[i].current?.currentTime}</span>
         </Grid>
       )}
 
@@ -70,6 +72,7 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
         <Button variant={audioRef.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
                 startIcon={<Icon>audiotrack</Icon>}
                 onClick={() => audioRef.isPlaying ? handlePause() : handlePlay(audioRef)}>Reference</Button>
+        <span>{refAudioRef.current?.currentTime}</span>
       </Grid>}
 
       <Grid item xs={12}>

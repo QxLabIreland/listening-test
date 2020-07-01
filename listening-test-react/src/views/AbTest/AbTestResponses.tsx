@@ -48,7 +48,7 @@ export default function AbTestResponses(props) {
 
   useEffect(() => {
     Axios.get('/api/response', {params: {testType: 'abTest', testId: id}})
-      .then(res => setResponse(res.data), reason => setError(reason.response.statusText));
+      .then(res => setResponse(res.data), reason => setError(reason.response.data));
   }, [id])
 
   const handleSelectAll = event => {

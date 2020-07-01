@@ -21,7 +21,7 @@ export default function AbTestPage() {
       .then((res) => {
         setData(res.data);
         setFiltered(res.data);
-      }, reason => setError(reason));
+      }, reason => setError(reason.response.data));
   }, [])
 
   const handleSearchChange = (event) =>

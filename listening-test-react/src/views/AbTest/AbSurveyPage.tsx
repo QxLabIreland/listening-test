@@ -28,7 +28,7 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
 
   useEffect(() => {
     if (!value) Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
-      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.statusText))
+      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.data))
   }, [id]);
 
   function handlePanelChange(v, index) {

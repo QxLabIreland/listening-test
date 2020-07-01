@@ -13,7 +13,7 @@ export default function XsrfAuth() {
   useEffect(() => {
     Axios.get('/api/login').then((res) => setUser(res.data), (err => {
       console.log(err.response)
-      openDialog(err.response.statusText, 'Server Error')
+      openDialog(err.response.data, 'Server Error')
     }));
   }, []);
 
