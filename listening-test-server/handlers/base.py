@@ -1,5 +1,4 @@
 import json
-
 import bson
 import tornado.web
 from bson import ObjectId
@@ -28,20 +27,17 @@ class BaseHandler(tornado.web.RequestHandler):
     def on_finish(self):
         self.mongo_client.close()
 
-    # TODO delete it Standard response. success 0, fail other number.
-    async def write_res(self, code, info=None, data=None):
-        data = {"code": code, "message": info, "data": data}
-        json_data = json.dumps(data, cls=CJsonEncoder, ensure_ascii=False)
-        # Unacceptable situation
-        if code < 0:
-            self.set_status(500, info)
-        self.write(json_data)
-        return json
+    # Custom error handling
+    def send_error(self, status_code: int = 500, reason: str = None) -> None:
+        self.set_status(status_code, reason)
+        self.write(f'{status_code}: {reason}')
 
+    # Write BSON data to client
     def dumps_write(self, data):
         json_data = dumps(data, json_options=bson.json_util.RELAXED_JSON_OPTIONS)
         self.write(json_data)
 
+    # Loads BSON from request body
     def loads_body(self):
         body = self.request.body
         return loads(body, json_options=bson.json_util.RELAXED_JSON_OPTIONS)
@@ -56,7 +52,14 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         id_user = self.get_secure_cookie("_user", None)
         if not id_user:
-            self.set_status(403)
+            self.send_error(403, "You don't have permission")
             return None
         else:
             return ObjectId(id_user.decode("utf-8"))
+
+    def auth_current_user(self) -> ObjectId:
+        user_id = self.get_current_user()
+        if user_id is None:
+            raise tornado.web.Finish
+        else:
+            return user_id

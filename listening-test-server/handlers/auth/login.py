@@ -12,15 +12,15 @@ class LoginHandler(BaseHandler):
                 del user['password']
                 self.dumps_write(user)
             else:
-                self.set_status(200, 'No user login')
+                self.send_error(200, 'No user login')
         else:
-            self.set_status(200, reason="No xsrf token, set csrf token successfully")
+            self.send_error(200, "No xsrf token, set csrf token successfully")
 
     async def post(self):
         body = self.loads_body()
         user = self.db['users'].find_one({'email': body["email"]})
         if not user:
-            self.set_status(404, reason="User not found")
+            self.send_error(404, "User not found")
             return
 
         # hashed_password = yield executor.submit(
@@ -34,7 +34,7 @@ class LoginHandler(BaseHandler):
             self.dumps_write(user)
             # self.redirect(self.get_argument("next", "/"))
         else:
-            self.set_status(401, reason="Incorrect password")
+            self.send_error(401, "Incorrect password")
 
     async def delete(self):
         self.clear_cookie("_user")

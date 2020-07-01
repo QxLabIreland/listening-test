@@ -11,7 +11,7 @@ from datetime import datetime
 
 class ResponsesDownloadHandler(BaseHandler):
     def prepare(self):
-        self.user_id = self.get_current_user()
+        self.user_id = self.auth_current_user()
 
     # Download api
     async def get(self):
