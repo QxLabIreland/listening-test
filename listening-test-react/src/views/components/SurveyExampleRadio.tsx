@@ -18,22 +18,22 @@ export const SurveyExampleRadio = observer(function (props: { example: AbExample
   }
   return (
     <Grid item xs={12}>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">
-          <Typography>Which is your preference?</Typography>
-        </FormLabel>
-        <RadioGroup row aria-label="select better one" name="selectAudio" value={example.answer}
-                    onChange={(e) => handleSelectChange(e, example)}>
-          {example.audios.map((a, i) =>
-            <FormControlLabel key={i} value={a.value} control={<Radio/>} label={"Audio " + (i + 1)}/>
-          )}
-          <FormControlLabel value="*" control={<Radio/>} label="They are the same"/>
-        </RadioGroup>
-      </FormControl>
-      <Box mt={2}>
-        <TextField variant="outlined" fullWidth label={example.question} value={example.comment}
-                   onChange={event => example.comment = event.target.value}/>
-      </Box>
+      {/*<FormControl component="fieldset">*/}
+      {/*  <FormLabel component="legend">*/}
+      {/*    <Typography>Which is your preference?</Typography>*/}
+      {/*  </FormLabel>*/}
+      {/*  <RadioGroup row aria-label="select better one" name="selectAudio" value={example.answer}*/}
+      {/*              onChange={(e) => handleSelectChange(e, example)}>*/}
+      {/*    {example.audios.map((a, i) =>*/}
+      {/*      <FormControlLabel key={i} value={a.value} control={<Radio/>} label={"Audio " + (i + 1)}/>*/}
+      {/*    )}*/}
+      {/*    <FormControlLabel value="*" control={<Radio/>} label="They are the same"/>*/}
+      {/*  </RadioGroup>*/}
+      {/*</FormControl>*/}
+      {/*<Box mt={2}>*/}
+      {/*  <TextField variant="outlined" fullWidth label={example.question} value={example.comment}*/}
+      {/*             onChange={event => example.comment = event.target.value}/>*/}
+      {/*</Box>*/}
     </Grid>
   )
 })
