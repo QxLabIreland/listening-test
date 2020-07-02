@@ -2,7 +2,7 @@ import React from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 import IconButton from "@material-ui/core/IconButton";
-import {Container, Icon} from "@material-ui/core";
+import {AppBar, Container, Icon} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -30,14 +30,16 @@ export default function ResponsePreviewDialog(props) {
       <Icon>pageview</Icon>
     </IconButton>
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <AppBar position="static">
       <Toolbar style={{display: 'flex'}}>
         <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
           <Icon>close</Icon>
         </IconButton>
         <Typography variant="h6">
-          Response view
+          Response view (changed won't be saved)
         </Typography>
       </Toolbar>
+      </AppBar>
       <Container maxWidth="md">
         {props.children}
       </Container>

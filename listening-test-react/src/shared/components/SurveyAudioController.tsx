@@ -54,6 +54,8 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
     return isNaN(num) ? 0 : num.toFixed(0) + 's'
   }
 
+  if (audios.some(value => value == null)) return null;
+
   return (
     <React.Fragment>
       {audios.map((v, i) =>

@@ -72,7 +72,9 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
             <Grid container spacing={3}>
               {/*TODO Expose the pause*/}
               <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
-              <SurveyCardView items={ex.questions}/>
+              <Grid item>
+                <SurveyCardView items={ex.questions}/>
+              </Grid>
             </Grid>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
