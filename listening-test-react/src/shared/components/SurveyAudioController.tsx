@@ -21,9 +21,11 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
   const handlePause = () => {
     // Deconstruction for all including reference audio
     const {allAudio, allRefs} = includeAudioRef();
-    allAudio.forEach((a, i) => {
-      a.isPlaying = false;
+    allRefs.forEach((_, i) => {
+      allAudio[i].isPlaying = false;
       allRefs[i].current.pause();
+      // State that if it is ready
+      console.log(allRefs[i].current.readyState)
     });
   }
 
@@ -41,7 +43,7 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
     const {allAudio, allRefs} = includeAudioRef();
     allAudio.forEach((a, i) => {
       // Adjust properties
-      a.isPlaying = a === v;
+      allAudio[i].isPlaying = a === v;
       allRefs[i].current.volume = a === v ? 1 : 0;
       // Play after
       allRefs[i].current.play().then();
@@ -55,7 +57,7 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
   return (
     <React.Fragment>
       {audios.map((v, i) =>
-        <Grid item xs={6} key={v.filename}>
+        <Grid item key={v.filename}>
           <audio src={v.src} controls loop ref={refs[i]} style={{display: 'none'}} preload="auto"
                  onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}/>
 
@@ -67,8 +69,8 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
       )}
 
       {/*Reference Audio*/}
-      {audioRef && <Grid item xs={6}>
-        <audio key={audioRef.filename} src={audioRef.src} controls loop ref={refAudioRef} style={{display: 'none'}}/>
+      {audioRef && <Grid item>
+        <audio src={audioRef.src} controls loop ref={refAudioRef} style={{display: 'none'}} preload="auto"/>
         <Button variant={audioRef.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
                 startIcon={<Icon>audiotrack</Icon>}
                 onClick={() => audioRef.isPlaying ? handlePause() : handlePlay(audioRef)}>Reference</Button>

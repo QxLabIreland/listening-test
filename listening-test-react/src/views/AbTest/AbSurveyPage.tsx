@@ -10,13 +10,13 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import {SurveyAudioController} from "../../shared/components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
-import {SurveyExampleRadio} from "../components/SurveyExampleRadio";
 import {SurveyCardView} from "../components/SurveyCardView";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../shared/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
+import {Box} from "@material-ui/core";
 
 export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   const {value} = props;
@@ -43,10 +43,10 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
 
   return <>{theTest ? <Grid container spacing={3} direction="column">
 
-    <Grid item xs={12}>
+    <Grid item xs={12}><Box pt={6}>
       <Typography variant="h3" gutterBottom>{theTest.name}</Typography>
       <Typography variant="body1" gutterBottom>{theTest.description}</Typography>
-    </Grid>
+    </Box></Grid>
     <Grid item xs={12}>
       <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
         <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
@@ -65,14 +65,14 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
       <Grid item xs={12} key={i}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-            {ex.answer && <Icon>check</Icon>}
+            {ex.questions[0].value && <Icon>check</Icon>}
             <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container spacing={3}>
               {/*TODO Expose the pause*/}
               <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
-              <SurveyExampleRadio example={ex}/>
+              <SurveyCardView items={ex.questions}/>
             </Grid>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>

@@ -14,12 +14,10 @@ export interface AbTestModel {
 }
 
 export interface AbExampleModel {
-  // Brief comment of choice
-  question: string;
+  // New field for more flexibility
+  questions: SurveyControlModel[];
   tags?: string;
-  comment?: string;
-  // The answer is the name of audio
-  answer?: string;
+  // The answer is the value of audio
   audios: AudioFileModel[];
   audioRef?: AudioFileModel;
 }

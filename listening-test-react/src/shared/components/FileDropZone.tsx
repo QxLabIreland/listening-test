@@ -5,12 +5,12 @@ import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
 import TagsGroup from "./TagsGroup";
 
-export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value?: string, label?: string }) {
+export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value?: string, label?: string, isTag?: boolean }) {
   // Default label
-  const {onChange, fileModel, value, label = 'Click to choose or Drop a file'} = props;
+  const {onChange, fileModel, value, label = 'Click to choose or Drop a file', isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
   // Style of file boxes
-  const boxStyle = {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)'} as CSSProperties;
+  const boxStyle = {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4} as CSSProperties;
   const [isUploading, setIsUploading] = useState(false);
   // Program settings
   const [progress, setProgress] = useState(0);
@@ -73,6 +73,6 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value
         : <><Typography>{label}</Typography><Icon>file_copy</Icon></>
       }
     </Box>}
-    {fileModel && <TagsGroup tags={fileModel.tags} onChange={handleTagsChange}/>}
+    {fileModel && isTag && <TagsGroup tags={fileModel.tags} onChange={handleTagsChange}/>}
   </React.Fragment>
 }

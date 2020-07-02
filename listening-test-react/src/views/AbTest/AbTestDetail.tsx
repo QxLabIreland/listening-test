@@ -17,6 +17,8 @@ import Loading from "../../shared/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
 import TagsGroup from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
+import {SurveyControlType} from "../../shared/models/SurveyControlModel";
+import {SurveyControl} from "../../shared/components/SurveyControl";
 
 export const AbTestDetail = observer(function () {
   const {id} = useParams();
@@ -40,7 +42,13 @@ export const AbTestDetail = observer(function () {
   }, []);
 
   function addExample() {
-    tests.examples.push({question: 'Briefly comment on your choice.', audios: [null, null]});
+    tests.examples.push({
+      questions: [
+        {type: SurveyControlType.radio, question: 'Which one is your preference?', options: ['A', 'B'], value: ''},
+        {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
+      ],
+      audios: [null, null]
+    });
     scrollToView();
   }
 
@@ -91,19 +99,18 @@ export const AbTestDetail = observer(function () {
               }/>
               <CardContent>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <TextField fullWidth variant="filled" name={'Question' + i} label="Question for this example"
-                               value={v.question} onChange={event => v.question=event.target.value}/>
+                  <Grid item xs={12} md={5}>
+                    <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm} value="A"/>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[0]} onChange={fm=>v.audios[0]=fm} value="A"/>
-                  </Grid>
-                  <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[1]} onChange={fm=>v.audios[1]=fm} value="B"/>
+                    <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm} value="B"/>
                   </Grid>
                   <Grid item xs={12} md={2}>
-                    <FileDropZone fileModel={v.audioRef} onChange={fm=>v.audioRef=fm}
+                    <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
                                   label="Reference"/></Grid>
+                  {v.questions.map((q, qi) => <Grid item xs={12} key={q.question}>
+                    <SurveyControl control={q} label={'Your question ' + (qi+1)}/>
+                  </Grid>)}
                 </Grid>
               </CardContent>
             </Card>
