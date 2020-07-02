@@ -28,6 +28,7 @@ export const AbTestDetail = observer(function () {
   const openDialog = useContext(GlobalDialog);
   // Scroll properties
   const {viewRef, scrollToView} = useScrollToView();
+  // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
 
   useEffect(() => {
@@ -57,12 +58,26 @@ export const AbTestDetail = observer(function () {
   }
 
   const handleSubmit = () => {
+    if (+id === 0) {
+      requestServer(true);
+    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'abTest'}}).then(res => {
+      // After checking with server, if there are responses
+      if (res.data > 0) openDialog(
+        'This test already has some responses, save will create a new test. You can delete old one if you like.',
+        'Reminder', null, () => requestServer(true));
+      else requestServer(false);
+    });
+  }
+
+  const requestServer = (isNew: boolean) => {
     setIsSubmitted(true);
+    // Request server based on is New or not.
     Axios.request({
-      method: +id === 0 ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
+      method: isNew ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
     }).then(() => {
+      // TODO snackbar
       history.push('./');
-    }, reason => openDialog(reason.response.data, 'Something wrong'))
+    }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
 
   return (
@@ -109,7 +124,7 @@ export const AbTestDetail = observer(function () {
                     <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
                                   label="Reference"/></Grid>
                   {v.questions.map((q, qi) => <Grid item xs={12} key={q.question}>
-                    <SurveyControl control={q} label={'Your question ' + (qi+1)}/>
+                    <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
                   </Grid>)}
                 </Grid>
               </CardContent>

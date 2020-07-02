@@ -1,18 +1,25 @@
 import os
 import shutil
+import tarfile
 
 
+# Folder
 base_dir = 'listeningTest'
 if os.path.exists(base_dir):
     shutil.rmtree(base_dir)
+# Archive file
+base_dir_tgz = base_dir + '.tgz'
+if os.path.exists(base_dir_tgz):
+    os.remove(base_dir_tgz)
 
 # Move tornado server files
 server_dir = os.path.join(base_dir, 'server')
-shutil.copytree("listening-test-server/handlers", server_dir + "/handlers")
-shutil.copytree("listening-test-server/tools", server_dir + "/tools")
-shutil.copyfile("listening-test-server/server.py", server_dir + "/server.py")
-shutil.copyfile("listening-test-server/mongodbconnection.py", server_dir + "/mongodbconnection.py")
-shutil.copyfile("listening-test-server/url.py", server_dir + "/url.py")
+for v in ['/handlers', '/tools', '/server.py', '/mongodbconnection.py', '/url.py']:
+    source = 'listening-test-server' + v
+    if os.path.isfile(source):
+        shutil.copyfile(source, server_dir + v)
+    else:
+        shutil.copytree(source, server_dir + v)
 
 # Move react files
 html_dir = os.path.join(base_dir, 'html')
@@ -21,3 +28,6 @@ shutil.copytree("listening-test-react/build", html_dir)
 # Move configuration files
 shutil.copyfile("tornado.ini", os.path.join(base_dir, "tornado.ini"))
 
+# Create tar file
+with tarfile.open(base_dir_tgz, "w:gz") as tar:
+        tar.add(base_dir, arcname=os.path.basename(base_dir))
