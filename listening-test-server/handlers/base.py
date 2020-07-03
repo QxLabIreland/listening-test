@@ -1,15 +1,19 @@
-import json
+from abc import ABC
+from typing import Optional
 import bson
 import tornado.web
 from bson import ObjectId
 from bson.json_util import dumps, loads
+from pymongo.collection import Collection
 from mongodbconnection import MongoDBConnection, CJsonEncoder
 
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler, ABC):
     def __init__(self, application, request, **kwargs):
         super().__init__(application, request, **kwargs)
-        self.user_id = None
+        self.user_id: Optional[ObjectId] = None
+        # Current db means the db which a handler is currently using
+        self.current_db: Optional[Collection] = None
         self.mongo_client = MongoDBConnection().client
         self.db = MongoDBConnection().db
 
