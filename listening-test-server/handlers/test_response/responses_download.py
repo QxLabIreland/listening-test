@@ -1,6 +1,7 @@
 import os
 
 import pymongo
+import tornado.web
 from bson import ObjectId
 
 from handlers.base import BaseHandler
@@ -23,7 +24,9 @@ class ResponsesDownloadHandler(BaseHandler):
         test_id = self.get_argument('testId')
         data = res_collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
             .sort('createdAt', pymongo.DESCENDING)
-        if not data:
+        # If there is no data here
+        if data.count() == 0:
+            self.send_error(404, 'Cannot find the resource')
             return
 
         # Build file name with test type and datetime
@@ -53,6 +56,7 @@ class ResponsesDownloadHandler(BaseHandler):
             survey_value_list = [x['value'] if 'value' in x else '' for x in row['survey']]
             example_answer_list = []
             for x in row['examples']:
+                # TODO answer and comment become questions list
                 example_answer_list.append(x['answer'] if 'answer' in x else '')
                 # Example tests have a comment field after answer
                 example_answer_list.append(x['comment'] if 'comment' in x else '')
