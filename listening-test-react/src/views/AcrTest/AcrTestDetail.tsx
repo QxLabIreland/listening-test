@@ -1,26 +1,26 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Prompt, useHistory, useParams} from 'react-router';
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
-import {CardContent, TextField} from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import {FileDropZone} from "../../shared/components/FileDropZone";
-import {observable} from "mobx";
 import {observer} from "mobx-react";
-import CardHeader from "@material-ui/core/CardHeader";
-import {SurveySetUpView} from "../components/SurveySetUpView";
-import Axios from "axios";
+import {Prompt, useHistory, useParams} from "react-router";
+import React, {useContext, useEffect, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import Loading from "../../layouts/components/Loading";
-import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
-import TagsGroup from "../../shared/components/TagsGroup";
+import {GlobalDialog} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
+import Axios from "axios";
+import {observable} from "mobx";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import {CardContent, TextField} from "@material-ui/core";
+import {SurveySetUpView} from "../components/SurveySetUpView";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import TagsGroup from "../../shared/components/TagsGroup";
+import IconButton from "@material-ui/core/IconButton";
+import Icon from "@material-ui/core/Icon";
+import {FileDropZone} from "../../shared/components/FileDropZone";
 import {SurveyControl} from "../../shared/components/SurveyControl";
+import Loading from "../../layouts/components/Loading";
 import {SurveyControlType} from "../../shared/ReactEnums";
 
-export const AbTestDetail = observer(function () {
+export default function AbTestDetail() {
   const {id} = useParams();
   const [tests, setTests] = useState<AbTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -137,16 +137,4 @@ export const AbTestDetail = observer(function () {
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )
-})
-
-function useAjaxGet<T>(url: string, id: string) {
-  const [data, setData] = useState<T>(null);
-  const [error, setError] = useState(undefined);
-
-  useEffect(() => {
-    Axios.get<T>(url, {withCredentials: true, params: {id}})
-      .then((res) => setData(res.data), (reason) => setError(reason));
-  }, [url, id])
-
-  return {data, error}
 }

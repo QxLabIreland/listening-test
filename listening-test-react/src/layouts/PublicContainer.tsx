@@ -8,7 +8,7 @@ import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import Home from "../views/PublicPages/Home";
 import SignIn from "../views/PublicPages/SignIn";
 import SignUp from "../views/PublicPages/SingUp";
-import Loading from "../shared/components/Loading";
+import Loading from "./components/Loading";
 
 export default function PublicContainer() {
   return (

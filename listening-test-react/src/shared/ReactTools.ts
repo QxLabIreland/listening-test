@@ -4,7 +4,7 @@ import process from "process";
 const DEV_HOST = 'http://localhost:8889';
 const PRODUCTION_HOST = 'https://event.holacodes.com';
 
-function isDevMode() {
+export function isDevMode() {
   return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 }
 

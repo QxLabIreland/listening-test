@@ -1,3 +1,5 @@
+import {SurveyControlType} from "../ReactEnums";
+
 export interface SurveyControlModel {
   type: SurveyControlType;
   question: string;
@@ -5,10 +7,4 @@ export interface SurveyControlModel {
   value: any;
   required?: boolean;
   otherOption?: boolean;
-}
-
-export enum SurveyControlType {
-  text,
-  radio,
-  checkbox,
 }

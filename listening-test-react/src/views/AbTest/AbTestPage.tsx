@@ -7,7 +7,7 @@ import {useRouteMatch} from "react-router";
 import AbTestList from "./AbTestList";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import Loading from "../../shared/components/Loading";
+import Loading from "../../layouts/components/Loading";
 
 
 export default function AbTestPage() {

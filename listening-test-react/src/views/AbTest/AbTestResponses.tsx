@@ -20,7 +20,7 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
 import Axios from "axios";
-import Loading from "../../shared/components/Loading";
+import Loading from "../../layouts/components/Loading";
 import ResponsePreviewDialog from "../components/ResponsePreviewDialog";
 import {AbSurveyPage} from "./AbSurveyPage";
 

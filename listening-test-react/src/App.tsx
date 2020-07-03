@@ -1,9 +1,9 @@
 import React, {Suspense} from 'react';
-import Loading from "./shared/components/Loading";
+import Loading from "./layouts/components/Loading";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";
 import AppBarDrawer from "./layouts/AppBarDrawer/AppBarDrawer";
-import NotFoundView from "./layouts/NotFoundView";
+import NotFoundView from "./layouts/components/NotFoundView";
 import PublicContainer from "./layouts/PublicContainer";
 import XsrfAuth from "./shared/providers/XsrfAuth";
 import GlobalDialogProvider from "./shared/providers/GlobalDialogProvider";

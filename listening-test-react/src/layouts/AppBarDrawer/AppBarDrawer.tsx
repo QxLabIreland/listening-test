@@ -6,7 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
-import Loading from "../../shared/components/Loading";
+import Loading from "../components/Loading";
 import DashboardPage from "../../views/DashboardPage";
 import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
@@ -15,6 +15,8 @@ import MushraPage from "../../views/MushraPage";
 import AbTestPage from "../../views/AbTest/AbTestPage";
 import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
+import TestListView from "../../views/components/TestListView";
+import {isDevMode} from "../../shared/ReactTools";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -48,6 +50,7 @@ export default function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
@@ -76,23 +79,31 @@ export default function AppBarDrawer(props: any) {
         <Redirect exact from={`${path}`} to={`${path}/dashboard`}/>
         {/*Navigation page*/}
         <Route exact path={`${path}/dashboard`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><DashboardPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><AbTestPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><AbTestPage/></AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/acr-test`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="acr-test"/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><MushraPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><MushraPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixed><SettingsPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
         </Route>
         {/*Detail with back arrow button. Aka: no navigation page*/}
         <Route exact path={`${path}/ab-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestTab/></AppBarLayout>
         </Route>
+        <Route exact path={`${path}/acr-test/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+
+          </AppBarLayout>
+        </Route>
         {/*Context make this not working*/}
-        <Redirect to="/not-found"/>
+        {!isDevMode() && <Redirect to="/not-found"/>}
       </Switch>
     </Suspense>
   </div>;
