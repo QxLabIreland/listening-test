@@ -14,7 +14,7 @@ import {SurveyCardView} from "../components/SurveyCardView";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
-import Loading from "../../shared/components/Loading";
+import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {Box} from "@material-ui/core";
 

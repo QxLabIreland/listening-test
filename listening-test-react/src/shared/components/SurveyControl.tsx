@@ -3,7 +3,8 @@ import {Box, Grid, TextField} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {observer} from "mobx-react";
-import {SurveyControlModel, SurveyControlType} from "../models/SurveyControlModel";
+import {SurveyControlModel} from "../models/SurveyControlModel";
+import {SurveyControlType} from "../ReactEnums";
 
 export const SurveyControl = observer((props: { control: SurveyControlModel, label: string, onDelete?: (control) => void }) => {
   const {control, label, onDelete} = props;

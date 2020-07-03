@@ -1,16 +1,18 @@
 import {AudioFileModel} from "./AudioFileModel";
 import {SurveyControlModel} from "./SurveyControlModel";
+import {BasicTestModel} from "./BasicTestModel";
 
-export interface AbTestModel {
+export interface AbTestModel extends BasicTestModel{
   _id?: { $oid: string };
   userId?: number;
-  survey: SurveyControlModel[];
-  examples: AbExampleModel[];
   createdAt?: { $date: Date };
   modifiedAt?: { $date: Date };
   name: string;
   description: string;
   responses?: [];
+
+  survey: SurveyControlModel[];
+  examples: AbExampleModel[];
 }
 
 export interface AbExampleModel {

@@ -13,9 +13,9 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Link} from "react-router-dom";
 import {useRouteMatch} from 'react-router';
-import {Icon, IconButton, Snackbar} from "@material-ui/core";
+import {Icon, IconButton} from "@material-ui/core";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import {getCurrentHost} from "../../shared/ReactTools";
+import {ShareIconButton} from "../../shared/components/ShareIconButton";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -73,45 +73,4 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
       </CardContent>
     </Card>
   );
-}
-
-function ShareIconButton(props) {
-  const {url, ...rest} = props;
-  const [open, setSnackbarOpen] = useState(false);
-
-  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
-    if (reason === 'clickaway') return
-    setSnackbarOpen(false);
-  };
-  const handleShareClick = () => {
-    navigator.clipboard.writeText(getCurrentHost() + url)
-      .then(() => setSnackbarOpen(true));
-  }
-
-  return (
-    <React.Fragment>
-      <IconButton {...rest} size="small" color="primary"
-                  onClick={handleShareClick}><Icon>share</Icon></IconButton>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Copy the link to clipboard successfully"
-        action={
-          <React.Fragment>
-            <Button size="small" color="secondary" component={Link}
-                    to={url}>View</Button>
-
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <Icon fontSize="small">cancel</Icon>
-            </IconButton>
-          </React.Fragment>
-        }
-      />
-    </React.Fragment>
-  )
 }

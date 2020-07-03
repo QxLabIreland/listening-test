@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export default function AppBarLayout(props: any) {
-  const {handleDrawerToggle, fixed} = props;
+  const {handleDrawerToggle, fixedTitle} = props;
   const history = useHistory();
   const [title, setTitle] = useState<string>();
   const classes = useStyles();
@@ -42,7 +42,7 @@ export default function AppBarLayout(props: any) {
 
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {fixed
+          {fixedTitle
             ? <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle}
                           className={classes.menuButton}>
               <Icon>menu</Icon>
@@ -52,7 +52,7 @@ export default function AppBarLayout(props: any) {
             </IconButton>
           }
           <Typography variant="h6" noWrap>
-            {fixed ? 'Listening Tests Dashboard' : title}
+            {fixedTitle ? 'Listening Tests Dashboard' : title}
           </Typography>
         </Toolbar>
       </AppBar>
