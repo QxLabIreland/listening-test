@@ -9,8 +9,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {Icon, IconButton} from "@material-ui/core";
 import {useFormik} from "formik";
+import {observer} from "mobx-react";
 
-export default function ExampleSettingsDialog(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
+export const ExampleSettingsDialog = observer(function(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik({
@@ -48,4 +49,4 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
       </form>
     </Dialog>
   </>;
-}
+})

@@ -6,16 +6,28 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
+import {
+  Box,
+  Card,
+  CardContent,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import AcrTestItemCard from "./AcrTestItemCard";
+import {AcrTestItemCard} from "./AcrTestItemCard";
+import {observer} from "mobx-react";
+import {observable} from "mobx";
 
-export default function AcrTestDetail() {
+export const AcrTestDetail = observer(() => {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -31,9 +43,9 @@ export default function AcrTestDetail() {
     // If it is edit page, get data from back end
     if (+id !== 0) Axios.get<AbTestModel>('/api/acr-test', {params: {_id: id}})
       // Successful callback
-      .then((res) => setTests(res.data), () => setIsError(true));
+      .then((res) => setTests(observable(res.data)), () => setIsError(true));
     // If in creation page
-    else setTests({name: '', description: '', items: []});
+    else setTests(observable({name: '', description: '', items: []}));
   }, []);
 
   const handleSubmit = () => {
@@ -61,21 +73,20 @@ export default function AcrTestDetail() {
 
   // Local methods
   function addItem(newItem: TestItemModel) {
-    setTests({...tests, items: [...tests.items, newItem]});
+    tests.items.push(newItem);
     scrollToView();
   }
 
   function deleteItem(index) {
     tests.items.splice(index, 1);
-    setTests({...tests, items: tests.items});
   }
 
-  function handleItemChange(item: TestItemModel, index: number) {
-    tests.items[index] = item;
-    setTests({...tests, items: tests.items});
-    console.log('0')
-  }
+  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
+                                           onChange={e => tests.name = e.target.value}/>;
 
+  const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+                                    defaultValue={tests.description}
+                                    onChange={(e) => tests.description = e.target.value}/>;
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted}
@@ -87,18 +98,14 @@ export default function AcrTestDetail() {
           <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
         </Grid>
         <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Name" fullWidth value={tests.name}
-                     onChange={(e) => setTests({...tests, name: e.target.value})}/>
+          <NameText/>
         </Grid>
         <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-                     value={tests.description}
-                     onChange={(e) => setTests({...tests, description: e.target.value})}/>
+          <DesText/>
         </Grid>
         {tests.items.map((v, i) =>
           <Grid item xs={12} key={i} ref={viewRef}>
-            <AcrTestItemCard item={v} onDelete={() => deleteItem(i)}
-                             onChange={(item) => handleItemChange(item, i)}/>
+            <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>
@@ -107,9 +114,9 @@ export default function AcrTestDetail() {
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )
-}
+})
 
-function AddItemButtonGroup(props: { onAdd: (type: TestItemModel) => void }) {
+const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemModel) => void }) {
   const {onAdd} = props;
   const classes = makeStyles((theme: Theme) => createStyles({
     buttonGroup: {
@@ -148,11 +155,12 @@ function AddItemButtonGroup(props: { onAdd: (type: TestItemModel) => void }) {
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
       <Icon>add</Icon>Add Training Example
     </Button>
-    <AddQuestionButton onQuestionAdd={question => onAdd({type: TestItemType.question, questionControl: question})}/>
+    <AddQuestionButton onQuestionAdd={question =>
+      onAdd({type: TestItemType.question, questionControl: question})}/>
   </Box>
-}
+});
 
-function AddQuestionButton(props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
+const AddQuestionButton = observer(function(props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
   const {onQuestionAdd} = props;
   // When menu clicked
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -172,7 +180,7 @@ function AddQuestionButton(props: { onQuestionAdd: (question: SurveyControlModel
   return <>
     {/*Adding menu Button*/}
     <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey Question</Button>
-    <Menu anchorEl={anchorEl} keepMounted open={!!anchorEl} onClose={() => setAnchorEl(null)}>
+    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
       <MenuItem disabled>
         <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
       </MenuItem>
@@ -196,5 +204,5 @@ function AddQuestionButton(props: { onQuestionAdd: (question: SurveyControlModel
       </MenuItem>
     </Menu>
   </>;
-}
+});
 

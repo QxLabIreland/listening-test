@@ -10,10 +10,11 @@ import {CardContent} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React, {CSSProperties} from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import TagsGroup from "../../shared/components/TagsGroup";
+import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
-import ExampleSettingsDialog from "../components/ExampleSettingsDialog";
+import {ExampleSettingsDialog} from "../components/ExampleSettingsDialog";
+import {observer} from "mobx-react";
 
 const labelInputStyle = {
   fontFamily: 'inherit',
@@ -24,54 +25,53 @@ const labelInputStyle = {
   width: '100%'
 } as CSSProperties;
 
-export default function AcrTestItemCard(props: {
-  item: TestItemModel,
-  onDelete: () => void,
-  onChange: (item: TestItemModel) => void
+export const AcrTestItemCard = observer(function (props: {
+  value: TestItemModel,
+  onDelete: () => void
 }) {
-  const {item, onDelete, onChange} = props;
+  const {value, onDelete} = props;
 
   const handleExampleChange = (example: ItemExampleModel) => {
-    onChange({...item, example: example});
+    value.example = example;
   }
 
   const handleQuestionChange = (question: SurveyControlModel) => {
-    onChange({...item, questionControl: question});
+    value.questionControl = question;
   }
 
   // Label methods
   const handleLabelChange = (event) => {
-    onChange({...item, label: event.target.value});
+    value.label = event.target.value;
   }
 
-  if (item.type === TestItemType.example || item.type === TestItemType.training) return (
-    <TestItemExampleCard example={item.example} onChange={handleExampleChange} title={
-      <input style={labelInputStyle} value={item.label} onChange={handleLabelChange}
+  if (value.type === TestItemType.example || value.type === TestItemType.training) return (
+    <TestItemExampleCard example={value.example} onChange={handleExampleChange} title={
+      <input style={labelInputStyle} value={value.label} onChange={handleLabelChange}
              onFocus={event => event.target.select()}/>
     } delButton={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } tags={item.type === TestItemType.example}/>
+    } tags={value.type === TestItemType.example}/>
   );
 
-  else if (item.type === TestItemType.question) return <Card>
+  else if (value.type === TestItemType.question) return <Card>
     <CardHeader style={{paddingBottom: 0}} action={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
     } subheader="Question Card">
     </CardHeader>
     <CardContent>
-      <SurveyControl control={item.questionControl} label={'Your question'} onChange={handleQuestionChange}/>
+      <SurveyControl control={value.questionControl} label={'Your question'}/>
     </CardContent>
   </Card>;
   else return null;
-}
+})
 
-function TestItemExampleCard(props: React.PropsWithChildren<{
+const TestItemExampleCard = observer((props: React.PropsWithChildren<{
   example: ItemExampleModel,
   onChange: (example: ItemExampleModel) => void,
   delButton: React.ReactNode,
   title: React.ReactNode,
   tags?: boolean
-}>) {
+}>) => {
   const {example, onChange, delButton, title, tags = true} = props;
 
   // Methods for audios changed
@@ -112,7 +112,7 @@ function TestItemExampleCard(props: React.PropsWithChildren<{
     <CardContent>
       <Grid container spacing={2}>
         {tags && <Grid item xs={12}>
-          <TagsGroup tags={example.tags}
+          <TagsGroup value={example.tags}
                      onChange={newTags => onChange({...example, tags: newTags})}/>
         </Grid>}
         {/*Reference*/}
@@ -129,12 +129,11 @@ function TestItemExampleCard(props: React.PropsWithChildren<{
         </Grid>
         {/*Questions for this example*/}
         {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-          <SurveyControl control={q} label={'Your question ' + (qi + 1)}
-                         onChange={control => handleQuestionChange(control, qi)}/>
+          <SurveyControl control={q} label={'Your question'}/>
         </Grid>)}
       </Grid>
     </CardContent>
     {/*<CardActions style={{justifyContent: 'flex-end', paddingTop: 0}}>
     </CardActions>*/}
   </Card>;
-}
+})

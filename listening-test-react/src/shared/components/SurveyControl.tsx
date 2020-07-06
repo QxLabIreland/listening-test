@@ -1,66 +1,59 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Grid, TextField} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControlModel} from "../models/SurveyControlModel";
 import {SurveyControlType} from "../ReactEnums";
+import {observer} from "mobx-react";
 
-export const SurveyControl = (props: {
+export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
   label: string,
-  onDelete?: (control) => void,
-  onChange: (control: SurveyControlModel) => void
-}) => {
-  const {control, label, onDelete, onChange} = props;
+  onDelete?: (control) => void
+}) {
+  const {control, label, onDelete} = props;
 
   return <>
     {/*Question input*/}
     <Box mb={2} style={{display: 'flex', justifyContent: 'space-between'}}>
       <TextField fullWidth variant="filled" style={{flexGrow: 1}} label={label} value={control.question}
-                 onChange={e => onChange({...control, question: e.target.value})}
+                 onChange={e => control.question = e.target.value}
                  onFocus={event => event.target.select()}/>
       {onDelete && <span style={{paddingLeft: 16}}>
         <IconButton size="small" onClick={() => onDelete(control)}><Icon>delete</Icon></IconButton>
       </span>}
     </Box>
     {/*Options editor*/}
-    <SurveyOptions control={control} type={control.type}
-                   onChange={options => onChange({...control, options})}/>
-  </>
-};
+    {control.type === SurveyControlType.text
+      ? <TextField fullWidth variant="outlined" label={control.question}
+                   value="Subject will answer the question here..." disabled/>
+      : <SurveyOptions options={control.options} type={control.type}/>}
 
-const SurveyOptions = (props: { control: SurveyControlModel, type: SurveyControlType, onChange: (options: string[]) => void }) => {
-  const {control, type, onChange} = props;
+  </>
+});
+
+const SurveyOptions = observer(function (props: { options: string[], type: SurveyControlType }) {
+  const {options, type} = props;
   const [autoFocus, setAutoFocus] = useState(false);
-  // If it is not an options control
-  if (type === SurveyControlType.text) return (
-    <TextField fullWidth variant="outlined" label={control.question} value="Subject will answer the question here..."
-               disabled/>
-  );
 
   function handleDelete(index: number) {
-    control.options.splice(index, 1);
-    // React original state changing
-    onChange(control.options);
+    options.splice(index, 1);
   }
 
   const handleAdd = (event) => {
     setAutoFocus(true);
     event.preventDefault();
     event.stopPropagation();
-    control.options.push('Option ' + (control.options.length + 1));
-    // React original state changing
-    onChange(control.options);
+    options.push('Option ' + (options.length + 1));
   }
 
   const handleChange = (newValue, i) => {
-    control.options[i] = newValue;
-    onChange(control.options);
+    options[i] = newValue;
   }
 
   // radio_button_unchecked
   return <Grid container spacing={2}>
-    {control.options && control.options.map((o, i) =>
+    {options?.map((o, i) =>
       <Grid key={i} item xs={12} container spacing={1} alignItems="flex-end">
         <Grid item>
           <IconButton size="small" disabled>
@@ -94,5 +87,4 @@ const SurveyOptions = (props: { control: SurveyControlModel, type: SurveyControl
       </Grid>
     </Grid>
   </Grid>
-}
-
+});

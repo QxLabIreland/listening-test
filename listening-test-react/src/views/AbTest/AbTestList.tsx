@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useState} from "react";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import CardContent from "@material-ui/core/CardContent";
@@ -67,7 +66,7 @@ export default function AbTestList (props: {tests: AbTestModel[], handleDelete})
                 <IconButton className={classes.button} size="small" color="default" onClick={() => handleDelete(test)}>
                   <Icon>delete</Icon></IconButton>
               </TableCell>
-            </TableRow>) : <TableCell colSpan={4}>There is no test here. You can add test by the button top right.</TableCell>}
+            </TableRow>) : <TableRow><TableCell colSpan={4}>There is no test here. You can add test by the button top right.</TableCell></TableRow>}
           </TableBody>
         </Table>
       </CardContent>

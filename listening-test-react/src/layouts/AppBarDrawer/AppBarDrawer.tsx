@@ -17,7 +17,6 @@ import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
 import TestListView from "../../views/components/TestListView";
 import {isDevMode} from "../../shared/ReactTools";
-import AcrTestDetail from "../../views/AcrTest/AcrTestDetail";
 import AcrTestTab from "../../views/AcrTest/AcrTestTab";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

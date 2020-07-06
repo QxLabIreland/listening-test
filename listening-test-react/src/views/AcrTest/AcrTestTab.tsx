@@ -3,7 +3,7 @@ import {Box, Button, Icon, Tab, Tabs, Tooltip} from "@material-ui/core";
 import {useHistory, useLocation, useParams} from "react-router";
 import {downloadFileTool} from "../../shared/ReactTools";
 import {AppBarTitle} from "../../shared/ReactContexts";
-import AcrTestDetail from "./AcrTestDetail";
+import {AcrTestDetail} from "./AcrTestDetail";
 
 export default function AcrTestTab() {
   // Hash of location, switch to response tab. url -> value -> title
