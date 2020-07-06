@@ -16,14 +16,14 @@ export default function TagsGroup (props: {tags: string, onChange: (value) => vo
 
   const handleEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      setNewLabel('');
       // Add a new tag into the file model
       if (!tags) {
         onChange(newLabel);
         return;
       }
       // Check duplicate
-      if (tags.includes(newLabel)) return;
+      if (tags.split(',').includes(newLabel)) return;
+      setNewLabel('');
       // Push and refresh component
       const tagsArr = tags.split(',');
       tagsArr.push(newLabel);

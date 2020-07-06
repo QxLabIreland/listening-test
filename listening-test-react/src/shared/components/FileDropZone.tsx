@@ -5,7 +5,7 @@ import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
 import TagsGroup from "./TagsGroup";
 
-export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value?: string, label?: string, isTag?: boolean }) {
+export function FileDropZone(props: { onChange, fileModel?: AudioFileModel, value?: string, label?: string, isTag?: boolean }) {
   // Default label
   const {onChange, fileModel, value, label = 'Click to choose or Drop a file', isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
@@ -23,9 +23,9 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value
     const formData = new FormData();
     formData.append("audioFile", files[0]);
     // Config what to do when finished
-    const onUploadingFinished =() => {
+    const onUploadingFinished = () => {
       // Clear file input
-      fileRef.current.value = null;
+      if (fileRef.current) fileRef.current.value = null;
       setIsUploading(false);
       setProgress(0);
     }
@@ -69,7 +69,10 @@ export function FileDropZone(props: { onChange, fileModel: AudioFileModel, value
     </Box> : <Box p={2} style={boxStyle} onClick={() => fileRef.current.click()}
                   onDragOver={stopDefault} onDrop={handleFileDrop}>
       {fileModel?.filename
-        ? <><Typography>{fileModel.filename}</Typography><Icon>attachment</Icon></>
+        ? <>
+          <Typography>{fileModel.filename}</Typography>
+          <Icon>attachment</Icon>
+        </>
         : <><Typography>{label}</Typography><Icon>file_copy</Icon></>
       }
     </Box>}

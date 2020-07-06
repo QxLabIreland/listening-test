@@ -56,10 +56,14 @@ class ResponsesDownloadHandler(BaseHandler):
             survey_value_list = [x['value'] if 'value' in x else '' for x in row['survey']]
             example_answer_list = []
             for x in row['examples']:
-                # TODO answer and comment become questions list
-                example_answer_list.append(x['answer'] if 'answer' in x else '')
-                # Example tests have a comment field after answer
-                example_answer_list.append(x['comment'] if 'comment' in x else '')
+                # answer and comment become questions list
+                if 'questions' in x:
+                    ex_qu_dict = x['questions']
+                    example_answer_list.append(ex_qu_dict[0]['value'] if len(ex_qu_dict) > 0 else '')
+                    # Example tests have a comment field after answer
+                    example_answer_list.append(ex_qu_dict[1]['value'] if len(ex_qu_dict) > 1 else '')
+                else:
+                    example_answer_list.append(['', ''])
 
             # Append these three list and write
             self.write(','.join(base_list + survey_value_list + example_answer_list) + '\n')

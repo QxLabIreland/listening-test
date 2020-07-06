@@ -30,7 +30,8 @@ class BasicTestHandler(BaseHandler, ABC):
 
     async def post(self):
         body = self.loads_body()
-        del body['_id']
+        if '_id' in body:
+            del body['_id']
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
         _id = self.current_db.insert(body)

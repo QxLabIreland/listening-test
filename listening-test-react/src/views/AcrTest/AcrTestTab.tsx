@@ -3,6 +3,7 @@ import {Box, Button, Icon, Tab, Tabs, Tooltip} from "@material-ui/core";
 import {useHistory, useLocation, useParams} from "react-router";
 import {downloadFileTool} from "../../shared/ReactTools";
 import {AppBarTitle} from "../../shared/ReactContexts";
+import AcrTestDetail from "./AcrTestDetail";
 
 export default function AcrTestTab() {
   // Hash of location, switch to response tab. url -> value -> title
@@ -36,7 +37,7 @@ export default function AcrTestTab() {
         <Tab label="Responses" disabled={id === '0'}/>
       </Tabs>
       <Box paddingTop={2}>
-        {value === 0 && <>Detail page</>}
+        {value === 0 && <AcrTestDetail/>}
         {value === 1 && <>
           <Tooltip title="Download all Responses for This Test">
             <Button variant="outlined" color="primary" onClick={handleDownload}>

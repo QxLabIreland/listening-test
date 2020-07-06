@@ -71,7 +71,7 @@ export default function TestListView(props: {testUrl: string}) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        {data ? <Card>
+        {filtered ? <Card>
           <CardContent className={classes.content}>
             <Table>
               <TableHead>
@@ -89,7 +89,7 @@ export default function TestListView(props: {testUrl: string}) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.length ? filtered.map(test => <TableRow hover key={test._id.$oid}>
+                {filtered.length ? filtered.map(test => <TableRow hover key={test._id.$oid}>
                   <TableCell>{test.name}</TableCell>
                   <TableCell>
                     <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}

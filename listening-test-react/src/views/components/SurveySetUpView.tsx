@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {SurveyControlModel, SurveyControlType} from "../../shared/models/SurveyControlModel";
+import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import React, {useState} from "react";
 import {
   Button,
@@ -18,6 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
+import {SurveyControlType} from "../../shared/ReactEnums";
 
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
@@ -53,7 +54,7 @@ export const SurveySetUpView = observer(function (props) {
       <Grid container spacing={2}>
         {items.map((c, i) =>
           <Grid item xs={12} key={i} ref={viewRef} style={{scrollMarginTop: 100}}>
-            <SurveyControl control={c} label={'Your question ' + (i+1)} onDelete={handleDelete}/>
+            <SurveyControl control={c} label={'Your question ' + (i+1)} onDelete={handleDelete} onChange={control => items[i] = control}/>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>

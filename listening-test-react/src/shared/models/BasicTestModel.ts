@@ -1,4 +1,6 @@
-import {TestItemModel} from "./TestItemModel";
+import {TestItemType} from "../ReactEnums";
+import {SurveyControlModel} from "./SurveyControlModel";
+import {ItemExampleModel} from "./ItemExampleModel";
 
 export interface BasicTestModel {
   _id?: { $oid: string };
@@ -11,4 +13,12 @@ export interface BasicTestModel {
   responses?: [];
 
   items: TestItemModel[];
+}
+
+export interface TestItemModel {
+  type: TestItemType;
+  // The label for this example. Normally on the header of a card.
+  label?: string;
+  questionControl?: SurveyControlModel;
+  example?: ItemExampleModel;
 }
