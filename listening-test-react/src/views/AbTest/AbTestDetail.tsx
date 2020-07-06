@@ -15,7 +15,7 @@ import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../layouts/components/Loading";
 import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
-import TagsGroup from "../../shared/components/TagsGroup";
+import {TagsGroup} from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import {SurveyControlType} from "../../shared/ReactEnums";
@@ -107,7 +107,7 @@ export const AbTestDetail = observer(function () {
             <Card>
               <CardHeader title={
                 <div style={{display: 'flex'}}>Example {i + 1}
-                  <TagsGroup tags={v.tags} onChange={newTags => v.tags = newTags}/>
+                  <TagsGroup value={v.tags} onChange={newTags => v.tags = newTags}/>
                   <span style={{flexGrow: 1}}/>
                   <IconButton size="small" onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
                 </div>
@@ -124,7 +124,7 @@ export const AbTestDetail = observer(function () {
                     <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
                                   label="Reference"/></Grid>
                   {v.questions.map((q, qi) => <Grid item xs={12} key={qi}>
-                    <SurveyControl control={q} label={'Your question ' + (qi + 1)} onChange={control => v.questions[qi] = control}/>
+                    <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
                   </Grid>)}
                 </Grid>
               </CardContent>

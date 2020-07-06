@@ -3,9 +3,10 @@ import {Box, CircularProgress, LinearProgress, Typography} from "@material-ui/co
 import Icon from "@material-ui/core/Icon";
 import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
-import TagsGroup from "./TagsGroup";
+import {TagsGroup} from "./TagsGroup";
+import {observer} from "mobx-react";
 
-export function FileDropZone(props: { onChange, fileModel?: AudioFileModel, value?: string, label?: string, isTag?: boolean }) {
+export const FileDropZone = observer((props: { onChange, fileModel?: AudioFileModel, value?: string, label?: string, isTag?: boolean }) => {
   // Default label
   const {onChange, fileModel, value, label = 'Click to choose or Drop a file', isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
@@ -76,6 +77,6 @@ export function FileDropZone(props: { onChange, fileModel?: AudioFileModel, valu
         : <><Typography>{label}</Typography><Icon>file_copy</Icon></>
       }
     </Box>}
-    {fileModel && isTag && <TagsGroup tags={fileModel.tags} onChange={handleTagsChange}/>}
+    {fileModel && isTag && <TagsGroup value={fileModel.tags} onChange={handleTagsChange}/>}
   </React.Fragment>
-}
+})

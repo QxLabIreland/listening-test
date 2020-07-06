@@ -54,7 +54,7 @@ export const SurveySetUpView = observer(function (props) {
       <Grid container spacing={2}>
         {items.map((c, i) =>
           <Grid item xs={12} key={i} ref={viewRef} style={{scrollMarginTop: 100}}>
-            <SurveyControl control={c} label={'Your question ' + (i+1)} onDelete={handleDelete} onChange={control => items[i] = control}/>
+            <SurveyControl control={c} label={'Your question ' + (i+1)} onDelete={handleDelete}/>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>

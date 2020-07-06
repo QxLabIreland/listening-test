@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Box, Chip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {observer} from "mobx-react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   chipGroup: {
@@ -9,36 +10,36 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TagsGroup (props: {tags: string, onChange: (value) => void}) {
+export const TagsGroup = observer((props: {value: string, onChange: (value) => void}) => {
   const classes = useStyles();
   const [newLabel, setNewLabel] = useState('Add Tag');
-  const {tags, onChange} = props;
+  const {value, onChange} = props;
 
   const handleEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       // Add a new tag into the file model
-      if (!tags) {
+      if (!value) {
         onChange(newLabel);
         return;
       }
       // Check duplicate
-      if (tags.split(',').includes(newLabel)) return;
+      if (value.split(',').includes(newLabel)) return;
       setNewLabel('');
       // Push and refresh component
-      const tagsArr = tags.split(',');
+      const tagsArr = value.split(',');
       tagsArr.push(newLabel);
       onChange(tagsArr.toString());
     }
   }
 
   const handleLabelDelete = (index) => {
-    const tagsArr = tags.split(',');
+    const tagsArr = value.split(',');
     tagsArr.splice(index, 1);
     onChange(tagsArr.toString());
   }
 
   return <Box className={classes.chipGroup}>
-    {tags && tags.split(',').map((l, i) =>
+    {value && value.split(',').map((l, i) =>
       <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l}/>)}
 
     <Chip size="small" variant="outlined" icon={<Icon>add</Icon>}
@@ -47,4 +48,4 @@ export default function TagsGroup (props: {tags: string, onChange: (value) => vo
                         style={{border: 'none', outline: 'none', width: 53, background: 'transparent'}}/>}
     />
   </Box>
-}
+})

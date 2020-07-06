@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Grid} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
-import SearchInput from "../../shared/components/SearchInput";
+import {SearchInput} from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import AbTestList from "./AbTestList";
 import Axios from "axios";
