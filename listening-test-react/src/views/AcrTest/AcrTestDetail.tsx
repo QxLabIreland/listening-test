@@ -1,28 +1,23 @@
-import {observer} from "mobx-react";
 import {Prompt, useHistory, useParams} from "react-router";
 import React, {useContext, useEffect, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
-import {observable} from "mobx";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {CardContent, TextField} from "@material-ui/core";
-import {SurveySetUpView} from "../components/SurveySetUpView";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import TagsGroup from "../../shared/components/TagsGroup";
-import IconButton from "@material-ui/core/IconButton";
+import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
-import {FileDropZone} from "../../shared/components/FileDropZone";
-import {SurveyControl} from "../../shared/components/SurveyControl";
 import Loading from "../../layouts/components/Loading";
-import {SurveyControlType} from "../../shared/ReactEnums";
+import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
+import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import AcrTestItemCard from "./AcrTestItemCard";
 
-export default function AbTestDetail() {
+export default function AcrTestDetail() {
   const {id} = useParams();
-  const [tests, setTests] = useState<AbTestModel>(null);
+  const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
@@ -31,36 +26,20 @@ export default function AbTestDetail() {
   // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
 
+  // Request for server methods
   useEffect(() => {
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/ab-test', {params: {_id: id}})
+    if (+id !== 0) Axios.get<AbTestModel>('/api/acr-test', {params: {_id: id}})
       // Successful callback
-      .then((res) => setTests(observable(res.data)),
-        () => setIsError(true));
+      .then((res) => setTests(res.data), () => setIsError(true));
     // If in creation page
-    else setTests(observable({name: '', description: '', examples: [], survey: [], items: undefined}));
-    // TODO Clean up and auto save
+    else setTests({name: '', description: '', items: []});
   }, []);
-
-  function addExample() {
-    tests.examples.push({
-      questions: [
-        {type: SurveyControlType.radio, question: 'Which one is your preference?', options: ['A', 'B'], value: ''},
-        {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
-      ],
-      audios: [null, null]
-    });
-    scrollToView();
-  }
-
-  function deleteExample(index) {
-    tests.examples.splice(index, 1);
-  }
 
   const handleSubmit = () => {
     if (+id === 0) {
       requestServer(true);
-    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'abTest'}}).then(res => {
+    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'acrTest'}}).then(res => {
       // After checking with server, if there are responses
       if (res.data > 0) openDialog(
         'This test already has some responses, save will create a new test. You can delete old one if you like.',
@@ -73,11 +52,28 @@ export default function AbTestDetail() {
     setIsSubmitted(true);
     // Request server based on is New or not.
     Axios.request({
-      method: isNew ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
+      method: isNew ? 'POST' : 'PUT', url: '/api/acr-test', data: tests
     }).then(() => {
       // TODO snackbar
       history.push('./');
     }, reason => openDialog(reason.response.data, 'Something wrong'));
+  }
+
+  // Local methods
+  function addItem(newItem: TestItemModel) {
+    setTests({...tests, items: [...tests.items, newItem]});
+    scrollToView();
+  }
+
+  function deleteItem(index) {
+    tests.items.splice(index, 1);
+    setTests({...tests, items: tests.items});
+  }
+
+  function handleItemChange(item: TestItemModel, index: number) {
+    tests.items[index] = item;
+    setTests({...tests, items: tests.items});
+    console.log('0')
   }
 
   return (
@@ -91,50 +87,114 @@ export default function AbTestDetail() {
           <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
         </Grid>
         <Grid item xs={12}>
-          <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
-                     label="Test Name" fullWidth/>
+          <TextField variant="outlined" label="Test Name" fullWidth value={tests.name}
+                     onChange={(e) => setTests({...tests, name: e.target.value})}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Description" rowsMax={8} value={tests.description}
-                     onChange={(e) => tests.description = e.target.value} multiline fullWidth/>
-
+          <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+                     value={tests.description}
+                     onChange={(e) => setTests({...tests, description: e.target.value})}/>
         </Grid>
-        <Grid item xs={12}>
-          <SurveySetUpView items={tests.survey}/>
-        </Grid>
-        {tests.examples.map((v, i) =>
+        {tests.items.map((v, i) =>
           <Grid item xs={12} key={i} ref={viewRef}>
-            <Card>
-              <CardHeader title={
-                <div style={{display: 'flex'}}>Example {i + 1}
-                  <TagsGroup tags={v.tags} onChange={newTags => v.tags = newTags}/>
-                  <span style={{flexGrow: 1}}/>
-                  <IconButton size="small" onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
-                </div>
-              }/>
-              <CardContent>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm} value="A"/>
-                  </Grid>
-                  <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm} value="B"/>
-                  </Grid>
-                  <Grid item xs={12} md={2}>
-                    <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
-                                  label="Reference"/></Grid>
-                  {v.questions.map((q, qi) => <Grid item xs={12} key={q.question}>
-                    <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
-                  </Grid>)}
-                </Grid>
-              </CardContent>
-            </Card>
+            <AcrTestItemCard item={v} onDelete={() => deleteItem(i)}
+                             onChange={(item) => handleItemChange(item, i)}/>
           </Grid>
         )}
-        <Grid item>
-          <Button variant="outlined" color="primary" onClick={addExample}><Icon>add</Icon>Add an Audio Example</Button>
+        <Grid item container justify="center" xs={12}>
+          <AddItemButtonGroup onAdd={addItem}/>
         </Grid>
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )
 }
+
+function AddItemButtonGroup(props: { onAdd: (type: TestItemModel) => void }) {
+  const {onAdd} = props;
+  const classes = makeStyles((theme: Theme) => createStyles({
+    buttonGroup: {
+      '& > *': {margin: theme.spacing(0.5)}
+    }
+  }))();
+
+  const handleAdd = (type: TestItemType) => {
+    let newItem: TestItemModel;
+    switch (type) {
+      case TestItemType.example:
+        newItem = {
+          type: TestItemType.example, label: 'Example', example: {
+            audios: [], fields: [
+              {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
+            ]
+          }
+        }; break;
+      case TestItemType.training:
+        newItem = {
+          type: TestItemType.training, label: 'Training Example', example: {
+            audios: [], fields: null
+          }
+        }; break;
+      case TestItemType.sectionHeader:
+        newItem = {
+          type: TestItemType.sectionHeader, label: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
+        }; break;
+    }
+    onAdd(newItem);
+  }
+  return <Box className={classes.buttonGroup}>
+    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
+      <Icon>add</Icon>Add Example
+    </Button>
+    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
+      <Icon>add</Icon>Add Training Example
+    </Button>
+    <AddQuestionButton onQuestionAdd={question => onAdd({type: TestItemType.question, questionControl: question})}/>
+  </Box>
+}
+
+function AddQuestionButton(props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
+  const {onQuestionAdd} = props;
+  // When menu clicked
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleAdd = (type: SurveyControlType) => {
+    setAnchorEl(null);
+    // Check controls types
+    if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
+      onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
+    else onQuestionAdd({type: type, question: 'Untitled question', value: null});
+    // Close the adding menu
+  }
+
+  return <>
+    {/*Adding menu Button*/}
+    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey Question</Button>
+    <Menu anchorEl={anchorEl} keepMounted open={!!anchorEl} onClose={() => setAnchorEl(null)}>
+      <MenuItem disabled>
+        <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
+      </MenuItem>
+      <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
+        <ListItemIcon>
+          <Icon fontSize="small">text_fields</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Text Input"/>
+      </MenuItem>
+      <MenuItem onClick={() => handleAdd(SurveyControlType.radio)}>
+        <ListItemIcon>
+          <Icon fontSize="small">radio_button_checked</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Radio Group"/>
+      </MenuItem>
+      <MenuItem onClick={() => handleAdd(SurveyControlType.checkbox)}>
+        <ListItemIcon>
+          <Icon fontSize="small">check_box</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Checkbox Group"/>
+      </MenuItem>
+    </Menu>
+  </>;
+}
+

@@ -123,8 +123,8 @@ export const AbTestDetail = observer(function () {
                   <Grid item xs={12} md={2}>
                     <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
                                   label="Reference"/></Grid>
-                  {v.questions.map((q, qi) => <Grid item xs={12} key={q.question}>
-                    <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
+                  {v.questions.map((q, qi) => <Grid item xs={12} key={qi}>
+                    <SurveyControl control={q} label={'Your question ' + (qi + 1)} onChange={control => v.questions[qi] = control}/>
                   </Grid>)}
                 </Grid>
               </CardContent>
@@ -138,15 +138,3 @@ export const AbTestDetail = observer(function () {
     </Grid>
   )
 })
-
-function useAjaxGet<T>(url: string, id: string) {
-  const [data, setData] = useState<T>(null);
-  const [error, setError] = useState(undefined);
-
-  useEffect(() => {
-    Axios.get<T>(url, {withCredentials: true, params: {id}})
-      .then((res) => setData(res.data), (reason) => setError(reason));
-  }, [url, id])
-
-  return {data, error}
-}

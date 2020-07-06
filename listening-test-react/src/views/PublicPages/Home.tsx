@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <div className={classes.background}>
       <CssBaseline />
-      <Container component="main" className={classes.main} maxWidth="sm">
+      <Container component="main" className={classes.main} maxWidth="md" style={{marginBottom: 300}}>
         <Typography variant="h2" component="h1" gutterBottom>
           Hello there!
         </Typography>
@@ -48,10 +48,12 @@ export default function Home() {
 
         </Typography>
         <Typography variant="body1">Click sign in to start your tests.</Typography>
-        <Typography variant="body2"><small>Photo by Wolfgang Hasselmann on Unsplash</small></Typography>
+        <Typography variant="body2">
+          <small>Photo by Wolfgang Hasselmann on Unsplash</small>
+        </Typography>
       </Container>
       <footer className={classes.footer}>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Typography variant="body1">by QxLab at University College Dublin</Typography>
           <Copyright />
         </Container>

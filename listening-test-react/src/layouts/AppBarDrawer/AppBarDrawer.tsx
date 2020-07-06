@@ -17,6 +17,8 @@ import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
 import TestListView from "../../views/components/TestListView";
 import {isDevMode} from "../../shared/ReactTools";
+import AcrTestDetail from "../../views/AcrTest/AcrTestDetail";
+import AcrTestTab from "../../views/AcrTest/AcrTestTab";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -98,9 +100,7 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestTab/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AcrTestTab/></AppBarLayout>
         </Route>
         {/*Context make this not working*/}
         {!isDevMode() && <Redirect to="/not-found"/>}

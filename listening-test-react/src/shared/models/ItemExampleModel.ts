@@ -8,4 +8,10 @@ export interface ItemExampleModel {
   // New field for more flexibility
   fields: SurveyControlModel[];
   tags?: string;
+  // Settings make example play specific times
+  settings?: ItemExampleSettingsModel
+}
+
+export interface ItemExampleSettingsModel {
+  loopTimes?: number;
 }
