@@ -12,7 +12,6 @@ import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import MushraPage from "../../views/MushraPage";
-import AbTestPage from "../../views/AbTest/AbTestPage";
 import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
 import TestListView from "../../views/components/TestListView";
@@ -83,7 +82,7 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><AbTestPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="ab-test"/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="acr-test"/></AppBarLayout>
