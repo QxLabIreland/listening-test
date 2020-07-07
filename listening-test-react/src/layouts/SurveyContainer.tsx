@@ -3,8 +3,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
-import {AbSurveyPage} from "../views/AbTest/AbSurveyPage";
+import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
 import {Redirect} from "react-router-dom";
+import {isDevMode} from "../shared/ReactTools";
+import {AcrSurveyPage} from "../views/AcrTest/AcrSurveyPage";
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
@@ -15,7 +17,8 @@ export default function SurveyContainer() {
         <Suspense fallback={<Loading/>}>
           <Switch>
             <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
-            <Redirect to="/not-found" />
+            <Route exact path={`${path}/acr-test/:id`} component={AcrSurveyPage}/>
+            {!isDevMode() && <Redirect to="/not-found"/>}
           </Switch>
         </Suspense>
       </Container>

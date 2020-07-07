@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
-import {AudioFileModel} from "../models/AudioFileModel";
+import {AudioFileModel} from "../../../shared/models/AudioFileModel";
 
 export const SurveyAudioController = observer(function (props: { audios: AudioFileModel[], audioRef: AudioFileModel }) {
   const {audios, audioRef} = props;

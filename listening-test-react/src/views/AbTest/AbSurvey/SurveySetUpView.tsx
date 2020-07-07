@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 import React, {useState} from "react";
 import {
   Button,
@@ -16,9 +16,9 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
-import {useScrollToView} from "../../shared/ReactHooks";
-import {SurveyControl} from "../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../shared/ReactEnums";
+import {useScrollToView} from "../../../shared/ReactHooks";
+import {SurveyControl} from "../../../shared/components/SurveyControl";
+import {SurveyControlType} from "../../../shared/ReactEnums";
 
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey

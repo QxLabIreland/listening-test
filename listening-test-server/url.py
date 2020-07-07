@@ -3,6 +3,7 @@ from handlers.auth.sign_up_handler import SignUpHandler
 from handlers.auth.login import LoginHandler
 from handlers.auth.password import PasswordHandler
 from handlers.ab_test import AbTestHandler
+from handlers.survey.acr_survey import AcrSurveyHandler
 from handlers.test_response.responses_count import ResponsesCountHandler
 from handlers.test_response.responses_download import ResponsesDownloadHandler
 from handlers.test_response.test_responses import TestResponsesHandler
@@ -30,5 +31,6 @@ path = [
 
     # Survey and Task
     ("/api/task/ab-test", AbTestSurveyHandler),
+    ("/api/task/acr-test", AcrSurveyHandler),
 ]
 

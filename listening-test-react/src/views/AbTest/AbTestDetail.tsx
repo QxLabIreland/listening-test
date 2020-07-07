@@ -10,7 +10,7 @@ import {FileDropZone} from "../../shared/components/FileDropZone";
 import {observable} from "mobx";
 import {observer} from "mobx-react";
 import CardHeader from "@material-ui/core/CardHeader";
-import {SurveySetUpView} from "../components/SurveySetUpView";
+import {SurveySetUpView} from "./AbSurvey/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../layouts/components/Loading";

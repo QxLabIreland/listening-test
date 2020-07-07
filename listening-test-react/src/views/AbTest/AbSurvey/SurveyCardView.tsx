@@ -11,9 +11,9 @@ import {
   TextField
 } from "@material-ui/core";
 import React from "react";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 import {observer} from "mobx-react";
-import {SurveyControlType} from "../../shared/ReactEnums";
+import {SurveyControlType} from "../../../shared/ReactEnums";
 
 
 export const SurveyCardView =  observer(function (props: {items: SurveyControlModel[]}) {

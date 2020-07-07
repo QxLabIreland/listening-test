@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Grid, Icon, IconButton} from "@material-ui/core";
+import {Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
@@ -16,8 +16,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableBody from "@material-ui/core/TableBody";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import ShareIconButton from "../../shared/components/ShareIconButton";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {getCurrentHost} from "../../shared/ReactTools";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -126,5 +126,46 @@ export default function TestListView(props: { testUrl: string }) {
       </Grid>
 
     </Grid>
+  )
+}
+
+export function ShareIconButton(props) {
+  const {url, ...rest} = props;
+  const [open, setSnackbarOpen] = useState(false);
+
+  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason === 'clickaway') return
+    setSnackbarOpen(false);
+  };
+  const handleShareClick = () => {
+    navigator.clipboard.writeText(getCurrentHost() + url)
+      .then(() => setSnackbarOpen(true));
+  }
+
+  return (
+    <React.Fragment>
+      <IconButton {...rest} size="small" color="primary"
+                  onClick={handleShareClick}><Icon>share</Icon></IconButton>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Copy the link to clipboard successfully"
+        action={
+          <React.Fragment>
+            <Button size="small" color="secondary" component={Link}
+                    to={url}>View</Button>
+
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <Icon fontSize="small">cancel</Icon>
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+    </React.Fragment>
   )
 }
