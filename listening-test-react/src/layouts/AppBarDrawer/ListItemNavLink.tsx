@@ -19,7 +19,7 @@ export default function ListItemNavLink(props: any) {
   }, [path, to, pathname])
 
   return (
-    <ListItem button key={props.children} component={NavLink} to={to} selected={selected} {...rest}
+    <ListItem button component={NavLink} to={to} selected={selected} {...rest}
               activeStyle={{color: theme.palette.primary.main}}>
         <span style={{minWidth: 40}}>
           <Icon>{icon}</Icon>

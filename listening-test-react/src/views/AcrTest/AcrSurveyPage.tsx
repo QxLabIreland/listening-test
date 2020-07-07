@@ -47,7 +47,7 @@ export const AcrSurveyPage = observer(function (props: { url: 'acr-test'|'ab-tes
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
     </Box></Grid>
     {questionnaire.items.map((v, i) =>
-      <Grid item xs={12} key={i}>
+      <Grid item xs={12} key={v.id}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
             <Typography variant="h6" style={{marginLeft: 8}}>{v.label}</Typography>
