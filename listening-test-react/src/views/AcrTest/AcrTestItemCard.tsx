@@ -31,26 +31,18 @@ export const AcrTestItemCard = observer(function (props: {
 }) {
   const {value, onDelete} = props;
 
-  const handleExampleChange = (example: ItemExampleModel) => {
-    value.example = example;
-  }
-
-  const handleQuestionChange = (question: SurveyControlModel) => {
-    value.questionControl = question;
-  }
-
   // Label methods
   const handleLabelChange = (event) => {
     value.label = event.target.value;
   }
 
   if (value.type === TestItemType.example || value.type === TestItemType.training) return (
-    <TestItemExampleCard example={value.example} onChange={handleExampleChange} title={
+    <TestItemExampleCard example={value.example} title={
       <input style={labelInputStyle} value={value.label} onChange={handleLabelChange}
              onFocus={event => event.target.select()}/>
     } delButton={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } tags={value.type === TestItemType.example}/>
+    } isTraining={value.type === TestItemType.example}/>
   );
 
   else if (value.type === TestItemType.question) return <Card>
@@ -67,59 +59,49 @@ export const AcrTestItemCard = observer(function (props: {
 
 const TestItemExampleCard = observer((props: React.PropsWithChildren<{
   example: ItemExampleModel,
-  onChange: (example: ItemExampleModel) => void,
   delButton: React.ReactNode,
   title: React.ReactNode,
-  tags?: boolean
+  isTraining?: boolean
 }>) => {
-  const {example, onChange, delButton, title, tags = true} = props;
+  const {example, delButton, title, isTraining = true} = props;
 
   // Methods for audios changed
-  const handleAdd = (newAudio: AudioFileModel, isReference: boolean = false) => {
-    // If is Reference the audioRef will be added
-    if (isReference) onChange({...example, audioRef: newAudio});
-    else onChange({...example, audios: [...example.audios, newAudio]});
-  }
+  const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
 
   const handleDelete = (index: number) => {
-    if (index === -1) onChange({...example, audioRef: undefined});
-    else {
-      example.audios.splice(index, 1);
-      onChange({...example});
-    }
+    if (index === -1) example.audioRef = undefined;
+    else example.audios.splice(index, 1);
   }
 
   const handleChange = (newAudio: AudioFileModel, index: number) => {
-    if (index === -1) onChange({...example, audioRef: newAudio});
-    else {
-      example.audios[index] = newAudio;
-      onChange({...example});
+    if (newAudio == null) {
+      handleDelete(index);
+      return;
     }
-  }
-
-  // Question for example
-  const handleQuestionChange = (question: SurveyControlModel, index: number) => {
-    example.fields[index] = question;
-    onChange({...example});
+    // If is Reference the audioRef will be added or deleted
+    if (index === -1) example.audioRef=newAudio;
+    else example.audios[index] = newAudio;
   }
 
   // Setting submitted
-  const handleSettingChange = (settings) => onChange({...example, settings});
+  const handleSettingChange = (settings) => example.settings = settings;
 
   return <Card>
-    <CardHeader style={{paddingBottom: 0}} title={title} action={<span>{delButton}
-                <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/></span>}/>
+    <CardHeader style={{paddingBottom: 0}} title={title} action={
+      <span>{delButton}<ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/></span>
+    }/>
     <CardContent>
       <Grid container spacing={2}>
-        {tags && <Grid item xs={12}>
-          <TagsGroup value={example.tags}
-                     onChange={newTags => onChange({...example, tags: newTags})}/>
-        </Grid>}
-        {/*Reference*/}
-        <Grid item xs={12} md={4}>
-          <FileDropZone fileModel={example.audioRef} onChange={fm => handleAdd(fm, true)}
-                        label="Reference"/>
-        </Grid>
+        {isTraining && <>
+          <Grid item xs={12}>
+            <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
+          </Grid>
+          {/*Reference place*/}
+          <Grid item xs={12} md={4}>
+            <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
+                          label="Reference"/>
+          </Grid>
+        </>}
         {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
           <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
         </Grid>)}
