@@ -32,17 +32,18 @@ export const RenderTestItem = observer(function (props: { item: TestItemModel })
 
 const RenderTestItemExample = observer(function (props: { value: ItemExampleModel, isTraining?: boolean }) {
   const {value, isTraining = false} = props;
-  const {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate} = useAudioPlayer(value.audios, value.audioRef);
+  // This is a custom hook that expose some functions for AudioButton and Controller
+  const {refs, sampleRef, currentTime, handleTimeUpdate, ...restHandlers} = useAudioPlayer(value.audios, value.audioRef);
 
   return <Grid container spacing={3}>
     {value.audioRef && <Grid item style={RatingAreaStyle}>
-      <AudioButton audio={value.audioRef} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
+      <AudioButton ref={sampleRef} audio={value.audioRef} {...restHandlers}>Ref</AudioButton>
       <span>{sampleRef?.current?.currentTime}</span>
     </Grid>}
 
     {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
-      <AudioRatingBar audio={v} hidden={isTraining}/>
-      <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
+      {!isTraining && <AudioRatingBar audio={v}/>}
+      <AudioButton ref={refs[i]} audio={v} {...restHandlers}
                    onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
       <span>{refs[i].current?.currentTime}</span>
     </Grid>)}
@@ -57,39 +58,20 @@ const RenderTestItemExample = observer(function (props: { value: ItemExampleMode
   </Grid>
 })
 
-export const AudioRatingBar = observer(function (props: { audio: AudioFileModel, hidden?: boolean }) {
-  if (props.hidden) return null;
+export const AudioRatingBar = observer(function (props: { audio: AudioFileModel}) {
   const marks = [
-    {
-      value: 0,
-      label: '',
-    },
-    {
-      value: 20,
-      label: 'Bad',
-    },
-    {
-      value: 40,
-      label: 'Poor',
-    },
-    {
-      value: 60,
-      label: 'Fair',
-    },
-    {
-      value: 80,
-      label: 'Good',
-    },
-    {
-      value: 100,
-      label: 'Excellent',
-    },
+    {value: 0, abel: ''},
+    {value: 20, label: 'Bad'},
+    {value: 40, label: 'Poor'},
+    {value: 60, label: 'Fair'},
+    {value: 80, label: 'Good'},
+    {value: 100, label: 'Excellent'},
   ];
 
   return <Box ml={2.5} mb={2} style={{height: 200}}>
     <Slider orientation="vertical" aria-labelledby="vertical-slider" step={20} max={100}
-                      getAriaValueText={(value: number) => `${value}`} marks={marks}
-                      defaultValue={parseInt(props.audio.value) ? Number(props.audio.value) : 0}
-                      onChange={(_, value) => props.audio.value = value.toString()}/>
+            getAriaValueText={(value: number) => `${value}`} marks={marks}
+            value={parseInt(props.audio.value) ? Number(props.audio.value) : 0}
+            onChange={(_, value) => props.audio.value = value.toString()}/>
   </Box>
 })

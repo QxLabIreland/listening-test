@@ -59,7 +59,7 @@ export const SurveyAudioController = observer(function (props: { audios: AudioFi
   return (
     <React.Fragment>
       {audios.map((v, i) =>
-        <Grid item key={v.filename}>
+        <Grid item key={i}>
           <audio src={v.src} controls loop ref={refs[i]} style={{display: 'none'}} preload="auto"
                  onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}/>
 

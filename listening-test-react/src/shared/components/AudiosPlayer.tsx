@@ -1,10 +1,11 @@
-import React, {forwardRef, PropsWithChildren, PropsWithoutRef, PropsWithRef, RefObject, useRef, useState} from "react";
+import React, {forwardRef, RefObject, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../models/AudioFileModel";
-import Grid from "@material-ui/core/Grid";
 
+/** In order to build a custom audio player including rating bar,
+ *  use this hook with AudioButton and AudioController components */
 export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel) {
   const [currentTime, setCurrentTime] = useState(0);
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
@@ -42,17 +43,18 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
     setCurrentTime(refs[0].current.currentTime);
   }
   // Reference audio
-  // {sample && <AudioButton audio={sample} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}/>}
-
-  // audios.map((v, i) =>
+  // const sampleNode = <AudioButton audio={sample} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
+  //
+  // const audioNodes = audios.map((v, i) =>
   //   <AudioButton key={i} audio={v} ref={refs[i]} onPlay={handlePlay} onPause={handlePause}
-  //                onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}/>
+  //                onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
   // );
-  // <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+  // const controllerNode = <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
 
-  return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate};
+  return {refs, sampleRef, currentTime, onPlay: handlePlay, onPause: handlePause, handleTimeUpdate};
 }
 
+// This component exposes the audio to outside. Control audio with ref attribute.
 export const AudioButton = forwardRef<HTMLAudioElement, {
   audio: AudioFileModel, onPlay, onPause, onTimeUpdate?, children?
 }>(function (props, ref) {

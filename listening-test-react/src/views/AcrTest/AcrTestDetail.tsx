@@ -26,6 +26,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AcrTestItemCard} from "./AcrTestItemCard";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
+import {uuid} from "uuidv4";
 
 export const AcrTestDetail = observer(function() {
   const {id} = useParams();
@@ -100,7 +101,7 @@ export const AcrTestDetail = observer(function() {
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
         {tests.items.map((v, i) =>
-          <Grid item xs={12} key={i} ref={viewRef}>
+          <Grid item xs={12} key={v.id} ref={viewRef}>
             <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
           </Grid>
         )}
@@ -125,7 +126,7 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
     switch (type) {
       case TestItemType.example:
         newItem = {
-          type: TestItemType.example, label: 'Example', example: {
+          id: uuid(), type: TestItemType.example, label: 'Example', example: {
             audios: [], fields: [
               {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
             ]
@@ -133,17 +134,19 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
         }; break;
       case TestItemType.training:
         newItem = {
-          type: TestItemType.training, label: 'Training Example', example: {
+          id: uuid(), type: TestItemType.training, label: 'Training Example', example: {
             audios: [], fields: null
           }
         }; break;
       case TestItemType.sectionHeader:
         newItem = {
-          type: TestItemType.sectionHeader, label: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
+          id: uuid(), type: TestItemType.sectionHeader, label: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
         }; break;
     }
     onAdd(newItem);
   }
+
+  const handleQuestionAdd = question => onAdd({id: uuid(), type: TestItemType.question, questionControl: question, label: 'A Survey Question'});
   return <Box className={classes.buttonGroup}>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
       <Icon>add</Icon>Add Example
@@ -151,8 +154,7 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
       <Icon>add</Icon>Add Training Example
     </Button>
-    <AddQuestionButton onQuestionAdd={question =>
-      onAdd({type: TestItemType.question, questionControl: question, label: 'A Survey Question'})}/>
+    <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
   </Box>
 });
 
