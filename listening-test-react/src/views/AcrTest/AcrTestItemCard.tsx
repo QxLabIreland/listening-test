@@ -56,7 +56,7 @@ export const AcrTestItemCard = observer(function (props: {
   else if (value.type === TestItemType.question) return <Card>
     <CardHeader style={{paddingBottom: 0}} action={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } subheader="Question Card">
+    } title={value.label}>
     </CardHeader>
     <CardContent>
       <SurveyControl control={value.questionControl} label={'Your question'}/>

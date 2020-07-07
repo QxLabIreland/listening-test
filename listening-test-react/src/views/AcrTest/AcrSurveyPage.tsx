@@ -7,28 +7,27 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import {SurveyAudioController} from "../../shared/components/SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
-import {SurveyCardView} from "../components/SurveyCardView";
-import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {Box} from "@material-ui/core";
+import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {RenderTestItem} from "../components/RenderTestItem";
 
-export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
+export const AcrSurveyPage = observer(function (props: { url: 'acr-test'|'ab-test', value?: BasicTestModel}) {
   const {value} = props;
-  const [theTest, setTheTest] = useState<AbTestModel>(value ? value : null);
+  const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
   const {id} = useParams();
   const globalDialog = useContext(GlobalDialog);
 
   useEffect(() => {
-    if (!value) Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
-      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.data))
+    if (!value) Axios.get<BasicTestModel>('/api/task/acr-test', {params: {_id: id}})
+      .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
 
   function handlePanelChange(v, index) {
@@ -37,48 +36,27 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   }
 
   function handleSubmit() {
-    Axios.post('/api/task/ab-test', toJS(theTest))
+    Axios.post('/api/task/acr-test', toJS(questionnaire))
       .then(() => globalDialog('Thanks for your submitting! The page will be closed.', 'Done')); // , () => window.close()
   }
 
-  return <>{theTest ? <Grid container spacing={3} direction="column">
+  return <>{questionnaire ? <Grid container spacing={3} direction="column">
 
     <Grid item xs={12}><Box pt={6}>
-      <Typography variant="h3" gutterBottom>{theTest.name}</Typography>
-      <Typography variant="body1" gutterBottom>{theTest.description}</Typography>
+      <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
+      <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
     </Box></Grid>
-    <Grid item xs={12}>
-      <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
-        <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-          <Typography variant="h6">A survey before test</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <SurveyCardView items={theTest.survey}/>
-        </ExpansionPanelDetails>
-        <ExpansionPanelActions>
-          <Button size="small" color="primary"
-                  onClick={() => setOpenedPanel(0)}>Next</Button>
-        </ExpansionPanelActions>
-      </ExpansionPanel>
-    </Grid>
-    {theTest.examples.map((ex, i) =>
+    {questionnaire.items.map((v, i) =>
       <Grid item xs={12} key={i}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-            {ex.questions[0].value && <Icon>check</Icon>}
-            <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
+            <Typography variant="h6" style={{marginLeft: 8}}>{v.label}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Grid container spacing={3}>
-              {/*TODO Expose the pause*/}
-              <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
-              <Grid item>
-                <SurveyCardView items={ex.questions}/>
-              </Grid>
-            </Grid>
+            <RenderTestItem item={v}/>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
-            {i !== theTest.examples.length - 1 &&
+            {i !== questionnaire.items.length - 1 &&
             <Button size="small" color="primary"
                     onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
           </ExpansionPanelActions>

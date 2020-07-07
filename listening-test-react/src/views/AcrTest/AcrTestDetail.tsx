@@ -27,7 +27,7 @@ import {AcrTestItemCard} from "./AcrTestItemCard";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 
-export const AcrTestDetail = observer(() => {
+export const AcrTestDetail = observer(function() {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -97,12 +97,8 @@ export const AcrTestDetail = observer(() => {
           <span style={{flexGrow: 1}}/>
           <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
         </Grid>
-        <Grid item xs={12}>
-          <NameText/>
-        </Grid>
-        <Grid item xs={12}>
-          <DesText/>
-        </Grid>
+        <Grid item xs={12}><NameText/></Grid>
+        <Grid item xs={12}><DesText/></Grid>
         {tests.items.map((v, i) =>
           <Grid item xs={12} key={i} ref={viewRef}>
             <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
@@ -156,7 +152,7 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
       <Icon>add</Icon>Add Training Example
     </Button>
     <AddQuestionButton onQuestionAdd={question =>
-      onAdd({type: TestItemType.question, questionControl: question})}/>
+      onAdd({type: TestItemType.question, questionControl: question, label: 'A Survey Question'})}/>
   </Box>
 });
 
