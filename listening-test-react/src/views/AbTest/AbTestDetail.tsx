@@ -115,10 +115,10 @@ export const AbTestDetail = observer(function () {
               <CardContent>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm} value="A"/>
+                    <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm}/>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm} value="B"/>
+                    <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm}/>
                   </Grid>
                   <Grid item xs={12} md={2}>
                     <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
