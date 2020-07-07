@@ -5,7 +5,7 @@ import {Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 
-export function ShareIconButton(props) {
+export default function ShareIconButton(props) {
   const {url, ...rest} = props;
   const [open, setSnackbarOpen] = useState(false);
 

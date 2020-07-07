@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Grid, Icon, IconButton} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
-import {SearchInput} from "../../shared/components/SearchInput";
+import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import Axios from "axios";
 import Loading from "../../layouts/components/Loading";
@@ -16,7 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableBody from "@material-ui/core/TableBody";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {ShareIconButton} from "../../shared/components/ShareIconButton";
+import ShareIconButton from "../../shared/components/ShareIconButton";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -28,13 +28,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TestListView(props: {testUrl: string}) {
+export default function TestListView(props: { testUrl: string }) {
+  const {testUrl} = props;
   const {path} = useRouteMatch();
+  const classes = useStyles();
   const [data, setData] = useState<BasicTestModel[]>(null);
   const [filtered, setFiltered] = useState<BasicTestModel[]>(null);
   const [error, setError] = useState(undefined);
-  const classes = useStyles();
-  const {testUrl} = props;
 
   useEffect(() => {
     Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true})
@@ -42,7 +42,14 @@ export default function TestListView(props: {testUrl: string}) {
         setData(res.data);
         setFiltered(res.data);
       }, reason => setError(reason.response.data));
-  }, [])
+
+    // Reset state
+    return () => {
+      setData(null);
+      setFiltered(null);
+      setError(undefined);
+    }
+  }, [testUrl]);
 
   const handleSearchChange = (event) =>
     setFiltered(data.filter(value =>
@@ -52,10 +59,12 @@ export default function TestListView(props: {testUrl: string}) {
       || value.createdAt.$date.toString().toLowerCase().includes(event.target.value.toLowerCase())
     ));
 
+  // When trash button clicked
   const handleDelete = (obj: BasicTestModel) =>
-    Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() =>
-      setData(data.splice(data.indexOf(obj), 1))
-    );
+    Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
+      data.splice(data.indexOf(obj), 1);
+      setData([...data]);
+    });
 
   return (
     <Grid container spacing={2}>
@@ -103,10 +112,13 @@ export default function TestListView(props: {testUrl: string}) {
                     <IconButton className={classes.button} size="small" color="primary" component={Link}
                                 to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
                     <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
-                    <IconButton className={classes.button} size="small" color="default" onClick={() => handleDelete(test)}>
+                    <IconButton className={classes.button} size="small" color="default"
+                                onClick={() => handleDelete(test)}>
                       <Icon>delete</Icon></IconButton>
                   </TableCell>
-                </TableRow>) : <TableRow><TableCell colSpan={4}>There is no test here. You can add test by the button top right.</TableCell></TableRow>}
+                </TableRow>) : <TableRow><TableCell colSpan={4}>
+                  There is no test here. You can add test by the button top right.
+                </TableCell></TableRow>}
               </TableBody>
             </Table>
           </CardContent>

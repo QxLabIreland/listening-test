@@ -12,17 +12,19 @@ export default function AcrTestTab() {
   const {id} = useParams();
   const history = useHistory();
   const {setTitle} = useContext(AppBarTitle);
+  // This is the state for triggering useEffect
   const [preSetValue, setPreSetValue] = useState<boolean>(null);
 
   // Run when value is changed and first mount
   useEffect(() => {
     // Set correct value based on url
     setValue(location.hash === '#responses' ? 1 : 0);
-    setTitle(+id === 0 ? 'New ACR Test' : !value ? 'Edit an ACR Test' : 'ACR Test Responses');
+    setTitle(+id === 0 ? 'New ACR Test' : location.hash !== '#responses' ? 'Edit an ACR Test' : 'ACR Test Responses');
   }, [id, preSetValue]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     history.replace({hash: !newValue ? null : 'responses'});
+    // Because prompt block cannot block code here. So we need do this in useEffect callback.
     setPreSetValue(!preSetValue);
   }
 

@@ -14,7 +14,7 @@ import {Link} from "react-router-dom";
 import {useRouteMatch} from 'react-router';
 import {Icon, IconButton} from "@material-ui/core";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import {ShareIconButton} from "../../shared/components/ShareIconButton";
+import ShareIconButton from "../../shared/components/ShareIconButton";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {

@@ -8,18 +8,19 @@ import {AppBarTitle} from "../../shared/ReactContexts";
 import Grid from "@material-ui/core/Grid";
 
 export default function AbTestTab() {
-  // Hash of location, switch to response tab. url -> value -> title
+  // Hash of location, switch to response tab. url -> value, url -> title
   const location = useLocation();
   const [value, setValue] = React.useState(location.hash === '#responses' ? 1 : 0);
   const {id} = useParams();
   const {setTitle} = useContext(AppBarTitle);
   const history = useHistory();
+  // This is the state for triggering useEffect
   const [preSetValue, setPreSetValue] = useState(false);
 
   useEffect(() => {
     // Set correct value based on url
     setValue(location.hash === '#responses' ? 1 : 0);
-    setTitle(+id === 0 ? 'New AB Test' : !value ? 'Edit an AB Test' : 'AB Test Responses');
+    setTitle(+id === 0 ? 'New AB Test' : location.hash === '#responses' ? 'AB Test Responses': 'Edit an AB Test');
   }, [id, preSetValue]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
