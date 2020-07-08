@@ -13,7 +13,6 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         super().__init__(application, request, **kwargs)
         self.user_id: Optional[ObjectId] = None
         # Current db means the db which a handler is currently using
-        self.current_db: Optional[Collection] = None
         self.mongo_client = MongoDBConnection().client
         self.db = MongoDBConnection().db
 

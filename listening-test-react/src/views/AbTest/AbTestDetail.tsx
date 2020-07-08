@@ -122,7 +122,7 @@ export const AbTestDetail = observer(function () {
                   </Grid>
                   <Grid item xs={12} md={2}>
                     <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
-                                  label="Reference"/></Grid>
+                                  label="Reference (Optional)"/></Grid>
                   {v.questions.map((q, qi) => <Grid item xs={12} key={qi}>
                     <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
                   </Grid>)}
