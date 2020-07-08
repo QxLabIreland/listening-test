@@ -105,7 +105,7 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
         {/*Reference place*/}
         {isTraining && <Grid item xs={12} md={4}>
           <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
-                        label="Reference"/>
+                        label="Reference (Optional)"/>
         </Grid>}
         {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
           <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>

@@ -132,7 +132,7 @@ const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemMod
     switch (type) {
       case TestItemType.example:
         newItem = {
-          id: uuid(), type: TestItemType.example, title: 'Example (Editable Title)', example: {
+          id: uuid(), type: TestItemType.example, title: 'Example (Click to edit this)', example: {
             audios: [], fields: [
               {type: SurveyControlType.description, question: 'Rate the quality of these sounds.', value: null}
             ]
@@ -141,7 +141,7 @@ const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemMod
         break;
       case TestItemType.training:
         newItem = {
-          id: uuid(), type: TestItemType.training, title: 'Training Example (Editable Title)', example: {
+          id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
             audios: [], fields: [
               {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
             ]
@@ -158,7 +158,7 @@ const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemMod
   }
 
   const handleQuestionAdd = question => onAdd({
-    id: uuid(), type: TestItemType.question, title: 'Survey Question (Editable Title)', questionControl: question
+    id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
   });
 
   return <Box className={classes.buttonGroup}>

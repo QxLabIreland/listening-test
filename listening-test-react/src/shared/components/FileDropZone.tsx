@@ -79,10 +79,10 @@ export const FileDropZone = observer((props: { onChange, fileModel?: AudioFileMo
         <Typography>{fileModel.filename}</Typography>
         <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}><small>{label?.slice(0, 3)}</small>
         <Tooltip title="Click to delete this one">
-          <IconButton size="small" onClick={handleDelete}><Icon>attachment</Icon></IconButton>
+          <IconButton size="small" onClick={handleDelete}><Icon>delete_outline</Icon></IconButton>
         </Tooltip>
         </Box>
-      </> : <><Typography>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>file_copy</Icon></>}
+      </> : <><Typography>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>attachment</Icon></>}
     </Box>}
     {fileModel && isTag && <TagsGroup value={fileModel.tags} onChange={handleTagsChange}/>}
   </React.Fragment>
