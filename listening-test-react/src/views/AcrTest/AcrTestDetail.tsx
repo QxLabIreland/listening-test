@@ -6,17 +6,7 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {
-  Box,
-  Card,
-  CardContent,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  TextField,
-  Typography
-} from "@material-ui/core";
+import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
@@ -28,7 +18,7 @@ import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {uuid} from "uuidv4";
 
-export const AcrTestDetail = observer(function() {
+export const AcrTestDetail = observer(function () {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -50,10 +40,17 @@ export const AcrTestDetail = observer(function() {
   }, []);
 
   const handleSubmit = () => {
+    // Validate if all examples have been added audios
+    const validationResult = validate(tests);
+    if (validationResult) {
+      openDialog(validationResult);
+      return;
+    }
+    // Create a new text or modify current test
     if (+id === 0) {
       requestServer(true);
     } else Axios.get('/api/response-count', {params: {testId: id, testType: 'acrTest'}}).then(res => {
-      // After checking with server, if there are responses
+      // After checking with server, if there are responses, it will create a new test.
       if (res.data > 0) openDialog(
         'This test already has some responses, save will create a new test. You can delete old one if you like.',
         'Reminder', null, () => requestServer(true));
@@ -82,12 +79,21 @@ export const AcrTestDetail = observer(function() {
     tests.items.splice(index, 1);
   }
 
-  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
-                                           onChange={e => tests.name = e.target.value}/>;
+  const validate = (tests: BasicTestModel) => {
+    for (const item of tests.items) {
+      if (item.example && (!item.example.audios || item.example.audios.length < 1)) {
+        return 'Please add at least one audio for every example'
+      }
+    }
+    return null;
+  }
 
+  // Some components for performance boost
+  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
+                                    onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-                                    defaultValue={tests.description}
-                                    onChange={(e) => tests.description = e.target.value}/>;
+                                   defaultValue={tests.description}
+                                   onChange={(e) => tests.description = e.target.value}/>;
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted}
@@ -113,7 +119,7 @@ export const AcrTestDetail = observer(function() {
   )
 })
 
-const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemModel) => void }) {
+const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
   const {onAdd} = props;
   const classes = makeStyles((theme: Theme) => createStyles({
     buttonGroup: {
@@ -126,27 +132,35 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
     switch (type) {
       case TestItemType.example:
         newItem = {
-          id: uuid(), type: TestItemType.example, label: 'Example', example: {
+          id: uuid(), type: TestItemType.example, title: 'Example (Editable Title)', example: {
             audios: [], fields: [
-              {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
+              {type: SurveyControlType.description, question: 'Rate the quality of these sounds.', value: null}
             ]
           }
-        }; break;
+        };
+        break;
       case TestItemType.training:
         newItem = {
-          id: uuid(), type: TestItemType.training, label: 'Training Example', example: {
-            audios: [], fields: null
+          id: uuid(), type: TestItemType.training, title: 'Training Example (Editable Title)', example: {
+            audios: [], fields: [
+              {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
+            ]
           }
-        }; break;
+        };
+        break;
       case TestItemType.sectionHeader:
         newItem = {
-          id: uuid(), type: TestItemType.sectionHeader, label: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        }; break;
+          id: uuid(), type: TestItemType.sectionHeader, title: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
+        };
+        break;
     }
     onAdd(newItem);
   }
 
-  const handleQuestionAdd = question => onAdd({id: uuid(), type: TestItemType.question, questionControl: question, label: 'A Survey Question'});
+  const handleQuestionAdd = question => onAdd({
+    id: uuid(), type: TestItemType.question, title: 'Survey Question (Editable Title)', questionControl: question
+  });
+
   return <Box className={classes.buttonGroup}>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
       <Icon>add</Icon>Add Example
@@ -158,7 +172,7 @@ const AddItemButtonGroup = observer(function(props: { onAdd: (type: TestItemMode
   </Box>
 });
 
-const AddQuestionButton = observer(function(props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
+const AddQuestionButton = observer(function (props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
   const {onQuestionAdd} = props;
   // When menu clicked
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -167,17 +181,27 @@ const AddQuestionButton = observer(function(props: { onQuestionAdd: (question: S
   };
 
   const handleAdd = (type: SurveyControlType) => {
+    // Close the adding menu
     setAnchorEl(null);
     // Check controls types
-    if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
-      onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
-    else onQuestionAdd({type: type, question: 'Untitled question', value: null});
-    // Close the adding menu
+    switch (type) {
+      case SurveyControlType.radio:
+      case SurveyControlType.checkbox:
+        onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
+        break;
+      case SurveyControlType.text:
+        onQuestionAdd({type: type, question: 'Untitled question', value: null});
+        break;
+      case SurveyControlType.description:
+        onQuestionAdd({type: type, question: 'Type you description here', value: null});
+        break;
+    }
   }
 
   return <>
     {/*Adding menu Button*/}
-    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey Question</Button>
+    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey
+      Question</Button>
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
       <MenuItem disabled>
         <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
@@ -199,6 +223,12 @@ const AddQuestionButton = observer(function(props: { onQuestionAdd: (question: S
           <Icon fontSize="small">check_box</Icon>
         </ListItemIcon>
         <ListItemText primary="Checkbox Group"/>
+      </MenuItem>
+      <MenuItem onClick={() => handleAdd(SurveyControlType.description)}>
+        <ListItemIcon>
+          <Icon fontSize="small">label</Icon>
+        </ListItemIcon>
+        <ListItemText primary="A Text Label"/>
       </MenuItem>
     </Menu>
   </>;

@@ -8,7 +8,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  TextField
+  TextField, Typography
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";
@@ -23,6 +23,8 @@ export const RenderSurveyControl = observer(function (props: { control: SurveyCo
       return <SurveyRadio control={control}/>
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
+    case SurveyControlType.description:
+      return <Typography>{control.question}</Typography>
     default:
       return null;
   }

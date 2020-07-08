@@ -33,12 +33,12 @@ export const AcrTestItemCard = observer(function (props: {
 
   // Label methods
   const handleLabelChange = (event) => {
-    value.label = event.target.value;
+    value.title = event.target.value;
   }
 
   if (value.type === TestItemType.example || value.type === TestItemType.training) return (
     <TestItemExampleCard example={value.example} title={
-      <input style={labelInputStyle} value={value.label} onChange={handleLabelChange}
+      <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
              onFocus={event => event.target.select()}/>
     } delButton={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
@@ -48,10 +48,11 @@ export const AcrTestItemCard = observer(function (props: {
   else if (value.type === TestItemType.question) return <Card>
     <CardHeader style={{paddingBottom: 0}} action={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } title={value.label}>
+    } title={<input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
+                    onFocus={event => event.target.select()}/>}>
     </CardHeader>
     <CardContent>
-      <SurveyControl control={value.questionControl} label={'Your question'}/>
+      <SurveyControl control={value.questionControl}/>
     </CardContent>
   </Card>;
   else return null;
@@ -79,7 +80,7 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
       return;
     }
     // If is Reference the audioRef will be added or deleted
-    if (index === -1) example.audioRef=newAudio;
+    if (index === -1) example.audioRef = newAudio;
     else example.audios[index] = newAudio;
   }
 
@@ -92,16 +93,20 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
     }/>
     <CardContent>
       <Grid container spacing={2}>
-        {isTraining && <>
-          <Grid item xs={12}>
-            <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
-          </Grid>
-          {/*Reference place*/}
-          <Grid item xs={12} md={4}>
-            <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
-                          label="Reference"/>
-          </Grid>
-        </>}
+        {isTraining && <Grid item xs={12}>
+          <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
+        </Grid>}
+
+        {/*Description for this example*/}
+        {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
+          <SurveyControl control={q}/>
+        </Grid>)}
+
+        {/*Reference place*/}
+        {isTraining && <Grid item xs={12} md={4}>
+          <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
+                        label="Reference"/>
+        </Grid>}
         {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
           <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
         </Grid>)}
@@ -109,10 +114,6 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
         <Grid item xs={12} md={4}>
           <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
         </Grid>
-        {/*Questions for this example*/}
-        {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-          <SurveyControl control={q} label={'Your question'}/>
-        </Grid>)}
       </Grid>
     </CardContent>
     {/*<CardActions style={{justifyContent: 'flex-end', paddingTop: 0}}>
