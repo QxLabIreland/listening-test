@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Box, Grid, TextField} from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, Grid, TextField, Typography} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControlModel} from "../models/SurveyControlModel";
@@ -8,10 +8,27 @@ import {observer} from "mobx-react";
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
-  label: string,
+  label?: string,
   onDelete?: (control) => void
 }) {
-  const {control, label, onDelete} = props;
+  const {control, onDelete} = props;
+  const {label = control.type === SurveyControlType.description ? 'Your description' : 'Your question'} = props;
+
+  // Render second field for the control
+  const switchControlType = () => {
+    switch (control.type) {
+      case SurveyControlType.text:
+        return <TextField fullWidth variant="outlined" label={control.question}
+                          value="Subject will answer the question here..." disabled/>
+      case SurveyControlType.radio:
+      case SurveyControlType.checkbox:
+        return <SurveyOptions options={control.options} type={control.type}/>
+      case SurveyControlType.description:
+        return <Typography>{control.question}</Typography>
+      default:
+        return null;
+    }
+  }
 
   return <>
     {/*Question input*/}
@@ -23,12 +40,7 @@ export const SurveyControl = observer(function (props: {
         <IconButton size="small" onClick={() => onDelete(control)}><Icon>delete</Icon></IconButton>
       </span>}
     </Box>
-    {/*Options editor*/}
-    {control.type === SurveyControlType.text
-      ? <TextField fullWidth variant="outlined" label={control.question}
-                   value="Subject will answer the question here..." disabled/>
-      : <SurveyOptions options={control.options} type={control.type}/>}
-
+    {switchControlType()}
   </>
 });
 

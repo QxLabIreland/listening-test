@@ -19,7 +19,7 @@ export interface TestItemModel {
   id: string;
   type: TestItemType;
   // The label for this example. Normally on the header of a card.
-  label?: string;
+  title?: string;
   questionControl?: SurveyControlModel;
   example?: ItemExampleModel;
 }

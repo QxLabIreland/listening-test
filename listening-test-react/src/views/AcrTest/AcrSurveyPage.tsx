@@ -13,11 +13,12 @@ import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {Box} from "@material-ui/core";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {Box, Card, CardContent, CardHeader} from "@material-ui/core";
+import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {RenderTestItem} from "../components/RenderTestItem";
+import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
 
-export const AcrSurveyPage = observer(function (props: { url: 'acr-test'|'ab-test', value?: BasicTestModel}) {
+export const AcrSurveyPage = observer(function (props: { url: 'acr-test' | 'ab-test', value?: BasicTestModel }) {
   const {value} = props;
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
@@ -48,19 +49,25 @@ export const AcrSurveyPage = observer(function (props: { url: 'acr-test'|'ab-tes
     </Box></Grid>
     {questionnaire.items.map((v, i) =>
       <Grid item xs={12} key={v.id}>
-        <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
-          <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-            <Typography variant="h6" style={{marginLeft: 8}}>{v.label}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <RenderTestItem item={v}/>
-          </ExpansionPanelDetails>
-          <ExpansionPanelActions>
-            {i !== questionnaire.items.length - 1 &&
-            <Button size="small" color="primary"
-                    onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
-          </ExpansionPanelActions>
-        </ExpansionPanel>
+        {v.type === TestItemType.question && v.questionControl.type === SurveyControlType.description ?
+          <Card>
+            <CardHeader title={v.title}/>
+            <CardContent>{v.questionControl.question}</CardContent>
+          </Card> :
+          <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
+            <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
+              <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <RenderTestItem item={v}/>
+            </ExpansionPanelDetails>
+            <ExpansionPanelActions>
+              {i !== questionnaire.items.length - 1 &&
+              <Button size="small" color="primary"
+                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
+            </ExpansionPanelActions>
+          </ExpansionPanel>
+        }
       </Grid>
     )}
     <Grid item xs={12} hidden={!!value}>
