@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TestListView(props: { testUrl: string }) {
+export default function TestListView(props: { testUrl: 'ab-test' | 'acr-test' }) {
   const {testUrl} = props;
   const {path} = useRouteMatch();
   const classes = useStyles();

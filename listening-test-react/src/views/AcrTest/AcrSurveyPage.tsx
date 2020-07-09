@@ -15,10 +15,10 @@ import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {Box, Card, CardContent, CardHeader} from "@material-ui/core";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
-import {RenderTestItem} from "../components/RenderTestItem";
+import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
 
-export const AcrSurveyPage = observer(function (props: { url: 'acr-test' | 'ab-test', value?: BasicTestModel }) {
+export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel }) {
   const {value} = props;
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
@@ -59,7 +59,7 @@ export const AcrSurveyPage = observer(function (props: { url: 'acr-test' | 'ab-t
               <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <RenderTestItem item={v}/>
+              <AcrSurveyRenderItem item={v}/>
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
               {i !== questionnaire.items.length - 1 &&

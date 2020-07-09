@@ -1,11 +1,13 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Box, Button, Icon, Tab, Tabs, Tooltip} from "@material-ui/core";
+import {Box, Tab, Tabs} from "@material-ui/core";
 import {useHistory, useLocation, useParams} from "react-router";
-import {downloadFileTool} from "../../shared/ReactTools";
 import {AppBarTitle} from "../../shared/ReactContexts";
-import {AcrTestDetail} from "./AcrTestDetail";
+import {AcrTestDetail} from "../AcrTest/AcrTestDetail";
+import ResponseListView from "./ResponseListView";
+import {AbTestDetail} from "../AbTest/AbTestDetail";
 
-export default function AcrTestTab() {
+export default function TestTabPage(props: {testType: 'abTest' | 'acrTest', testName: string}) {
+  const {testType, testName} = props;
   // Hash of location, switch to response tab. url -> value -> title
   const location = useLocation();
   const [value, setValue] = React.useState<number>(location.hash === '#responses' ? 1 : 0);
@@ -19,18 +21,22 @@ export default function AcrTestTab() {
   useEffect(() => {
     // Set correct value based on url
     setValue(location.hash === '#responses' ? 1 : 0);
-    setTitle(+id === 0 ? 'New ACR Test' : location.hash !== '#responses' ? 'Edit an ACR Test' : 'ACR Test Responses');
+    setTitle(+id === 0 ? `New ${testName}` : location.hash !== '#responses' ? `Edit an ${testName}` : `${testName} Responses`);
   }, [id, preSetValue]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    history.replace({hash: !newValue ? null : 'responses'});
+    history.replace({hash: newValue === 1 ? 'responses' : null});
     // Because prompt block cannot block code here. So we need do this in useEffect callback.
     setPreSetValue(!preSetValue);
   }
 
-  const handleDownload = () => downloadFileTool({
-    url: '/api/response-download', params: {testType: 'acrTest', testId: id}
-  });
+  const renderDetail = () => {
+    switch (testType) {
+      case "abTest": return <AbTestDetail/>
+      case "acrTest": return <AcrTestDetail/>
+      default: return null;
+    }
+  }
 
   return (
     <React.Fragment>
@@ -39,13 +45,8 @@ export default function AcrTestTab() {
         <Tab label="Responses" disabled={id === '0'}/>
       </Tabs>
       <Box paddingTop={2}>
-        {value === 0 && <AcrTestDetail/>}
-        {value === 1 && <>
-          <Tooltip title="Download all Responses for This Test">
-            <Button variant="outlined" color="primary" onClick={handleDownload}>
-              <Icon>get_app</Icon>Download all Responses</Button>
-          </Tooltip>
-        </>}
+        {value === 0 && renderDetail()}
+        {value === 1 && <ResponseListView testType={testType}/>}
       </Box>
     </React.Fragment>
   )
