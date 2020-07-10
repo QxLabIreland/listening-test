@@ -10,14 +10,14 @@ from tools.file_helper import write_data_in_csv
 from datetime import datetime
 
 
-class ResponsesDownloadHandler(BaseHandler):
+class AbTestResponsesDownload(BaseHandler):
     def prepare(self):
         self.user_id = self.auth_current_user()
 
     # Download api
     async def get(self):
         # Change collection
-        res_collection = switch_response_collection(self)
+        res_collection = self.db['abTestSurveys']
         if not res_collection:
             return
         # Get responses, based on 1 test
@@ -26,11 +26,11 @@ class ResponsesDownloadHandler(BaseHandler):
             .sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
-            self.send_error(404, 'Cannot find the resource')
+            self.send_error(404, 'There is no enough AB test responses')
             return
 
         # Build file name with test type and datetime
-        csv_name = f"{self.get_argument('testType')}-{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+        csv_name = f"AB_Test-{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
         # Set http response header for downloading file
         self.set_header('Content-Type', 'application/octet-stream')
         self.set_header('Content-Disposition', f'attachment; filename="{csv_name}"')
