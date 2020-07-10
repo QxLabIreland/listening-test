@@ -8,14 +8,14 @@ import {
   createStyles,
   Grid,
   Icon,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Theme, Tooltip, Typography,
+  Theme,
+  Tooltip,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";

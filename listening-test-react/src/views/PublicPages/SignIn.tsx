@@ -6,6 +6,7 @@ import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
 import {GlobalDialog} from "../../shared/ReactContexts";
+import {Md5} from 'ts-md5';
 
 export default function SignIn() {
   const classes = useStyles();
@@ -14,15 +15,11 @@ export default function SignIn() {
 
   const formik = useFormik({
     initialValues: {email: '', password: ''},
-    onSubmit: values => {
-      Axios.post('/api/login', values).then(() => {
-        history.push('/user');
-      }, (reason) => {
-        console.log(reason.response)
+    // Hash the password
+    onSubmit: values => Axios.post('/api/login', {...values, password: Md5.hashStr(values.password)})
+      .then(() => history.push('/user'), (reason) => {
         openDialog(reason.response.data);
-      })
-
-    },
+      }),
     validate: pipeValidator({
       password: [required(), minLength(6)],
       email: [email(), required()]

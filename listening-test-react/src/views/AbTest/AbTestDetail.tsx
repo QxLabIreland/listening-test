@@ -14,7 +14,7 @@ import {SurveySetUpView} from "./AbSurvey/SurveySetUpView";
 import Axios from "axios";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import Loading from "../../layouts/components/Loading";
-import {AppBarTitle, GlobalDialog} from "../../shared/ReactContexts";
+import {AppBarTitle, GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
@@ -26,6 +26,7 @@ export const AbTestDetail = observer(function () {
   const [isError, setIsError] = useState(false);
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
+  const openSnackbar = useContext(GlobalSnackbar);
   // Scroll properties
   const {viewRef, scrollToView} = useScrollToView();
   // No submit alert variable
@@ -39,7 +40,6 @@ export const AbTestDetail = observer(function () {
         () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', examples: [], survey: [], items: undefined}));
-    // TODO Clean up and auto save
   }, []);
 
   function addExample() {
@@ -75,7 +75,7 @@ export const AbTestDetail = observer(function () {
     Axios.request({
       method: isNew ? 'POST' : 'PUT', url: '/api/ab-test', data: tests
     }).then(() => {
-      // TODO snackbar
+      openSnackbar('Save Successfully');
       history.push('./');
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }

@@ -16,6 +16,8 @@ interface IUserContext {
 export const CurrentUser = createContext({setUser: (_)=>{}} as IUserContext);
 
 // Components Contexts
-export const GlobalDialog = createContext<(
-  description: string, title?: string, onDismiss?: () => void, onConfirm?: () => void
-) => void>(null);
+type DialogCallback = (description: string, title?: string, onDismiss?: () => void, onConfirm?: () => void) => void;
+export const GlobalDialog = createContext<DialogCallback>(null);
+
+type SnackbarCallback = (message: string, time?: number) => void;
+export const GlobalSnackbar = createContext<SnackbarCallback>(null);

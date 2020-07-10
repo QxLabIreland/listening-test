@@ -107,7 +107,6 @@ export default function TestListView(props: { testUrl: TestUrl }) {
                   </TableCell>
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
-                    {/*{moment(order.createdAt).format('DD/MM/YYYY')}*/}
                   </TableCell>
                   <TableCell>
                     <IconButton className={classes.button} size="small" color="primary" component={Link}
@@ -130,7 +129,7 @@ export default function TestListView(props: { testUrl: TestUrl }) {
   )
 }
 
-export function ShareIconButton(props) {
+function ShareIconButton(props) {
   const {url, ...rest} = props;
   const [open, setSnackbarOpen] = useState(false);
 
@@ -150,10 +149,10 @@ export function ShareIconButton(props) {
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'center',
         }}
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={10_000}
         onClose={handleClose}
         message="Copy the link to clipboard successfully"
         action={
