@@ -10,13 +10,14 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import {SurveyAudioController} from "./SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
-import {SurveyCardView} from "./SurveyCardView";
 import {AbTestModel} from "../../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../../layouts/components/Loading";
 import {GlobalDialog} from "../../../shared/ReactContexts";
 import {Box} from "@material-ui/core";
+import {RenderSurveyControl} from "../../components/RenderSurveyControl";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 
 export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   const {value} = props;
@@ -53,7 +54,7 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
           <Typography variant="h6">A survey before test</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <SurveyCardView items={theTest.survey}/>
+          <RenderSurveyControls items={theTest.survey}/>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Button size="small" color="primary"
@@ -73,7 +74,7 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
               {/*TODO Expose the pause*/}
               <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
               <Grid item>
-                <SurveyCardView items={ex.questions}/>
+                <RenderSurveyControls items={ex.questions}/>
               </Grid>
             </Grid>
           </ExpansionPanelDetails>
@@ -93,3 +94,17 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
     </Grid>
   </Grid> : <Loading error={!!error} message={error}/>}</>
 })
+
+const RenderSurveyControls =  observer(function (props: {items: SurveyControlModel[]}) {
+  const {items} = props;
+  if (!items) return null;
+
+  return <Grid container spacing={3}>
+    {items.map((c, i) =>
+      <Grid item xs={12} key={i}>
+        <RenderSurveyControl control={c}/>
+      </Grid>
+    )}
+  </Grid>
+})
+

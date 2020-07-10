@@ -5,8 +5,9 @@ import {AppBarTitle} from "../../shared/ReactContexts";
 import {AcrTestDetail} from "../AcrTest/AcrTestDetail";
 import ResponseListView from "./ResponseListView";
 import {AbTestDetail} from "../AbTest/AbTestDetail";
+import {TestType} from "../../shared/ReactEnumsAndTypes";
 
-export default function TestTabPage(props: {testType: 'abTest' | 'acrTest', testName: string}) {
+export default function TestTabPage(props: {testType: TestType, testName: string}) {
   const {testType, testName} = props;
   // Hash of location, switch to response tab. url -> value -> title
   const location = useLocation();

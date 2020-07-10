@@ -1,5 +1,4 @@
 import Axios, {AxiosRequestConfig} from "axios";
-import process from "process";
 
 const DEV_HOST = 'http://localhost:8889';
 const PRODUCTION_HOST = 'https://event.holacodes.com';

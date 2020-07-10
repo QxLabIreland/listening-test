@@ -18,6 +18,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
+import {TestUrl} from "../../shared/ReactEnumsAndTypes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TestListView(props: { testUrl: 'ab-test' | 'acr-test' }) {
+export default function TestListView(props: { testUrl: TestUrl }) {
   const {testUrl} = props;
   const {path} = useRouteMatch();
   const classes = useStyles();

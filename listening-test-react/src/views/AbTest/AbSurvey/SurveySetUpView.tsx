@@ -1,34 +1,17 @@
 import {observer} from "mobx-react";
-import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
-import React, {useState} from "react";
-import {
-  Button,
-  CardContent,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  TextField,
-  Typography
-} from "@material-ui/core";
+import React from "react";
+import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {useScrollToView} from "../../../shared/ReactHooks";
 import {SurveyControl} from "../../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../../shared/ReactEnums";
+import {SurveyControlType} from "../../../shared/ReactEnumsAndTypes";
 
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
   const {items} = props;
   const {viewRef, scrollToView} = useScrollToView();
-  // const [items] = useState(observable([
-  //   {type: 0, question: 'Text test'},
-  //   {type: 1, question: 'Radio test', options: ['1', '2', '3']},
-  //   {type: 2, question: 'Checkbox test', options: ['a', 'b', 'c']},
-  // ] as SurveyControlModel[]));
 
   // When menu clicked
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

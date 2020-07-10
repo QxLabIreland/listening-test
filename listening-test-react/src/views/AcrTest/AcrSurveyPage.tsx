@@ -16,7 +16,7 @@ import {GlobalDialog} from "../../shared/ReactContexts";
 import {Box, Card, CardContent, CardHeader} from "@material-ui/core";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
-import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
+import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
 
 export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel }) {
   const {value} = props;

@@ -11,7 +11,6 @@ import DashboardPage from "../../views/DashboardPage";
 import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
-import MushraPage from "../../views/MushraPage";
 import Axios from "axios";
 import AbTestTab from "../../views/AbTest/AbTestTab";
 import TestListView from "../../views/components/TestListView";
@@ -88,7 +87,7 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="acr-test"/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><MushraPage/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="mushra-test"/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
@@ -100,6 +99,11 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/acr-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
             <TestTabPage testName="ACR Test" testType="acrTest"/>
+          </AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/acr-test/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <TestTabPage testName="MUSHRA Test" testType="mushraTest"/>
           </AppBarLayout>
         </Route>
         {/*Context make this not working*/}

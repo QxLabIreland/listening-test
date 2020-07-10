@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
-import {SurveyControlType, TestItemType} from "../../shared/ReactEnums";
+import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
