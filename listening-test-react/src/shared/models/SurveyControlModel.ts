@@ -1,4 +1,4 @@
-import {SurveyControlType} from "../ReactEnums";
+import {SurveyControlType} from "../ReactEnumsAndTypes";
 
 export interface SurveyControlModel {
   type: SurveyControlType;

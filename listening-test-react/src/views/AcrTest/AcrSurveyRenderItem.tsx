@@ -1,7 +1,7 @@
 import React, {CSSProperties} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {TestItemType} from "../../shared/ReactEnums";
+import {TestItemType} from "../../shared/ReactEnumsAndTypes";
 import {RenderSurveyControl} from "../components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";

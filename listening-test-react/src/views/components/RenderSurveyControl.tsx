@@ -1,5 +1,5 @@
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {SurveyControlType} from "../../shared/ReactEnums";
+import {SurveyControlType} from "../../shared/ReactEnumsAndTypes";
 import {
   Checkbox,
   FormControl,
