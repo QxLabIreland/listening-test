@@ -11,7 +11,7 @@ export const FileDropZone = observer((props: { onChange, fileModel?: AudioFileMo
   const {onChange, fileModel, label, isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
   // Style of file boxes
-  const boxStyle = {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4} as CSSProperties;
+  const boxStyle = {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4, cursor: 'pointer'} as CSSProperties;
   const [isUploading, setIsUploading] = useState(false);
   // Program settings
   const [progress, setProgress] = useState(0);

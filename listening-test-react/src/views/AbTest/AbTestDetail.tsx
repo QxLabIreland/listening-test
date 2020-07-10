@@ -134,6 +134,10 @@ export const AbTestDetail = observer(function () {
         <Grid item>
           <Button variant="outlined" color="primary" onClick={addExample}><Icon>add</Icon>Add an Audio Example</Button>
         </Grid>
+        <Grid item xs={12} style={{display: 'flex'}}>
+          <span style={{flexGrow: 1}}/>
+          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
+        </Grid>
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )

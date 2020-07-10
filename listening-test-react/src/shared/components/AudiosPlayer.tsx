@@ -1,8 +1,9 @@
-import React, {forwardRef, RefObject, useRef, useState} from "react";
+import React, {forwardRef, RefObject, useEffect, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../models/AudioFileModel";
+import {ItemExampleSettingsModel} from "../models/ItemExampleModel";
 
 /** In order to build a custom audio player including rating bar,
  *  use this hook with AudioButton and AudioController components */
@@ -56,13 +57,21 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
 
 // This component exposes the audio to outside. Control audio with ref attribute.
 export const AudioButton = forwardRef<HTMLAudioElement, {
-  audio: AudioFileModel, onPlay, onPause, onTimeUpdate?, children?
+  audio: AudioFileModel, onPlay, onPause, onTimeUpdate?, settings?: ItemExampleSettingsModel, children?
 }>(function (props, ref) {
-  const {audio, onTimeUpdate, onPlay, onPause} = props;
+  const {audio, onTimeUpdate, onPlay, onPause, settings} = props;
+  const [playedTimes, setPlayedTimes] = useState(0);
+
+  // When loop attribute is true, this won't be called
+  const handleAudioEnded = () => {
+    if ((playedTimes + 1) < settings?.loopTimes)
+      (ref as React.RefObject<HTMLAudioElement>).current.play().then();
+    setPlayedTimes(playedTimes + 1);
+  }
 
   return <>
-    <audio src={audio.src} controls loop ref={ref} style={{display: 'none'}} preload="auto"
-           onTimeUpdate={onTimeUpdate}/>
+    <audio src={audio.src} controls loop={!settings?.loopTimes} ref={ref} style={{display: 'none'}} preload="auto"
+           onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
 
     <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
             startIcon={<Icon>{audio.isPlaying ? 'pause' : 'play_arrow'}</Icon>}
@@ -72,7 +81,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
   </>
 })
 
-export function AudioController(props: {refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number}) {
+export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number }) {
   const {refs, sampleRef, currentTime} = props;
 
   const handleSliderLabelFormat = (num) => {
