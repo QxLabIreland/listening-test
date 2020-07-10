@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
 import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
+import {isDevMode} from "../../shared/ReactTools";
 
 const RatingAreaStyle = {
   display: 'flex',
@@ -42,14 +43,15 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
 
     {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
       {!isTraining && <AudioRatingBar audio={v}/>}
-      <AudioButton ref={refs[i]} audio={v} {...restHandlers}
+      <AudioButton ref={refs[i]} audio={v} {...restHandlers} settings={value.settings}
                    onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
-      <span>{refs[i].current?.currentTime}</span>
+      {isDevMode() && <span>{refs[i].current?.currentTime}</span>}
     </Grid>)}
 
+    {/*Reference*/}
     {value.audioRef && <Grid item style={RatingAreaStyle}>
       <AudioButton ref={sampleRef} audio={value.audioRef} {...restHandlers}>Ref</AudioButton>
-      <span>{sampleRef?.current?.currentTime}</span>
+      {isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}
     </Grid>}
 
     <Grid item xs={12}>

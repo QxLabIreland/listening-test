@@ -30,10 +30,10 @@ export const ExampleSettingsDialog = observer(function(props: { settings: ItemEx
     <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle id="form-dialog-title">Example Settings</DialogTitle>
+        <DialogTitle id="form-dialog-title">Audio Playback Settings</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Leaving blank or 0 the audio means audios will be looped infinite times.
+            Set the number of times you wish the audio to loop. Setting this value to "0" will result in infinite looping.
           </DialogContentText>
           <TextField label="Loop times" fullWidth type="number" {...formik.getFieldProps('loopTimes')}
                      onFocus={event => event.target.select()}/>
