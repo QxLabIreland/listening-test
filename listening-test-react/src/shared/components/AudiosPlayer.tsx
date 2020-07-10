@@ -82,7 +82,8 @@ export function AudioController(props: {refs: RefObject<HTMLAudioElement>[], sam
   const dragSlider = (event, newValue) => {
     // Set all audios time
     refs.forEach(r => r.current.currentTime = newValue ? newValue : 0);
-    if (sampleRef) sampleRef.current.currentTime = newValue ? newValue : 0;
+    // Somethings there is no sample(reference)
+    if (sampleRef && sampleRef.current) sampleRef.current.currentTime = newValue ? newValue : 0;
   }
 
   if (!refs[0]) return null;

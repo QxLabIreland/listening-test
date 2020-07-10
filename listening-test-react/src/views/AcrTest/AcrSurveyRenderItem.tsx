@@ -68,7 +68,8 @@ export const AudioRatingBar = observer(function (props: { audio: AudioFileModel}
   ];
 
   // Set a default value
-  if (!parseInt(props.audio.value)) props.audio.value = '50';
+  const num = parseInt(props.audio.value);
+  if (!num && num !== 0) props.audio.value = '50';
 
   return <Box ml={2.5} mb={2} mt={2} style={{height: 200}}>
     <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={100} step={25}

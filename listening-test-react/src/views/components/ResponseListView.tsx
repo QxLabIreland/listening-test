@@ -86,7 +86,7 @@ export default function ResponseListView(props: {testType: 'abTest'| 'acrTest'})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
   const handleDownload = () => downloadFileTool({
-    url: '/api/response-download', params: {testType, testId: id}
+    url: '/api/csv-download/' + testType, params: {testId: id}
   });
 
   return (<Grid container spacing={2}>

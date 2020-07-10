@@ -30,7 +30,7 @@ export default function AbTestTab() {
   }
 
   const handleDownload = () => downloadFileTool({
-    url: '/api/response-download', params: {testType: 'abTest', testId: id}
+    url: '/api/csv-download/abTest', params: {testId: id}
   });
 
 
