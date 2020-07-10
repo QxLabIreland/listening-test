@@ -7,24 +7,27 @@ import NotFoundView from "./layouts/components/NotFoundView";
 import PublicContainer from "./layouts/PublicContainer";
 import XsrfAuth from "./shared/providers/XsrfAuth";
 import GlobalDialogProvider from "./shared/providers/GlobalDialogProvider";
+import GlobalSnackbarProvider from "./shared/providers/GlobalSnackbarProvider";
 
 export default function App() {
   return (
-    <GlobalDialogProvider>
-      <XsrfAuth/>
-      <BrowserRouter>
-        <Suspense fallback={<Loading/>}>
-          <Switch>
-            <Route path='/task' component={SurveyContainer}/>
-            {/*Dashboard administration pages*/}
-            <Route path="/user" component={AppBarDrawer}/>
-            {/*Outside pages*/}
-            <Route path="/not-found" component={NotFoundView}/>
-            <Route path="/" component={PublicContainer}/>
-          </Switch>
-        </Suspense>
-      </BrowserRouter>
-    </GlobalDialogProvider>
+    <GlobalSnackbarProvider>
+      <GlobalDialogProvider>
+        <XsrfAuth/>
+        <BrowserRouter>
+          <Suspense fallback={<Loading/>}>
+            <Switch>
+              <Route path='/task' component={SurveyContainer}/>
+              {/*Dashboard administration pages*/}
+              <Route path="/user" component={AppBarDrawer}/>
+              {/*Outside pages*/}
+              <Route path="/not-found" component={NotFoundView}/>
+              <Route path="/" component={PublicContainer}/>
+            </Switch>
+          </Suspense>
+        </BrowserRouter>
+      </GlobalDialogProvider>
+    </GlobalSnackbarProvider>
   );
 }
 

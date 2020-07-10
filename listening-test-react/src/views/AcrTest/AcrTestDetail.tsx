@@ -1,7 +1,7 @@
 import {Prompt, useHistory, useParams} from "react-router";
 import React, {useContext, useEffect, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import {GlobalDialog} from "../../shared/ReactContexts";
+import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
@@ -24,6 +24,7 @@ export const AcrTestDetail = observer(function () {
   const [isError, setIsError] = useState(false);
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
+  const openSnackbar = useContext(GlobalSnackbar);
   // Scroll properties
   const {viewRef, scrollToView} = useScrollToView();
   // No submit alert variable
@@ -64,8 +65,8 @@ export const AcrTestDetail = observer(function () {
     Axios.request({
       method: isNew ? 'POST' : 'PUT', url: '/api/acr-test', data: tests
     }).then(() => {
-      // TODO snackbar
       history.push('./');
+      openSnackbar('Save successfully');
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
 

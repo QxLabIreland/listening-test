@@ -4,19 +4,21 @@ import {useFormik} from "formik";
 import Axios from "axios";
 import {minLength, pipeValidator, required} from "../shared/FormikValidator";
 import {GlobalDialog} from "../shared/ReactContexts";
+import {Md5} from "ts-md5";
 
 export default function SettingsPage() {
   const openDialog = useContext(GlobalDialog);
 
   const formik = useFormik({
     initialValues: {password: '', newPassword: '', confirm: ''},
-    onSubmit: values => {
-      Axios.put('/api/password', values, {withCredentials: true}).then(() => {
-        alert('success');
-      }, (reason) => {
-        openDialog(reason.response.data);
-      });
-    },
+    onSubmit: values => Axios.put('/api/password', {
+      // Hash all of things
+      password: Md5.hashStr(values.password),
+      newPassword: Md5.hashStr(values.newPassword),
+      confirm: Md5.hashStr(values.confirm)
+    }).then(() => openDialog('You have successfully updated your password', 'Success'), (reason) => {
+      openDialog(reason.response.data);
+    }),
     validate: pipeValidator({
       password: [required(), minLength(6)],
       newPassword: [required(), minLength(6)],

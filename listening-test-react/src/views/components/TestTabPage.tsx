@@ -31,6 +31,7 @@ export default function TestTabPage(props: {testType: TestType, testName: string
     setPreSetValue(!preSetValue);
   }
 
+  // Render correct Detail Componets.
   const renderDetail = () => {
     switch (testType) {
       case "abTest": return <AbTestDetail/>
