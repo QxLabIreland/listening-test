@@ -1,6 +1,5 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import {TestItemType} from "../../shared/ReactEnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";

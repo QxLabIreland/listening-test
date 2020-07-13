@@ -4,11 +4,13 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormGroup, FormHelperText,
+  FormGroup,
+  FormHelperText,
   FormLabel,
   Radio,
   RadioGroup,
-  TextField, Typography
+  TextField,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";

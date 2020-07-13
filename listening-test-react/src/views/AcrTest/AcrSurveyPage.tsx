@@ -13,8 +13,8 @@ import Axios from "axios";
 import {useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {Box, Card, CardContent, CardHeader} from "@material-ui/core";
-import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {Box, Card, CardActions, CardContent, CardHeader} from "@material-ui/core";
+import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
 
@@ -32,8 +32,10 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
   }, [id]);
 
   function handlePanelChange(v, index) {
+    // Set which panel will open
     if (v) setOpenedPanel(index);
-    else setOpenedPanel(null);
+    // If the survey setting is individual question
+    else if (!questionnaire.settings?.isIndividual) setOpenedPanel(null);
   }
 
   function handleSubmit() {
@@ -41,39 +43,46 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
       .then(() => globalDialog('Thanks for your submitting! The page will be closed.', 'Done')); // , () => window.close()
   }
 
-  return <>{questionnaire ? <Grid container spacing={3} direction="column">
-
-    <Grid item xs={12}><Box pt={6}>
+  return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
+    {/*When the title and description doesn't show*/}
+    {!(questionnaire.settings?.isIndividual && openedPanel !== -1) && <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
-    </Box></Grid>
+      <div style={{textAlign: 'right'}}>
+        <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>
+      </div>
+    </Grid>}
     {questionnaire.items.map((v, i) =>
-      <Grid item xs={12} key={v.id}>
-        {v.type === TestItemType.question && v.questionControl.type === SurveyControlType.description ?
-          <Card>
+      <Grid item xs={12} key={v.id} hidden={questionnaire.settings?.isIndividual && openedPanel !== i}>
+        {/*{v.type === TestItemType.question && v.questionControl.type === SurveyControlType.description
+          ? <Card>
             <CardHeader title={v.title}/>
             <CardContent>{v.questionControl.question}</CardContent>
-          </Card> :
-          <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
-            <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-              <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <AcrSurveyRenderItem item={v}/>
-            </ExpansionPanelDetails>
-            <ExpansionPanelActions>
-              {i !== questionnaire.items.length - 1 &&
+            <CardActions style={{justifyContent: 'flex-end'}}>
               <Button size="small" color="primary"
-                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
-            </ExpansionPanelActions>
-          </ExpansionPanel>
-        }
+                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
+            </CardActions>
+          </Card>*/}
+        <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
+          <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
+            <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <AcrSurveyRenderItem item={v}/>
+          </ExpansionPanelDetails>
+          <ExpansionPanelActions>
+            {i !== questionnaire.items.length - 1
+              ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
+              : <Button hidden={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+            }
+          </ExpansionPanelActions>
+        </ExpansionPanel>
       </Grid>
     )}
-    <Grid item xs={12} hidden={!!value}>
+    {/*<Grid item xs={12} hidden={!!value}>
       <Grid container justify="flex-end">
-        <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+        <Button hidden={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
       </Grid>
-    </Grid>
-  </Grid> : <Loading error={!!error} message={error}/>}</>
+    </Grid>*/}
+  </Grid> : <Loading error={!!error} message={error}/>}</Box>
 })

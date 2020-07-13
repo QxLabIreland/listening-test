@@ -11,8 +11,9 @@ export interface BasicTestModel {
   modifiedAt?: { $date: Date };
   // This is the field show how many responses this test have
   responses?: [];
-
+  // List may get rid of these fields
   items: TestItemModel[];
+  settings?: TestSettingsModel;
 }
 
 export interface TestItemModel {
@@ -22,4 +23,8 @@ export interface TestItemModel {
   title?: string;
   questionControl?: SurveyControlModel;
   example?: ItemExampleModel;
+}
+
+export interface TestSettingsModel {
+  isIndividual?: boolean;
 }
