@@ -6,7 +6,7 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
+import {Box, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
@@ -17,6 +17,7 @@ import {AcrTestItemCard} from "./AcrTestItemCard";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {uuid} from "uuidv4";
+import TestSettingsDialog from "../components/TestSettingsDialog";
 
 export const AcrTestDetail = observer(function () {
   const {id} = useParams();
@@ -90,6 +91,12 @@ export const AcrTestDetail = observer(function () {
   }
 
   // Some components for performance boost
+  const ActionsArea = () => <Grid item xs={12} container alignItems="center" spacing={1}>
+    <Grid item style={{flexGrow: 1}}/>
+    <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
+    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
+  </Grid>;
+
   const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
                                     onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
@@ -101,10 +108,8 @@ export const AcrTestDetail = observer(function () {
               message='You have unsaved changes, are you sure you want to leave?'/>
 
       {tests ? <React.Fragment>
-        <Grid item xs={12} style={{display: 'flex'}}>
-          <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
-        </Grid>
+        <ActionsArea/>
+
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
         {tests.items.map((v, i) =>
@@ -116,10 +121,7 @@ export const AcrTestDetail = observer(function () {
           <AddItemButtonGroup onAdd={addItem}/>
         </Grid>
 
-        <Grid item xs={12} style={{display: 'flex'}}>
-          <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
-        </Grid>
+        <ActionsArea/>
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )

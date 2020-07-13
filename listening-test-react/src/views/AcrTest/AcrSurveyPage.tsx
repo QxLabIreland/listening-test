@@ -10,13 +10,13 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
 import Axios from "axios";
-import {useParams} from "react-router";
+import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {Box, Card, CardActions, CardContent, CardHeader} from "@material-ui/core";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
-import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
+import {isDevMode} from "../../shared/ReactTools";
 
 export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel }) {
   const {value} = props;
@@ -24,7 +24,7 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
   const {id} = useParams();
-  const globalDialog = useContext(GlobalDialog);
+  const history = useHistory();
 
   useEffect(() => {
     if (!value) Axios.get<BasicTestModel>('/api/task/acr-test', {params: {_id: id}})
@@ -39,14 +39,17 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
   }
 
   function handleSubmit() {
-    Axios.post('/api/task/acr-test', toJS(questionnaire))
-      .then(() => globalDialog('Thanks for your submitting! The page will be closed.', 'Done')); // , () => window.close()
+    Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
+      if (!isDevMode()) history.replace('/task/finish');
+    });
   }
 
   return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
+    <Grid item xs={12}>
+      <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
+    </Grid>
     {/*When the title and description doesn't show*/}
     {!(questionnaire.settings?.isIndividual && openedPanel !== -1) && <Grid item xs={12}>
-      <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
       <div style={{textAlign: 'right'}}>
         <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>

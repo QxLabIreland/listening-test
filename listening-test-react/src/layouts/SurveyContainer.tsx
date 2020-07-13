@@ -7,6 +7,7 @@ import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
 import {Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import {AcrSurveyPage} from "../views/AcrTest/AcrSurveyPage";
+import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
@@ -16,6 +17,7 @@ export default function SurveyContainer() {
       <Container maxWidth="md">
         <Suspense fallback={<Loading/>}>
           <Switch>
+            <Route exact path={`${path}/finish`} component={SurveyFinishPage}/>
             <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
             <Route exact path={`${path}/acr-test/:id`} component={AcrSurveyPage}/>
             {!isDevMode() && <Redirect to="/not-found"/>}
