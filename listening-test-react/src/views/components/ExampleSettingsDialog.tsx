@@ -14,7 +14,7 @@ import {observer} from "mobx-react";
 export const ExampleSettingsDialog = observer(function(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
-  const formik = useFormik({
+  const formik = useFormik<ItemExampleSettingsModel>({
     initialValues: {loopTimes: 0, ...settings},
     onSubmit: values => {
       onConfirm(values);
