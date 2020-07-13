@@ -1,4 +1,4 @@
-import React, {forwardRef, RefObject, useEffect, useRef, useState} from "react";
+import React, {forwardRef, RefObject, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";

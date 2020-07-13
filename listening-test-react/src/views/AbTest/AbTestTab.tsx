@@ -1,11 +1,10 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Box, Button, Icon, Tab, Tabs, Tooltip} from "@material-ui/core";
 import {AbTestDetail} from "./AbTestDetail";
-import {Prompt, useHistory, useLocation, useParams} from "react-router";
+import {useHistory, useLocation, useParams} from "react-router";
 import AbTestResponses from "./AbTestResponses";
 import {downloadFileTool} from "../../shared/ReactTools";
 import {AppBarTitle} from "../../shared/ReactContexts";
-import Grid from "@material-ui/core/Grid";
 
 export default function AbTestTab() {
   // Hash of location, switch to response tab. url -> value, url -> title
