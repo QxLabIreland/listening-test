@@ -18,8 +18,7 @@ import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
 import {isDevMode} from "../../shared/ReactTools";
 
-export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel }) {
-  const {value} = props;
+export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestModel }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
@@ -39,7 +38,7 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
   }
 
   function handleSubmit() {
-    Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
+    if (!value) Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
       if (!isDevMode()) history.replace('/task/finish');
     });
   }
@@ -71,12 +70,12 @@ export const AcrSurveyPage = observer(function (props: { value?: BasicTestModel 
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <AcrSurveyRenderItem item={v}/>
+            <AcrSurveyRenderItem item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             {i !== questionnaire.items.length - 1
               ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
-              : <Button hidden={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+              : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
             }
           </ExpansionPanelActions>
         </ExpansionPanel>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
@@ -19,6 +19,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/ReactEnumsAndTypes";
+import {GlobalSnackbar} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -29,49 +30,53 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TestListView(props: { testUrl: TestUrl }) {
-  const {testUrl} = props;
+export default function TestListView({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
   const classes = useStyles();
   const [data, setData] = useState<BasicTestModel[]>(null);
-  const [filtered, setFiltered] = useState<BasicTestModel[]>(null);
+  const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState(undefined);
+  const openSnackbar = useContext(GlobalSnackbar);
 
   useEffect(() => {
     Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true})
       .then((res) => {
         setData(res.data);
-        setFiltered(res.data);
       }, reason => setError(reason.response.data));
 
     // Reset state
     return () => {
       setData(null);
-      setFiltered(null);
       setError(undefined);
     }
   }, [testUrl]);
 
-  const handleSearchChange = (event) =>
-    setFiltered(data.filter(value =>
+  const getFilterData = () => data.filter(value =>
       // Name searching
-      value.name.toLowerCase().includes(event.target.value.toLowerCase())
+      value.name.toLowerCase().includes(searchStr.toLowerCase())
       // Date searching
-      || value.createdAt.$date.toString().toLowerCase().includes(event.target.value.toLowerCase())
-    ));
+      || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
+    );
 
   // When trash button clicked
   const handleDelete = (obj: BasicTestModel) =>
     Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
       data.splice(data.indexOf(obj), 1);
       setData([...data]);
+      openSnackbar('Delete successfully');
     });
+
+  const handleCopyTest = (newTest) => Axios.post('/api/' + testUrl, newTest).then(res => {
+    data.unshift(res.data);
+    setData([...data]);
+    openSnackbar('Duplicate successfully');
+  }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
 
   return (
     <Grid container spacing={2}>
       <Grid item container xs={12}>
         <Grid item xs={12} md={6}>
-          <SearchInput placeholder="Search tests" onChange={handleSearchChange}/>
+          <SearchInput placeholder="Search tests" onChange={event => setSearchStr(event.target.value)}/>
         </Grid>
         <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
           <span style={{flexGrow: 1}}/>
@@ -81,7 +86,7 @@ export default function TestListView(props: { testUrl: TestUrl }) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        {filtered ? <Card>
+        {data ? <Card>
           <CardContent className={classes.content}>
             <Table>
               <TableHead>
@@ -99,11 +104,11 @@ export default function TestListView(props: { testUrl: TestUrl }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filtered.length ? filtered.map(test => <TableRow hover key={test._id.$oid}>
+                {data.length ? getFilterData().map(test => <TableRow hover key={test._id.$oid}>
                   <TableCell>{test.name}</TableCell>
                   <TableCell>
                     <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
-                            color="primary">{test.responses?.length}</Button>
+                            color="primary">{test.responses? test.responses.length: 0}</Button>
                   </TableCell>
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
@@ -112,6 +117,9 @@ export default function TestListView(props: { testUrl: TestUrl }) {
                     <IconButton className={classes.button} size="small" color="primary" component={Link}
                                 to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
                     <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
+
+                    <IconButton className={classes.button} size="small" color="primary" onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
+
                     <IconButton className={classes.button} size="small" color="default"
                                 onClick={() => handleDelete(test)}>
                       <Icon>delete</Icon></IconButton>
@@ -148,7 +156,7 @@ function ShareIconButton(props) {
                   onClick={handleShareClick}><Icon>share</Icon></IconButton>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'center',
         }}
         open={open}

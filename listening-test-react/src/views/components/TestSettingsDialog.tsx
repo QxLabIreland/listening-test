@@ -32,11 +32,11 @@ export default function TestSettingsDialog(props: { settings: TestSettingsModel,
         <DialogTitle id="form-dialog-title">Test settings</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Test layout settings
+            Settings
           </DialogContentText>
           <FormControlLabel
             control={<Checkbox checked={formik.values.isIndividual} {...formik.getFieldProps('isIndividual')}/>}
-            label="Display question cards separately"
+            label="Show each question individually"
           />
         </DialogContent>
         <DialogActions>
