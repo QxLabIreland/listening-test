@@ -18,7 +18,7 @@ class AcrTestHandler(BaseHandler):
                     {'$project': {'_id': 1}}
                 ], 'as': 'responses'}},
                 # {'$group': {'_id': "$responses", "numOfStudent": {'$sum': 1}}},
-                {'$project': {'survey': 0}},
+                # {'$project': {'items': 0, 'settings': 0}},
                 {'$sort': {'createdAt': -1}}
             ])
         else:
@@ -28,12 +28,16 @@ class AcrTestHandler(BaseHandler):
 
     async def post(self):
         body = self.loads_body()
+        # Del some useless fields
         if '_id' in body:
             del body['_id']
+        if 'responses' in body:
+            del body['responses']
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
         _id = self.db['acrTests'].insert(body)
-        self.dumps_write(_id)
+        data = self.db['acrTests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+        self.dumps_write(data)
 
     async def put(self):
         body = self.loads_body()

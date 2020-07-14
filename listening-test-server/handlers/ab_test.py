@@ -18,7 +18,7 @@ class AbTestHandler(BaseHandler):
                     {'$project': {'_id': 1}}
                 ], 'as': 'responses'}},
                 # {'$group': {'_id': "$responses", "numOfStudent": {'$sum': 1}}},
-                {'$project': {'survey': 0}},
+                # {'$project': {'survey': 0}},
                 {'$sort': {'createdAt': -1}}
             ])
         else:
@@ -30,10 +30,14 @@ class AbTestHandler(BaseHandler):
         body = self.loads_body()
         if '_id' in body:
             del body['_id']
+        if 'responses' in body:
+            del body['responses']
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
+        # Insert and find this one
         _id = self.db['abTests'].insert(body)
-        self.dumps_write(_id)
+        data = self.db['abTests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+        self.dumps_write(data)
 
     async def put(self):
         body = self.loads_body()

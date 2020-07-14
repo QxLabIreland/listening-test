@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -12,8 +12,7 @@ import {observer} from "mobx-react";
 import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
-import {GlobalDialog} from "../../shared/ReactContexts";
-import {Box, Card, CardActions, CardContent, CardHeader} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AcrSurveyRenderItem} from "./AcrSurveyRenderItem";
 import {isDevMode} from "../../shared/ReactTools";
