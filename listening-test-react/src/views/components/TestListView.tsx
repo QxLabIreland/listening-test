@@ -66,11 +66,12 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
       openSnackbar('Delete successfully');
     });
 
-  const handleCopyTest = (newTest) => Axios.post('/api/' + testUrl, newTest).then(res => {
-    data.unshift(res.data);
-    setData([...data]);
-    openSnackbar('Duplicate successfully');
-  }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
+  const handleCopyTest = (newTest: BasicTestModel) =>
+    Axios.post<BasicTestModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
+      data.unshift(res.data);
+      setData([...data]);
+      openSnackbar('Duplicate successfully');
+    }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
 
   return (
     <Grid container spacing={2}>

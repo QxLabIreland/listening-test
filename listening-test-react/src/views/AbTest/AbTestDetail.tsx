@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {Prompt, useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
@@ -28,7 +28,8 @@ export const AbTestDetail = observer(function () {
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // Scroll properties
-  const {viewRef, scrollToView} = useScrollToView();
+  const viewRef = useRef(null);
+  const {scrollToView} = useScrollToView(viewRef);
   // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
 
