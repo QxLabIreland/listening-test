@@ -1,4 +1,4 @@
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, forwardRef, PropsWithRef, Ref, RefObject, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/ReactEnumsAndTypes";
@@ -17,24 +17,28 @@ const RatingAreaStyle = {
   justifyContent: 'flex-end'
 } as CSSProperties;
 
-export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel }) {
-
-  switch (props.item.type) {
+export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
+  const {item, ...rest} = props;
+  switch (item.type) {
     case TestItemType.question:
-      return <RenderSurveyControl control={props.item.questionControl}/>
+      return <RenderSurveyControl control={item.questionControl} {...rest}/>
     case TestItemType.example:
-      return <RenderRatingExample value={props.item.example}/>;
+      return <RenderRatingExample value={item.example} {...rest}/>;
     case TestItemType.training:
-      return <RenderRatingExample value={props.item.example} isTraining={true}/>;
+      return <RenderRatingExample value={item.example} isTraining={true} {...rest}/>;
     default:
       return null;
   }
 })
 
-const RenderRatingExample = observer(function (props: { value: ItemExampleModel, isTraining?: boolean }) {
-  const {value, isTraining = false} = props;
+const RenderRatingExample = observer(function (props: { value: ItemExampleModel, isTraining?: boolean, active?: boolean }) {
+  const {value, isTraining = false, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, handleTimeUpdate, ...restHandlers} = useAudioPlayer(value.audios, value.audioRef);
+  const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+
+  useEffect(() => {
+    if (active === false) onPause();
+  }, [active])
 
   return <Grid container spacing={3}>
     {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
@@ -43,14 +47,14 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
 
     {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
       {!isTraining && <AudioRatingBar audio={v}/>}
-      <AudioButton ref={refs[i]} audio={v} {...restHandlers} settings={value.settings}
-                   onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
+      <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
+                   onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
       {isDevMode() && <span>{refs[i].current?.currentTime}</span>}
     </Grid>)}
 
     {/*Reference*/}
     {value.audioRef && <Grid item style={RatingAreaStyle}>
-      <AudioButton ref={sampleRef} audio={value.audioRef} {...restHandlers}>Ref</AudioButton>
+      <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
       {isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}
     </Grid>}
 

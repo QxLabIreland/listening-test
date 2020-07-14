@@ -18,6 +18,7 @@ import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {uuid} from "uuidv4";
 import TestSettingsDialog from "../components/TestSettingsDialog";
+import {Location, Action} from "history";
 
 export const AcrTestDetail = observer(function () {
   const {id} = useParams();
@@ -96,17 +97,15 @@ export const AcrTestDetail = observer(function () {
     <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
     <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
   </Grid>;
-
   const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
                                     onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
                                    defaultValue={tests.description}
                                    onChange={(e) => tests.description = e.target.value}/>;
+
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
-      <Prompt when={!isSubmitted}
-              message='You have unsaved changes, are you sure you want to leave?'/>
-
+      <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
       {tests ? <React.Fragment>
         <ActionsArea/>
 

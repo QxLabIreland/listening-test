@@ -52,7 +52,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   // );
   // const controllerNode = <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
 
-  return {refs, sampleRef, currentTime, onPlay: handlePlay, onPause: handlePause, handleTimeUpdate};
+  return {refs, sampleRef, currentTime, onPlay: handlePlay, onPause: handlePause, onTimeUpdate: handleTimeUpdate};
 }
 
 // This component exposes the audio to outside. Control audio with ref attribute.
