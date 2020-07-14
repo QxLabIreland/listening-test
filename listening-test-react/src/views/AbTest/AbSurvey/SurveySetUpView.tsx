@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import React from "react";
+import React, {useRef} from "react";
 import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -11,7 +11,8 @@ import {SurveyControlType} from "../../../shared/ReactEnumsAndTypes";
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
   const {items} = props;
-  const {viewRef, scrollToView} = useScrollToView();
+  const viewRef = useRef(null);
+  const {scrollToView} = useScrollToView(viewRef);
 
   // When menu clicked
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

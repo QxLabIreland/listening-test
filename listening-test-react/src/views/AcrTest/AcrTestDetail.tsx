@@ -1,12 +1,22 @@
 import {Prompt, useHistory, useParams} from "react-router";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Box, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
+import {
+  Box,
+  Grow,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
 import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
@@ -19,6 +29,7 @@ import {observable} from "mobx";
 import {uuid} from "uuidv4";
 import TestSettingsDialog from "../components/TestSettingsDialog";
 import {Location, Action} from "history";
+import DraggableZone from "../../shared/components/DraggableZone";
 
 export const AcrTestDetail = observer(function () {
   const {id} = useParams();
@@ -28,7 +39,8 @@ export const AcrTestDetail = observer(function () {
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // Scroll properties
-  const {viewRef, scrollToView} = useScrollToView();
+  const viewRef = useRef(null);
+  const {scrollToView} = useScrollToView(viewRef);
   // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
 
@@ -91,6 +103,12 @@ export const AcrTestDetail = observer(function () {
     return null;
   }
 
+  const handleReorder = (index: number, newIndex: number) => {
+    const value = tests.items.splice(index, 1);
+// Insert and delete original
+    tests.items.splice(newIndex, 0, ...value);
+  }
+
   // Some components for performance boost
   const ActionsArea = () => <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
@@ -111,8 +129,10 @@ export const AcrTestDetail = observer(function () {
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
         {tests.items.map((v, i) =>
-          <Grid item xs={12} key={v.id} ref={viewRef}>
-            <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
+          <Grid item xs={12} ref={viewRef} key={v.id}>
+            <DraggableZone index={i} length={tests.items.length} onReorder={handleReorder}>
+              <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
+            </DraggableZone>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>
@@ -163,9 +183,15 @@ const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemMod
     onAdd(newItem);
   }
 
-  const handleQuestionAdd = question => onAdd({
-    id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
-  });
+  const handleQuestionAdd = question => {
+    // Bad solution for scrolling
+    const timer = setTimeout(() => {
+      onAdd({
+        id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
+      });
+      clearTimeout(timer);
+    });
+  };
 
   return <Box className={classes.buttonGroup}>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>

@@ -1,20 +1,20 @@
-import {useEffect, useRef, useState} from "react";
+import {RefObject, useEffect, useRef, useState} from "react";
 
-export function useScrollToView() {
+export function useScrollToView(viewRef: RefObject<any> = null) {
   // Scroll properties
-  const viewRef = useRef(null);
   const [isUpdated, setIsUpdated] = useState<boolean>(null);
 
   useEffect(() => {
-    if (viewRef.current && isUpdated !== null){
+    if (viewRef && viewRef.current && isUpdated !== null){
       viewRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
   }, [isUpdated])
 
-  const scrollToView = () => {
+  const scrollToView = (ref: RefObject<any> = null) => {
+    if (ref) viewRef = ref;
     setIsUpdated(!isUpdated);
   }
 
-  return {viewRef, scrollToView}
+  return {scrollToView}
 }
 
