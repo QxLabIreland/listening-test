@@ -102,7 +102,6 @@ export const AcrTestDetail = observer(function () {
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
                                    defaultValue={tests.description}
                                    onChange={(e) => tests.description = e.target.value}/>;
-
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>

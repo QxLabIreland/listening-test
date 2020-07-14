@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {Link} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import Axios from "axios";
@@ -52,11 +52,11 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
   }, [testUrl]);
 
   const getFilterData = () => data.filter(value =>
-      // Name searching
-      value.name.toLowerCase().includes(searchStr.toLowerCase())
-      // Date searching
-      || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
-    );
+    // Name searching
+    value.name.toLowerCase().includes(searchStr.toLowerCase())
+    // Date searching
+    || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
+  );
 
   // When trash button clicked
   const handleDelete = (obj: BasicTestModel) =>
@@ -108,7 +108,7 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                   <TableCell>{test.name}</TableCell>
                   <TableCell>
                     <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
-                            color="primary">{test.responses? test.responses.length: 0}</Button>
+                            color="primary">{test.responses ? test.responses.length : 0}</Button>
                   </TableCell>
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
@@ -117,9 +117,10 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                     <IconButton className={classes.button} size="small" color="primary" component={Link}
                                 to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
                     <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
-
-                    <IconButton className={classes.button} size="small" color="primary" onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
-
+                    <Tooltip title="Duplicate test">
+                      <IconButton className={classes.button} size="small" color="primary"
+                                  onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
+                    </Tooltip>
                     <IconButton className={classes.button} size="small" color="default"
                                 onClick={() => handleDelete(test)}>
                       <Icon>delete</Icon></IconButton>
@@ -137,8 +138,7 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
   )
 }
 
-function ShareIconButton(props) {
-  const {url, ...rest} = props;
+function ShareIconButton({url, ...rest}) {
   const [open, setSnackbarOpen] = useState(false);
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
@@ -150,30 +150,30 @@ function ShareIconButton(props) {
       .then(() => setSnackbarOpen(true));
   }
 
-  return (
-    <React.Fragment>
+  return <>
+    <Tooltip title="Copy test URL">
       <IconButton {...rest} size="small" color="primary"
                   onClick={handleShareClick}><Icon>share</Icon></IconButton>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        open={open}
-        autoHideDuration={10_000}
-        onClose={handleClose}
-        message="Copy the link to clipboard successfully"
-        action={
-          <React.Fragment>
-            <Button size="small" color="secondary" component={Link}
-                    to={url}>View</Button>
+    </Tooltip>
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      open={open}
+      autoHideDuration={10_000}
+      onClose={handleClose}
+      message="Copy the link to clipboard successfully"
+      action={
+        <React.Fragment>
+          <Button size="small" color="secondary" component={Link} target="_blank"
+                  to={url}>View</Button>
 
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <Icon fontSize="small">cancel</Icon>
-            </IconButton>
-          </React.Fragment>
-        }
-      />
-    </React.Fragment>
-  )
+          <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+            <Icon fontSize="small">cancel</Icon>
+          </IconButton>
+        </React.Fragment>
+      }
+    />
+  </>
 }
