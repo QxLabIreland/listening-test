@@ -185,11 +185,14 @@ const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemMod
 
   const handleQuestionAdd = question => {
     // Bad solution for scrolling
-    const timer = setTimeout(() => {
-      onAdd({
-        id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
-      });
-      clearTimeout(timer);
+    // const timer = setTimeout(() => {
+    //   onAdd({
+    //     id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
+    //   });
+    //   clearTimeout(timer);
+    // });
+    onAdd({
+      id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
     });
   };
 
@@ -219,10 +222,10 @@ const AddQuestionButton = observer(function (props: { onQuestionAdd: (question: 
     switch (type) {
       case SurveyControlType.radio:
       case SurveyControlType.checkbox:
-        onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null});
+        onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null, required: true});
         break;
       case SurveyControlType.text:
-        onQuestionAdd({type: type, question: 'Untitled question', value: null});
+        onQuestionAdd({type: type, question: 'Untitled question', value: null, required: true});
         break;
       case SurveyControlType.description:
         onQuestionAdd({type: type, question: 'Type you description here', value: null});

@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    backgroundImage: 'url(/images/david-kovalenko-Q0aPaktO84k-unsplash.jpg)',
+    backgroundImage: 'url(/images/login.jpg)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'

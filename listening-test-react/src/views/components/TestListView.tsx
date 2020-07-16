@@ -108,23 +108,32 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                 {data.length ? getFilterData().map(test => <TableRow hover key={test._id.$oid}>
                   <TableCell>{test.name}</TableCell>
                   <TableCell>
+                    <Tooltip title="Check responses">
+
                     <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
                             color="primary">{test.responses ? test.responses.length : 0}</Button>
+                    </Tooltip>
                   </TableCell>
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
                   </TableCell>
                   <TableCell>
+                    <Tooltip title="Edit">
+
                     <IconButton className={classes.button} size="small" color="primary" component={Link}
                                 to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
+                    </Tooltip>
                     <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
                     <Tooltip title="Duplicate test">
                       <IconButton className={classes.button} size="small" color="primary"
                                   onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
                     </Tooltip>
+                    <Tooltip title="Delete">
+
                     <IconButton className={classes.button} size="small" color="default"
                                 onClick={() => handleDelete(test)}>
                       <Icon>delete</Icon></IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>) : <TableRow><TableCell colSpan={4}>
                   There is no test here. You can add test by the button top right.

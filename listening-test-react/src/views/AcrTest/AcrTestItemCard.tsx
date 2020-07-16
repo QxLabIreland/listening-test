@@ -1,11 +1,11 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {TestItemType} from "../../shared/ReactEnumsAndTypes";
+import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent} from "@material-ui/core";
+import {CardContent, FormControlLabel, Switch} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React, {CSSProperties} from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
@@ -45,9 +45,13 @@ export const AcrTestItemCard = observer(function (props: {
   );
 
   else if (value.type === TestItemType.question) return <Card>
-    <CardHeader style={{paddingBottom: 0}} action={
+    <CardHeader style={{paddingBottom: 0}} action={<>
+      {value.questionControl.type !== SurveyControlType.description && <FormControlLabel
+        control={<Switch checked={value.questionControl.required} onChange={e => value.questionControl.required = e.target.checked}/>}
+        label="Required"
+      />}
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } title={<input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
+    </>} title={<input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
                     onFocus={event => event.target.select()}/>}>
     </CardHeader>
     <CardContent>
@@ -88,7 +92,10 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
 
   return <Card>
     <CardHeader style={{paddingBottom: 0}} title={title} action={
-      <span>{delButton}<ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/></span>
+      <span>
+        {delButton}
+        <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      </span>
     }/>
     <CardContent>
       <Grid container spacing={2}>

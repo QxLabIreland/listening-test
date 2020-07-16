@@ -1,7 +1,4 @@
-from typing import Optional
-import pymongo
 from bson import ObjectId
-from pymongo.collection import Collection
 from handlers.base import BaseHandler
 from handlers.test_response.test_responses import switch_response_collection
 
