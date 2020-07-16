@@ -41,6 +41,8 @@ def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
         return self.db['abTestSurveys']
     elif test_type == 'acrTest':
         return self.db['acrSurveys']
+    elif test_type == 'mushraTest':
+        return self.db['mushraSurveys']
     else:
         self.set_status(400, 'Invalid test type')
         return None

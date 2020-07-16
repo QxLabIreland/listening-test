@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
   },
   background: {
-    backgroundImage: 'url(/images/wolfgang-hasselmann-hym0ngq6IbY-unsplash.jpg)',
+    backgroundImage: 'url(/images/homepage.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     overflow: 'auto'
@@ -49,7 +49,9 @@ export default function Home() {
         </Typography>
         <Typography variant="body1">Click sign in to start your tests.</Typography>
         <Typography variant="body2">
-          <small>Photo by Wolfgang Hasselmann on Unsplash</small>
+          <small>
+            <span>Photo by Tanner Boriack on Unsplash</span>
+          </small>
         </Typography>
       </Container>
       <footer className={classes.footer}>

@@ -50,7 +50,8 @@ export default function AppBarDrawer(props: any) {
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/mushra`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
     <ListItemNavLink to="/sign-in" icon='exit_to_app' onClick={handleSignOut}>Sign out</ListItemNavLink>
@@ -86,8 +87,11 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/acr-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="acr-test"/></AppBarLayout>
         </Route>
-        <Route exact path={`${path}/mushra`}>
+        <Route exact path={`${path}/mushra-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="mushra-test"/></AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/hearing-test`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="hearing-test"/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
@@ -101,7 +105,7 @@ export default function AppBarDrawer(props: any) {
             <TestTabPage testName="ACR Test" testType="acrTest"/>
           </AppBarLayout>
         </Route>
-        <Route exact path={`${path}/acr-test/:id`}>
+        <Route exact path={`${path}/mushra-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
             <TestTabPage testName="MUSHRA Test" testType="mushraTest"/>
           </AppBarLayout>

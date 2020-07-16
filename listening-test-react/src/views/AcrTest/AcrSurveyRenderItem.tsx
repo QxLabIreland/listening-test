@@ -1,8 +1,8 @@
-import React, {CSSProperties, forwardRef, PropsWithRef, Ref, RefObject, useEffect} from "react";
+import React, {CSSProperties, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/ReactEnumsAndTypes";
-import {RenderSurveyControl} from "../components/RenderSurveyControl";
+import {RenderSurveyControl, SurveyControlValidate} from "../components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
@@ -10,12 +10,10 @@ import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {isDevMode} from "../../shared/ReactTools";
 
-const RatingAreaStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-end'
-} as CSSProperties;
+export function ItemValidateError(item: TestItemModel): string {
+  if (item.type === TestItemType.question) return SurveyControlValidate(item.questionControl);
+  else return null;
+}
 
 export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -30,6 +28,13 @@ export const AcrSurveyRenderItem = observer(function (props: { item: TestItemMod
       return null;
   }
 })
+
+const RatingAreaStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-end'
+} as CSSProperties;
 
 const RenderRatingExample = observer(function (props: { value: ItemExampleModel, isTraining?: boolean, active?: boolean }) {
   const {value, isTraining = false, active} = props;

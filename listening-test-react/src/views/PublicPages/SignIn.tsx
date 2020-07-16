@@ -33,7 +33,7 @@ export default function SignIn() {
           <div className={classes.quote}>
             <div className={classes.quoteInner}>
               <Typography className={classes.bio} variant="body2">
-                Photo by David Kovalenko on Unsplash
+                <span>Photo by Michael Soledad on Unsplash</span>
               </Typography>
             </div>
           </div>

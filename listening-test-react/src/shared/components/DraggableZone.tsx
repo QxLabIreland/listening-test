@@ -37,22 +37,24 @@ export default function DraggableZone({children, index, length, onReorder, dragg
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      height: '100%'
+      height: '100%',
+      width: 0,
+      right: 0
     }}>
       {draggable ? <Tooltip title="Hold to reorder">
-        <IconButton style={{position: 'absolute', left: -32}} draggable
+        <IconButton style={{position: 'absolute', right: -32}} draggable
                     onDrag={handleDrag} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           <Icon>reorder</Icon>
         </IconButton>
       </Tooltip> : <>
         {/*We need to put item before new index item, so we need -1*/}
         <Tooltip title="Move this card up"><span>
-          <IconButton size="small" style={{left: -24}} disabled={index === 0} onClick={() => onReorder(index, index - 1)}>
+          <IconButton size="small" disabled={index === 0} onClick={() => onReorder(index, index - 1)}>
             <Icon>keyboard_arrow_up</Icon>
           </IconButton>
         </span></Tooltip>
         <Tooltip title="Move this card down"><span>
-          <IconButton size="small" style={{left: -24}} disabled={index === length - 1} onClick={() => onReorder(index, index + 1)}>
+          <IconButton size="small" disabled={index === length - 1} onClick={() => onReorder(index, index + 1)}>
             <Icon>keyboard_arrow_down</Icon>
           </IconButton>
         </span></Tooltip>
