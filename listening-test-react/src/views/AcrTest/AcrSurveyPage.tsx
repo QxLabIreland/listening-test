@@ -31,12 +31,20 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
       .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
 
-  function handlePanelChange(v, newIndex, index = null) {
-    const validationError = ItemValidateError(questionnaire.items[index ? index : newIndex]);
+  function handlePanelChange(v, newIndex) {
+    // Only validate when opened >= 0
+    const validationError = ItemValidateError(questionnaire.items[openedPanel]);
     if (validationError) openDialog(validationError, 'Required');
-    // Set which panel will open, if validation pass
-    else if (v) setOpenedPanel(newIndex);
-    // If the survey setting is individual question, do nothing
+    // Set which panel will open, if validation pass.
+    else if (v) {
+      setOpenedPanel(newIndex);
+      // TODO Timing process: add duration for current item, record start time for next one.
+      if (questionnaire.items[openedPanel]) {
+        // startTime[newIndex] = new Date().getTime();
+        questionnaire.items[openedPanel].time = new Date().getTime() - 10; // startTime[openedPanel] ? startTime[openedPanel] : 0
+      }
+    }
+    // If the survey setting is individual question, DO NOTHING
     else if (!questionnaire.settings?.isIndividual) setOpenedPanel(null);
   }
 
@@ -82,7 +90,7 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             {i !== questionnaire.items.length - 1
-              ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1, i)}>Next</Button>
+              ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
               : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
             }
           </ExpansionPanelActions>
