@@ -11,6 +11,7 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {isDevMode} from "../../shared/ReactTools";
 
 export function ItemValidateError(item: TestItemModel): string {
+  if (item == null) return null;
   if (item.type === TestItemType.question) return SurveyControlValidate(item.questionControl);
   else return null;
 }
