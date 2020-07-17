@@ -63,7 +63,7 @@ def build_tags(item):
 def build_header(item):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'question' in item['questionControl']:
-            return item['questionControl']['question'] or ''
+            return '"' + (item['questionControl']['question'] or '') + '"'
         else:
             return ''
     elif item['type'] == 2:  # Example
@@ -78,7 +78,7 @@ def build_header(item):
 def build_row(item):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
-            # Checkbox has comma
+            # Checkbox has comma, so we need "
             if item['questionControl']['type'] == 2:
                 return '"' + (item['questionControl']['value'] or '') + '"'
             else:
