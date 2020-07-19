@@ -6,32 +6,21 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {
-  Box,
-  Grow,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  TextField,
-  Typography
-} from "@material-ui/core";
+import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Loading from "../../layouts/components/Loading";
-import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
+import {SurveyControlType, TestItemType, TestType, TestUrl} from "../../shared/ReactEnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AcrTestItemCard} from "./AcrTestItemCard";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {uuid} from "uuidv4";
 import TestSettingsDialog from "../components/TestSettingsDialog";
-import {Location, Action} from "history";
 import DraggableZone from "../../shared/components/DraggableZone";
+import {AcrTestItemCard} from "../AcrTest/AcrTestItemCard";
 
-export const AcrTestDetail = observer(function () {
+export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: TestUrl, testType: TestType}) {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -47,7 +36,7 @@ export const AcrTestDetail = observer(function () {
   // Request for server methods
   useEffect(() => {
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/acr-test', {params: {_id: id}})
+    if (+id !== 0) Axios.get<AbTestModel>('/api/' + testUrl, {params: {_id: id}})
       // Successful callback
       .then((res) => setTests(observable(res.data)), () => setIsError(true));
     // If in creation page
@@ -64,7 +53,7 @@ export const AcrTestDetail = observer(function () {
     // Create a new text or modify current test
     if (+id === 0) {
       requestServer(true);
-    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'acrTest'}}).then(res => {
+    } else Axios.get('/api/response-count', {params: {testId: id, testType: testType}}).then(res => {
       // After checking with server, if there are responses, it will create a new test.
       if (res.data > 0) openDialog(
         'This test already has some responses, save will create a new test. You can delete old one if you like.',
@@ -77,7 +66,7 @@ export const AcrTestDetail = observer(function () {
     setIsSubmitted(true);
     // Request server based on is New or not.
     Axios.request({
-      method: isNew ? 'POST' : 'PUT', url: '/api/acr-test', data: tests
+      method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: tests
     }).then(() => {
       history.push('./');
       openSnackbar('Save successfully');

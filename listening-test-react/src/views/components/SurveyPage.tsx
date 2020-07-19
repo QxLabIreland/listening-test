@@ -14,11 +14,12 @@ import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
-import {AcrSurveyRenderItem, ItemValidateError} from "./AcrSurveyRenderItem";
 import {isDevMode} from "../../shared/ReactTools";
 import {GlobalDialog} from "../../shared/ReactContexts";
+import {AcrSurveyRenderItem, ItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
+import {TestUrl} from "../../shared/ReactEnumsAndTypes";
 
-export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestModel }) {
+export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(-1);
@@ -28,7 +29,7 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
   const [startTime] = useState<{[key: number]: number}>({});
 
   useEffect(() => {
-    if (!value) Axios.get<BasicTestModel>('/api/task/acr-test', {params: {_id: id}})
+    if (!value) Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
       .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
 
@@ -40,7 +41,7 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
     else if (v) {
       setOpenedPanel(newIndex);
       // Timing process
-      if (questionnaire.settings.isTimed) {
+      if (questionnaire.settings?.isTimed) {
         // Record start time for next one.
         if (questionnaire.items[newIndex]) startTime[newIndex] = new Date().getTime();
         // Add duration for current item
@@ -61,7 +62,7 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
       openDialog(validationError, item.title + ' Required');
       break;
     }
-    if (!value) Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
+    if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
       if (!isDevMode()) history.replace('/task/finish');
     });
   }

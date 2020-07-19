@@ -2,7 +2,7 @@ import React, {CSSProperties, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/ReactEnumsAndTypes";
-import {RenderSurveyControl, SurveyControlValidate} from "../components/RenderSurveyControl";
+import {RenderSurveyControl, SurveyControlValidate} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
@@ -44,7 +44,7 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
 
   useEffect(() => {
     if (active === false) onPause();
-  }, [active])
+  }, [active]);
 
   return <Grid container spacing={3}>
     {value.fields?.map((value, i) => <Grid item xs={12} key={i}>

@@ -6,8 +6,8 @@ import {Route, Switch, useRouteMatch} from 'react-router';
 import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
 import {Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
-import {AcrSurveyPage} from "../views/AcrTest/AcrSurveyPage";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
+import {SurveyPage} from "../views/components/SurveyPage";
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
@@ -19,7 +19,8 @@ export default function SurveyContainer() {
           <Switch>
             <Route exact path={`${path}/finish`} component={SurveyFinishPage}/>
             <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
-            <Route exact path={`${path}/acr-test/:id`} component={AcrSurveyPage}/>
+            <Route exact path={`${path}/acr-test/:id`}><SurveyPage testUrl="acr-test"/></Route>
+            <Route exact path={`${path}/mushra-test/:id`}><SurveyPage testUrl="mushra-test"/></Route>
             {!isDevMode() && <Redirect to="/not-found"/>}
           </Switch>
         </Suspense>
