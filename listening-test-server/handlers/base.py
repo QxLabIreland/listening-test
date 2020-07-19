@@ -16,6 +16,8 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         self.mongo_client = MongoDBConnection().client
         self.db = MongoDBConnection().db
 
+        self.test_name = None
+
     # When data received, it will be called before PUT and POST
     def data_received(self, chunk):
         pass
