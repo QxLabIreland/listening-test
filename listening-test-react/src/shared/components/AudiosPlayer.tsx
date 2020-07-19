@@ -36,7 +36,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
       allAudio[i].isPlaying = false;
       allRefs[i].current.pause();
       // State that if it is ready
-      console.log(allRefs[i].current.readyState)
+      // console.log(allRefs[i].current.readyState)
     });
   }
 
