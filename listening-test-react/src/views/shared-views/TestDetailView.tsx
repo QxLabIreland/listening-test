@@ -16,7 +16,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {uuid} from "uuidv4";
-import TestSettingsDialog from "../components/TestSettingsDialog";
+import TestSettingsDialog from ".//TestSettingsDialog";
 import DraggableZone from "../../shared/components/DraggableZone";
 import {AcrTestItemCard} from "../AcrTest/AcrTestItemCard";
 
