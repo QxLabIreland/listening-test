@@ -29,5 +29,5 @@ export interface TestItemModel {
 
 export interface TestSettingsModel {
   isIndividual?: boolean;
-  timing?: boolean;
+  isTimed?: boolean;
 }

@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {Checkbox, FormControlLabel, IconButton} from "@material-ui/core";
+import {Checkbox, FormControlLabel, FormGroup, IconButton} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {TestSettingsModel} from "../../shared/models/BasicTestModel";
 import {useFormik} from "formik";
@@ -14,7 +14,7 @@ import {useFormik} from "formik";
 export default function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {
   const [open, setOpen] = React.useState(false);
   const formik = useFormik<TestSettingsModel>({
-    initialValues: {isIndividual: false, ...props.settings},
+    initialValues: {isIndividual: false, isTimed: false, ...props.settings},
     onSubmit: values => {
       props.onConfirm(values);
       setOpen(false);
@@ -32,12 +32,18 @@ export default function TestSettingsDialog(props: { settings: TestSettingsModel,
         <DialogTitle id="form-dialog-title">Test settings</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Settings
+            Settings for the whole test
           </DialogContentText>
+          <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={formik.values.isIndividual} {...formik.getFieldProps('isIndividual')}/>}
             label="Show each question individually"
           />
+          <FormControlLabel
+            control={<Checkbox checked={formik.values.isTimed} {...formik.getFieldProps('isTimed')}/>}
+            label="Time each question"
+          />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" type="button">Cancel</Button>

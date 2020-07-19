@@ -25,23 +25,27 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
   const {id} = useParams();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
+  const [startTime] = useState<{[key: number]: number}>({});
 
   useEffect(() => {
     if (!value) Axios.get<BasicTestModel>('/api/task/acr-test', {params: {_id: id}})
       .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
 
-  function handlePanelChange(v, newIndex) {
+  function handlePanelChange(v, newIndex: number) {
     // Only validate when opened >= 0
     const validationError = ItemValidateError(questionnaire.items[openedPanel]);
     if (validationError) openDialog(validationError, 'Required');
     // Set which panel will open, if validation pass.
     else if (v) {
       setOpenedPanel(newIndex);
-      // TODO Timing process: add duration for current item, record start time for next one.
-      if (questionnaire.items[openedPanel]) {
-        // startTime[newIndex] = new Date().getTime();
-        questionnaire.items[openedPanel].time = new Date().getTime() - 10; // startTime[openedPanel] ? startTime[openedPanel] : 0
+      // Timing process
+      if (questionnaire.settings.isTimed) {
+        // Record start time for next one.
+        if (questionnaire.items[newIndex]) startTime[newIndex] = new Date().getTime();
+        // Add duration for current item
+        if (questionnaire.items[openedPanel])
+          questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
       }
     }
     // If the survey setting is individual question, DO NOTHING
@@ -50,9 +54,14 @@ export const AcrSurveyPage = observer(function ({value}: { value?: BasicTestMode
 
   function handleSubmit() {
     // Check validation before submission
-    const validationError = ItemValidateError(questionnaire.items[questionnaire.items.length - 1]);
-    if (validationError) openDialog(validationError, 'Required');
-    else if (!value) Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
+    for (const item of questionnaire.items) {
+      const validationError = ItemValidateError(item);
+      // If there is no error, check the next item
+      if (!validationError) continue;
+      openDialog(validationError, item.title + ' Required');
+      break;
+    }
+    if (!value) Axios.post('/api/task/acr-test', toJS(questionnaire)).then(() => {
       if (!isDevMode()) history.replace('/task/finish');
     });
   }
