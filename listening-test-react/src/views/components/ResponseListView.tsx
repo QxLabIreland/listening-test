@@ -25,9 +25,9 @@ import {downloadFileTool} from "../../shared/ReactTools";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {AbSurveyPage} from "../AbTest/AbSurvey/AbSurveyPage";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
-import {AcrSurveyPage} from "../AcrTest/AcrSurveyPage";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {TestType} from "../../shared/ReactEnumsAndTypes";
+import {SurveyPage} from "./SurveyPage";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
   content: {
@@ -55,7 +55,7 @@ export default function ResponseListView(props: {testType: TestType}) {
   const renderSurveyPage = (value: BasicTestModel) => {
     switch (testType) {
       case "abTest": return <AbSurveyPage value={value as AbTestModel}/>
-      case "acrTest": return <AcrSurveyPage value={value}/>
+      case "acrTest": return <SurveyPage testUrl="acr-test" value={value}/>
       default: return null;
     }
   }

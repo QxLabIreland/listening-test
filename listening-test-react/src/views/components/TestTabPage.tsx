@@ -2,10 +2,10 @@ import React, {useContext, useEffect, useState} from "react";
 import {Box, Tab, Tabs} from "@material-ui/core";
 import {useHistory, useLocation, useParams} from "react-router";
 import {AppBarTitle} from "../../shared/ReactContexts";
-import {AcrTestDetail} from "../AcrTest/AcrTestDetail";
 import ResponseListView from "./ResponseListView";
 import {AbTestDetail} from "../AbTest/AbTestDetail";
 import {TestType} from "../../shared/ReactEnumsAndTypes";
+import {TestDetailView} from "./TestDetailView";
 
 export default function TestTabPage(props: {testType: TestType, testName: string}) {
   const {testType, testName} = props;
@@ -34,8 +34,9 @@ export default function TestTabPage(props: {testType: TestType, testName: string
   // Render correct Detail Componets.
   const renderDetail = () => {
     switch (testType) {
-      case "abTest": return <AbTestDetail/>
-      case "acrTest": return <AcrTestDetail/>
+      case 'abTest': return <AbTestDetail/>
+      case 'acrTest': return <TestDetailView testType="acrTest" testUrl="acr-test"/>
+      case 'mushraTest': return <TestDetailView testType="mushraTest" testUrl="mushra-test"/>
       default: return null;
     }
   }
