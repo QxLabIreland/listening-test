@@ -12,7 +12,7 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
-import {ExampleSettingsDialog} from "../components/ExampleSettingsDialog";
+import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 
 const labelInputStyle = {

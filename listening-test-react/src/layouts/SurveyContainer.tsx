@@ -7,7 +7,7 @@ import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
 import {Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
-import {SurveyPage} from "../views/components/SurveyPage";
+import {SurveyPage} from "../views/shared-views/SurveyPage";
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
