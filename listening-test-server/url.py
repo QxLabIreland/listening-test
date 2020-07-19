@@ -1,3 +1,4 @@
+from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
 from handlers.survey.mushra_survey import MushraSurveyHandler
 from handlers.test_handlers.acr_test import AcrTestHandler
 from handlers.auth.sign_up_handler import SignUpHandler
@@ -35,7 +36,7 @@ path = [
     ("/api/task/acr-test", AcrSurveyHandler),
 
     ("/api/mushra-test", MushraTestHandler),
-    # ("/api/csv-download/mushraTest", AcrTestCsvDownload),
+    ("/api/csv-download/mushraTest", MushraTestCsvDownload),
     ("/api/task/mushra-test", MushraSurveyHandler),
 
     # Response
