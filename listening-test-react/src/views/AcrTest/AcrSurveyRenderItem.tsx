@@ -1,7 +1,7 @@
 import React, {CSSProperties, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {TestItemType} from "../../shared/ReactEnumsAndTypes";
+import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl, SurveyControlValidate} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";

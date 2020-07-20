@@ -4,7 +4,7 @@ import {useHistory, useLocation, useParams} from "react-router";
 import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
 import {AbTestDetail} from "../AbTest/AbTestDetail";
-import {TestType} from "../../shared/ReactEnumsAndTypes";
+import {TestType} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
 
 export default function TestTabPage(props: {testType: TestType, testName: string}) {

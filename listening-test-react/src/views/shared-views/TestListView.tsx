@@ -18,7 +18,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
-import {TestUrl} from "../../shared/ReactEnumsAndTypes";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalSnackbar} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

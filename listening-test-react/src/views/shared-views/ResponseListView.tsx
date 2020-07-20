@@ -26,7 +26,7 @@ import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {AbSurveyPage} from "../AbTest/AbSurvey/AbSurveyPage";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import {TestType} from "../../shared/ReactEnumsAndTypes";
+import {TestType} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({

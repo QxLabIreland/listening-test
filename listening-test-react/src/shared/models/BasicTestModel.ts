@@ -1,4 +1,4 @@
-import {TestItemType} from "../ReactEnumsAndTypes";
+import {TestItemType} from "./EnumsAndTypes";
 import {SurveyControlModel} from "./SurveyControlModel";
 import {ItemExampleModel} from "./ItemExampleModel";
 
