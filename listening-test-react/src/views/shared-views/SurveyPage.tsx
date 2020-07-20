@@ -17,7 +17,7 @@ import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {isDevMode} from "../../shared/ReactTools";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {AcrSurveyRenderItem, ItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
-import {TestUrl} from "../../shared/ReactEnumsAndTypes";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);

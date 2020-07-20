@@ -3,7 +3,7 @@ import {Box, Grid, TextField, Typography} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControlModel} from "../models/SurveyControlModel";
-import {SurveyControlType} from "../ReactEnumsAndTypes";
+import {SurveyControlType} from "../models/EnumsAndTypes";
 import {observer} from "mobx-react";
 
 export const SurveyControl = observer(function (props: {

@@ -18,7 +18,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../shared/ReactEnumsAndTypes";
+import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
 
 export const AbTestDetail = observer(function () {
   const {id} = useParams();

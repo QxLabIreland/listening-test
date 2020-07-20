@@ -1,6 +1,6 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {SurveyControlType, TestItemType} from "../../shared/ReactEnumsAndTypes";
+import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
