@@ -1,6 +1,6 @@
 from handlers.survey.acr_survey import AcrSurveyHandler
 
 
-class MushraSurveyHandler(AcrSurveyHandler):
+class HearingSurveyHandler(AcrSurveyHandler):
     def prepare(self):
-        self.test_name = 'mushra'
+        self.test_name = 'hearing'

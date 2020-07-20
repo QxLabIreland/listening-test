@@ -1,4 +1,6 @@
+from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
+from handlers.survey.hearing_survey import HearingSurveyHandler
 from handlers.survey.mushra_survey import MushraSurveyHandler
 from handlers.test_handlers.acr_test import AcrTestHandler
 from handlers.auth.sign_up_handler import SignUpHandler
@@ -7,6 +9,7 @@ from handlers.auth.password import PasswordHandler
 from handlers.test_handlers.ab_test import AbTestHandler
 from handlers.download_csv.acr_test_csv_download import AcrTestCsvDownload
 from handlers.survey.acr_survey import AcrSurveyHandler
+from handlers.test_handlers.hearing_test import HearingTestHandler
 from handlers.test_handlers.mushra_test import MushraTestHandler
 from handlers.test_response.responses_count import ResponsesCountHandler
 from handlers.download_csv.ab_test_responses_download import AbTestResponsesDownload
@@ -26,7 +29,7 @@ path = [
     ("/api/audio-file", AudioFileHandler),
     ("/api/password", PasswordHandler),
 
-    # Tests and Survey
+    # # Tests and Survey
     ("/api/ab-test", AbTestHandler),
     ("/api/csv-download/abTest", AbTestResponsesDownload),
     ("/api/task/ab-test", AbTestSurveyHandler),
@@ -38,6 +41,10 @@ path = [
     ("/api/mushra-test", MushraTestHandler),
     ("/api/csv-download/mushraTest", MushraTestCsvDownload),
     ("/api/task/mushra-test", MushraSurveyHandler),
+
+    ("/api/hearing-test", HearingTestHandler),
+    ("/api/csv-download/hearingTest", HearingTestCsvDownload),
+    ("/api/task/hearing-test", HearingSurveyHandler),
 
     # Response
     ("/api/response", TestResponsesHandler),
