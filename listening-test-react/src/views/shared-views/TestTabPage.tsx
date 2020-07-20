@@ -37,6 +37,7 @@ export default function TestTabPage(props: {testType: TestType, testName: string
       case 'abTest': return <AbTestDetail/>
       case 'acrTest': return <TestDetailView testType="acrTest" testUrl="acr-test"/>
       case 'mushraTest': return <TestDetailView testType="mushraTest" testUrl="mushra-test"/>
+      case 'hearingTest': return <TestDetailView testType="hearingTest" testUrl="hearing-test"/>
       default: return null;
     }
   }

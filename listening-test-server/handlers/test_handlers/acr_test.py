@@ -6,14 +6,16 @@ from handlers.base import BaseHandler
 class AcrTestHandler(BaseHandler):
     def prepare(self):
         self.user_id = self.auth_current_user()
+        # self.test_name + ' -> 'acr
+        self.test_name = 'acr'
 
     async def get(self):
         _id = self.get_argument('_id', None)
         if not _id:
             # Get all test in created ASC order
-            data = self.db['acrTests'].aggregate([
+            data = self.db[self.test_name + 'Tests'].aggregate([
                 {'$match': {'userId': self.user_id}},
-                {'$lookup': {'from': 'acrSurveys', 'let': {'testId': '$_id'}, 'pipeline': [
+                {'$lookup': {'from': self.test_name + 'Surveys', 'let': {'testId': '$_id'}, 'pipeline': [
                     {'$match': {'$expr': {'$eq': ["$testId", "$$testId"]}}},
                     {'$project': {'_id': 1}}
                 ], 'as': 'responses'}},
@@ -23,7 +25,7 @@ class AcrTestHandler(BaseHandler):
             ])
         else:
             # Get one test
-            data = self.db['acrTests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+            data = self.db[self.test_name + 'Tests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
         self.dumps_write(data)
 
     async def post(self):
@@ -35,18 +37,18 @@ class AcrTestHandler(BaseHandler):
             del body['responses']
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
-        _id = self.db['acrTests'].insert(body)
-        data = self.db['acrTests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+        _id = self.db[self.test_name + 'Tests'].insert(body)
+        data = self.db[self.test_name + 'Tests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
         self.dumps_write(data)
 
     async def put(self):
         body = self.loads_body()
         body['modifiedAt'] = datetime.now()
-        data = self.db['acrTests'].update_one({'userId': self.user_id, '_id': body['_id']}, {"$set": body}).raw_result
+        data = self.db[self.test_name + 'Tests'].update_one({'userId': self.user_id, '_id': body['_id']}, {"$set": body}).raw_result
         self.dumps_write(data)
 
     async def delete(self):
         _id = ObjectId(self.get_argument('_id'))
-        data = self.db['acrTests'].delete_one({'_id': ObjectId(_id)}).raw_result
+        data = self.db[self.test_name + 'Tests'].delete_one({'_id': ObjectId(_id)}).raw_result
         self.dumps_write(data)
 

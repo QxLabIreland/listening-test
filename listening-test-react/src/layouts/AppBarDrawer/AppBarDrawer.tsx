@@ -82,23 +82,33 @@ export default function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
         <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="ab-test"/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListView testUrl="ab-test"/>
+          </AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="acr-test"/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListView testUrl="acr-test"/>
+          </AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="mushra-test"/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListView testUrl="mushra-test"/>
+          </AppBarLayout>
         </Route>
         <Route exact path={`${path}/hearing-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TestListView testUrl="hearing-test"/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListView testUrl="hearing-test"/>
+          </AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
         </Route>
         {/*Detail with back arrow button. Aka: no navigation page*/}
         <Route exact path={`${path}/ab-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}><AbTestTab/></AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <AbTestTab/>
+          </AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
@@ -108,6 +118,11 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/mushra-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
             <TestTabPage testName="MUSHRA Test" testType="mushraTest"/>
+          </AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/hearing-test/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <TestTabPage testName="Hearing Sensitivity Test" testType="hearingTest"/>
           </AppBarLayout>
         </Route>
         {/*Context make this not working*/}
