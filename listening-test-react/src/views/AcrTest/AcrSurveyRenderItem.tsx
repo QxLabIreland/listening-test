@@ -55,13 +55,13 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
       {!isTraining && <AudioRatingBar audio={v}/>}
       <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
                    onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
-      {isDevMode() && <span>{refs[i].current?.currentTime}</span>}
+      {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
     </Grid>)}
 
     {/*Reference*/}
     {value.audioRef && <Grid item style={RatingAreaStyle}>
       <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
-      {isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}
+      {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
     </Grid>}
 
     <Grid item xs={12}>

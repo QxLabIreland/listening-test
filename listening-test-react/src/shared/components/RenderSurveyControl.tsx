@@ -27,7 +27,7 @@ export const RenderSurveyControl = observer(function (props: { control: SurveyCo
   const {control} = props;
   switch (control.type) {
     case SurveyControlType.text:
-      return <TextField fullWidth variant="filled" label={control.question}
+      return <TextField fullWidth variant="filled" label={control.question} required={control.required}
                         onChange={event => control.value = event.target.value}/>
     case SurveyControlType.radio:
       return <SurveyRadio control={control}/>
@@ -43,7 +43,7 @@ export const RenderSurveyControl = observer(function (props: { control: SurveyCo
 const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
 
-  return <FormControl variant="filled" fullWidth>
+  return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend">{control.question}</FormLabel>
     <RadioGroup row value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options && control.options.map(o =>
@@ -65,7 +65,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
     control.value = values.toString();
   }
 
-  return <FormControl variant="filled" fullWidth>
+  return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend">{control.question}</FormLabel>
     <FormGroup row>
       {control.options && control.options.map(o =>
