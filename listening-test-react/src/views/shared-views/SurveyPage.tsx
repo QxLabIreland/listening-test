@@ -14,7 +14,6 @@ import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
-import {isDevMode} from "../../shared/ReactTools";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {AcrSurveyRenderItem, ItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
@@ -67,7 +66,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
       return;
     }
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
-      if (!isDevMode()) history.replace('/task/finish');
+      history.replace('/task/finish');
     });
   }
 

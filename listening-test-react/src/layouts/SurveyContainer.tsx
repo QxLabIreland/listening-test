@@ -4,15 +4,33 @@ import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
 import {SurveyPage} from "../views/shared-views/SurveyPage";
+import Toolbar from "@material-ui/core/Toolbar";
+import {Button, Typography} from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  toolbar: {
+    backgroundColor: theme.palette.grey["800"]
+  }
+}));
 
 export default function SurveyContainer() {
   const {path} = useRouteMatch();
+  const classes = useStyles();
   return (
     <React.Fragment>
+      <AppBar position="sticky" color="primary" elevation={6}>
+        <Toolbar className={classes.toolbar}>
+          <Button component={Link} to='/' color="inherit">Golisten.io</Button>
+          <span style={{flexGrow: 1}}/>
+          <Typography>Subject View</Typography>
+        </Toolbar>
+      </AppBar>
       <CssBaseline />
       <Container maxWidth="md">
         <Suspense fallback={<Loading/>}>

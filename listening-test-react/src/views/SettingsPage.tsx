@@ -68,14 +68,12 @@ export default function SettingsPage() {
     </Grid>
     <Grid item xs={12} md={6}>
       <Card>
-        <CardHeader title="Update your avatar"/>
+        <CardHeader title="Other settings"/>
         <CardContent>
           More settings will come soon.
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>
-          <Button color="primary">
-            Upload
-          </Button>
+          {/*<Button color="primary">Upload</Button>*/}
         </CardActions>
       </Card>
     </Grid>
