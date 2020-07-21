@@ -22,11 +22,15 @@ import {TestUrl} from "../../shared/models/EnumsAndTypes";
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
-  const [openedPanel, setOpenedPanel] = useState(-1);
+
+  const isIndividual = questionnaire?.settings?.isIndividual;
+
+  const [openedPanel, setOpenedPanel] = useState(isIndividual ? -1 : 0);
   const {id} = useParams();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
   const [startTime] = useState<{[key: number]: number}>({});
+
 
   useEffect(() => {
     if (!value) Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
@@ -60,25 +64,23 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
       // If there is no error, check the next item
       if (!validationError) continue;
       openDialog(validationError, item.title + ' Required');
-      break;
+      return;
     }
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
       if (!isDevMode()) history.replace('/task/finish');
     });
   }
 
-  const isIndividual = questionnaire?.settings?.isIndividual;
-
   return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
     </Grid>
     {/*When the title and description doesn't show*/}
-    {!(isIndividual && openedPanel !== -1) && <Grid item xs={12}>
+    {(!isIndividual || openedPanel === -1) && <Grid item xs={12}>
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
-      <div style={{textAlign: 'right'}}>
+      {isIndividual && <div style={{textAlign: 'right'}}>
         <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>
-      </div>
+      </div>}
     </Grid>}
     {questionnaire.items.map((v, i) =>
       <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>

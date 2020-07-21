@@ -73,7 +73,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
     <audio src={audio.src} controls loop={!settings?.loopTimes} ref={ref} style={{display: 'none'}} preload="auto"
            onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
 
-    <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
+    <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" style={{transition: 'none'}}
             startIcon={<Icon>{audio.isPlaying ? 'pause' : 'play_arrow'}</Icon>}
             onClick={() => audio.isPlaying ? onPause() : onPlay(audio)}>
       {props.children}
