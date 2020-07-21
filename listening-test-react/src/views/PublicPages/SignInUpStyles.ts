@@ -51,7 +51,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     paddingTop: theme.spacing(5),
-    paddingBototm: theme.spacing(2),
+    // paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2)
   },
