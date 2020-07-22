@@ -39,6 +39,7 @@ export default function SurveyContainer() {
             <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
             <Route exact path={`${path}/acr-test/:id`}><SurveyPage testUrl="acr-test"/></Route>
             <Route exact path={`${path}/mushra-test/:id`}><SurveyPage testUrl="mushra-test"/></Route>
+            <Route exact path={`${path}/hearing-test/:id`}><SurveyPage testUrl="hearing-test"/></Route>
             {!isDevMode() && <Redirect to="/not-found"/>}
           </Switch>
         </Suspense>

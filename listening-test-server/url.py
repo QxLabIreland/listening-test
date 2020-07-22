@@ -31,19 +31,19 @@ path = [
 
     # # Tests and Survey
     ("/api/ab-test", AbTestHandler),
-    ("/api/csv-download/abTest", AbTestResponsesDownload),
+    ("/api/csv-download/ab-test", AbTestResponsesDownload),
     ("/api/task/ab-test", AbTestSurveyHandler),
 
     ("/api/acr-test", AcrTestHandler),
-    ("/api/csv-download/acrTest", AcrTestCsvDownload),
+    ("/api/csv-download/acr-test", AcrTestCsvDownload),
     ("/api/task/acr-test", AcrSurveyHandler),
 
     ("/api/mushra-test", MushraTestHandler),
-    ("/api/csv-download/mushraTest", MushraTestCsvDownload),
+    ("/api/csv-download/mushra-test", MushraTestCsvDownload),
     ("/api/task/mushra-test", MushraSurveyHandler),
 
     ("/api/hearing-test", HearingTestHandler),
-    ("/api/csv-download/hearingTest", HearingTestCsvDownload),
+    ("/api/csv-download/hearing-test", HearingTestCsvDownload),
     ("/api/task/hearing-test", HearingSurveyHandler),
 
     # Response

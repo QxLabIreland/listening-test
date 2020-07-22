@@ -26,7 +26,7 @@ import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {AbSurveyPage} from "../AbTest/AbSurvey/AbSurveyPage";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AbTestModel} from "../../shared/models/AbTestModel";
-import {TestType} from "../../shared/models/EnumsAndTypes";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
 
 const useStyles = makeStyles((theme: Theme) => (createStyles({
@@ -42,8 +42,8 @@ const useStyles = makeStyles((theme: Theme) => (createStyles({
   }
 })));
 
-export default function ResponseListView(props: {testType: TestType}) {
-  const {testType} = props;
+export default function ResponseListView(props: {testUrl: TestUrl}) {
+  const {testUrl} = props;
   const classes = useStyles();
   // Prefix is the router prefix of a detail
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -53,15 +53,15 @@ export default function ResponseListView(props: {testType: TestType}) {
   const {id} = useParams();
 
   const renderSurveyPage = (value: BasicTestModel) => {
-    switch (testType) {
-      case "abTest": return <AbSurveyPage value={value as AbTestModel}/>
-      case "acrTest": return <SurveyPage testUrl="acr-test" value={value}/>
+    switch (testUrl) {
+      case "ab-test": return <AbSurveyPage value={value as AbTestModel}/>
+      case "acr-test": return <SurveyPage testUrl="acr-test" value={value}/>
       default: return null;
     }
   }
 
   useEffect(() => {
-    Axios.get('/api/response', {params: {testType, testId: id}})
+    Axios.get('/api/response', {params: {testUrl: testUrl, testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.data));
   }, [id])
 
@@ -83,11 +83,11 @@ export default function ResponseListView(props: {testType: TestType}) {
   // Batch delete checked items
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
-    Axios.delete('/api/response', {params: {testType, testId: id}, data: deletedList})
+    Axios.delete('/api/response', {params: {testUrl: testUrl, testId: id}, data: deletedList})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
   const handleDownload = () => downloadFileTool({
-    url: '/api/csv-download/' + testType, params: {testId: id}
+    url: '/api/csv-download/' + testUrl, params: {testId: id}
   });
 
   return (<Grid container spacing={2}>

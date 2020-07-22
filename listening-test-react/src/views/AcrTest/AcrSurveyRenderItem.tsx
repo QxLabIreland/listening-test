@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
 import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import {isDevMode} from "../../shared/ReactTools";
 
 export function ItemValidateError(item: TestItemModel): string {
   if (item == null) return null;
@@ -70,7 +69,7 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
   </Grid>
 })
 
-export const AudioRatingBar = observer(function (props: { audio: AudioFileModel}) {
+const AudioRatingBar = observer(function (props: { audio: AudioFileModel}) {
   const marks = [
     {value: 1, label: '1 - Bad'},
     {value: 2, label: '2 - Poor'},
