@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {Link, useHistory, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
 import {useRouteMatch} from "react-router";
 import Axios from "axios";
@@ -110,8 +110,8 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                   <TableCell>
                     <Tooltip title="Check responses">
 
-                    <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
-                            color="primary">{test.responses ? test.responses.length : 0}</Button>
+                      <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
+                              color="primary">{test.responses ? test.responses.length : 0}</Button>
                     </Tooltip>
                   </TableCell>
                   <TableCell>
@@ -120,8 +120,8 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                   <TableCell>
                     <Tooltip title="Edit">
 
-                    <IconButton className={classes.button} size="small" color="primary" component={Link}
-                                to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
+                      <IconButton className={classes.button} size="small" color="primary" component={Link}
+                                  to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
                     </Tooltip>
                     <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
                     <Tooltip title="Duplicate test">
@@ -130,9 +130,9 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
                     </Tooltip>
                     <Tooltip title="Delete">
 
-                    <IconButton className={classes.button} size="small" color="default"
-                                onClick={() => handleDelete(test)}>
-                      <Icon>delete</Icon></IconButton>
+                      <IconButton className={classes.button} size="small" color="default"
+                                  onClick={() => handleDelete(test)}>
+                        <Icon>delete</Icon></IconButton>
                     </Tooltip>
                   </TableCell>
                 </TableRow>) : <TableRow><TableCell colSpan={4}>

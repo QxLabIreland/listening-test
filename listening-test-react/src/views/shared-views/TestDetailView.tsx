@@ -6,21 +6,20 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Box, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography} from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
+import {TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
-import {SurveyControlType, TestItemType, TestType, TestUrl} from "../../shared/models/EnumsAndTypes";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
-import {uuid} from "uuidv4";
 import TestSettingsDialog from ".//TestSettingsDialog";
 import DraggableZone from "../../shared/components/DraggableZone";
 import {AcrTestItemCard} from "../AcrTest/AcrTestItemCard";
+import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
+import {HearingTestItemCard} from "../HearingTest/HearingTestItemCard";
+import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
 
-export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: TestUrl, testType: TestType}) {
+export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -45,7 +44,7 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
 
   const handleSubmit = () => {
     // Validate if all examples have been added audios
-    const validationResult = validate(tests);
+    const validationResult = validateError(tests);
     if (validationResult) {
       openDialog(validationResult);
       return;
@@ -53,7 +52,7 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
     // Create a new text or modify current test
     if (+id === 0) {
       requestServer(true);
-    } else Axios.get('/api/response-count', {params: {testId: id, testType: testType}}).then(res => {
+    } else Axios.get('/api/response-count', {params: {testId: id, testType: testUrl}}).then(res => {
       // After checking with server, if there are responses, it will create a new test.
       if (res.data > 0) openDialog(
         'This test already has some responses, save will create a new test. You can delete old one if you like.',
@@ -83,7 +82,7 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
     tests.items.splice(index, 1);
   }
 
-  const validate = (tests: BasicTestModel) => {
+  const validateError = (tests: BasicTestModel) => {
     for (const item of tests.items) {
       if (item.example && (!item.example.audios || item.example.audios.length < 1)) {
         return 'Please add at least one audio for every example'
@@ -94,7 +93,7 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
 
   const handleReorder = (index: number, newIndex: number) => {
     const value = tests.items.splice(index, 1);
-// Insert and delete original
+    // Insert and delete original
     tests.items.splice(newIndex, 0, ...value);
   }
 
@@ -109,6 +108,25 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
                                    defaultValue={tests.description}
                                    onChange={(e) => tests.description = e.target.value}/>;
+
+  // Switch different card and button group through 'testType'
+  const renderItemCard = (value: TestItemModel, index: number) => {
+    switch(testUrl){
+      case "acr-test":
+      case "mushra-test": return <AcrTestItemCard value={value} onDelete={() => deleteItem(index)}/>;
+      case "hearing-test": return <HearingTestItemCard value={value} onDelete={() => deleteItem(index)}/>;
+      default: return null;
+    }
+  }
+
+  const renderButtonGroup = () => {
+    switch(testUrl){
+      case "acr-test":
+      case "mushra-test": return <AcrAddItemButtonGroup onAdd={addItem}/>;
+      case "hearing-test": return <HearingAddItemButtons onAdd={addItem}/>;
+      default: return null;
+    }
+  }
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
@@ -120,12 +138,12 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
         {tests.items.map((v, i) =>
           <Grid item xs={12} ref={viewRef} key={v.id}>
             <DraggableZone index={i} length={tests.items.length} onReorder={handleReorder}>
-              <AcrTestItemCard value={v} onDelete={() => deleteItem(i)}/>
+              {renderItemCard(v, i)}
             </DraggableZone>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>
-          <AddItemButtonGroup onAdd={addItem}/>
+          {renderButtonGroup()}
         </Grid>
 
         <ActionsArea/>
@@ -133,128 +151,3 @@ export const TestDetailView = observer(function ({testUrl, testType}: {testUrl: 
     </Grid>
   )
 })
-
-const AddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
-  const {onAdd} = props;
-  const classes = makeStyles((theme: Theme) => createStyles({
-    buttonGroup: {
-      '& > *': {margin: theme.spacing(0.5)}
-    }
-  }))();
-
-  const handleAdd = (type: TestItemType) => {
-    let newItem: TestItemModel;
-    switch (type) {
-      case TestItemType.example:
-        newItem = {
-          id: uuid(), type: TestItemType.example, title: 'Example (Click to edit this)', example: {
-            audios: [], fields: [
-              {type: SurveyControlType.description, question: 'Rate the quality of these sounds.', value: null}
-            ]
-          }
-        };
-        break;
-      case TestItemType.training:
-        newItem = {
-          id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
-            audios: [], fields: [
-              {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
-            ]
-          }
-        };
-        break;
-      case TestItemType.sectionHeader:
-        newItem = {
-          id: uuid(), type: TestItemType.sectionHeader, title: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        };
-        break;
-    }
-    onAdd(newItem);
-  }
-
-  const handleQuestionAdd = question => {
-    // Bad solution for scrolling
-    // const timer = setTimeout(() => {
-    //   onAdd({
-    //     id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
-    //   });
-    //   clearTimeout(timer);
-    // });
-    onAdd({
-      id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
-    });
-  };
-
-  return <Box className={classes.buttonGroup}>
-    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
-      <Icon>add</Icon>Add Example
-    </Button>
-    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
-      <Icon>add</Icon>Add Training Example
-    </Button>
-    <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
-  </Box>
-});
-
-const AddQuestionButton = observer(function (props: { onQuestionAdd: (question: SurveyControlModel) => void }) {
-  const {onQuestionAdd} = props;
-  // When menu clicked
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleAdd = (type: SurveyControlType) => {
-    // Close the adding menu
-    setAnchorEl(null);
-    // Check controls types
-    switch (type) {
-      case SurveyControlType.radio:
-      case SurveyControlType.checkbox:
-        onQuestionAdd({type: type, question: 'Untitled question', options: ['Add your options!'], value: null, required: true});
-        break;
-      case SurveyControlType.text:
-        onQuestionAdd({type: type, question: 'Untitled question', value: null, required: true});
-        break;
-      case SurveyControlType.description:
-        onQuestionAdd({type: type, question: 'Type you description here', value: null});
-        break;
-    }
-  }
-
-  return <>
-    {/*Adding menu Button*/}
-    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey
-      Question</Button>
-    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
-      <MenuItem disabled>
-        <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
-        <ListItemIcon>
-          <Icon fontSize="small">text_fields</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Text Input"/>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(SurveyControlType.radio)}>
-        <ListItemIcon>
-          <Icon fontSize="small">radio_button_checked</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Radio Group"/>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(SurveyControlType.checkbox)}>
-        <ListItemIcon>
-          <Icon fontSize="small">check_box</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Checkbox Group"/>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(SurveyControlType.description)}>
-        <ListItemIcon>
-          <Icon fontSize="small">label</Icon>
-        </ListItemIcon>
-        <ListItemText primary="A Text Label"/>
-      </MenuItem>
-    </Menu>
-  </>;
-});
-

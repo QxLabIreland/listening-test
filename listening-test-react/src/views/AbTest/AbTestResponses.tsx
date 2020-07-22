@@ -46,7 +46,7 @@ export default function AbTestResponses(props) {
   const {id} = useParams();
 
   useEffect(() => {
-    Axios.get('/api/response', {params: {testType: 'abTest', testId: id}})
+    Axios.get('/api/response', {params: {testType: 'ab-test', testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.data));
   }, [id])
 
@@ -65,7 +65,7 @@ export default function AbTestResponses(props) {
   // Batch delete checked items
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
-    Axios.delete('/api/response', {params: {testType: 'abTest', testId: id}, data: deletedList})
+    Axios.delete('/api/response', {params: {testType: 'ab-test', testId: id}, data: deletedList})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
 

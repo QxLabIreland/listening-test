@@ -4,11 +4,11 @@ import {useHistory, useLocation, useParams} from "react-router";
 import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
 import {AbTestDetail} from "../AbTest/AbTestDetail";
-import {TestType} from "../../shared/models/EnumsAndTypes";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
 
-export default function TestTabPage(props: {testType: TestType, testName: string}) {
-  const {testType, testName} = props;
+export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
+  const {testUrl, testName} = props;
   // Hash of location, switch to response tab. url -> value -> title
   const location = useLocation();
   const [value, setValue] = React.useState<number>(location.hash === '#responses' ? 1 : 0);
@@ -33,11 +33,11 @@ export default function TestTabPage(props: {testType: TestType, testName: string
 
   // Render correct Detail Componets.
   const renderDetail = () => {
-    switch (testType) {
-      case 'abTest': return <AbTestDetail/>
-      case 'acrTest': return <TestDetailView testType="acrTest" testUrl="acr-test"/>
-      case 'mushraTest': return <TestDetailView testType="mushraTest" testUrl="mushra-test"/>
-      case 'hearingTest': return <TestDetailView testType="hearingTest" testUrl="hearing-test"/>
+    switch (testUrl) {
+      case 'ab-test': return <AbTestDetail/>
+      case 'acr-test':
+      case 'mushra-test':
+      case 'hearing-test': return <TestDetailView testUrl={testUrl}/>
       default: return null;
     }
   }
@@ -50,7 +50,7 @@ export default function TestTabPage(props: {testType: TestType, testName: string
       </Tabs>
       <Box paddingTop={2}>
         {value === 0 && renderDetail()}
-        {value === 1 && <ResponseListView testType={testType}/>}
+        {value === 1 && <ResponseListView testUrl={testUrl}/>}
       </Box>
     </React.Fragment>
   )

@@ -6,4 +6,10 @@ export interface AudioFileModel {
   value: string;
   // Additional attributes
   isPlaying?: boolean;
+  settings?: AudioSettings;
+}
+
+export interface AudioSettings {
+  frequency: string;
+  initVolume: number;
 }

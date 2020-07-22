@@ -61,7 +61,7 @@ export const AbTestDetail = observer(function () {
   const handleSubmit = () => {
     if (+id === 0) {
       requestServer(true);
-    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'abTest'}}).then(res => {
+    } else Axios.get('/api/response-count', {params: {testId: id, testType: 'ab-test'}}).then(res => {
       // After checking with server, if there are responses
       if (res.data > 0) openDialog(
         'This test already has some responses, save will create a new test. You can delete old one if you like.',
