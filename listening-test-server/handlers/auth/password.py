@@ -14,4 +14,4 @@ class PasswordHandler(BaseHandler):
             user['password'] = body["newPassword"]
             self.db['users'].update_one({'_id': self.user_id}, {'$set': user})
         else:
-            self.send_error(400, reason="Current password is wrong or the user not found")
+            self.set_error(400, reason="Current password is wrong or the user not found")

@@ -17,7 +17,7 @@ class AcrTestCsvDownload(BaseHandler):
             .sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
-            self.send_error(404, 'There is no enough ' + self.test_name + ' Test responses')
+            self.set_error(404, 'There is no enough ' + self.test_name + ' Test responses')
             return
 
         # Build file name with test type and datetime

@@ -8,7 +8,7 @@ class SignUpHandler(BaseHandler):
         # Check if there is existing user
         user = self.db['users'].find_one({'email': body["email"]})
         if user:
-            self.send_error(403, 'This email has been used')
+            self.set_error(403, 'This email has been used')
         else:
             body['createdAt'] = datetime.now()
             # Do insertion into users

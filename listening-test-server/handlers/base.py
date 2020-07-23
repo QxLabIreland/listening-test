@@ -33,7 +33,7 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         self.mongo_client.close()
 
     # Custom error handling
-    def send_error(self, status_code: int = 500, reason: str = None) -> None:
+    def set_error(self, status_code: int = 500, reason: str = None) -> None:
         self.set_status(status_code, reason)
         self.write(f'{status_code}: {reason}')
 
@@ -57,7 +57,7 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
     def get_current_user(self):
         id_user = self.get_secure_cookie("_user", None)
         if not id_user:
-            self.send_error(403, "You don't have permission")
+            self.set_error(403, "You don't have permission")
             return None
         else:
             return ObjectId(id_user.decode("utf-8"))

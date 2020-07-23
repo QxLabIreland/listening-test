@@ -52,16 +52,8 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   const [error, setError] = useState(undefined);
   const {id} = useParams();
 
-  const renderSurveyPage = (value: BasicTestModel) => {
-    switch (testUrl) {
-      case "ab-test": return <AbSurveyPage value={value as AbTestModel}/>
-      case "acr-test": return <SurveyPage testUrl="acr-test" value={value}/>
-      default: return null;
-    }
-  }
-
   useEffect(() => {
-    Axios.get('/api/response', {params: {testUrl: testUrl, testId: id}})
+    Axios.get('/api/response', {params: {testType: testUrl, testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.data));
   }, [id])
 
@@ -83,13 +75,21 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   // Batch delete checked items
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
-    Axios.delete('/api/response', {params: {testUrl: testUrl, testId: id}, data: deletedList})
+    Axios.delete('/api/response', {params: {testType: testUrl, testId: id}, data: deletedList})
       .then(() => setResponse(responses.filter(r => !r.selected)))
   }
   const handleDownload = () => downloadFileTool({
     url: '/api/csv-download/' + testUrl, params: {testId: id}
   });
-
+  // Switch to the correct rendering view
+  const renderSurveyPage = (value: BasicTestModel) => {
+    switch (testUrl) {
+      case "ab-test": return <AbSurveyPage value={value as AbTestModel}/>
+      case "acr-test":
+      case "hearing-test": return <SurveyPage testUrl={testUrl} value={value}/>
+      default: return null;
+    }
+  }
   return (<Grid container spacing={2}>
     <Grid item xs={12}>
       {responses ? <Card>
