@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     backgroundImage: 'url(/images/homepage.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+    backgroundPosition: 'center',
     overflow: 'auto',
 
     position: 'absolute',
@@ -49,19 +50,19 @@ export default function Home() {
     <div className={classes.background}>
       <CssBaseline />
       <Container component="main" className={classes.main} maxWidth="md">
-        <Typography variant="h2" component="h1" gutterBottom align="center">
+        <Typography variant="h2" component="h1" gutterBottom align="center" style={{fontWeight: 800}}>
           Golisten.io
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom align="center">
           Create and share a subjective listening test in a few minutes<br/>
 
         </Typography>
-        <Typography variant="body1" gutterBottom align="center">Click sign in to start your tests.</Typography>
+        {/*<Typography variant="body1" gutterBottom align="center">Click sign in to start your tests.</Typography>*/}
 
       </Container>
-      <footer className={classes.footer}>
+      {/*<footer className={classes.footer}>
         <Container maxWidth="md">
-          {/*<Typography variant="body1">by QxLab at University College Dublin</Typography>*/}
+          <Typography variant="body1">by QxLab at University College Dublin</Typography>
           <Typography variant="body2" gutterBottom>
             <small>
               <span>Photo by Tanner Boriack on Unsplash</span>
@@ -69,7 +70,7 @@ export default function Home() {
           </Typography>
           <Copyright />
         </Container>
-      </footer>
+      </footer>*/}
     </div>
   );
 }

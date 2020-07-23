@@ -23,7 +23,7 @@ export const HearingAddItemButtons = observer(function (props: { onAdd: (type: T
     switch (type) {
       case TestItemType.example: onAdd({
           id: uuid(), type: TestItemType.example, title: 'Example (Click to edit this)', example: {
-            audios: [], fields: [
+            audios: [{filename: null, src: null, value: null, settings: {initVolume: 0.5, frequency: 500}}], fields: [
               {type: SurveyControlType.description, question: 'Use the slider below to reduce the volume of this tone until it is just audible. When complete, click "Next"', value: null}
             ]
           }

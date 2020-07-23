@@ -10,6 +10,6 @@ export interface AudioFileModel {
 }
 
 export interface AudioSettings {
-  frequency: string;
+  frequency: number;
   initVolume: number;
 }

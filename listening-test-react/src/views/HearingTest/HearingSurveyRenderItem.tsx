@@ -1,14 +1,14 @@
-import React, {CSSProperties, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
-import {Box, Slider} from "@material-ui/core";
+import {Box, Slider, Tooltip, Typography} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
+import Button from "@material-ui/core/Button";
 
 export const HearingSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -22,47 +22,89 @@ export const HearingSurveyRenderItem = observer(function (props: { item: TestIte
   }
 })
 
-const RatingAreaStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-end'
-} as CSSProperties;
+// const AudioContext = window.AudioContext || window.webkitAudioContext;
+interface GainAndOscillator {
+  oscillator: OscillatorNode;
+  gainNode: GainNode;
+}
+
+function createOscillatorAndGain(volume: number, frequency: number): GainAndOscillator {
+  // Create oscillator and gain nodes
+  const audioContext = new AudioContext();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  // Calculate gain volume db
+  const gainDb = (volume - 1) * 100;
+  gainNode.gain.value = Math.pow(10, gainDb / 20);
+  // Change default frequency
+  oscillator.frequency.value = frequency;
+  // Connect gainNode and oscillator
+  gainNode.connect(audioContext.destination);
+  oscillator.connect(gainNode);
+  return {oscillator, gainNode};
+}
 
 const RenderVolumeExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
   const {value, active} = props;
-  // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+  const [gos] = useState<GainAndOscillator[]>(Array.from(Array(value.audios.length), () => Object.create({}) as GainAndOscillator));
 
   useEffect(() => {
-    if (active === false) onPause();
+    // if (active === false) onPause();
   }, [active]);
+
+  const handleButtonClick = (audio: AudioFileModel, index: number) => {
+    if (audio.isPlaying) gos[index].oscillator.stop();
+    else {
+      // Stop others first
+      gos.forEach((v, i) => {
+        if (i === index || !v.oscillator) return;
+        v.oscillator.stop();
+        props.value.audios[i].isPlaying = false;
+      })
+      // Create a Oscillator and Gain object
+      gos[index] = createOscillatorAndGain(audio.value? +audio.value : audio.settings.initVolume, audio.settings.frequency);
+      gos[index].oscillator.start();
+    }
+    audio.isPlaying = !audio.isPlaying;
+  }
 
   return <Grid container spacing={3}>
     {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
       <RenderSurveyControl control={value}/>
     </Grid>)}
 
-    {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
-      <AudioVolumeBar audio={v}/>
-      <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
-                   onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
+    {value.audios.map((v, i) => <Grid item key={i} style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'flex-end'
+    }}>
+      <GainNodeBar audio={v} gainNode={gos[i].gainNode}/>
+      <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
+              style={{transition: 'none'}}
+        // disabled={playedTimes >= settings?.loopTimes}
+              onClick={() => handleButtonClick(v, i)}>
+        <Icon>{v.isPlaying ? 'pause' : 'play_arrow'}</Icon>
+      </Button>
     </Grid>)}
 
-    {/*Reference*/}
-    {value.audioRef && <Grid item style={RatingAreaStyle}>
-      <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
-    </Grid>}
-
-    <Grid item xs={12}>
-      <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
-    </Grid>
   </Grid>
 })
 
-const AudioVolumeBar = observer(function (props: { audio: AudioFileModel }) {
+const GainNodeBar = observer(function (props: { audio: AudioFileModel, gainNode: GainNode }) {
+  const handleSliderChange = (_, nv: number | number[]) => {
+    props.audio.value = (+nv).toString();
+    if (!props.gainNode) return;
+    const gainDb = (+nv - 1) * 100;
+    props.gainNode.gain.value = Math.pow(10, gainDb / 20);
+  }
 
-  return <Box mb={2} mt={2} style={{height: 200}}>
+  return <>
+    <div style={{height: 24}}>
+      {!!Number(props.audio.value) ? <Tooltip title="Done!"><Icon>check</Icon></Tooltip>
+      : <Tooltip title="Please drag sliders"><Icon style={{color: '#cccccc'}}>check</Icon></Tooltip>}
+    </div>
+    <Box mb={2} mt={2} style={{height: 200}}>
     {/*<Grid container spacing={1} direction="column" justify="space-between">
       <Grid item><Icon>volume_down</Icon></Grid>
       <Grid item>
@@ -70,9 +112,9 @@ const AudioVolumeBar = observer(function (props: { audio: AudioFileModel }) {
       </Grid>
       <Grid item><Icon>volume_up</Icon></Grid>
     </Grid>*/}
-    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={100} step={1} valueLabelDisplay="auto"
-            defaultValue={props.audio.settings?.initVolume}
-            onChange={(_, nv) => props.audio.value = (+nv / 100).toString()}/>
+    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01} valueLabelDisplay="auto"
+            defaultValue={Number(props.audio.value)  ? +props.audio.value : props.audio.settings?.initVolume}
+            onChange={handleSliderChange}/>
 
-  </Box>
+  </Box></>
 })
