@@ -26,14 +26,15 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   const {id} = useParams();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
-  const [startTime] = useState<{[key: number]: number}>({});
+  const [startTime] = useState<{ [key: number]: number }>({});
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
 
   useEffect(() => {
-    if (!value) Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
+    if (value) return;
+    Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
       .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
-  }, [id]);
+  }, [testUrl, id, value]);
   // If isIndividual, goto description
   useEffect(() => {
     if (questionnaire?.settings?.isIndividual) setOpenedPanel(-1);
@@ -44,7 +45,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     if (validationError) openDialog(validationError, 'Required');
     // Set which panel will open, if validation pass.
     else if (v) {
-      setOpenedPanel(newIndex);
       // Timing process
       if (questionnaire.settings?.isTimed) {
         // Record start time for next one.
@@ -53,13 +53,15 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
         if (questionnaire.items[openedPanel])
           questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
       }
+      // useState is async method, so put it at the end
+      setOpenedPanel(newIndex);
     }
     // If the survey setting is individual question, DO NOTHING
     else if (!questionnaire.settings?.isIndividual) setOpenedPanel(null);
   }
 
   function handleSubmit() {
-    // Check validation before submission
+    // Check all items' validation before submission
     for (const item of questionnaire.items) {
       const validationError = SliderItemValidateError(item);
       // If there is no error, check the next item
@@ -67,6 +69,10 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
       openDialog(validationError, item.title + ' Required');
       return;
     }
+    // Record the last item time
+    if (questionnaire.settings?.isTimed)
+      questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+    // Start request
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
       history.replace('/task/finish');
     });
@@ -76,9 +82,12 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   const renderItemByTestUrl = (item: TestItemModel, index: number) => {
     switch (testUrl) {
       case "acr-test":
-      case "mushra-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "hearing-test": return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
-      default: return null;
+      case "mushra-test":
+        return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "hearing-test":
+        return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
+      default:
+        return null;
     }
   }
 
@@ -105,7 +114,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
             </CardActions>
           </Card>*/}
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
-          <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>} aria-controls="panel1a-content">
+          <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
+                                 aria-controls="panel1a-content">
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
