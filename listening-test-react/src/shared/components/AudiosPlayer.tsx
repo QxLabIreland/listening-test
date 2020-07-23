@@ -64,8 +64,11 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
   // When loop attribute is true, this won't be called
   const handleAudioEnded = () => {
-    if ((playedTimes + 1) < settings?.loopTimes)
+    // playedTimes will be added when the audio ENDS
+    if (playedTimes + 1 < settings?.loopTimes)
       (ref as React.RefObject<HTMLAudioElement>).current.play().then();
+    // Make sure the button style looks right
+    else audio.isPlaying = false;
     setPlayedTimes(playedTimes + 1);
   }
 
@@ -73,7 +76,9 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
     <audio src={audio.src} controls loop={!settings?.loopTimes} ref={ref} style={{display: 'none'}} preload="auto"
            onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
 
-    <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" style={{transition: 'none'}}
+    <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
+            style={{transition: 'none'}}
+            // disabled={playedTimes >= settings?.loopTimes}
             startIcon={<Icon>{audio.isPlaying ? 'pause' : 'play_arrow'}</Icon>}
             onClick={() => audio.isPlaying ? onPause() : onPlay(audio)}>
       {props.children}

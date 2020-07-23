@@ -13,6 +13,7 @@ class TestResponsesHandler(BaseHandler):
         _id = self.get_argument('_id', None)
         collection = switch_response_collection(self)
         if not collection:
+            self.set_error(400, 'Invalid test type')
             return
         # Get a list or a response
         if not _id:
@@ -37,12 +38,13 @@ class TestResponsesHandler(BaseHandler):
 def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
     test_type = self.get_argument('testType')
     # Get right collection
-    if test_type == 'abTest':
+    if test_type == 'ab-test':
         return self.db['abTestSurveys']
-    elif test_type == 'acrTest':
+    elif test_type == 'acr-test':
         return self.db['acrSurveys']
-    elif test_type == 'mushraTest':
+    elif test_type == 'mushra-test':
         return self.db['mushraSurveys']
+    elif test_type == 'hearing-test':
+        return self.db['hearingSurveys']
     else:
-        self.set_status(400, 'Invalid test type')
         return None

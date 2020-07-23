@@ -26,7 +26,7 @@ class AbTestResponsesDownload(BaseHandler):
             .sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
-            self.send_error(404, 'There is no enough AB test responses')
+            self.set_error(404, 'There is no enough AB test responses')
             return
 
         # Build file name with test type and datetime

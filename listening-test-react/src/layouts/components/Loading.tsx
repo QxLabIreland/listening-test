@@ -21,7 +21,7 @@ export default class Loading extends React.Component<{ error?: boolean, message?
 
     return (
       <div style={{
-        height: 240,
+        minHeight: 320,
         maxWidth: 480,
         display: 'flex',
         justifyContent: 'center',

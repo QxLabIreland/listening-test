@@ -13,32 +13,34 @@ import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {AcrSurveyRenderItem, ItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
+import {AcrSurveyRenderItem, SliderItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
-
-  const isIndividual = questionnaire?.settings?.isIndividual;
-
-  const [openedPanel, setOpenedPanel] = useState(isIndividual ? -1 : 0);
+  const [openedPanel, setOpenedPanel] = useState(0);
   const {id} = useParams();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
   const [startTime] = useState<{[key: number]: number}>({});
-
+  // Expose isIndividual setting to reduce code
+  const isIndividual = questionnaire?.settings?.isIndividual;
 
   useEffect(() => {
     if (!value) Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
       .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
+  // If isIndividual, goto description
+  useEffect(() => {
+    if (questionnaire?.settings?.isIndividual) setOpenedPanel(-1);
+  }, [questionnaire])
 
   function handlePanelChange(v, newIndex: number) {
-    // Only validate when opened >= 0
-    const validationError = ItemValidateError(questionnaire.items[openedPanel]);
+    const validationError = SliderItemValidateError(questionnaire.items[openedPanel]);
     if (validationError) openDialog(validationError, 'Required');
     // Set which panel will open, if validation pass.
     else if (v) {
@@ -59,7 +61,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   function handleSubmit() {
     // Check validation before submission
     for (const item of questionnaire.items) {
-      const validationError = ItemValidateError(item);
+      const validationError = SliderItemValidateError(item);
       // If there is no error, check the next item
       if (!validationError) continue;
       openDialog(validationError, item.title + ' Required');
@@ -68,6 +70,16 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
       history.replace('/task/finish');
     });
+  }
+
+  // Switch to right rendering item
+  const renderItemByTestUrl = (item: TestItemModel, index: number) => {
+    switch (testUrl) {
+      case "acr-test":
+      case "mushra-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "hearing-test": return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
+      default: return null;
+    }
   }
 
   return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
@@ -97,7 +109,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <AcrSurveyRenderItem item={v} active={openedPanel === i}/>
+            {renderItemByTestUrl(v, i)}
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             {i !== questionnaire.items.length - 1
