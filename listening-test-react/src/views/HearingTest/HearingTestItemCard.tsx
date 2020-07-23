@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {Box, CardContent, Slider, TextField, Typography} from "@material-ui/core";
+import {Box, CardContent, Slider, TextField, Tooltip, Typography} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
@@ -38,11 +38,8 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
   const {example, onDelete, title} = props;
 
   // Methods for audios changed
-  const handleAdd = (newAudio: AudioFileModel) => {
-    // Add settings for newAudio
-    newAudio.settings = {initVolume: 1, frequency: null};
-    example.audios.push(newAudio);
-  }
+  const handleAdd = () =>
+    example.audios.push({filename: null, src: null, value: null, settings: {initVolume: 1, frequency: 500}});
 
   const handleChange = (newAudio: AudioFileModel, index: number) => {
     if (newAudio == null) {
@@ -62,13 +59,13 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
   }
 
   // Setting submitted
-  const handleSettingChange = (settings) => example.settings = settings;
+  const handleExampleSettingChange = (settings) => example.settings = settings;
 
   return <Card>
     <CardHeader style={{paddingBottom: 0}} title={title} action={
       <span>
         <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-        <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+        <ExampleSettingsDialog settings={example.settings} onConfirm={handleExampleSettingChange}/>
       </span>
     }/>
     <CardContent>
@@ -82,21 +79,15 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
           <SurveyControl control={q}/>
         </Grid>)}
 
-        {/*Reference place*/}
-        <Grid item xs={12} md={4}>
-          <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
-                        label="Reference (Optional)"/>
-        </Grid>
         {/*Audios*/}
         {example.audios.map((a, i) => <Grid key={i} item xs={12} md={4}>
-          <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
-          <Box mt={2}>
-            <AudioSettingsView audio={a}/>
-          </Box>
+          <AudioSettingsView audio={a}/>
         </Grid>)}
         {/*Placeholder for adding to list*/}
         <Grid item xs={12} md={4}>
-          <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
+          <Tooltip title="Add new one">
+          <IconButton onClick={handleAdd}><Icon>add</Icon></IconButton>
+          </Tooltip>
         </Grid>
       </Grid>
     </CardContent>
@@ -107,9 +98,9 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
 
 const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel }) {
   // Performance boost with defaultValue
-  const FrequencyText = () => <TextField variant="outlined" size="small" label="Frequency in Hz" fullWidth
-                                         defaultValue={audio.settings.frequency}
-                                         onChange={e => audio.settings.frequency = e.target.value}/>
+  const FrequencyText = () => <TextField variant="outlined" size="small" label="Frequency in Hz" fullWidth type="number"
+                                         defaultValue={audio.settings.frequency} required
+                                         onChange={e => audio.settings.frequency = +e.target.value}/>
 
   return <Grid container spacing={1}>
     <Grid item xs={12}>

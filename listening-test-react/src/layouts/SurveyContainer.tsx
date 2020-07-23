@@ -26,9 +26,10 @@ export default function SurveyContainer() {
     <React.Fragment>
       <AppBar position="sticky" color="primary" elevation={6}>
         <Toolbar className={classes.toolbar}>
-          <Button component={Link} to='/' color="inherit">Golisten.io</Button>
+          {/*<Button component={Link} to='/' color="inherit">Golisten.io</Button>*/}
+          <Button color="inherit">Golisten.io</Button>
           <span style={{flexGrow: 1}}/>
-          <Typography>Subject View</Typography>
+          {/*<Typography>Subject View</Typography>*/}
         </Toolbar>
       </AppBar>
       <CssBaseline />
