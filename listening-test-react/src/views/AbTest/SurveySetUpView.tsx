@@ -1,36 +1,25 @@
 import {observer} from "mobx-react";
 import React, {useRef} from "react";
-import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
+import {CardContent, Grid} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import Icon from "@material-ui/core/Icon";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
+import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
+import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 
-export const SurveySetUpView = observer(function (props) {
+export const SurveySetUpView = observer(function (props: {items: SurveyControlModel[]}) {
   // Create an array for survey
   const {items} = props;
   const viewRef = useRef(null);
   const {scrollToView} = useScrollToView(viewRef);
 
-  // When menu clicked
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleAdd = (type: SurveyControlType) => {
-    // Check controls types
-    if (type === SurveyControlType.radio || type === SurveyControlType.checkbox)
-      items.push({type: type, question: 'Untitled question ' + (items.length + 1), options: ['Add your options!'], value: null});
-    else items.push({type: type, question: 'Untitled question ' + (items.length + 1)});
-    // Close the adding menu
-    setAnchorEl(null);
+  const handleQuestionAdd = question => {
     scrollToView();
+    items.push(question);
   }
 
-  const handleDelete = (control) => items.splice(items.indexOf(control), 1);
+  const handleDelete = (control) => items.splice(items.indexOf(control), 1)
 
   return <Card>
     <CardHeader title="Create a survey before the test"/>
@@ -43,35 +32,10 @@ export const SurveySetUpView = observer(function (props) {
         )}
         <Grid item container justify="center" xs={12}>
           <Grid item>
-            {/*Adding menu Button*/}
-            <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>add</Icon>Add a question</Button>
-            <Menu anchorEl={anchorEl} keepMounted open={!!anchorEl} onClose={() => setAnchorEl(null)}>
-              <MenuItem disabled>
-                <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
-              </MenuItem>
-              <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
-                <ListItemIcon>
-                  <Icon fontSize="small">text_fields</Icon>
-                </ListItemIcon>
-                <ListItemText primary="Text Input"/>
-              </MenuItem>
-              <MenuItem onClick={() => handleAdd(SurveyControlType.radio)}>
-                <ListItemIcon>
-                  <Icon fontSize="small">radio_button_checked</Icon>
-                </ListItemIcon>
-                <ListItemText primary="Radio Group"/>
-              </MenuItem>
-              <MenuItem onClick={() => handleAdd(SurveyControlType.checkbox)}>
-                <ListItemIcon>
-                  <Icon fontSize="small">check_box</Icon>
-                </ListItemIcon>
-                <ListItemText primary="Checkbox Group"/>
-              </MenuItem>
-            </Menu>
-
+            <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
           </Grid>
         </Grid>
       </Grid>
     </CardContent>
   </Card>
-})
+});
