@@ -41,22 +41,7 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
   const handleAdd = () =>
     example.audios.push({filename: null, src: null, value: null, settings: {initVolume: 1, frequency: 500}});
 
-  const handleChange = (newAudio: AudioFileModel, index: number) => {
-    if (newAudio == null) {
-      handleDelete(index);
-      return;
-    }
-    // Add settings for newAudio
-    newAudio.settings = {initVolume: 1, frequency: null};
-    // If is Reference the audioRef will be added or deleted
-    if (index === -1) example.audioRef = newAudio;
-    else example.audios[index] = newAudio;
-  }
-
-  const handleDelete = (index: number) => {
-    if (index === -1) example.audioRef = undefined;
-    else example.audios.splice(index, 1);
-  }
+  const handleDelete = (index: number) => example.audios.splice(index, 1);
 
   // Setting submitted
   const handleExampleSettingChange = (settings) => example.settings = settings;
@@ -73,7 +58,6 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
         <Grid item xs={12}>
           <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
         </Grid>
-
         {/*Description for this example*/}
         {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
           <SurveyControl control={q}/>
@@ -81,8 +65,11 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
 
         {/*Audios*/}
         {example.audios.map((a, i) => <Grid key={i} item xs={12} md={4}>
-          <AudioSettingsView audio={a}/>
+          <AudioSettingsView audio={a} delButton={
+            <IconButton onClick={() => handleDelete(i)} size="small"><Icon>delete_outline</Icon></IconButton>
+          }/>
         </Grid>)}
+
         {/*Placeholder for adding to list*/}
         <Grid item xs={12} md={4}>
           <Tooltip title="Add new one">
@@ -96,16 +83,16 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
   </Card>;
 })
 
-const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel }) {
+const AudioSettingsView = observer(function ({audio, delButton}: { audio: AudioFileModel, delButton: React.ReactNode }) {
   // Performance boost with defaultValue
   const FrequencyText = () => <TextField variant="outlined" size="small" label="Frequency in Hz" fullWidth type="number"
                                          defaultValue={audio.settings.frequency} required
                                          onChange={e => audio.settings.frequency = +e.target.value}/>
 
   return <Grid container spacing={1}>
-    <Grid item xs={12}>
-      <FrequencyText/>
-    </Grid>
+    <Grid item xs><FrequencyText/></Grid>
+    <Grid item>{delButton}</Grid>
+
     <Grid item xs={12}><Typography variant="body2" gutterBottom>Initial Volume:</Typography></Grid>
     <Grid item><Icon>volume_down</Icon></Grid>
     <Grid item xs>

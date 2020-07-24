@@ -12,7 +12,6 @@ import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import Axios from "axios";
-import AbTestTab from "../../views/AbTest/AbTestTab";
 import TestListView from "../../views/shared-views/TestListView";
 import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
@@ -107,7 +106,7 @@ export default function AppBarDrawer(props: any) {
         {/*Detail with back arrow button. Aka: no navigation page*/}
         <Route exact path={`${path}/ab-test/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <AbTestTab/>
+            <TestTabPage testName="AB Test" testUrl="ab-test"/>
           </AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test/:id`}>

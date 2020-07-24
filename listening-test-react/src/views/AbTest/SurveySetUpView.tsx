@@ -4,9 +4,9 @@ import {Button, CardContent, Grid, ListItemIcon, ListItemText, Menu, MenuItem, T
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import Icon from "@material-ui/core/Icon";
-import {useScrollToView} from "../../../shared/ReactHooks";
-import {SurveyControl} from "../../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
+import {useScrollToView} from "../../shared/ReactHooks";
+import {SurveyControl} from "../../shared/components/SurveyControl";
+import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
 
 export const SurveySetUpView = observer(function (props) {
   // Create an array for survey
