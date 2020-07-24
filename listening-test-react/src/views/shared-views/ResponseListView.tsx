@@ -23,7 +23,7 @@ import Axios from "axios";
 import Loading from "../../layouts/components/Loading";
 import {downloadFileTool} from "../../shared/ReactTools";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
-import {AbSurveyPage} from "../AbTest/AbSurvey/AbSurveyPage";
+import {AbSurveyPage} from "../AbTest/AbSurveyPage";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
@@ -86,6 +86,7 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
     switch (testUrl) {
       case "ab-test": return <AbSurveyPage value={value as AbTestModel}/>
       case "acr-test":
+      case "mushra-test":
       case "hearing-test": return <SurveyPage testUrl={testUrl} value={value}/>
       default: return null;
     }

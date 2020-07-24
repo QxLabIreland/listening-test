@@ -10,14 +10,14 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import {SurveyAudioController} from "./SurveyAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
-import {AbTestModel} from "../../../shared/models/AbTestModel";
+import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useHistory, useParams} from "react-router";
-import Loading from "../../../layouts/components/Loading";
+import Loading from "../../layouts/components/Loading";
 import {Box} from "@material-ui/core";
-import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
-import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
-import {isDevMode} from "../../../shared/ReactTools";
+import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
+import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {isDevMode} from "../../shared/ReactTools";
 
 export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   const {value} = props;

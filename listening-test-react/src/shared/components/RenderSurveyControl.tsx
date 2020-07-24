@@ -45,7 +45,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 
   return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend">{control.question}</FormLabel>
-    <RadioGroup row value={control.value} onChange={(event => control.value = event.target.value)}>
+    <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
       )}

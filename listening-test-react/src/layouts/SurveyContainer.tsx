@@ -3,7 +3,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
-import {AbSurveyPage} from "../views/AbTest/AbSurvey/AbSurveyPage";
+import {AbSurveyPage} from "../views/AbTest/AbSurveyPage";
 import {Link, Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";

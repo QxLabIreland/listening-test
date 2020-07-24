@@ -5,7 +5,7 @@ import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {Box, Slider, Tooltip, Typography} from "@material-ui/core";
+import {Box, Slider, Tooltip} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
@@ -22,7 +22,9 @@ export const HearingSurveyRenderItem = observer(function (props: { item: TestIte
   }
 })
 
-// const AudioContext = window.AudioContext || window.webkitAudioContext;
+// Make sure it works on safari and firefox. And create only one for the application
+const audioContext = new (window.AudioContext || (window as any).webkitAudioContext) ();
+
 interface GainAndOscillator {
   oscillator: OscillatorNode;
   gainNode: GainNode;
@@ -30,7 +32,6 @@ interface GainAndOscillator {
 
 function createOscillatorAndGain(volume: number, frequency: number): GainAndOscillator {
   // Create oscillator and gain nodes
-  const audioContext = new AudioContext();
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
   // Calculate gain volume db
@@ -44,28 +45,40 @@ function createOscillatorAndGain(volume: number, frequency: number): GainAndOsci
   return {oscillator, gainNode};
 }
 
+function disposeGo(go: GainAndOscillator) {
+  if (go?.oscillator) {
+    go.oscillator.stop();
+    go.oscillator.disconnect();
+  }
+  if (go?.gainNode) go.gainNode.disconnect();
+  return null;
+}
+
 const RenderVolumeExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
   const {value, active} = props;
-  const [gos] = useState<GainAndOscillator[]>(Array.from(Array(value.audios.length), () => Object.create({}) as GainAndOscillator));
+  const [gos] = useState<GainAndOscillator[]>(Array(value.audios.length));
 
   useEffect(() => {
     // if (active === false) onPause();
   }, [active]);
 
   const handleButtonClick = (audio: AudioFileModel, index: number) => {
-    if (audio.isPlaying) gos[index].oscillator.stop();
+    if (audio.isPlaying) {
+      gos[index] = disposeGo(gos[index]);
+      audio.isPlaying = false;
+    }
     else {
       // Stop others first
       gos.forEach((v, i) => {
-        if (i === index || !v.oscillator) return;
-        v.oscillator.stop();
+        if (i === index || !v?.oscillator) return;
+        gos[i] = disposeGo(v);
         props.value.audios[i].isPlaying = false;
       })
       // Create a Oscillator and Gain object
       gos[index] = createOscillatorAndGain(audio.value? +audio.value : audio.settings.initVolume, audio.settings.frequency);
       gos[index].oscillator.start();
+      audio.isPlaying = true;
     }
-    audio.isPlaying = !audio.isPlaying;
   }
 
   return <Grid container spacing={3}>
@@ -79,8 +92,8 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       alignItems: 'center',
       justifyContent: 'flex-end'
     }}>
-      <GainNodeBar audio={v} gainNode={gos[i].gainNode}/>
-      <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
+      <GainNodeBar audio={v} gainNode={gos[i]?.gainNode}/>
+      <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" disableElevation
               style={{transition: 'none'}}
         // disabled={playedTimes >= settings?.loopTimes}
               onClick={() => handleButtonClick(v, i)}>
