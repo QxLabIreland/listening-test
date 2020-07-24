@@ -19,6 +19,10 @@ import {TagsGroup} from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
+import TestSettingsDialog from "../shared-views/TestSettingsDialog";
+import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
+import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
+import DraggableZone from "../../shared/components/DraggableZone";
 
 export const AbTestDetail = observer(function () {
   const {id} = useParams();
@@ -45,7 +49,7 @@ export const AbTestDetail = observer(function () {
 
   function addExample() {
     tests.examples.push({
-      questions: [
+      fields: [
         {type: SurveyControlType.radio, question: 'Which one is your preference?', options: ['A', 'B'], value: ''},
         {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
       ],
@@ -70,7 +74,6 @@ export const AbTestDetail = observer(function () {
     });
   }
 
-
   const requestServer = (isNew: boolean) => {
     setIsSubmitted(true);
     // Request server based on is New or not.
@@ -82,65 +85,77 @@ export const AbTestDetail = observer(function () {
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
 
-  return (
-    <Grid container spacing={2} justify="center" alignItems="center">
-      <Prompt when={!isSubmitted}
-              message='You have unsaved changes, are you sure you want to leave?'/>
+  const handleReorder = (index: number, newIndex: number) => {
+    const value = tests.examples.splice(index, 1);
+    // Insert and delete original
+    tests.examples.splice(newIndex, 0, ...value);
+  }
 
-      {tests ? <React.Fragment>
-        <Grid item xs={12} style={{display: 'flex'}}>
-          <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
-                     label="Test Name" fullWidth/>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Description" rowsMax={8} value={tests.description}
-                     onChange={(e) => tests.description = e.target.value} multiline fullWidth/>
+  const ActionsArea = () => <Grid item xs={12} container alignItems="center" spacing={1}>
+    <Grid item style={{flexGrow: 1}}/>
+    <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
+    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
+  </Grid>;
 
+
+  return <Grid container spacing={2} justify="center" alignItems="center">
+    <Prompt when={!isSubmitted}
+            message='You have unsaved changes, are you sure you want to leave?'/>
+    {tests ? <React.Fragment>
+      <ActionsArea/>
+
+      <Grid item xs={12}>
+        <TextField variant="outlined" value={tests.name} onChange={(e) => tests.name = e.target.value}
+                   label="Test Name" fullWidth/>
+      </Grid>
+      <Grid item xs={12}>
+        <TextField variant="outlined" label="Test Description" rowsMax={8} value={tests.description}
+                   onChange={(e) => tests.description = e.target.value} multiline fullWidth/>
+      </Grid>
+      <Grid item xs={12}><SurveySetUpView items={tests.survey}/></Grid>
+
+      {tests.examples?.map((v, i) =>
+        <Grid item xs={12} key={i} ref={viewRef}>
+          <DraggableZone index={i} length={tests.examples.length} onReorder={handleReorder}>
+            <AbTestExCard v={v} i={i} deleteExample={deleteExample}/>
+          </DraggableZone>
         </Grid>
-        <Grid item xs={12}>
-          <SurveySetUpView items={tests.survey}/>
+      )}
+      <Grid item container justify="center" xs={12}>
+        <Button variant="outlined" color="primary" onClick={addExample}>
+          <Icon>add</Icon>Add Example
+        </Button>
+      </Grid>
+
+      <ActionsArea/>
+    </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
+  </Grid>
+})
+
+const AbTestExCard = observer(function ({v, i, deleteExample}: {v: ItemExampleModel, i: number, deleteExample: (i: number)=> void}) {
+  return <Card>
+    <CardHeader title={<div style={{display: 'flex'}}>
+      <span>Example {i + 1}</span>
+      <TagsGroup value={v.tags} onChange={newTags => v.tags = newTags}/>
+    </div>} action={<>
+      <ExampleSettingsDialog settings={v.settings} onConfirm={settings => v.settings = settings}/>
+      <IconButton onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
+    </>}/>
+    <CardContent>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={5}>
+          <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm}/>
         </Grid>
-        {tests.examples.map((v, i) =>
-          <Grid item xs={12} key={i} ref={viewRef}>
-            <Card>
-              <CardHeader title={
-                <div style={{display: 'flex'}}>Example {i + 1}
-                  <TagsGroup value={v.tags} onChange={newTags => v.tags = newTags}/>
-                  <span style={{flexGrow: 1}}/>
-                  <IconButton size="small" onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
-                </div>
-              }/>
-              <CardContent>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[0]} onChange={fm => v.audios[0] = fm}/>
-                  </Grid>
-                  <Grid item xs={12} md={5}>
-                    <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm}/>
-                  </Grid>
-                  <Grid item xs={12} md={2}>
-                    <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
-                                  label="Reference (Optional)"/></Grid>
-                  {v.questions.map((q, qi) => <Grid item xs={12} key={qi}>
-                    <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
-                  </Grid>)}
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-        <Grid item>
-          <Button variant="outlined" color="primary" onClick={addExample}><Icon>add</Icon>Add an Audio Example</Button>
+        <Grid item xs={12} md={5}>
+          <FileDropZone fileModel={v.audios[1]} onChange={fm => v.audios[1] = fm}/>
         </Grid>
-        <Grid item xs={12} style={{display: 'flex'}}>
-          <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button>
-        </Grid>
-      </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
-    </Grid>
-  )
+        <Grid item xs={12} md={2}>
+          <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
+                        label="Reference (Optional)"/></Grid>
+        {v.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
+          <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
+        </Grid>)}
+      </Grid>
+    </CardContent>
+  </Card>
 })

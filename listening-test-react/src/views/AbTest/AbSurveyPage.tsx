@@ -7,7 +7,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import {SurveyAudioController} from "./SurveyAudioController";
+import {AbAudioController} from "./AbAudioController";
 import {observable, toJS} from "mobx";
 import {observer} from "mobx-react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
@@ -18,6 +18,7 @@ import {Box} from "@material-ui/core";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import {isDevMode} from "../../shared/ReactTools";
+import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
 
 export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   const {value} = props;
@@ -67,15 +68,13 @@ export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
       <Grid item xs={12} key={i}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
-            {ex.questions[0].value && <Icon>check</Icon>}
             <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container spacing={3}>
-              {/*TODO Expose the pause*/}
-              <SurveyAudioController audios={ex.audios} audioRef={ex.audioRef}/>
+              <AbAudioController value={ex} active={openedPanel === i}/>
               <Grid item>
-                <RenderSurveyControls items={ex.questions}/>
+                <RenderSurveyControls items={ex.fields}/>
               </Grid>
             </Grid>
           </ExpansionPanelDetails>
