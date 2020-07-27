@@ -14,7 +14,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Theme,
   Tooltip,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
@@ -29,7 +28,7 @@ import {AbTestModel} from "../../shared/models/AbTestModel";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
 
-const useStyles = makeStyles((theme: Theme) => (createStyles({
+const useStyles = makeStyles(() => (createStyles({
   content: {
     padding: 0
   },
@@ -55,7 +54,7 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   useEffect(() => {
     Axios.get('/api/response', {params: {testType: testUrl, testId: id}})
       .then(res => setResponse(res.data), reason => setError(reason.response.data));
-  }, [id])
+  }, [id, testUrl])
 
   // Checkbox methods
   const handleSelectAll = (event: any) => {

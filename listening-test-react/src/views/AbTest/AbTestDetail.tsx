@@ -47,7 +47,7 @@ export const AbTestDetail = observer(function () {
         () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', examples: [], survey: [], items: undefined}));
-  }, []);
+  }, [id]);
 
   function addExample() {
     if (!tests.items) tests.items = [];

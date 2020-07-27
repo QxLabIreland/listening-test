@@ -40,7 +40,7 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
       .then((res) => setTests(observable(res.data)), () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', items: []}));
-  }, []);
+  }, [id, testUrl]);
 
   const handleSubmit = () => {
     // Validate if all examples have been added audios
