@@ -38,6 +38,7 @@ class AbTestResponsesDownload(BaseHandler):
         # Set build csv and write
         is_header_writen = False
         for row in data:
+            row['examples'] = [x['example'] for x in row['items']]
             if not is_header_writen:
                 # Questions header
                 header_list = ['Name', 'Date'] + [x['question'] for x in row['survey']]
@@ -53,17 +54,18 @@ class AbTestResponsesDownload(BaseHandler):
 
             # Build three different lists of data
             base_list = [row['name'], row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
-            survey_value_list = [x['value'] if 'value' in x else '' for x in row['survey']]
+            survey_value_list = [(x['value'] if x['value'] else '') if 'value' in x else '' for x in row['survey']]
             example_answer_list = []
             for x in row['examples']:
                 # answer and comment become questions list
-                if 'questions' in x:
-                    ex_qu_dict = x['questions']
+                if 'fields' in x:
+                    ex_qu_dict = x['fields']
                     example_answer_list.append(ex_qu_dict[0]['value'] if len(ex_qu_dict) > 0 else '')
                     # Example tests have a comment field after answer
                     example_answer_list.append(ex_qu_dict[1]['value'] if len(ex_qu_dict) > 1 else '')
                 else:
-                    example_answer_list.append(['', ''])
+                    example_answer_list.append('')
+                    example_answer_list.append('')
 
             # Append these three list and write
             self.write(','.join(base_list + survey_value_list + example_answer_list) + '\n')
