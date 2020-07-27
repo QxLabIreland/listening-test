@@ -145,7 +145,7 @@ const AbTestExCard = observer(function ({v, i, deleteExample}: {v: ItemExampleMo
       <span>Example {i + 1}</span>
       <TagsGroup value={v.tags} onChange={newTags => v.tags = newTags}/>
     </div>} action={<>
-      <ExampleSettingsDialog settings={v.settings} onConfirm={settings => v.settings = settings}/>
+      {/*<ExampleSettingsDialog settings={v.settings} onConfirm={settings => v.settings = settings}/>*/}
       <IconButton onClick={() => deleteExample(i)}><Icon>delete</Icon></IconButton>
     </>}/>
     <CardContent>
