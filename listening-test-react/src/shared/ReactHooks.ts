@@ -1,4 +1,4 @@
-import {RefObject, useEffect, useRef, useState} from "react";
+import {RefObject, useEffect, useState} from "react";
 
 export function useScrollToView(viewRef: RefObject<any> = null) {
   // Scroll properties

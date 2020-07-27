@@ -24,7 +24,6 @@ import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import DraggableZone from "../../shared/components/DraggableZone";
 import {uuid} from "uuidv4";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {ValidateDetailError} from "../../shared/ReactTools";
 
 export const AbTestDetail = observer(function () {

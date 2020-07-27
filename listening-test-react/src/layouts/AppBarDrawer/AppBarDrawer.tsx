@@ -12,7 +12,7 @@ import SettingsPage from "../../views/SettingsPage";
 import ListItemNavLink from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import Axios from "axios";
-import TestListView from "../../views/shared-views/TestListView";
+import TestListPage from "../../views/shared-views/TestListPage";
 import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
 
@@ -82,22 +82,22 @@ export default function AppBarDrawer(props: any) {
         </Route>
         <Route exact path={`${path}/ab-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListView testUrl="ab-test"/>
+            <TestListPage testUrl="ab-test"/>
           </AppBarLayout>
         </Route>
         <Route exact path={`${path}/acr-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListView testUrl="acr-test"/>
+            <TestListPage testUrl="acr-test"/>
           </AppBarLayout>
         </Route>
         <Route exact path={`${path}/mushra-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListView testUrl="mushra-test"/>
+            <TestListPage testUrl="mushra-test"/>
           </AppBarLayout>
         </Route>
         <Route exact path={`${path}/hearing-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListView testUrl="hearing-test"/>
+            <TestListPage testUrl="hearing-test"/>
           </AppBarLayout>
         </Route>
         <Route exact path={`${path}/settings`}>

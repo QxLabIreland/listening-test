@@ -4,12 +4,12 @@ import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {AbSurveyPage} from "../views/AbTest/AbSurveyPage";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
 import {SurveyPage} from "../views/shared-views/SurveyPage";
 import Toolbar from "@material-ui/core/Toolbar";
-import {Button, Typography} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
