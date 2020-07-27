@@ -45,7 +45,7 @@ function createOscillatorAndGain(volume: number, frequency: number): GainAndOsci
   return {oscillator, gainNode};
 }
 
-function disposeGo(go: GainAndOscillator) {
+function disposeGo(go: GainAndOscillator): null {
   if (go?.oscillator) {
     go.oscillator.stop();
     go.oscillator.disconnect();
@@ -105,7 +105,7 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
 })
 
 const GainNodeBar = observer(function (props: { audio: AudioFileModel, gainNode: GainNode }) {
-  const handleSliderChange = (_, nv: number | number[]) => {
+  const handleSliderChange = (_: any, nv: number | number[]) => {
     props.audio.value = (+nv).toString();
     if (!props.gainNode) return;
     const gainDb = (+nv - 1) * 100;

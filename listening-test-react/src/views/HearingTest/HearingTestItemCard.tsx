@@ -1,17 +1,16 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
+import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {Box, CardContent, Slider, TextField, Tooltip, Typography} from "@material-ui/core";
+import {CardContent, Slider, TextField, Tooltip, Typography} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import {FileDropZone} from "../../shared/components/FileDropZone";
 import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {labelInputStyle, TestItemQuestionCard} from "../components/TestItemQuestionCard";
@@ -20,7 +19,7 @@ export const HearingTestItemCard = observer(function (props: { value: TestItemMo
   const {value, onDelete} = props;
 
   // Label methods
-  const handleLabelChange = (event) => {
+  const handleLabelChange = (event: any) => {
     value.title = event.target.value;
   }
 
@@ -44,7 +43,7 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
   const handleDelete = (index: number) => example.audios.splice(index, 1);
 
   // Setting submitted
-  const handleExampleSettingChange = (settings) => example.settings = settings;
+  const handleExampleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
 
   return <Card>
     <CardHeader style={{paddingBottom: 0}} title={title} action={

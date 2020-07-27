@@ -18,9 +18,9 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
     allRefs: sample ? [...refs, sampleRef] : refs
   });
 
-  const handlePlay = (v) => {
+  const handlePlay = (v: AudioFileModel) => {
     const {allAudio, allRefs} = includeAll();
-    allAudio.forEach((a, i) => {
+    allAudio.forEach((a: AudioFileModel, i: number) => {
       // Adjust properties
       allAudio[i].isPlaying = a === v;
       allRefs[i].current.volume = a === v ? 1 : 0;
@@ -32,7 +32,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const handlePause = () => {
     // Deconstruction for all including reference audio
     const {allAudio, allRefs} = includeAll();
-    allRefs.forEach((_, i) => {
+    allRefs.forEach((_: AudioFileModel, i: number) => {
       allAudio[i].isPlaying = false;
       allRefs[i].current.pause();
       // State that if it is ready
@@ -57,7 +57,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
 
 // This component exposes the audio to outside. Control audio with ref attribute.
 export const AudioButton = forwardRef<HTMLAudioElement, {
-  audio: AudioFileModel, onPlay, onPause, onTimeUpdate?, settings?: ItemExampleSettingsModel, children?
+  audio: AudioFileModel, onPlay: (v: AudioFileModel) => void, onPause: () => void, onTimeUpdate?: () => void, settings?: ItemExampleSettingsModel, children?: any
 }>(function (props, ref) {
   const {audio, onTimeUpdate, onPlay, onPause, settings} = props;
   const [playedTimes, setPlayedTimes] = useState(0);
@@ -89,15 +89,15 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number }) {
   const {refs, sampleRef, currentTime} = props;
 
-  const handleSliderLabelFormat = (num) => {
+  const handleSliderLabelFormat = (num: number) => {
     return isNaN(num) ? 0 : num.toFixed(0) + 's'
   }
 
-  const dragSlider = (event, newValue) => {
+  const dragSlider = (event: any, newValue: number | number[]) => {
     // Set all audios time
-    refs.forEach(r => r.current.currentTime = newValue ? newValue : 0);
+    refs.forEach(r => r.current.currentTime = newValue ? Number(newValue) : 0);
     // Somethings there is no sample(reference)
-    if (sampleRef && sampleRef.current) sampleRef.current.currentTime = newValue ? newValue : 0;
+    if (sampleRef && sampleRef.current) sampleRef.current.currentTime = newValue ? Number(newValue) : 0;
   }
 
   if (!refs[0]) return null;

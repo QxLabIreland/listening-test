@@ -78,7 +78,7 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
     scrollToView();
   }
 
-  function deleteItem(index) {
+  function deleteItem(index: number) {
     tests.items.splice(index, 1);
   }
 

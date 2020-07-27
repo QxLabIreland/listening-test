@@ -1,5 +1,5 @@
 export function required(message?: string) {
-  return (value, errors, name): boolean => {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     let condition: boolean;
     // Required works differently when type is boolean, number, object
     switch (typeof value) {
@@ -21,7 +21,7 @@ export function required(message?: string) {
 }
 
 export function maxLength(num: number, message?: string) {
-  return (value, errors, name): boolean => {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     // If the email not a string, continue validate
     if (typeof value !== 'string') return false;
     // Validate
@@ -31,7 +31,7 @@ export function maxLength(num: number, message?: string) {
   }
 }
 export function minLength(num: number, message?: string) {
-  return (value, errors, name): boolean => {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     // If the email not a string, continue validate
     if (typeof value !== 'string') return false;
     // Validate
@@ -42,7 +42,7 @@ export function minLength(num: number, message?: string) {
 }
 
 export function email(message?: string) {
-  return (value, errors, name): boolean => {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     // If the email not a string, continue validate
     if (typeof value !== 'string') return false;
     // Validate
@@ -53,7 +53,7 @@ export function email(message?: string) {
 }
 
 export function mustBeTrue(message?: string) {
-  return (value, errors, name): boolean => {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     const condition: boolean = !value;
     if (condition) errors[name] = message ? message : 'Invalid input';
     return condition;
@@ -61,7 +61,7 @@ export function mustBeTrue(message?: string) {
 }
 
 export function pipeValidator(fields: Field) {
-  return values => {
+  return (values: any) => {
     const errors: any = {};
     // For each field
     for (const key in fields) {
@@ -80,6 +80,6 @@ export function pipeValidator(fields: Field) {
 // Value means what value will use type in. Errors means what error will be added. Name is the field name
 // About return. If there is an error, should return true. The return means are there errors?
 interface Field {
-  [key: string]: ((value, errors, name) => boolean)[]
+  [key: string]: ((value: any, errors: {[key: string]: string}, name: string) => boolean)[]
 }
 

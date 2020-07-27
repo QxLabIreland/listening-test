@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {PropsWithChildren, useState} from "react";
 import {Icon, IconButton, Snackbar} from "@material-ui/core";
 import {GlobalSnackbar} from "../ReactContexts";
 
-export default function GlobalSnackbarProvider(props) {
+export default function GlobalSnackbarProvider(props: PropsWithChildren<any>) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<any>({});
 
@@ -11,7 +11,7 @@ export default function GlobalSnackbarProvider(props) {
     setOpen(false);
   };
 
-  const openSnackbar = (message, time = 6_000) => {
+  const openSnackbar = (message: string, time = 6_000) => {
     setOptions({message, time});
     setOpen(true);
   }

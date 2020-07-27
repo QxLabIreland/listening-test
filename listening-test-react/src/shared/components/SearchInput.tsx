@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function SearchInput (props) {
+export default function SearchInput (props: any) {
   const { className, onChange, style, ...rest } = props;
 
   const classes = useStyles();

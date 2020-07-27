@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {Prompt, useHistory, useParams} from 'react-router';
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
-import {CardContent, TextField} from "@material-ui/core";
+import {Box, CardContent, FormControlLabel, Switch, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,11 +18,14 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import {useScrollToView} from "../../shared/ReactHooks";
 import {SurveyControl} from "../../shared/components/SurveyControl";
-import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
+import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
 import TestSettingsDialog from "../shared-views/TestSettingsDialog";
 import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import DraggableZone from "../../shared/components/DraggableZone";
+import {uuid} from "uuidv4";
+import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {ValidateDetailError} from "../../shared/ReactTools";
 
 export const AbTestDetail = observer(function () {
   const {id} = useParams();
@@ -48,21 +51,28 @@ export const AbTestDetail = observer(function () {
   }, []);
 
   function addExample() {
-    tests.examples.push({
-      fields: [
-        {type: SurveyControlType.radio, question: 'Which one is your preference?', options: ['A', 'B'], value: ''},
-        {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: ''}
-      ],
-      audios: [null, null]
-    });
+    if (!tests.items) tests.items = [];
+    tests.items.push({id: uuid(), type: TestItemType.example, example: {
+        fields: [
+          {type: SurveyControlType.radio, question: 'Which one is your preference?', options: ['A', 'B'], value: null, required: true},
+          {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: true}
+        ],
+        audios: [null, null]
+      }});
     scrollToView();
   }
 
-  function deleteExample(index) {
-    tests.examples.splice(index, 1);
+  function deleteExample(index: number) {
+    tests.items.splice(index, 1);
   }
 
   const handleSubmit = () => {
+    // Validate if all examples have been added audios
+    const validationResult = ValidateDetailError(tests);
+    if (validationResult) {
+      openDialog(validationResult);
+      return;
+    }
     if (+id === 0) {
       requestServer(true);
     } else Axios.get('/api/response-count', {params: {testId: id, testType: 'ab-test'}}).then(res => {
@@ -86,17 +96,15 @@ export const AbTestDetail = observer(function () {
   }
 
   const handleReorder = (index: number, newIndex: number) => {
-    const value = tests.examples.splice(index, 1);
+    const value = tests.items.splice(index, 1);
     // Insert and delete original
-    tests.examples.splice(newIndex, 0, ...value);
+    tests.items.splice(newIndex, 0, ...value);
   }
 
-  const ActionsArea = () => <Grid item xs={12} container alignItems="center" spacing={1}>
-    <Grid item style={{flexGrow: 1}}/>
+  const ActionsArea = () => <Grid item xs={12} container alignItems="center" justify="flex-end" spacing={1}>
     <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
     <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
-  </Grid>;
-
+  </Grid>
 
   return <Grid container spacing={2} justify="center" alignItems="center">
     <Prompt when={!isSubmitted}
@@ -114,10 +122,10 @@ export const AbTestDetail = observer(function () {
       </Grid>
       <Grid item xs={12}><SurveySetUpView items={tests.survey}/></Grid>
 
-      {tests.examples?.map((v, i) =>
+      {tests.items?.map((v, i) =>
         <Grid item xs={12} key={i} ref={viewRef}>
-          <DraggableZone index={i} length={tests.examples.length} onReorder={handleReorder}>
-            <AbTestExCard v={v} i={i} deleteExample={deleteExample}/>
+          <DraggableZone index={i} length={tests.items.length} onReorder={handleReorder}>
+            <AbTestExCard v={v.example} i={i} deleteExample={deleteExample}/>
           </DraggableZone>
         </Grid>
       )}
@@ -153,6 +161,11 @@ const AbTestExCard = observer(function ({v, i, deleteExample}: {v: ItemExampleMo
           <FileDropZone fileModel={v.audioRef} onChange={fm => v.audioRef = fm}
                         label="Reference (Optional)"/></Grid>
         {v.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
+          <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <FormControlLabel label="Required" control={
+              <Switch checked={q.required} onChange={e => q.required = e.target.checked}/>
+            }/>
+          </Box>
           <SurveyControl control={q} label={'Your question ' + (qi + 1)}/>
         </Grid>)}
       </Grid>

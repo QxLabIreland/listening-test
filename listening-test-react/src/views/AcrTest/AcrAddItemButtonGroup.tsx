@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
+import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 
 export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void, testUrl?: TestUrl }) {
   const {onAdd, testUrl} = props;
@@ -48,7 +49,7 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: T
     onAdd(newItem);
   }
 
-  const handleQuestionAdd = question => {
+  const handleQuestionAdd = (question: SurveyControlModel) => {
     // Bad solution for scrolling
     const timer = setTimeout(() => {
       onAdd({

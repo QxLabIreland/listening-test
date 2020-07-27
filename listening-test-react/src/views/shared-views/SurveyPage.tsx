@@ -40,7 +40,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     if (questionnaire?.settings?.isIndividual) setOpenedPanel(-1);
   }, [questionnaire])
 
-  function handlePanelChange(v, newIndex: number) {
+  function handlePanelChange(v: boolean, newIndex: number) {
     const validationError = SliderItemValidateError(questionnaire.items[openedPanel]);
     if (validationError) openDialog(validationError, 'Required');
     // Set which panel will open, if validation pass.

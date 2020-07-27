@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {PropsWithChildren, useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {GlobalDialog} from "../ReactContexts";
 
 
-export default function GlobalDialogProvider(props) {
+export default function GlobalDialogProvider(props: PropsWithChildren<any>) {
   const [options, setOptions] = useState<any>({});
   const [open, setOpen] = useState(false);
 
-  const openGlobalDialog = (description, title, onDismiss, onConfirm) => {
+  const openGlobalDialog = (description: string, title: string, onDismiss: ()=>void, onConfirm: ()=>void) => {
     setOptions({description, title, onDismiss, onConfirm});
     setOpen(true);
   }

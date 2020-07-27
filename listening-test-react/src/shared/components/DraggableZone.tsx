@@ -5,27 +5,27 @@ export default function DraggableZone({children, index, length, onReorder, dragg
   index: number, length: number, onReorder?: (index: number, newIndex: number) => void, draggable?: boolean
 }>) {
   // Draggable item handlers
-  const handleDragStart = (event) => {
+  const handleDragStart = (event: any) => {
     // event.target.style.opacity = 0;
     // event.dataTransfer;
   }
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     // event.target.style.opacity = 1;
   }
-  const handleDrag = event => {
+  const handleDrag = (event: any) => {
   }
 
   // Drop container handlers
-  const handleDragEnter = event => {
+  const handleDragEnter = (event: any) => {
     event.target.style.border = '2px solid green';
   }
-  const handleDragLeave = event => {
+  const handleDragLeave = (event: any) => {
     event.target.style.border = 'none';
   }
   const handleDropOver = (event: DragEvent) => {
     event.dataTransfer.dropEffect = 'move';
   }
-  const handleDrop = event => {
+  const handleDrop = (event: any) => {
     console.log(event)
     if (onReorder) onReorder(index, index);
     event.target.style.border = 'none';
