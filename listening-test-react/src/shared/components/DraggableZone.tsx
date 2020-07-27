@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, DragEvent} from "react";
+import React, {DragEvent, PropsWithChildren} from "react";
 import {Icon, IconButton, Tooltip} from "@material-ui/core";
 
 export default function DraggableZone({children, index, length, onReorder, draggable}: PropsWithChildren<{

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function TestListView({testUrl}: { testUrl: TestUrl }) {
+export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
   const classes = useStyles();
   const [data, setData] = useState<BasicTestModel[]>(null);
