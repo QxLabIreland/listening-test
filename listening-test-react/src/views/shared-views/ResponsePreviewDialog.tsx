@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PropsWithChildren} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 import IconButton from "@material-ui/core/IconButton";
@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ResponsePreviewDialog(props) {
+export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

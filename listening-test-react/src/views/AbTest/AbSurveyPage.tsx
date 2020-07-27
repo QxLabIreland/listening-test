@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -14,85 +14,120 @@ import {AbTestModel} from "../../shared/models/AbTestModel";
 import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
-import {Box} from "@material-ui/core";
-import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
+import {Box, MobileStepper} from "@material-ui/core";
+import {RenderSurveyControl, SurveyControlValidate} from "../../shared/components/RenderSurveyControl";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {isDevMode} from "../../shared/ReactTools";
-import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
+import {GlobalDialog} from "../../shared/ReactContexts";
+import {TestItemModel} from "../../shared/models/BasicTestModel";
+import {TestItemType} from "../../shared/models/EnumsAndTypes";
 
 export const AbSurveyPage = observer(function (props: { value?: AbTestModel }) {
   const {value} = props;
-  const [theTest, setTheTest] = useState<AbTestModel>(value ? value : null);
+  const [abTest, setTheTest] = useState<AbTestModel>(value ? value : null);
   const [error, setError] = useState(undefined);
+  // Default is to open description and survey
   const [openedPanel, setOpenedPanel] = useState(-1);
   const {id} = useParams();
   const history = useHistory();
 
+  const openDialog = useContext(GlobalDialog);
+  const isIndividual = abTest?.settings?.isIndividual;
+  // const [startTime] = useState<{ [key: number]: number }>({});
+
   useEffect(() => {
     if (!value) Axios.get<AbTestModel>('/api/task/ab-test', {params: {_id: id}})
-      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.data))
+      .then(res => setTheTest(observable(res.data)), reason => setError(reason.response.data));
   }, [id]);
 
-  function handlePanelChange(v, index) {
-    if (v) setOpenedPanel(index);
-    else setOpenedPanel(null);
+  function handlePanelChange(v: boolean, newIndex: number) {
+    const validationError = openedPanel < 0 ? AbValidateSurveyError(abTest.survey) : AbValidateError(abTest.items[openedPanel]);
+    if (validationError) openDialog(validationError, 'Validation error');
+    // Set which panel will open, if validation pass.
+    else if (v) {
+      // // Timing process
+      // if (abTest.settings?.isTimed) {
+      //   if (abTest.items[newIndex]) startTime[newIndex] = new Date().getTime();
+      //   // Add duration for current item
+      //   if (abTest.items[openedPanel])
+      //     abTest.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+      // }
+      // useState is async method, so put it at the end
+      setOpenedPanel(newIndex);
+    }
+    // If the survey setting is individual question, DO NOTHING
+    else if (!abTest.settings?.isIndividual) setOpenedPanel(null);
   }
 
   function handleSubmit() {
-    Axios.post('/api/task/ab-test', toJS(theTest)).then(() => {
-      if (!isDevMode()) history.replace('/task/finish');
+    AbValidateSurveyError(abTest.survey);
+    // Check all items' validation before submission
+    for (const item of abTest.items) {
+      const validationError = AbValidateError(item);
+      // If there is no error, check the next item
+      if (!validationError) continue;
+      openDialog(validationError, item.title + ' Required');
+      return;
+    }
+    // // Record the last item time
+    // if (abTest.settings?.isTimed)
+    //   abTest.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+    // Start request
+    if (!value) Axios.post('/api/task/ab-test', toJS(abTest)).then(() => {
+      history.replace('/task/finish');
     });
   }
 
-  return <>{theTest ? <Grid container spacing={3} direction="column">
-
-    <Grid item xs={12}><Box pt={6}>
-      <Typography variant="h3" gutterBottom>{theTest.name}</Typography>
-      <Typography variant="body1" gutterBottom>{theTest.description}</Typography>
-    </Box></Grid>
+  return <Box pt={6}>{abTest ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
+      <Typography variant="h3" gutterBottom>{abTest.name}</Typography>
+    </Grid>
+    {/*When the title and description doesn't show*/}
+    <Grid item xs={12} hidden={isIndividual && openedPanel !== -1}>
+      <Typography variant="body1" gutterBottom>{abTest.description}</Typography>
+    </Grid>
+    <Grid item xs={12} hidden={isIndividual && openedPanel !== -1}>
       <ExpansionPanel expanded={openedPanel === -1} onChange={(_, v) => handlePanelChange(v, -1)}>
         <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
           <Typography variant="h6">A survey before test</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <RenderSurveyControls items={theTest.survey}/>
+          <RenderSurveyControls items={abTest.survey}/>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Button size="small" color="primary"
-                  onClick={() => setOpenedPanel(0)}>Next</Button>
+                  onClick={() => handlePanelChange(true, 0)}>Next</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </Grid>
-    {theTest.examples.map((ex, i) =>
-      <Grid item xs={12} key={i}>
+    {abTest.items.map((v, i) =>
+      <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
-          <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>} aria-controls="panel1a-content">
+          <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
+                                 aria-controls="panel1a-content">
             <Typography variant="h6" style={{marginLeft: 8}}>Example {i + 1}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container spacing={3}>
-              <AbAudioController value={ex} active={openedPanel === i}/>
+              <AbAudioController value={v.example} active={openedPanel === i}/>
               <Grid item>
-                <RenderSurveyControls items={ex.fields}/>
+                <RenderSurveyControls items={v.example.fields}/>
               </Grid>
             </Grid>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
-            {i !== theTest.examples.length - 1 &&
-            <Button size="small" color="primary"
-                    onClick={() => handlePanelChange(true, i + 1)}>Next</Button>}
+            {i !== abTest.items.length - 1
+              ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
+              : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+            }
           </ExpansionPanelActions>
         </ExpansionPanel>
       </Grid>
     )}
-
-    <Grid item xs={12} hidden={!!value}>
-      <Grid container justify="flex-end">
-        <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-      </Grid>
+    <Grid item xs={12}>
+      <MobileStepper variant="text" steps={abTest.items.length} position="static" activeStep={openedPanel}
+        nextButton={null} backButton={null}/>
     </Grid>
-  </Grid> : <Loading error={!!error} message={error}/>}</>
+  </Grid> : <Loading error={!!error} message={error}/>}</Box>
 })
 
 const RenderSurveyControls = observer(function (props: { items: SurveyControlModel[] }) {
@@ -108,3 +143,23 @@ const RenderSurveyControls = observer(function (props: { items: SurveyControlMod
   </Grid>
 })
 
+function AbValidateError(item: TestItemModel): string {
+  if (!item) return null;
+  if (item.type === TestItemType.example) {
+    // Make sure ab test questions have been answered
+    for (const a of item.example.fields) {
+      const error = SurveyControlValidate(a);
+      if (error) return error;
+    }
+    return null;
+  }
+  else return null;
+}
+
+function AbValidateSurveyError(questions: SurveyControlModel[]): string {
+  for (const a of questions) {
+    const error = SurveyControlValidate(a);
+    if (error) return error;
+  }
+  return null;
+}

@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import React, {useRef} from "react";
-import {CardContent, Grid} from "@material-ui/core";
+import {Box, CardContent, FormControlLabel, Grid, Icon, IconButton, Switch} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {useScrollToView} from "../../shared/ReactHooks";
@@ -14,12 +14,12 @@ export const SurveySetUpView = observer(function (props: {items: SurveyControlMo
   const viewRef = useRef(null);
   const {scrollToView} = useScrollToView(viewRef);
 
-  const handleQuestionAdd = question => {
+  const handleQuestionAdd = (question: SurveyControlModel) => {
     scrollToView();
     items.push(question);
   }
 
-  const handleDelete = (control) => items.splice(items.indexOf(control), 1)
+  const handleDelete = (control: SurveyControlModel) => items.splice(items.indexOf(control), 1)
 
   return <Card>
     <CardHeader title="Create a survey before the test"/>
@@ -27,7 +27,14 @@ export const SurveySetUpView = observer(function (props: {items: SurveyControlMo
       <Grid container spacing={2}>
         {items.map((c, i) =>
           <Grid item xs={12} key={i} ref={viewRef} style={{scrollMarginTop: 100}}>
-            <SurveyControl control={c} label={'Your question ' + (i+1)} onDelete={handleDelete}/>
+            <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <FormControlLabel label="Required" control={
+                <Switch checked={c.required}
+                        onChange={e => c.required = e.target.checked}/>}
+              />
+              <IconButton onClick={() =>handleDelete(c)}><Icon>delete</Icon></IconButton>
+            </Box>
+            <SurveyControl control={c} label={'Your question ' + (i+1)}/>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>

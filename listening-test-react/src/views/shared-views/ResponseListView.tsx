@@ -48,8 +48,8 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   // Prefix is the router prefix of a detail
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [responses, setResponse] = useState(null);
-  const [error, setError] = useState(undefined);
+  const [responses, setResponse] = useState<any[]>(null);
+  const [error, setError] = useState<any>(undefined);
   const {id} = useParams();
 
   useEffect(() => {
@@ -58,25 +58,25 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   }, [id])
 
   // Checkbox methods
-  const handleSelectAll = event => {
+  const handleSelectAll = (event: any) => {
     currentPageList().forEach(res => res.selected = event.target.checked);
     setResponse([...responses]);
   }
-  const handleSelectOne = (event, res) => {
+  const handleSelectOne = (event: any, res: any) => {
     res.selected = event.target.checked;
     setResponse([...responses]);
   }
   // Get a list of items for current page
-  const currentPageList = () => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const currentPageList = (): any[] => responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   // Page handle
-  const handlePageChange = (event, page) => setPage(page);
-  const handleRowsPerPageChange = event => setRowsPerPage(event.target.value);
+  const handlePageChange = (event: any, page: number) => setPage(page);
+  const handleRowsPerPageChange = (event: any) => setRowsPerPage(event.target.value);
 
   // Batch delete checked items
   const handleDelete = () => {
     const deletedList = responses.filter(r => r.selected).map(r => r._id);
     Axios.delete('/api/response', {params: {testType: testUrl, testId: id}, data: deletedList})
-      .then(() => setResponse(responses.filter(r => !r.selected)))
+      .then(() => setResponse(responses.filter(r => !r.selected)));
   }
   const handleDownload = () => downloadFileTool({
     url: '/api/csv-download/' + testUrl, params: {testId: id}
@@ -98,8 +98,8 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
-                <Checkbox checked={currentPageList().every(value => value.selected)} color="primary"
-                          indeterminate={currentPageList().some(value => value.selected) && !currentPageList().every(value => value.selected)}
+                <Checkbox checked={currentPageList().every(v => v.selected)} color="primary"
+                          indeterminate={currentPageList().some(v => v.selected) && !currentPageList().every(v => v.selected)}
                           onChange={handleSelectAll}/>
               </TableCell>
               <TableCell>Test Name</TableCell>

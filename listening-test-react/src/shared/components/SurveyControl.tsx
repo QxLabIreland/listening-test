@@ -8,10 +8,9 @@ import {observer} from "mobx-react";
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
-  label?: string,
-  onDelete?: (control) => void
+  label?: string
 }) {
-  const {control, onDelete} = props;
+  const {control} = props;
   const {label = control.type === SurveyControlType.description ? 'Your description' : 'Your question'} = props;
 
   // Render second field for the control
@@ -36,9 +35,6 @@ export const SurveyControl = observer(function (props: {
       <TextField fullWidth variant="filled" style={{flexGrow: 1}} label={label} value={control.question}
                  onChange={e => control.question = e.target.value}
                  onFocus={event => event.target.select()}/>
-      {onDelete && <span style={{paddingLeft: 16}}>
-        <IconButton size="small" onClick={() => onDelete(control)}><Icon>delete</Icon></IconButton>
-      </span>}
     </Box>
     {switchControlType()}
   </>
@@ -52,14 +48,14 @@ const SurveyOptions = observer(function (props: { options: string[], type: Surve
     options.splice(index, 1);
   }
 
-  const handleAdd = (event) => {
+  const handleAdd = (event: any) => {
     setAutoFocus(true);
     event.preventDefault();
     event.stopPropagation();
     options.push('Option ' + (options.length + 1));
   }
 
-  const handleChange = (newValue, i) => {
+  const handleChange = (newValue: string, i: number) => {
     options[i] = newValue;
   }
 

@@ -56,7 +56,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
 
-  function handleCheckbox(event) {
+  function handleCheckbox(event: any) {
     // To array for manipulation
     const values: string[] = control.value ? control.value.split(',') : [];
     if (event.target.checked) values.push(event.target.name)

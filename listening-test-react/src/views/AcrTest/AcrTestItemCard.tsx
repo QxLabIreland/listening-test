@@ -1,5 +1,5 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
+import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
@@ -23,7 +23,7 @@ export const AcrTestItemCard = observer(function (props: {
   const {value, onDelete} = props;
 
   // Label methods
-  const handleLabelChange = (event) => {
+  const handleLabelChange = (event: any) => {
     value.title = event.target.value;
   }
 
@@ -67,7 +67,7 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
   }
 
   // Setting submitted
-  const handleSettingChange = (settings) => example.settings = settings;
+  const handleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
 
   return <Card>
     <CardHeader style={{paddingBottom: 0}} title={title} action={

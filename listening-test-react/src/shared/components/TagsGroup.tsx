@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export const TagsGroup = observer((props: {value: string, onChange: (value) => void}) => {
+export const TagsGroup = observer((props: {value: string, onChange: (value: string) => void}) => {
   const classes = useStyles();
   const [newLabel, setNewLabel] = useState('Add Tag');
   const {value, onChange} = props;
@@ -32,7 +32,7 @@ export const TagsGroup = observer((props: {value: string, onChange: (value) => v
     }
   }
 
-  const handleLabelDelete = (index) => {
+  const handleLabelDelete = (index: number) => {
     const tagsArr = value.split(',');
     tagsArr.splice(index, 1);
     onChange(tagsArr.toString());

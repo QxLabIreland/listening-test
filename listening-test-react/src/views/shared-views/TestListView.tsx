@@ -77,7 +77,7 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
     <Grid container spacing={2}>
       <Grid item container xs={12}>
         <Grid item xs={12} md={6}>
-          <SearchInput placeholder="Search tests" onChange={event => setSearchStr(event.target.value)}/>
+          <SearchInput placeholder="Search tests" onChange={(event: any) => setSearchStr(event.target.value)}/>
         </Grid>
         <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
           <span style={{flexGrow: 1}}/>
@@ -148,7 +148,7 @@ export default function TestListView({testUrl}: { testUrl: TestUrl }) {
   )
 }
 
-function ShareIconButton({url, ...rest}) {
+function ShareIconButton({url, ...rest}: any) {
   const [open, setSnackbarOpen] = useState(false);
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {

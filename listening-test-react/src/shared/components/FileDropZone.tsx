@@ -6,7 +6,7 @@ import Axios from "axios";
 import {TagsGroup} from "./TagsGroup";
 import {observer} from "mobx-react";
 
-export const FileDropZone = observer((props: { onChange, fileModel?: AudioFileModel, label?: string, isTag?: boolean }) => {
+export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>void, fileModel?: AudioFileModel, label?: string, isTag?: boolean }) => {
   // Default label
   const {onChange, fileModel, label, isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
@@ -56,12 +56,12 @@ export const FileDropZone = observer((props: { onChange, fileModel?: AudioFileMo
     event.preventDefault();
   }
 
-  const handleTagsChange = (tags) => {
+  const handleTagsChange = (tags: string) => {
     fileModel.tags = tags;
     onChange(Object.assign({}, fileModel));
   }
 
-  const handleDelete = (event) => {
+  const handleDelete = (event: any) => {
     event.stopPropagation();
     onChange(null);
   }
