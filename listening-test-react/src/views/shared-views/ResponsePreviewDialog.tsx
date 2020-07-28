@@ -6,6 +6,7 @@ import {AppBar, Container, Icon} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -31,15 +32,16 @@ export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
     </IconButton>
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar position="static">
-      <Toolbar style={{display: 'flex'}}>
-        <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-          <Icon>close</Icon>
-        </IconButton>
-        <Typography variant="h6">
-          Response view (changed won't be saved)
-        </Typography>
-      </Toolbar>
+        <Toolbar style={{display: 'flex'}}>
+          <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+            <Icon>close</Icon>
+          </IconButton>
+          <Typography variant="h6">
+            Response view (changed won't be saved)
+          </Typography>
+        </Toolbar>
       </AppBar>
+      <CssBaseline />
       <Container maxWidth="md">
         {props.children}
       </Container>

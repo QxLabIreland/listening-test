@@ -5,7 +5,7 @@ import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {Box, Slider, Tooltip} from "@material-ui/core";
+import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
@@ -30,7 +30,7 @@ interface GainAndOscillator {
   gainNode: GainNode;
 }
 
-function createOscillatorAndGain(volume: number, frequency: number): GainAndOscillator {
+export function createOscillatorAndGain(volume: number, frequency: number): GainAndOscillator {
   // Create oscillator and gain nodes
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
@@ -45,7 +45,7 @@ function createOscillatorAndGain(volume: number, frequency: number): GainAndOsci
   return {oscillator, gainNode};
 }
 
-function disposeGo(go: GainAndOscillator): null {
+export function disposeOscillatorAndGain(go: GainAndOscillator): null {
   if (go?.oscillator) {
     go.oscillator.stop();
     go.oscillator.disconnect();
@@ -64,14 +64,14 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
 
   const handleButtonClick = (audio: AudioFileModel, index: number) => {
     if (audio.isPlaying) {
-      gos[index] = disposeGo(gos[index]);
+      gos[index] = disposeOscillatorAndGain(gos[index]);
       audio.isPlaying = false;
     }
     else {
       // Stop others first
       gos.forEach((v, i) => {
         if (i === index || !v?.oscillator) return;
-        gos[i] = disposeGo(v);
+        gos[i] = disposeOscillatorAndGain(v);
         props.value.audios[i].isPlaying = false;
       })
       // Create a Oscillator and Gain object
@@ -113,10 +113,6 @@ const GainNodeBar = observer(function (props: { audio: AudioFileModel, gainNode:
   }
 
   return <>
-    <div style={{height: 24}}>
-      {!!Number(props.audio.value) ? <Tooltip title="Done!"><Icon>check</Icon></Tooltip>
-      : <Tooltip title="Please drag sliders"><Icon style={{color: '#cccccc'}}>check</Icon></Tooltip>}
-    </div>
     <Box mb={2} mt={2} style={{height: 200}}>
     {/*<Grid container spacing={1} direction="column" justify="space-between">
       <Grid item><Icon>volume_down</Icon></Grid>
@@ -125,7 +121,7 @@ const GainNodeBar = observer(function (props: { audio: AudioFileModel, gainNode:
       </Grid>
       <Grid item><Icon>volume_up</Icon></Grid>
     </Grid>*/}
-    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01} valueLabelDisplay="auto"
+    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01}
             defaultValue={Number(props.audio.value)  ? +props.audio.value : props.audio.settings?.initVolume}
             onChange={handleSliderChange}/>
 

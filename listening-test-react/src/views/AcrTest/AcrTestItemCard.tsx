@@ -15,6 +15,7 @@ import {FileDropZone} from "../../shared/components/FileDropZone";
 import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {labelInputStyle, TestItemQuestionCard} from "../components/TestItemQuestionCard";
+import {TestItemTrainingCard} from "../components/TestItemTrainingCard";
 
 export const AcrTestItemCard = observer(function (props: {
   value: TestItemModel,
@@ -27,26 +28,31 @@ export const AcrTestItemCard = observer(function (props: {
     value.title = event.target.value;
   }
 
-  if (value.type === TestItemType.example || value.type === TestItemType.training) return (
+  if (value.type === TestItemType.example) return (
     <TestItemExampleCard example={value.example} title={
       <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
              onFocus={event => event.target.select()}/>
     } delButton={
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-    } isTraining={value.type === TestItemType.example}/>
+    }/>
   );
 
   else if (value.type === TestItemType.question) return <TestItemQuestionCard {...props}/>
+
+  else if (value.type === TestItemType.training) return <TestItemTrainingCard title={
+    <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
+           onFocus={event => event.target.select()}/>
+  } example={value.example} onDelete={onDelete}/>
+
   else return null;
 })
 
 const TestItemExampleCard = observer((props: React.PropsWithChildren<{
   example: ItemExampleModel,
   delButton: React.ReactNode,
-  title: React.ReactNode,
-  isTraining?: boolean
+  title: React.ReactNode
 }>) => {
-  const {example, delButton, title, isTraining = true} = props;
+  const {example, delButton, title} = props;
 
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
@@ -78,9 +84,9 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
     }/>
     <CardContent>
       <Grid container spacing={2}>
-        {isTraining && <Grid item xs={12}>
+        <Grid item xs={12}>
           <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
-        </Grid>}
+        </Grid>
 
         {/*Description for this example*/}
         {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
@@ -88,10 +94,10 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{
         </Grid>)}
 
         {/*Reference place*/}
-        {isTraining && <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4}>
           <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
                         label="Reference (Optional)"/>
-        </Grid>}
+        </Grid>
         {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
           <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
         </Grid>)}

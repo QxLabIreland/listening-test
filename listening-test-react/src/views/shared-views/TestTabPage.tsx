@@ -3,7 +3,6 @@ import {Box, Tab, Tabs} from "@material-ui/core";
 import {useHistory, useLocation, useParams} from "react-router";
 import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
-import {AbTestDetail} from "../AbTest/AbTestDetail";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
 
@@ -34,7 +33,7 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
   // Render correct Detail Componets.
   const renderDetail = () => {
     switch (testUrl) {
-      case 'ab-test': return <AbTestDetail/>
+      case 'ab-test':
       case 'acr-test':
       case 'mushra-test':
       case 'hearing-test': return <TestDetailView testUrl={testUrl}/>

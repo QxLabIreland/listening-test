@@ -15,9 +15,10 @@ import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {AcrSurveyRenderItem, SliderItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
+import {AcrSurveyRenderItem, sliderItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
+import {AbSurveyRenderItem, questionedExValidateError} from "../AbTest/AbSurveyRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -41,7 +42,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   }, [questionnaire])
 
   function handlePanelChange(v: boolean, newIndex: number) {
-    const validationError = SliderItemValidateError(questionnaire.items[openedPanel]);
+    const validationError = validateError(questionnaire.items[openedPanel]);
     if (validationError) openDialog(validationError, 'Required');
     // Set which panel will open, if validation pass.
     else if (v) {
@@ -63,7 +64,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   function handleSubmit() {
     // Check all items' validation before submission
     for (const item of questionnaire.items) {
-      const validationError = SliderItemValidateError(item);
+      const validationError = validateError(item);
       // If there is no error, check the next item
       if (!validationError) continue;
       openDialog(validationError, item.title + ' Required');
@@ -81,13 +82,21 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   // Switch to right rendering item
   const renderItemByTestUrl = (item: TestItemModel, index: number) => {
     switch (testUrl) {
+      case "ab-test": return <AbSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "acr-test":
+      case "mushra-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "hearing-test": return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
+      default: return null;
+    }
+  }
+
+  const validateError = (item: TestItemModel): string => {
+    switch (testUrl) {
+      case "ab-test": return questionedExValidateError(item);
       case "acr-test":
       case "mushra-test":
-        return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "hearing-test":
-        return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
-      default:
-        return null;
+      case "hearing-test": return sliderItemValidateError(item);
+      default: return null;
     }
   }
 

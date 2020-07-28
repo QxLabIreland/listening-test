@@ -3,7 +3,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
-import {AbSurveyPage} from "../views/AbTest/AbSurveyPage";
 import {Redirect} from "react-router-dom";
 import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
@@ -37,7 +36,7 @@ export default function SurveyContainer() {
         <Suspense fallback={<Loading/>}>
           <Switch>
             <Route exact path={`${path}/finish`} component={SurveyFinishPage}/>
-            <Route exact path={`${path}/ab-test/:id`} component={AbSurveyPage}/>
+            <Route exact path={`${path}/ab-test/:id`}><SurveyPage testUrl="ab-test"/></Route>
             <Route exact path={`${path}/acr-test/:id`}><SurveyPage testUrl="acr-test"/></Route>
             <Route exact path={`${path}/mushra-test/:id`}><SurveyPage testUrl="mushra-test"/></Route>
             <Route exact path={`${path}/hearing-test/:id`}><SurveyPage testUrl="hearing-test"/></Route>
