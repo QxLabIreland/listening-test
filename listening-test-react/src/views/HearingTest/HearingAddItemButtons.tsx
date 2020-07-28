@@ -29,9 +29,13 @@ export const HearingAddItemButtons = observer(function (props: { onAdd: (type: T
             ]
           }
         }); break;
-      case TestItemType.sectionHeader: onAdd({
-          id: uuid(), type: TestItemType.sectionHeader, title: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        }); break;
+      case TestItemType.training: onAdd({
+        id: uuid(), type: TestItemType.training, title: 'Calibration for hardware volume (Click to edit this)', example: {
+          audios: [], fields: [
+            {type: SurveyControlType.description, question: 'Please listen and follow the instruction to calibrate your device.', value: null}
+          ]
+        }
+      }); break;
     }
   }
 
@@ -51,6 +55,9 @@ export const HearingAddItemButtons = observer(function (props: { onAdd: (type: T
   return <Box className={classes.buttonGroup}>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
       <Icon>add</Icon>Add Example
+    </Button>
+    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
+      <Icon>add</Icon>Add Calibration
     </Button>
     <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
   </Box>

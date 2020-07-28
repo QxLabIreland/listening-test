@@ -18,6 +18,7 @@ import {AcrTestItemCard} from "../AcrTest/AcrTestItemCard";
 import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
 import {HearingTestItemCard} from "../HearingTest/HearingTestItemCard";
 import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
+import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
 
 export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) {
   const {id} = useParams();
@@ -112,19 +113,21 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
   // Switch different card and button group through 'testType'
   const renderItemCard = (value: TestItemModel, index: number) => {
     switch(testUrl){
+      case "ab-test":
       case "acr-test":
-      case "mushra-test": return <AcrTestItemCard value={value} onDelete={() => deleteItem(index)}/>;
-      case "hearing-test": return <HearingTestItemCard value={value} onDelete={() => deleteItem(index)}/>;
+      case "mushra-test": return <AcrTestItemCard value={value} onDelete={() => deleteItem(index)}/>
+      case "hearing-test": return <HearingTestItemCard value={value} onDelete={() => deleteItem(index)}/>
       default: return null;
     }
   }
 
   const renderButtonGroup = () => {
     switch(testUrl){
+      case "ab-test": return <AbAddItemButtonGroup onAdd={addItem}/>
       case "acr-test":
-      case "mushra-test": return <AcrAddItemButtonGroup onAdd={addItem}/>;
-      case "hearing-test": return <HearingAddItemButtons onAdd={addItem}/>;
-      default: return null;
+      case "mushra-test": return <AcrAddItemButtonGroup onAdd={addItem}/>
+      case "hearing-test": return <HearingAddItemButtons onAdd={addItem}/>
+      default: return null
     }
   }
   return (

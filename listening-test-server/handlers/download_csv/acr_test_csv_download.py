@@ -78,7 +78,7 @@ def build_tags(item):
         return None
 
 
-def build_header(item):
+def build_header(item, suffix='rating'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'question' in item['questionControl']:
             return f'"{item["questionControl"]["question"] or ""}"'
@@ -86,14 +86,14 @@ def build_header(item):
             return ''
     elif item['type'] == 2:  # Example
         if 'example' in item:
-            return f'"{item["title"]} rating"'
+            return f'"{item["title"]} {suffix}"'
         else:
             return ''
     else:  # 0: Section header, 3 Training
         return None
 
 
-def build_row(item):
+def build_row(item, value_source='audios'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
             # Checkbox has comma, so we need "
@@ -104,9 +104,9 @@ def build_row(item):
         else:
             return ''
     elif item['type'] == 2:  # Example
-        if 'example' in item and 'audios' in item['example']:
+        if 'example' in item and value_source in item['example']:
 
-            return '"' + ','.join([a['value'] if 'value' in a else '' for a in item['example']['audios']]) + '"'
+            return '"' + ','.join([a['value'] if 'value' in a else '' for a in item['example'][value_source]]) + '"'
         else:
             return ''
     else:  # 0: Section header, 3 Training

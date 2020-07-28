@@ -2,16 +2,17 @@ import React, {CSSProperties, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl, SurveyControlValidate} from "../../shared/components/RenderSurveyControl";
+import {RenderSurveyControl, surveyControlValidateError} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
 import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
+import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
 
-export function SliderItemValidateError(item: TestItemModel): string {
+export function sliderItemValidateError(item: TestItemModel): string {
   if (item == null) return null;
-  else if (item.type === TestItemType.question) return SurveyControlValidate(item.questionControl);
+  else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
     for (const a of item.example.audios) {
       if (!a.value) return 'The example input (slider bar) is required'
@@ -29,7 +30,7 @@ export const AcrSurveyRenderItem = observer(function (props: { item: TestItemMod
     case TestItemType.example:
       return <RenderRatingExample value={item.example} {...rest}/>;
     case TestItemType.training:
-      return <RenderRatingExample value={item.example} isTraining={true} {...rest}/>;
+      return <RenderSurveyTraining value={item.example} {...rest}/>;
     default:
       return null;
   }
@@ -42,8 +43,8 @@ const RatingAreaStyle = {
   justifyContent: 'flex-end'
 } as CSSProperties;
 
-const RenderRatingExample = observer(function (props: { value: ItemExampleModel, isTraining?: boolean, active?: boolean }) {
-  const {value, isTraining = false, active} = props;
+const RenderRatingExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
+  const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
 
@@ -57,7 +58,7 @@ const RenderRatingExample = observer(function (props: { value: ItemExampleModel,
     </Grid>)}
 
     {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
-      {!isTraining && <AudioRatingBar audio={v}/>}
+      <AudioRatingBar audio={v}/>
       <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
                    onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
       {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}

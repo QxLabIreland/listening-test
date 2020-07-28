@@ -15,7 +15,7 @@ import {
 import React from "react";
 import {observer} from "mobx-react";
 
-export function SurveyControlValidate(control: SurveyControlModel): string {
+export function surveyControlValidateError(control: SurveyControlModel): string {
   // Pass description type
   if (control.type === SurveyControlType.description) return null;
   // Required checking

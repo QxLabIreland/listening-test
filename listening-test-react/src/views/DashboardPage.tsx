@@ -1,13 +1,8 @@
 import React from 'react';
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid} from "@material-ui/core";
 
 export default function DashboardPage() {
   return <Grid container spacing={3}>
-    <Grid item xs={12}>
-      <Typography variant="h5">
-        New Responses:
-      </Typography>
-    </Grid>
     <Grid item xs={12} md={6}>
       <Card>
         <CardHeader title="AB Test"/>
