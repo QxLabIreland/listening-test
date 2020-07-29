@@ -24,7 +24,7 @@ export const HearingSurveyRenderItem = observer(function (props: { item: TestIte
     case TestItemType.example:
       return <RenderVolumeExample value={item.example} {...rest}/>;
     case TestItemType.training:
-      return <RenderSurveyTraining value={item.example} {...rest}/>;
+      return <RenderSurveyTraining value={item.example} disableSlider {...rest}/>;
     default:
       return null;
   }

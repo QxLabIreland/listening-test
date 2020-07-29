@@ -1,5 +1,5 @@
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
+import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
@@ -11,7 +11,6 @@ import React, {useEffect, useState} from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {labelInputStyle, TestItemQuestionCard} from "../components/TestItemQuestionCard";
 import {TestItemTrainingCard} from "../components/TestItemTrainingCard";
@@ -44,14 +43,10 @@ export const HearingTestItemCard = observer(function (props: { value: TestItemMo
 const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>) => {
   const {example, onDelete, title} = props;
 
-  // Setting submitted
-  const handleExampleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
-
   return <Card>
     <CardHeader style={{paddingBottom: 0}} title={title} action={
       <span>
         <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-        <ExampleSettingsDialog settings={example.settings} onConfirm={handleExampleSettingChange}/>
       </span>
     }/>
     <CardContent>

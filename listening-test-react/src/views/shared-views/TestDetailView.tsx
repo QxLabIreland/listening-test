@@ -19,6 +19,7 @@ import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
 import {HearingTestItemCard} from "../HearingTest/HearingTestItemCard";
 import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
 import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
+import {testItemsValidateError} from "../../shared/ErrorValidators";
 
 export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) {
   const {id} = useParams();
@@ -45,7 +46,7 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
 
   const handleSubmit = () => {
     // Validate if all examples have been added audios
-    const validationResult = validateError(tests);
+    const validationResult = testItemsValidateError(tests);
     if (validationResult) {
       openDialog(validationResult);
       return;
@@ -74,23 +75,12 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
   }
 
   // Local methods
-  function addItem(newItem: TestItemModel) {
+  const addItem = (newItem: TestItemModel) => {
     tests.items.push(newItem);
     scrollToView();
   }
 
-  function deleteItem(index: number) {
-    tests.items.splice(index, 1);
-  }
-
-  const validateError = (tests: BasicTestModel) => {
-    for (const item of tests.items) {
-      if (item.example && (!item.example.audios || item.example.audios.length < 1)) {
-        return 'Please add at least one audio for every example'
-      }
-    }
-    return null;
-  }
+  const deleteItem = (index: number) => tests.items.splice(index, 1);
 
   const handleReorder = (index: number, newIndex: number) => {
     const value = tests.items.splice(index, 1);

@@ -1,4 +1,4 @@
-import {TestItemModel} from "./models/BasicTestModel";
+import {BasicTestModel, TestItemModel} from "./models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "./models/EnumsAndTypes";
 import {SurveyControlModel} from "./models/SurveyControlModel";
 
@@ -31,4 +31,13 @@ export function sliderItemValidateError(item: TestItemModel): string {
     }
     return null;
   } else return null;
+}
+
+export function testItemsValidateError(tests: BasicTestModel) {
+  for (const item of tests.items) {
+    if (item.example && (!item.example.audios || item.example.audios.length < 1)) {
+      return 'Please add at least one audio for audio uploading example card'
+    }
+  }
+  return null;
 }

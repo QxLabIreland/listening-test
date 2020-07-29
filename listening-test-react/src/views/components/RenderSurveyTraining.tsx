@@ -5,8 +5,8 @@ import React, {useEffect} from "react";
 import Grid from "@material-ui/core/Grid";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 
-export const RenderSurveyTraining = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
-  const {value, active} = props;
+export const RenderSurveyTraining = observer(function (props: { value: ItemExampleModel, active?: boolean, disableSlider?: boolean }) {
+  const {value, active, disableSlider = false} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
 
@@ -26,8 +26,8 @@ export const RenderSurveyTraining = observer(function (props: { value: ItemExamp
       {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
     </Grid>)}
 
-    <Grid item xs={12}>
+    {!disableSlider && <Grid item xs={12}>
       <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
-    </Grid>
+    </Grid>}
   </Grid>
 })
