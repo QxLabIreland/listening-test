@@ -1,17 +1,11 @@
 import React, {useState} from "react";
 import {Box, Chip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {observer} from "mobx-react";
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  chipGroup: {
-    '& > *': {margin: theme.spacing(0.5)}
-  }
-}));
+import {useElementGroupStyle} from "../../views/SharedStyles";
 
 export const TagsGroup = observer((props: {value: string, onChange: (value: string) => void}) => {
-  const classes = useStyles();
+  const classes = useElementGroupStyle();
   const [newLabel, setNewLabel] = useState('Add Tag');
   const {value, onChange} = props;
 
@@ -38,7 +32,7 @@ export const TagsGroup = observer((props: {value: string, onChange: (value: stri
     onChange(tagsArr.toString());
   }
 
-  return <Box className={classes.chipGroup}>
+  return <Box className={classes.elementGroup}>
     {value && value.split(',').map((l, i) =>
       <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l}/>)}
 

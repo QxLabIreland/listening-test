@@ -13,7 +13,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const sampleRef = useRef<HTMLAudioElement>();
 
   // Include the reference audio for player controller, make sure they work in the same way
-  const includeAll = (): {allAudio: AudioFileModel[], allRefs: RefObject<HTMLAudioElement>[]} => Object.create({
+  const includeAll = (): { allAudio: AudioFileModel[], allRefs: RefObject<HTMLAudioElement>[] } => Object.create({
     allAudio: sample ? [...audios, sample] : audios,
     allRefs: sample ? [...refs, sampleRef] : refs
   });
@@ -43,6 +43,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const handleTimeUpdate = () => {
     setCurrentTime(refs[0].current.currentTime);
   }
+
   // // Reference audio
   // const sampleNode = <AudioButton audio={sample} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
   //
@@ -80,7 +81,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
     <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
             style={{transition: 'none'}}
-            // disabled={playedTimes >= settings?.loopTimes}
+      // disabled={playedTimes >= settings?.loopTimes}
             startIcon={<Icon>{audio.isPlaying ? 'pause' : 'play_arrow'}</Icon>}
             onClick={() => audio.isPlaying ? onPause() : onPlay(audio)}>
       {props.children}
