@@ -15,10 +15,11 @@ import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {AcrSurveyRenderItem, sliderItemValidateError} from "../AcrTest/AcrSurveyRenderItem";
+import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
-import {AbSurveyRenderItem, questionedExValidateError} from "../AbTest/AbSurveyRenderItem";
+import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
+import {questionedExValidateError, sliderItemValidateError} from "../../shared/ErrorValidators";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -113,15 +114,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     </Grid>}
     {questionnaire.items.map((v, i) =>
       <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>
-        {/*{v.type === TestItemType.question && v.questionControl.type === SurveyControlType.description
-          ? <Card>
-            <CardHeader title={v.title}/>
-            <CardContent>{v.questionControl.question}</CardContent>
-            <CardActions style={{justifyContent: 'flex-end'}}>
-              <Button size="small" color="primary"
-                      onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
-            </CardActions>
-          </Card>*/}
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
                                  aria-controls="panel1a-content">
@@ -139,11 +131,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
         </ExpansionPanel>
       </Grid>
     )}
-    {/*<Grid item xs={12} hidden={!!value}>
-      <Grid container justify="flex-end">
-        <Button hidden={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-      </Grid>
-    </Grid>*/}
     <Grid item xs={12}>
       <MobileStepper
         variant="text"
