@@ -12,7 +12,7 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
-import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
+import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {labelInputStyle, TestItemQuestionCard} from "../components/TestItemQuestionCard";
 import {TestItemTrainingCard} from "../components/TestItemTrainingCard";

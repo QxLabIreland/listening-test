@@ -15,14 +15,6 @@ import {
 import React from "react";
 import {observer} from "mobx-react";
 
-export function surveyControlValidateError(control: SurveyControlModel): string {
-  // Pass description type
-  if (control.type === SurveyControlType.description) return null;
-  // Required checking
-  if (control.required) return control.value ? null : `${control.question} is required. You must answer this question to continue`;
-  else return null;
-}
-
 export const RenderSurveyControl = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
   switch (control.type) {

@@ -2,24 +2,11 @@ import React, {useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl, surveyControlValidateError} from "../../shared/components/RenderSurveyControl";
+import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
+import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
 import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
-
-export function questionedExValidateError(item: TestItemModel): string {
-  if (!item) return null;
-  if (item.type === TestItemType.example) {
-    // Make sure ab test questions have been answered
-    for (const a of item.example.fields) {
-      const error = surveyControlValidateError(a);
-      if (error) return error;
-    }
-    return null;
-  }
-  else return null;
-}
 
 export const AbSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;

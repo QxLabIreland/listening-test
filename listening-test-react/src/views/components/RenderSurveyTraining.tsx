@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
+import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
 import React, {useEffect} from "react";
 import Grid from "@material-ui/core/Grid";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";

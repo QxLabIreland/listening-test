@@ -2,25 +2,13 @@ import React, {CSSProperties, useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl, surveyControlValidateError} from "../../shared/components/RenderSurveyControl";
+import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {AudioButton, AudioController, useAudioPlayer} from "../../shared/components/AudiosPlayer";
+import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
 import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
-
-export function sliderItemValidateError(item: TestItemModel): string {
-  if (item == null) return null;
-  else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
-  else if (item.type === TestItemType.example) {
-    for (const a of item.example.audios) {
-      if (!a.value) return 'The example input (slider bar) is required'
-    }
-    return null;
-  }
-  else return null;
-}
 
 export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;

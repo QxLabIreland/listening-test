@@ -4,7 +4,7 @@ import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/It
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {ExampleSettingsDialog} from "../shared-views/ExampleSettingsDialog";
+import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import {CardContent} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import {SurveyControl} from "../../shared/components/SurveyControl";

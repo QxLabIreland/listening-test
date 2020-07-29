@@ -16,7 +16,7 @@ function Copyright() {
 const useStyles = makeStyles((theme: Theme) => createStyles({
   main: {
     marginTop: theme.spacing(16),
-    // marginBottom: theme.spacing(8),
+    marginBottom: theme.spacing(16),
     color: 'white'
   },
   footer: {
@@ -27,19 +27,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     color: theme.palette.grey["50"]
   },
   background: {
+    // Background
     backgroundImage: 'url(/images/homepage.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'auto',
-
+    // Layout
     position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   }
 }));
 
