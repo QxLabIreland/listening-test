@@ -6,6 +6,8 @@ export interface OscillatorAngGain {
   gainNode: GainNode;
 }
 
+/** Use this function to create an oscillator.
+ *  To play oscillator, please use OscillatorAngGain.oscillator.start(); */
 export function createOscillatorAndGain(volume: number, frequency: number): OscillatorAngGain {
   // Create oscillator and gain nodes
   const oscillator = audioContext.createOscillator();

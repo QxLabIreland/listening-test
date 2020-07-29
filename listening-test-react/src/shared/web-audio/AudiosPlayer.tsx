@@ -43,7 +43,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const handleTimeUpdate = () => {
     setCurrentTime(refs[0].current.currentTime);
   }
-  // Reference audio
+  // // Reference audio
   // const sampleNode = <AudioButton audio={sample} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
   //
   // const audioNodes = audios.map((v, i) =>
@@ -72,6 +72,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
     setPlayedTimes(playedTimes + 1);
   }
 
+  // An AudioButton contains an audio element and a button
   return <>
     <audio src={audio.src} controls loop={!settings?.loopTimes} ref={ref} style={{display: 'none'}} preload="auto"
            onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
