@@ -1,6 +1,20 @@
+import {CSSProperties} from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const ratingAreaStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-end'
+} as CSSProperties;
+
+export const useElementGroupStyle = makeStyles((theme: Theme) => createStyles({
+  elementGroup: {
+    '& > *': {margin: theme.spacing(0.5)}
+  }
+}));
+
+export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     backgroundColor: theme.palette.background.default,
     height: '100%'

@@ -1,15 +1,15 @@
 import React, {useContext} from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Checkbox, FormHelperText, Grid, Link, TextField, Typography} from '@material-ui/core';
-import {useStyles} from "./SignInUpStyles";
 import {useFormik} from "formik";
 import {email, maxLength, minLength, mustBeTrue, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5/dist/md5';
+import {useSignInUpStyles} from "../SharedStyles";
 
 export default function SignUp() {
-  const classes = useStyles();
+  const classes = useSignInUpStyles();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
   // Form initialization

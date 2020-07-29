@@ -1,7 +1,6 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -9,14 +8,11 @@ import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {useElementGroupStyle} from "../SharedStyles";
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
   const {onAdd} = props;
-  const classes = makeStyles((theme: Theme) => createStyles({
-    buttonGroup: {
-      '& > *': {margin: theme.spacing(0.5)}
-    }
-  }))();
+  const classes = useElementGroupStyle();
 
   const handleAddExample = () => onAdd({
     id: uuid(),
@@ -54,7 +50,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
     });
   };
 
-  return <Box className={classes.buttonGroup}>
+  return <Box className={classes.elementGroup}>
     <Button variant="outlined" color="primary" onClick={handleAddExample}>
       <Icon>add</Icon>Add Example
     </Button>

@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect} from "react";
+import React, {useEffect} from "react";
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {TestItemType} from "../../shared/models/EnumsAndTypes";
@@ -9,6 +9,8 @@ import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-aud
 import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
+import {AudioLoading, useAllAudioReady} from "../../shared/web-audio/AudiosLoading";
+import {ratingAreaStyle} from "../SharedStyles";
 
 export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -24,47 +26,43 @@ export const AcrSurveyRenderItem = observer(function (props: { item: TestItemMod
   }
 })
 
-const RatingAreaStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-end'
-} as CSSProperties;
-
 const RenderRatingExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+  const loading = useAllAudioReady(value.audioRef ? [...refs, sampleRef] : refs);
 
   useEffect(() => {
     if (active === false) onPause();
   }, [active]);
 
-  return <Grid container spacing={3}>
-    {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
-    </Grid>)}
+  return <> {loading && <AudioLoading/>}
+    <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
+      {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
+        <RenderSurveyControl control={value}/>
+      </Grid>)}
 
-    {value.audios.map((v, i) => <Grid item key={i} style={RatingAreaStyle}>
-      <AudioRatingBar audio={v}/>
-      <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
-                   onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
-      {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
-    </Grid>)}
+      {value.audios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
+        <AudioRatingBar audio={v}/>
+        <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
+                     onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
+        {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
+      </Grid>)}
 
-    {/*Reference*/}
-    {value.audioRef && <Grid item style={RatingAreaStyle}>
-      <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
-      {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
-    </Grid>}
+      {/*Reference*/}
+      {value.audioRef && <Grid item style={ratingAreaStyle}>
+        <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
+        {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
+      </Grid>}
 
-    <Grid item xs={12}>
-      <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+      <Grid item xs={12}>
+        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+      </Grid>
     </Grid>
-  </Grid>
+  </>
 })
 
-const AudioRatingBar = observer(function (props: { audio: AudioFileModel}) {
+const AudioRatingBar = observer(function (props: { audio: AudioFileModel }) {
   const marks = [
     {value: 1, label: '1 - Bad'},
     {value: 2, label: '2 - Poor'},
@@ -84,3 +82,4 @@ const AudioRatingBar = observer(function (props: { audio: AudioFileModel}) {
             onChange={(_, value) => props.audio.value = value.toString()}/>
   </Box>
 })
+

@@ -7,6 +7,7 @@ import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
 import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
+import {AudioLoading, useAllAudioReady} from "../../shared/web-audio/AudiosLoading";
 
 export const AbSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -26,31 +27,34 @@ const RenderQuestionedExample = observer(function (props: { value: ItemExampleMo
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+  const loading = useAllAudioReady(value.audioRef ? [...refs, sampleRef] : refs);
 
   useEffect(() => {
     if (active === false) onPause();
   }, [active]);
 
-  return <Grid container spacing={3}>
+  return <> {loading && <AudioLoading/>}
+    <Grid container spacing={3}>
 
-    {value.audios.map((v, i) => <Grid item key={i}>
-      <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
-                   onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
-      {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
-    </Grid>)}
+      {value.audios.map((v, i) => <Grid item key={i}>
+        <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
+                     onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
+        {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
+      </Grid>)}
 
-    {/*Reference*/}
-    {value.audioRef && <Grid item>
-      <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
-      {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
-    </Grid>}
+      {/*Reference*/}
+      {value.audioRef && <Grid item>
+        <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
+        {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
+      </Grid>}
 
-    {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
-    </Grid>)}
+      {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
+        <RenderSurveyControl control={value}/>
+      </Grid>)}
 
-    <Grid item xs={12}>
-      <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+      <Grid item xs={12}>
+        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+      </Grid>
     </Grid>
-  </Grid>
+  </>
 })

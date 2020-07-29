@@ -15,6 +15,7 @@ import {
   disposeOscillatorAndGain,
   OscillatorAngGain
 } from "../../shared/web-audio/OscillatorAngGain";
+import {ratingAreaStyle} from "../SharedStyles";
 
 export const HearingSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -62,12 +63,7 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       <RenderSurveyControl control={value}/>
     </Grid>)}
 
-    {value.audios.map((v, i) => <Grid item key={i} style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-end'
-    }}>
+    {value.audios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
       <GainNodeBar audio={v} gainNode={gos[i]?.gainNode}/>
       <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" disableElevation
               style={{transition: 'none'}}
