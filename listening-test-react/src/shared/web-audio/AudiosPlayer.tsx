@@ -13,14 +13,14 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const sampleRef = useRef<HTMLAudioElement>();
 
   // Include the reference audio for player controller, make sure they work in the same way
-  const includeAll = () => Object.create({
+  const includeAll = (): {allAudio: AudioFileModel[], allRefs: RefObject<HTMLAudioElement>[]} => Object.create({
     allAudio: sample ? [...audios, sample] : audios,
     allRefs: sample ? [...refs, sampleRef] : refs
   });
 
   const handlePlay = (v: AudioFileModel) => {
     const {allAudio, allRefs} = includeAll();
-    allAudio.forEach((a: AudioFileModel, i: number) => {
+    allAudio.forEach((a, i: number) => {
       // Adjust properties
       allAudio[i].isPlaying = a === v;
       allRefs[i].current.volume = a === v ? 1 : 0;
@@ -32,7 +32,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   const handlePause = () => {
     // Deconstruction for all including reference audio
     const {allAudio, allRefs} = includeAll();
-    allRefs.forEach((_: AudioFileModel, i: number) => {
+    allRefs.forEach((_, i: number) => {
       allAudio[i].isPlaying = false;
       allRefs[i].current.pause();
       // State that if it is ready
@@ -64,8 +64,9 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
   // When loop attribute is true, this won't be called
   const handleAudioEnded = () => {
+    audio.playedOnce = true;
     // playedTimes will be added when the audio ENDS
-    if (playedTimes + 1 < settings?.loopTimes)
+    if (!settings?.loopTimes || playedTimes + 1 < settings?.loopTimes)
       (ref as React.RefObject<HTMLAudioElement>).current.play().then();
     // Make sure the button style looks right
     else audio.isPlaying = false;
@@ -74,7 +75,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
   // An AudioButton contains an audio element and a button
   return <>
-    <audio src={audio.src} controls loop={!settings?.loopTimes} ref={ref} style={{display: 'none'}} preload="auto"
+    <audio src={audio.src} controls ref={ref} style={{display: 'none'}} preload="auto"
            onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
 
     <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"

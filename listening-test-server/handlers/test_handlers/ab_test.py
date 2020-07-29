@@ -48,4 +48,5 @@ class AbTestHandler(BaseHandler):
     async def delete(self):
         _id = ObjectId(self.get_argument('_id'))
         data = self.db['abTests'].delete_one({'_id': ObjectId(_id)}).raw_result
+        self.db['abTestSurveys'].delete_many({'testId': ObjectId(_id)})
         self.dumps_write(data)

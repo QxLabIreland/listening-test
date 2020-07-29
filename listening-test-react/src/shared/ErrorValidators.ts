@@ -1,6 +1,15 @@
 import {BasicTestModel, TestItemModel} from "./models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "./models/EnumsAndTypes";
 import {SurveyControlModel} from "./models/SurveyControlModel";
+import {ItemExampleModel} from "./models/ItemExampleModel";
+
+function validatePlayedOnceError(example: ItemExampleModel): string {
+  if (!example.settings?.requireClipEnded) return null;
+  for (const a of example.audios) {
+    if (!a.playedOnce) return 'Please fully listen to these clips'
+  }
+  return null;
+}
 
 export function surveyControlValidateError(control: SurveyControlModel): string {
   // Pass description type
@@ -12,14 +21,17 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
 
 export function questionedExValidateError(item: TestItemModel): string {
   if (!item) return null;
-  if (item.type === TestItemType.example) {
+  else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
+  else if (item.type === TestItemType.example) {
     // Make sure ab test questions have been answered
     for (const a of item.example.fields) {
       const error = surveyControlValidateError(a);
       if (error) return error;
     }
-    return null;
-  } else return null;
+    // Audio validation
+    return validatePlayedOnceError(item.example);
+  } else if (item.type === TestItemType.training) return validatePlayedOnceError(item.example);
+  else return null;
 }
 
 export function sliderItemValidateError(item: TestItemModel): string {
@@ -27,10 +39,12 @@ export function sliderItemValidateError(item: TestItemModel): string {
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
     for (const a of item.example.audios) {
+      if (item.example.settings?.requireClipEnded && !a.playedOnce) return 'Please fully listen to these clips'
       if (!a.value) return 'You must complete this example to continue'
     }
     return null;
-  } else return null;
+  } else if (item.type === TestItemType.training) return validatePlayedOnceError(item.example);
+  else return null;
 }
 
 export function testItemsValidateError(tests: BasicTestModel) {

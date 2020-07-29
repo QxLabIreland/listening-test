@@ -4,9 +4,10 @@ export interface AudioFileModel {
   src: string | null;
   tags?: string;
   value: string;
+  settings?: AudioSettings;
   // Additional attributes
   isPlaying?: boolean;
-  settings?: AudioSettings;
+  playedOnce?: boolean;
 }
 
 export interface AudioSettings {
