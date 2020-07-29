@@ -7,21 +7,24 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
-import {Icon, IconButton} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Icon, IconButton} from "@material-ui/core";
 import {useFormik} from "formik";
 
 export default function ExampleSettingsDialog(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<ItemExampleSettingsModel>({
-    initialValues: {loopTimes: 0, ...settings},
+    initialValues: {loopTimes: 0, requireClipEnded: false},
     onSubmit: values => {
       onConfirm(values);
       handleClose();
     }
   });
 
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = () => {
+    formik.setValues({loopTimes: null, requireClipEnded: false, ...settings});
+    setOpen(true);
+  }
 
   const handleClose = () => setOpen(false);
 
@@ -31,11 +34,21 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle id="form-dialog-title">Audio Playback Settings</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Set the number of times you wish the audio to loop. Setting this value to "0" will result in infinite looping.
-          </DialogContentText>
-          <TextField label="Loop times" fullWidth type="number" {...formik.getFieldProps('loopTimes')}
+          <TextField label="Loop times" type="number" {...formik.getFieldProps('loopTimes')}
                      onFocus={event => event.target.select()}/>
+          <DialogContentText>
+            Set the number of times you wish the audio to loop. Setting this value to "0" will result in infinite
+            looping.
+          </DialogContentText>
+
+          <FormControlLabel
+            control={<Checkbox checked={formik.values.requireClipEnded} {...formik.getFieldProps('requireClipEnded')}/>}
+            label="Require fully listen"
+          />
+          <DialogContentText>
+            Make sure subject has listened fully before clicking next.
+          </DialogContentText>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" type="button">
