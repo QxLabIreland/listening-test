@@ -17,7 +17,7 @@ export const SurveyControl = observer(function (props: {
   const switchControlType = () => {
     switch (control.type) {
       case SurveyControlType.text:
-        return <TextField fullWidth variant="outlined" label={control.question}
+        return <TextField fullWidth variant="outlined" label={control.question} required={control.required}
                           value="Subject will answer the question here..." disabled/>
       case SurveyControlType.radio:
       case SurveyControlType.checkbox:

@@ -22,7 +22,6 @@ import Axios from "axios";
 import Loading from "../../layouts/components/Loading";
 import {downloadFileTool} from "../../shared/ReactTools";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
 
@@ -78,16 +77,7 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   const handleDownload = () => downloadFileTool({
     url: '/api/csv-download/' + testUrl, params: {testId: id}
   });
-  // Switch to the correct rendering view
-  const renderSurveyPage = (value: BasicTestModel) => {
-    switch (testUrl) {
-      case "ab-test":
-      case "acr-test":
-      case "mushra-test":
-      case "hearing-test": return <SurveyPage testUrl={testUrl} value={value}/>
-      default: return null;
-    }
-  }
+
   return (<Grid container spacing={2}>
     <Grid item xs={12}>
       {responses ? <Card>
@@ -112,7 +102,9 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
               <TableCell>{r.name}</TableCell>
               <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
               <TableCell>
-                <ResponsePreviewDialog>{renderSurveyPage(r)}</ResponsePreviewDialog>
+                <ResponsePreviewDialog>
+                  <SurveyPage testUrl={testUrl} value={r}/>
+                </ResponsePreviewDialog>
               </TableCell>
             </TableRow>) :<TableRow>
               <TableCell colSpan={4}>There is no response here for this page.</TableCell>

@@ -1,6 +1,4 @@
-import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
@@ -12,35 +10,9 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
-import {labelInputStyle, TestItemQuestionCard} from "../components/TestItemQuestionCard";
-import {TestItemTrainingCard} from "../components/TestItemTrainingCard";
 import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../shared/web-audio/OscillatorAngGain";
 
-export const HearingTestItemCard = observer(function (props: { value: TestItemModel, onDelete: () => void }) {
-  const {value, onDelete} = props;
-
-  // Label methods
-  const handleLabelChange = (event: any) => {
-    value.title = event.target.value;
-  }
-
-  // Switch to correct card
-  if (value.type === TestItemType.example) return <TestItemExampleCard title={
-    <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
-           onFocus={event => event.target.select()}/>
-  } example={value.example} onDelete={onDelete}/>
-
-  else if (value.type === TestItemType.question) return <TestItemQuestionCard {...props}/>
-
-  else if (value.type === TestItemType.training) return <TestItemTrainingCard title={
-    <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
-           onFocus={event => event.target.select()}/>
-  } example={value.example} onDelete={onDelete}/>
-
-  else return null;
-})
-
-const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>) => {
+export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>) => {
   const {example, onDelete, title} = props;
 
   return <Card>
@@ -66,8 +38,6 @@ const TestItemExampleCard = observer((props: React.PropsWithChildren<{ example: 
 
       </Grid>
     </CardContent>
-    {/*<CardActions style={{justifyContent: 'flex-end', paddingTop: 0}}>
-    </CardActions>*/}
   </Card>;
 })
 
@@ -113,10 +83,6 @@ const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel}) 
                  defaultValue={audio.settings.frequency} required
                  onChange={handleFrequencyChange}/>
     </Grid>
-
-    {/*<Grid item>
-      <Typography variant="body2" gutterBottom>Initial Volume:</Typography>
-    </Grid>*/}
 
     <Grid item><Icon>volume_down</Icon></Grid>
     <Grid item xs>

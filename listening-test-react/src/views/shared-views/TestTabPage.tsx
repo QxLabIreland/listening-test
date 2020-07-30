@@ -5,6 +5,12 @@ import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
+import {AcrTestItemExampleCard} from "../AcrTest/AcrTestItemExampleCard";
+import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
+import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
+import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
+import {HearingTestItemExampleCard} from "../HearingTest/HearingTestItemExampleCard";
+import {AbTestItemExampleCard} from "../AbTest/AbTestItemExampleCard";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -30,17 +36,6 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
     setPreSetValue(!preSetValue);
   }
 
-  // Render correct Detail Componets.
-  const renderDetail = () => {
-    switch (testUrl) {
-      case 'ab-test':
-      case 'acr-test':
-      case 'mushra-test':
-      case 'hearing-test': return <TestDetailView testUrl={testUrl}/>
-      default: return null;
-    }
-  }
-
   return (
     <React.Fragment>
       <Tabs value={value} onChange={handleTabChange} indicatorColor="primary" textColor="primary" centered>
@@ -48,9 +43,24 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
         <Tab label="Responses" disabled={id === '0'}/>
       </Tabs>
       <Box paddingTop={2}>
-        {value === 0 && renderDetail()}
+        {value === 0 && <TestDetailViewWrapper testUrl={testUrl}/>}
         {value === 1 && <ResponseListView testUrl={testUrl}/>}
       </Box>
     </React.Fragment>
   )
+}
+
+// Switch different card and button group through 'testType'
+function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
+  switch (testUrl) {
+    case "ab-test":
+      return <TestDetailView testUrl={testUrl} TestItemExampleCard={AbTestItemExampleCard} ButtonGroup={AbAddItemButtonGroup}/>
+    case "acr-test":
+    case "mushra-test":
+      return <TestDetailView testUrl={testUrl} TestItemExampleCard={AcrTestItemExampleCard} ButtonGroup={AcrAddItemButtonGroup}/>
+    case "hearing-test":
+      return <TestDetailView testUrl={testUrl} TestItemExampleCard={HearingTestItemExampleCard} ButtonGroup={HearingAddItemButtons}/>
+    default:
+      return null;
+  }
 }
