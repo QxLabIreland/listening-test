@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
-import React, {CSSProperties, FunctionComponent} from "react";
+import React, {FunctionComponent} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, FormControlLabel, Switch} from "@material-ui/core";
@@ -13,6 +13,7 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
+import {labelInputStyle} from "../SharedStyles";
 
 export const TestItemCard = observer(function (props: { value: TestItemModel, onDelete: () => void,
   TestItemExampleCard: FunctionComponent<{example: ItemExampleModel, onDelete: () => void, title: React.ReactNode}> }) {
@@ -38,15 +39,6 @@ export const TestItemCard = observer(function (props: { value: TestItemModel, on
 
   else return null;
 })
-
-export const labelInputStyle = {
-  fontFamily: 'inherit',
-  fontSize: 'inherit',
-  fontWeight: 'inherit',
-  outline: 'none',
-  border: 'none',
-  width: '100%'
-} as CSSProperties;
 
 export const TestItemQuestionCard = observer(function ({value, onDelete}: { value: TestItemModel, onDelete: () => void }) {
   return <Card>
