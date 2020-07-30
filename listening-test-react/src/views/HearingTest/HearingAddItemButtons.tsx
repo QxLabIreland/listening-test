@@ -51,7 +51,7 @@ export const HearingAddItemButtons = observer(function (props: { onAdd: (type: T
       <Icon>add</Icon>Add Example
     </Button>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
-      <Icon>add</Icon>Add Calibration
+      <Icon>add</Icon>Add Calibration Step
     </Button>
     <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
   </Box>

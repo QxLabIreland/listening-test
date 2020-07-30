@@ -38,7 +38,7 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: T
         break;
       case TestItemType.sectionHeader:
         newItem = {
-          id: uuid(), type: TestItemType.sectionHeader, title: 'Training Example', // titleDes: {title: 'New Title', description: 'Optional Description'}
+          id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title', // titleDes: {title: 'New Title', description: 'Optional Description'}
         };
         break;
     }

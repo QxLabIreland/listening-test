@@ -4,20 +4,20 @@ import {CircularProgress} from "@material-ui/core";
 
 export function useAllAudioReady(refs: RefObject<HTMLAudioElement>[]) {
   const [loading, setLoading] = useState(true);
-  const audioReady = () => Promise.all(refs.map((el) => {
-    return new Promise((resolve) =>
-      el.current.addEventListener('canplay', resolve)
-    )
-  }));
 
   useEffect(() => {
-    audioReady().then(() => setLoading(false), () => setLoading(false));
+    // Audio ready promise function for creating callback
+    Promise.all(refs.map((el) =>
+      new Promise((resolve) => el.current.addEventListener('canplay', resolve))
+    )).then(() => setLoading(false), () => setLoading(false));
   }, []);
 
   return loading
 }
 
-export function AudioLoading() {
+export function AudioLoading(props: {showing: boolean}) {
+  if (!props.showing) return null;
+
   return <Grid container spacing={2} alignItems="center">
     <Grid item><CircularProgress color="secondary"/></Grid>
     <Grid item>Clips are currently loading, just a moment...</Grid>

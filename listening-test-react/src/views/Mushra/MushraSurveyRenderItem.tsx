@@ -8,13 +8,13 @@ import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {RenderTraining} from "../components/RenderTraining";
 import {RenderRatingExample} from "../components/RenderRatingExample";
 
-export const AcrSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
+export const MushraSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
   switch (item.type) {
     case TestItemType.question:
       return <RenderSurveyControl control={item.questionControl} {...rest}/>
     case TestItemType.example:
-      return <RenderRatingExample value={item.example} RatingBar={AcrRatingBar} {...rest}/>;
+      return <RenderRatingExample value={item.example} RatingBar={MusharaRatingBar} {...rest}/>;
     case TestItemType.training:
       return <RenderTraining value={item.example} {...rest}/>;
     default:
@@ -22,23 +22,23 @@ export const AcrSurveyRenderItem = observer(function (props: { item: TestItemMod
   }
 })
 
-const AcrRatingBar = observer(function (props: { audio: AudioFileModel }) {
+const MusharaRatingBar = observer(function (props: { audio: AudioFileModel }) {
   const marks = [
-    {value: 1, label: '1 - Bad'},
-    {value: 2, label: '2 - Poor'},
-    {value: 3, label: '3 - Fair'},
-    {value: 4, label: '4 - Good'},
-    {value: 5, label: '5 - Excellent'},
+    {value: 0, label: '0'},
+    {value: 20, label: '20'},
+    {value: 40, label: '40'},
+    {value: 60, label: '60'},
+    {value: 80, label: '80'},
+    {value: 100, label: '100'},
   ];
 
   // Set a default value
   const num = parseInt(props.audio.value);
-  if (!num && num !== 0) props.audio.value = '3';
+  if (!num) props.audio.value = '0';
 
   return <Box ml={2.5} mb={2} mt={2} style={{height: 200}}>
-    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={1} max={5} step={1} track={false}
-            getAriaValueText={(value: number) => `${value}`} marks={marks}
-            value={Number(props.audio.value)}
+    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={100} step={1} marks={marks}
+            valueLabelDisplay="auto" value={Number(props.audio.value)}
             onChange={(_, value) => props.audio.value = value.toString()}/>
   </Box>
 })

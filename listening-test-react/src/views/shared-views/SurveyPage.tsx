@@ -20,6 +20,7 @@ import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
 import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
 import {questionedExValidateError, sliderItemValidateError} from "../../shared/ErrorValidators";
+import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -68,12 +69,14 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
       const validationError = validateError(item);
       // If there is no error, check the next item
       if (!validationError) continue;
-      openDialog(validationError, item.title + ' Required');
+      openDialog(validationError, 'Validation Error');
       return;
     }
     // Record the last item time
     if (questionnaire.settings?.isTimed)
       questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+    // Set opened to make sure active is false
+    setOpenedPanel(null);
     // Start request
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
       history.replace('/task/finish');
@@ -84,8 +87,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   const renderItemByTestUrl = (item: TestItemModel, index: number) => {
     switch (testUrl) {
       case "ab-test": return <AbSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "acr-test":
-      case "mushra-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "acr-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
+      case "mushra-test": return <MushraSurveyRenderItem item={item} active={openedPanel === index}/>
       case "hearing-test": return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
       default: return null;
     }
