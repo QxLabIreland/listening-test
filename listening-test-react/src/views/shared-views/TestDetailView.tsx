@@ -90,11 +90,6 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   }
 
   // Some components for performance boost
-  const ActionsArea = () => <Grid item xs={12} container alignItems="center" spacing={1}>
-    <Grid item style={{flexGrow: 1}}/>
-    <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
-    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
-  </Grid>;
   const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
                                     onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
@@ -105,7 +100,11 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
       {tests ? <React.Fragment>
-        <ActionsArea/>
+        <Grid item xs={12} container alignItems="center" spacing={1}>
+          <Grid item style={{flexGrow: 1}}/>
+          <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
+          <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
+        </Grid>
 
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
@@ -120,7 +119,11 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
           <ButtonGroup onAdd={addItem}/>
         </Grid>
 
-        <ActionsArea/>
+        <Grid item xs={12} container alignItems="center" spacing={1}>
+          <Grid item style={{flexGrow: 1}}/>
+          <Grid item><TestSettingsDialog settings={tests.settings} onConfirm={settings => tests.settings = settings}/></Grid>
+          <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
+        </Grid>
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )

@@ -8,6 +8,15 @@ export const ratingAreaStyle = {
   justifyContent: 'flex-end'
 } as CSSProperties;
 
+export const labelInputStyle = {
+  fontFamily: 'inherit',
+  fontSize: 'inherit',
+  fontWeight: 'inherit',
+  outline: 'none',
+  border: 'none',
+  width: '100%'
+} as CSSProperties;
+
 export const useElementGroupStyle = makeStyles((theme: Theme) => createStyles({
   elementGroup: {
     '& > *': {margin: theme.spacing(0.5)}

@@ -45,6 +45,7 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       audio.isPlaying = false;
     }
     else {
+      audio.playedOnce = true;
       // Stop others first
       gos.forEach((v, i) => {
         if (i === index || !v?.oscillator) return;
@@ -64,7 +65,7 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
     </Grid>)}
 
     {value.audios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
-      <GainNodeBar audio={v} gainNode={gos[i]?.gainNode}/>
+      <VolumeBar audio={v} gainNode={gos[i]?.gainNode}/>
       <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" disableElevation
               style={{transition: 'none'}}
         // disabled={playedTimes >= settings?.loopTimes}
@@ -76,26 +77,24 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
   </Grid>
 })
 
-const GainNodeBar = observer(function (props: { audio: AudioFileModel, gainNode: GainNode }) {
+const VolumeBar = observer(function ({audio, gainNode}: { audio: AudioFileModel, gainNode: GainNode }) {
   const handleSliderChange = (_: any, nv: number | number[]) => {
-    props.audio.value = (+nv).toString();
-    if (!props.gainNode) return;
+    audio.value = (+nv).toString();
+    if (!gainNode) return;
     const gainDb = (+nv - 1) * 100;
-    props.gainNode.gain.value = Math.pow(10, gainDb / 20);
+    gainNode.gain.value = Math.pow(10, gainDb / 20);
   }
 
-  return <>
-    <Box mb={2} mt={2} style={{height: 200}}>
-    {/*<Grid container spacing={1} direction="column" justify="space-between">
-      <Grid item><Icon>volume_down</Icon></Grid>
-      <Grid item>
+  if (!Number(audio.value) && audio.value !== '0') audio.value = audio.settings?.initVolume.toString();
 
-      </Grid>
+  return <Box mb={2} mt={2} style={{height: 200}}>
+    <Grid container spacing={1} direction="column" alignItems="center" style={{height: '100%'}}>
       <Grid item><Icon>volume_up</Icon></Grid>
-    </Grid>*/}
-    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01}
-            defaultValue={Number(props.audio.value)  ? +props.audio.value : props.audio.settings?.initVolume}
-            onChange={handleSliderChange}/>
-
-  </Box></>
+      <Grid item xs>
+        <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01}
+                value={+audio.value} onChange={handleSliderChange}/>
+      </Grid>
+      <Grid item><Icon>volume_down</Icon></Grid>
+    </Grid>
+  </Box>
 })

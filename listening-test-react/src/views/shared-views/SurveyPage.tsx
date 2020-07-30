@@ -13,14 +13,10 @@ import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
-import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
-import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
-import {questionedExValidateError, sliderItemValidateError} from "../../shared/ErrorValidators";
-import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
+import {useSurveyRenderItem} from "../../shared/ReactHooks";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -32,6 +28,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   const [startTime] = useState<{ [key: number]: number }>({});
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
+  const {RenderedItem, validateError} = useSurveyRenderItem(testUrl);
 
   useEffect(() => {
     if (value) return;
@@ -83,27 +80,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     });
   }
 
-  // Switch to right rendering item
-  const renderItemByTestUrl = (item: TestItemModel, index: number) => {
-    switch (testUrl) {
-      case "ab-test": return <AbSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "acr-test": return <AcrSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "mushra-test": return <MushraSurveyRenderItem item={item} active={openedPanel === index}/>
-      case "hearing-test": return <HearingSurveyRenderItem item={item} active={openedPanel === index}/>
-      default: return null;
-    }
-  }
-
-  const validateError = (item: TestItemModel): string => {
-    switch (testUrl) {
-      case "ab-test": return questionedExValidateError(item);
-      case "acr-test":
-      case "mushra-test":
-      case "hearing-test": return sliderItemValidateError(item);
-      default: return null;
-    }
-  }
-
   return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
@@ -123,7 +99,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            {renderItemByTestUrl(v, i)}
+            <RenderedItem item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             {i !== questionnaire.items.length - 1
