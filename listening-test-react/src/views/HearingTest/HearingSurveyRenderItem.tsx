@@ -9,7 +9,7 @@ import {Box, Slider} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
-import {RenderSurveyTraining} from "../components/RenderSurveyTraining";
+import {RenderTraining} from "../components/RenderTraining";
 import {
   createOscillatorAndGain,
   disposeOscillatorAndGain,
@@ -25,7 +25,7 @@ export const HearingSurveyRenderItem = observer(function (props: { item: TestIte
     case TestItemType.example:
       return <RenderVolumeExample value={item.example} {...rest}/>;
     case TestItemType.training:
-      return <RenderSurveyTraining value={item.example} disableSlider {...rest}/>;
+      return <RenderTraining value={item.example} disableSlider {...rest}/>;
     default:
       return null;
   }
