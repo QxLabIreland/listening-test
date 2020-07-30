@@ -24,7 +24,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
         options: ['A', 'B'],
         value: null,
         required: true
-      }, {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: true}],
+      }, {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false}],
       audios: [null, null]
     }
   });

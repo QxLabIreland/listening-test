@@ -67,14 +67,16 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
   const handleAudioEnded = () => {
     audio.playedOnce = true;
     // playedTimes will be added when the audio ENDS
-    if (!settings?.loopTimes || playedTimes + 1 < settings?.loopTimes)
-      (ref as React.RefObject<HTMLAudioElement>).current.play().then();
+    if (!settings?.loopTimes || playedTimes + 1 < settings?.loopTimes) {
+      (ref as RefObject<HTMLAudioElement>).current.play().then();
+      audio.isPlaying = true;
+    }
     // Make sure the button style looks right
     else audio.isPlaying = false;
     setPlayedTimes(playedTimes + 1);
   }
 
-  // An AudioButton contains an audio element and a button
+  // An AudioButton contains an audio element and a button. Use loop attribute, onEnded Event will not trigger.
   return <>
     <audio src={audio.src} controls ref={ref} style={{display: 'none'}} preload="auto"
            onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>

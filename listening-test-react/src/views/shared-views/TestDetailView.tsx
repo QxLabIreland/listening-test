@@ -1,5 +1,5 @@
 import {Prompt, useHistory, useParams} from "react-router";
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
@@ -14,14 +14,15 @@ import {observer} from "mobx-react";
 import {observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
 import DraggableZone from "../../shared/components/DraggableZone";
-import {AcrTestItemCard} from "../AcrTest/AcrTestItemCard";
-import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
-import {HearingTestItemCard} from "../HearingTest/HearingTestItemCard";
-import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
-import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
 import {testItemsValidateError} from "../../shared/ErrorValidators";
+import {TestItemCard} from "../components/TestItemCard";
+import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 
-export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) {
+export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
+  testUrl: TestUrl,
+  TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>,
+  ButtonGroup: FunctionComponent<{ onAdd: (type: TestItemModel) => void }>
+}) {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
   const [isError, setIsError] = useState(false);
@@ -100,26 +101,6 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
                                    defaultValue={tests.description}
                                    onChange={(e) => tests.description = e.target.value}/>;
 
-  // Switch different card and button group through 'testType'
-  const renderItemCard = (value: TestItemModel, index: number) => {
-    switch(testUrl){
-      case "ab-test":
-      case "acr-test":
-      case "mushra-test": return <AcrTestItemCard value={value} onDelete={() => deleteItem(index)}/>
-      case "hearing-test": return <HearingTestItemCard value={value} onDelete={() => deleteItem(index)}/>
-      default: return null;
-    }
-  }
-
-  const renderButtonGroup = () => {
-    switch(testUrl){
-      case "ab-test": return <AbAddItemButtonGroup onAdd={addItem}/>
-      case "acr-test":
-      case "mushra-test": return <AcrAddItemButtonGroup onAdd={addItem}/>
-      case "hearing-test": return <HearingAddItemButtons onAdd={addItem}/>
-      default: return null
-    }
-  }
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
       <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
@@ -131,12 +112,12 @@ export const TestDetailView = observer(function ({testUrl}: {testUrl: TestUrl}) 
         {tests.items.map((v, i) =>
           <Grid item xs={12} ref={viewRef} key={v.id}>
             <DraggableZone index={i} length={tests.items.length} onReorder={handleReorder}>
-              {renderItemCard(v, i)}
+              <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
             </DraggableZone>
           </Grid>
         )}
         <Grid item container justify="center" xs={12}>
-          {renderButtonGroup()}
+          <ButtonGroup onAdd={addItem}/>
         </Grid>
 
         <ActionsArea/>
