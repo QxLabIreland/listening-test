@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Slider, TextField, Tooltip} from "@material-ui/core";
+import {CardContent, Collapse, Slider, TextField, Tooltip} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React, {useEffect, useState} from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
@@ -12,36 +12,36 @@ import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
 import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../shared/web-audio/OscillatorAngGain";
 
-export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>) => {
-  const {example, onDelete, title} = props;
+export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{
+  example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, collapsed?: boolean
+}>) => {
+  const {example, title, action, collapsed} = props;
 
   return <Card>
-    <CardHeader style={{paddingBottom: 0}} title={title} action={
-      <span>
-        <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-      </span>
-    }/>
-    <CardContent>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
+    <CardHeader title={title} action={action}/>
+    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+      <CardContent style={{paddingTop: 0}}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
+          </Grid>
+          {/*Description for this example*/}
+          {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
+            <SurveyControl control={q}/>
+          </Grid>)}
+
+          {/*Audios*/}
+          {example.audios.map((a, i) => <Grid key={i} item xs={12} md={12}>
+            <AudioSettingsView audio={a}/>
+          </Grid>)}
+
         </Grid>
-        {/*Description for this example*/}
-        {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-          <SurveyControl control={q}/>
-        </Grid>)}
-
-        {/*Audios*/}
-        {example.audios.map((a, i) => <Grid key={i} item xs={12} md={12}>
-          <AudioSettingsView audio={a}/>
-        </Grid>)}
-
-      </Grid>
-    </CardContent>
+      </CardContent>
+    </Collapse>
   </Card>;
 })
 
-const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel}) {
+const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel }) {
   // Go means Gain and Oscillator
   const [go, setGo] = useState(null);
 

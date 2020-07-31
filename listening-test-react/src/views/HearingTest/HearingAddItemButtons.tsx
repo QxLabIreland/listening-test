@@ -8,11 +8,11 @@ import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {useElementGroupStyle} from "../SharedStyles";
+import {useMatStyles} from "../SharedStyles";
 
 export const HearingAddItemButtons = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
   const {onAdd} = props;
-  const classes = useElementGroupStyle();
+  const classes = useMatStyles();
 
   const handleAdd = (type: TestItemType) => {
     switch (type) {

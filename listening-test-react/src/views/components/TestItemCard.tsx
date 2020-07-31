@@ -1,10 +1,10 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, FormControlLabel, Switch} from "@material-ui/core";
+import {CardContent, Collapse, createStyles, FormControlLabel, Switch, Theme} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
@@ -14,55 +14,72 @@ import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
 import {labelInputStyle} from "../SharedStyles";
+import {makeStyles} from "@material-ui/core/styles";
 
-export const TestItemCard = observer(function (props: { value: TestItemModel, onDelete: () => void,
-  TestItemExampleCard: FunctionComponent<{example: ItemExampleModel, onDelete: () => void, title: React.ReactNode}> }) {
-  const {value, onDelete, TestItemExampleCard} = props;
-
+export const TestItemCard = observer(function (props: {
+  value: TestItemModel, onDelete: () => void, TestItemExampleCard: FunctionComponent<{
+    example: ItemExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+  }>
+}) {
+  const {value, TestItemExampleCard} = props;
   // Label methods
   const handleLabelChange = (event: any) => {
     value.title = event.target.value;
   }
 
+  const ExampleCard = value.type === TestItemType.example ? TestItemExampleCard : TestItemTrainingCard;
+
   // Switch to correct card
-  if (value.type === TestItemType.example) return <TestItemExampleCard title={
-    <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
-           onFocus={event => event.target.select()}/>
-  } example={value.example} onDelete={onDelete}/>
+  if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard title={
+    <input style={labelInputStyle} onFocus={event => event.target.select()}
+           value={value.title} onChange={handleLabelChange}/>
+  } example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}/>
 
-  else if (value.type === TestItemType.question) return <TestItemQuestionCard {...props}/>
-
-  else if (value.type === TestItemType.training) return <TestItemTrainingCard title={
-    <input style={labelInputStyle} value={value.title} onChange={handleLabelChange}
-           onFocus={event => event.target.select()}/>
-  } example={value.example} onDelete={onDelete}/>
+  else if (value.type === TestItemType.question)
+    return <TestItemQuestionCard {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}/>
 
   else return null;
 })
 
-export const TestItemQuestionCard = observer(function ({value, onDelete}: { value: TestItemModel, onDelete: () => void }) {
+const useStyles = makeStyles((theme: Theme) => {
+  const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
+  return createStyles({
+    expand: {transform: 'rotate(90deg)', transition: trans},
+    expandOpen: {transform: 'rotate(0deg)', transition: trans},
+  });
+});
+
+const HeaderIconButtons = observer(function ({onDelete, value}: { value: TestItemModel, onDelete: () => void }) {
+  const classes = useStyles();
+  return <>
+    <IconButton className={value.collapsed ? classes.expand : classes.expandOpen}
+                onClick={() => value.collapsed = !value.collapsed}><Icon>{value.collapsed ? 'add' : 'remove'}</Icon></IconButton>
+    <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
+  </>
+})
+
+const TestItemQuestionCard = observer(function ({value, action, collapsed}: { value: TestItemModel, action: ReactNode, collapsed?: boolean }) {
   return <Card>
-    <CardHeader style={{paddingBottom: 0}} action={<>
+    <CardHeader action={<>
       {value.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
         <Switch checked={value.questionControl.required}
                 onChange={e => value.questionControl.required = e.target.checked}/>}
-      />}
-      <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
+      />} {action}
     </>} title={<input style={labelInputStyle} value={value.title} onChange={e => value.title = e.target.value}
                        onFocus={event => event.target.select()}/>}>
     </CardHeader>
-    <CardContent>
-      <SurveyControl control={value.questionControl}/>
-    </CardContent>
+    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+      <CardContent style={{paddingTop: 0}}>
+        <SurveyControl control={value.questionControl}/>
+      </CardContent>
+    </Collapse>
   </Card>
 })
 
-export const TestItemTrainingCard = observer((props: React.PropsWithChildren<{
-  example: ItemExampleModel,
-  title: React.ReactNode,
-  onDelete: () => void
+const TestItemTrainingCard = observer((props: React.PropsWithChildren<{
+  example: ItemExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
 }>) => {
-  const {example, onDelete, title} = props;
+  const {example, title, action, collapsed} = props;
 
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
@@ -81,29 +98,28 @@ export const TestItemTrainingCard = observer((props: React.PropsWithChildren<{
   const handleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
 
   return <Card>
-    <CardHeader style={{paddingBottom: 0}} title={title} action={
-      <span>
-        <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
-        <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
-      </span>
-    }/>
-    <CardContent>
-      <Grid container spacing={2}>
-        {/*Description for this example*/}
-        {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-          <SurveyControl control={q}/>
-        </Grid>)}
+    <CardHeader title={title} action={<>
+      <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      {action} </>}/>
+    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+      <CardContent style={{paddingTop: 0}}>
+        <Grid container spacing={2}>
+          {/*Description for this example*/}
+          {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
+            <SurveyControl control={q}/>
+          </Grid>)}
 
-        {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
-          <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
-        </Grid>)}
+          {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
+            <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
+          </Grid>)}
 
-        {/*Placeholder for adding to list*/}
-        <Grid item xs={12} md={4}>
-          <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
+          {/*Placeholder for adding to list*/}
+          <Grid item xs={12} md={4}>
+            <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
+          </Grid>
         </Grid>
-      </Grid>
-    </CardContent>
+      </CardContent>
+    </Collapse>
     {/*<CardActions style={{justifyContent: 'flex-end', paddingTop: 0}}>
     </CardActions>*/}
   </Card>;

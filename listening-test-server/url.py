@@ -1,3 +1,4 @@
+from handlers.dashboard import DashboardHandler
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
 from handlers.survey.hearing_survey import HearingSurveyHandler
@@ -17,8 +18,6 @@ from handlers.test_response.test_responses import TestResponsesHandler
 from handlers.audio_file import AudioFileHandler
 from handlers.survey.ab_test_survey import AbTestSurveyHandler
 
-api_url = r"/api"
-
 
 path = [
     # Public
@@ -28,6 +27,7 @@ path = [
     # Tools and others
     ("/api/audio-file", AudioFileHandler),
     ("/api/password", PasswordHandler),
+    ("/api/dashboard", DashboardHandler),
 
     # # Tests and Survey
     ("/api/ab-test", AbTestHandler),

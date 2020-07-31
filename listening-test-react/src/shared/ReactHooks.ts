@@ -13,7 +13,7 @@ export function useScrollToView(viewRef: RefObject<any> = null) {
 
   useEffect(() => {
     if (viewRef && viewRef.current && isUpdated !== null) {
-      viewRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+      viewRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
     }
   }, [isUpdated])
 

@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import {Box, Chip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {observer} from "mobx-react";
-import {useElementGroupStyle} from "../../views/SharedStyles";
+import {useMatStyles} from "../../views/SharedStyles";
 
 export const TagsGroup = observer((props: {value: string, onChange: (value: string) => void}) => {
-  const classes = useElementGroupStyle();
+  const classes = useMatStyles();
   const [newLabel, setNewLabel] = useState('Add Tag');
   const {value, onChange} = props;
 
