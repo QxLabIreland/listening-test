@@ -25,6 +25,8 @@ export interface TestItemModel {
   example?: ItemExampleModel;
   // Time for users staying at this item.
   time?: number;
+  // If the card expanded or not
+  collapsed?: boolean;
 }
 
 export interface TestSettingsModel {

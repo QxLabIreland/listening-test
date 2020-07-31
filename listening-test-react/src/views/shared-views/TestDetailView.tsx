@@ -20,7 +20,7 @@ import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 
 export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
   testUrl: TestUrl,
-  TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, onDelete: () => void, title: React.ReactNode }>,
+  TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }>,
   ButtonGroup: FunctionComponent<{ onAdd: (type: TestItemModel) => void }>
 }) {
   const {id} = useParams();
@@ -84,8 +84,11 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const deleteItem = (index: number) => tests.items.splice(index, 1);
 
   const handleReorder = (index: number, newIndex: number) => {
-    const value = tests.items.splice(index, 1);
+    // const value = tests.items[index];
+    // tests.items[index] = tests.items[newIndex];
+    // tests.items[newIndex] = value;
     // Insert and delete original
+    const value = tests.items.splice(index, 1);
     tests.items.splice(newIndex, 0, ...value);
   }
 

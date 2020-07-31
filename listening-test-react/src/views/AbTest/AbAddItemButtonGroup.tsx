@@ -8,15 +8,16 @@ import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {useElementGroupStyle} from "../SharedStyles";
+import {useMatStyles} from "../SharedStyles";
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
   const {onAdd} = props;
-  const classes = useElementGroupStyle();
+  const classes = useMatStyles();
 
   const handleAddExample = () => onAdd({
     id: uuid(),
     type: TestItemType.example,
+    title: 'Example (click to edit)',
     example: {
       fields: [{
         type: SurveyControlType.radio,
@@ -30,7 +31,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
   });
 
   const handleAddTraining = () => onAdd({
-    id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
+    id: uuid(), type: TestItemType.training, title: 'Training (click to edit)', example: {
       fields: [
         {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
       ], audios: []
@@ -43,7 +44,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
       onAdd({
         id: uuid(),
         type: TestItemType.question,
-        title: 'Survey Question (Click to edit this)',
+        title: 'Survey Question (click to edit)',
         questionControl: question
       });
       clearTimeout(timer);

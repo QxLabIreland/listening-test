@@ -17,11 +17,15 @@ export const labelInputStyle = {
   width: '100%'
 } as CSSProperties;
 
-export const useElementGroupStyle = makeStyles((theme: Theme) => createStyles({
-  elementGroup: {
-    '& > *': {margin: theme.spacing(0.5)}
-  }
-}));
+export const useMatStyles = makeStyles((theme: Theme) => {
+  const transitionAll = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
+  return createStyles({
+    elementGroup: {
+      '& > *': {margin: theme.spacing(0.5)}
+    },
+    animated: {transition: transitionAll}
+  });
+});
 
 export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
   root: {
