@@ -45,7 +45,6 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
             control={<Checkbox checked={formik.values.requireClipEnded} {...formik.getFieldProps('requireClipEnded')}/>}
             label="Require the user to listen to each example in full"
           />
-
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" type="button">
