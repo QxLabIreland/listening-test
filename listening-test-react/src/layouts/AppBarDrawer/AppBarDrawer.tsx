@@ -15,6 +15,7 @@ import Axios from "axios";
 import TestListPage from "../../views/shared-views/TestListPage";
 import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
+import ManageUsers from "../../views/ManageUsers";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -42,10 +43,12 @@ export default function AppBarDrawer(props: any) {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleSignOut = () => Axios.delete('/api/login').then()
+  const handleSignOut = () => Axios.delete('/api/login').then();
 
   const drawer = <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
+    <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
+    <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
@@ -80,6 +83,17 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/dashboard`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
+        <Route exact path={`${path}/people`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <ManageUsers/>
+          </AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/template`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+
+          </AppBarLayout>
+        </Route>
+        {/*Test routes*/}
         <Route exact path={`${path}/ab-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
             <TestListPage testUrl="ab-test"/>

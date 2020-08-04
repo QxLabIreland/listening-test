@@ -1,3 +1,4 @@
+from handlers.auth.users import UsersHandler
 from handlers.dashboard import DashboardHandler
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
@@ -27,7 +28,10 @@ path = [
     # Tools and others
     ("/api/audio-file", AudioFileHandler),
     ("/api/password", PasswordHandler),
+
+    # Web app management
     ("/api/dashboard", DashboardHandler),
+    ("/api/users", UsersHandler),
 
     # # Tests and Survey
     ("/api/ab-test", AbTestHandler),

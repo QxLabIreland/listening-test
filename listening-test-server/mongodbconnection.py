@@ -4,8 +4,6 @@ from datetime import datetime, date, timedelta
 import bson
 import pymongo
 
-from handlers.auth.permissions import permission_list
-
 
 class CJsonEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -40,7 +38,7 @@ def create_default_user():
         'password': 'e10adc3949ba59abbe56e057f20f883e',
         'email': 'admin@yourdomain.com',
         'isAdmin': True,
-        'permissions': list(permission_list)
+        'permissions': ['user', 'template']
     }
     if not con.db['users'].find_one({'isAdmin': True}):
         con.db['users'].insert(default_user)
