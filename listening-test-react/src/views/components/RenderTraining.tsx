@@ -8,10 +8,10 @@ import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 export const RenderTraining = observer(function (props: { value: ItemExampleModel, active?: boolean, disableSlider?: boolean }) {
   const {value, active, disableSlider = false} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause} = useAudioPlayer(value.audios, value.audioRef);
 
   useEffect(() => {
-    if (active === false) onPause();
+    if (active === false) handlePause();
   }, [active]);
 
   return <Grid container spacing={3}>
@@ -21,8 +21,8 @@ export const RenderTraining = observer(function (props: { value: ItemExampleMode
     </Grid>)}
 
     {value.audios.map((v, i) => <Grid item key={i}>
-      <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
-                   onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
+      <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} settings={value.settings}
+                   onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
       {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
     </Grid>)}
 

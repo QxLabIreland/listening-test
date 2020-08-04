@@ -26,25 +26,25 @@ export const AbSurveyRenderItem = observer(function (props: { item: TestItemMode
 const RenderQuestionedExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, onTimeUpdate, onPlay, onPause} = useAudioPlayer(value.audios, value.audioRef);
+  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause} = useAudioPlayer(value.audios, value.audioRef);
   const loading = useAllAudioReady(value.audioRef ? [...refs, sampleRef] : refs);
 
   useEffect(() => {
-    if (active === false) onPause();
+    if (active === false) handlePause();
   }, [active]);
 
   return <> <AudioLoading showing={loading}/>
     <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
 
       {value.audios.map((v, i) => <Grid item key={i}>
-        <AudioButton ref={refs[i]} audio={v} onPlay={onPlay} onPause={onPause} settings={value.settings}
-                     onTimeUpdate={i === 0 ? onTimeUpdate : undefined}>{i + 1}</AudioButton>
+        <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} settings={value.settings}
+                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
         {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
       </Grid>)}
 
       {/*Reference*/}
       {value.audioRef && <Grid item>
-        <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={onPlay} onPause={onPause}>Ref</AudioButton>
+        <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
         {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
       </Grid>}
 

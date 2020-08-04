@@ -38,7 +38,7 @@ def create_default_user():
         'password': 'e10adc3949ba59abbe56e057f20f883e',
         'email': 'admin@yourdomain.com',
         'isAdmin': True,
-        'permissions': ['user', 'template']
+        'permissions': ['User', 'Template']
     }
     if not con.db['users'].find_one({'isAdmin': True}):
         con.db['users'].insert(default_user)
