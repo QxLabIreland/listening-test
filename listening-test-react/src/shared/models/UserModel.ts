@@ -3,4 +3,6 @@ export class UserModel {
   email: string;
   password?: string;
   policy?: boolean;
+  isAdmin?: boolean;
+  permissions?: string[];
 }
