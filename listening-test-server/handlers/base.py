@@ -4,8 +4,7 @@ import bson
 import tornado.web
 from bson import ObjectId
 from bson.json_util import dumps, loads
-from pymongo.collection import Collection
-from mongodbconnection import MongoDBConnection, CJsonEncoder
+from mongodbconnection import MongoDBConnection
 
 
 class BaseHandler(tornado.web.RequestHandler, ABC):
@@ -53,18 +52,16 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
     #     self.set_header("Access-Control-Allow-Headers", "x-requested-with")
     #     self.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
 
-    # if no login send 403, else return id with ObjectId
     def get_current_user(self):
         id_user = self.get_secure_cookie("_user", None)
-        if not id_user:
-            self.set_error(403, "You don't have permission")
-            return None
-        else:
-            return ObjectId(id_user.decode("utf-8"))
+        return ObjectId(id_user.decode("utf-8")) if id_user else None
 
+    # if no login send 403, else return id with ObjectId
     def auth_current_user(self) -> ObjectId:
         user_id = self.get_current_user()
         if user_id is None:
+            self.set_error(403, "You don't have permission")
+            # Force connect to stop
             raise tornado.web.Finish
         else:
             return user_id
