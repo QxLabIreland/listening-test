@@ -39,7 +39,7 @@ def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
     test_type = self.get_argument('testType')
     # Get right collection
     if test_type == 'ab-test':
-        return self.db['abTestSurveys']
+        return self.db['abSurveys']
     elif test_type == 'acr-test':
         return self.db['acrSurveys']
     elif test_type == 'mushra-test':

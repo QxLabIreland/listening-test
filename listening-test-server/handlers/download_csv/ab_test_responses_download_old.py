@@ -17,7 +17,7 @@ class AbTestResponsesDownload(BaseHandler):
     # Download api
     async def get(self):
         # Change collection
-        res_collection = self.db['abTestSurveys']
+        res_collection = self.db['abSurveys']
         if not res_collection:
             return
         # Get responses, based on 1 test

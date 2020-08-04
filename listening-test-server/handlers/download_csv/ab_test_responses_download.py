@@ -14,7 +14,7 @@ class AbTestResponsesDownload(BaseHandler):
     async def get(self):
         # Get responses, based on 1 test
         test_id = self.get_argument('testId')
-        data = self.db['abTestSurveys'].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
+        data = self.db['abSurveys'].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
             .sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
