@@ -40,6 +40,7 @@ with tarfile.open(base_dir_tgz, "w:gz") as tar:
 print('Transfer the files to server...')
 subprocess.run(f'scp -i ForStudy.pem -r {base_dir} ubuntu@63.34.10.16:/home/ubuntu/listeningTest')
 
-print('Start ssh...')
+print('Start ssh and run script...')
+# subprocess.run('ssh -i ForStudy.pem ubuntu@63.34.10.16 "pip install tornado pymongo"')
 # subprocess.run('ssh -i ForStudy.pem ubuntu@63.34.10.16 "sudo supervisorctl reload"')
 subprocess.run('ssh -i ForStudy.pem ubuntu@63.34.10.16 "sudo supervisorctl restart golisten"')

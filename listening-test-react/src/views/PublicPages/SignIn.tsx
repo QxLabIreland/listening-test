@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {Link as RouterLink, useHistory} from 'react-router-dom';
+import {Link as RouterLink, useHistory, useLocation} from 'react-router-dom';
 import {Button, Grid, Link, TextField, Typography} from '@material-ui/core';
 import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
-import {GlobalDialog} from "../../shared/ReactContexts";
+import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5';
 import {useSignInUpStyles} from "../SharedStyles";
 
@@ -12,12 +12,21 @@ export default function SignIn() {
   const classes = useSignInUpStyles();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
+  // Authorization hooks
+  const {setCurrentUser} = useContext(CurrentUser);
+  const location = useLocation();
 
   const formik = useFormik({
     initialValues: {email: '', password: ''},
     // Hash the password
     onSubmit: values => Axios.post('/api/login', {...values, password: Md5.hashStr(values.password)})
-      .then(() => history.push('/user'), (reason) => {
+      .then((res) => {
+        // Set current user and navigate to dashboard
+        setCurrentUser(res.data);
+        // Get state where user has been blocked by authentication
+        const {from} = location.state as any || { from: { pathname: '/user' } };
+        history.push(from);
+      }, (reason) => {
         openDialog(reason.response.data);
       }),
     validate: pipeValidator({
