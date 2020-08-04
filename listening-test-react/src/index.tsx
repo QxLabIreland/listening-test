@@ -4,6 +4,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import App from "./App";
+import Axios from "axios";
+
+Axios.defaults.withCredentials = true;
+Axios.defaults.xsrfHeaderName = "X-CSRFToken";
+Axios.defaults.xsrfCookieName = "_xsrf";
 
 ReactDOM.render(
   <React.StrictMode>
