@@ -82,7 +82,7 @@ export default function SignIn() {
                            {...formik.getFieldProps('password')}
                            error={!!formik.errors.password} helperText={formik.errors.password}/>
 
-                <Button className={classes.signInButton} color="primary" fullWidth size="large" type="submit"
+                <Button className={classes.signInUpButton} color="primary" fullWidth size="large" type="submit"
                         variant="contained">
                   Sign in now
                 </Button>

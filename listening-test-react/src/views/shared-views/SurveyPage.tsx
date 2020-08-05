@@ -13,10 +13,14 @@ import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {useSurveyRenderItem} from "../../shared/ReactHooks";
+import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
+import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
+import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
+import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
+import {questionedExValidateError, sliderItemValidateError} from "../../shared/ErrorValidators";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -122,3 +126,37 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     </Grid>
   </Grid> : <Loading error={!!error} message={error}/>}</Box>
 })
+
+// An hook to switch different views of card
+function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: TestItemModel, active?: boolean }) => JSX.Element, validateError: (item: TestItemModel) => string } {
+  // Switch to right rendering item
+  const renderItemByTestUrl = () => {
+    switch (testUrl) {
+      case "ab-test":
+        return AbSurveyRenderItem
+      case "acr-test":
+        return AcrSurveyRenderItem
+      case "mushra-test":
+        return MushraSurveyRenderItem
+      case "hearing-test":
+        return HearingSurveyRenderItem
+      default:
+        return null;
+    }
+  }
+
+  const validateError = () => {
+    switch (testUrl) {
+      case "ab-test":
+        return questionedExValidateError;
+      case "acr-test":
+      case "mushra-test":
+      case "hearing-test":
+        return sliderItemValidateError;
+      default:
+        return null;
+    }
+  }
+  return {RenderedItem: renderItemByTestUrl(), validateError: validateError()}
+}
+

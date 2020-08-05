@@ -1,11 +1,5 @@
-import {RefObject, useEffect, useState} from "react";
-import {TestItemModel} from "./models/BasicTestModel";
-import {AbSurveyRenderItem} from "../views/AbTest/AbSurveyRenderItem";
-import {AcrSurveyRenderItem} from "../views/AcrTest/AcrSurveyRenderItem";
-import {MushraSurveyRenderItem} from "../views/Mushra/MushraSurveyRenderItem";
-import {HearingSurveyRenderItem} from "../views/HearingTest/HearingSurveyRenderItem";
-import {questionedExValidateError, sliderItemValidateError} from "./ErrorValidators";
-import {TestUrl} from "./models/EnumsAndTypes";
+import {RefObject, useContext, useEffect, useState} from "react";
+import {CurrentUser} from "./ReactContexts";
 
 export function useScrollToView(viewRef: RefObject<any> = null) {
   // Scroll properties
@@ -25,34 +19,13 @@ export function useScrollToView(viewRef: RefObject<any> = null) {
   return {scrollToView}
 }
 
-export function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: TestItemModel, active?: boolean }) => JSX.Element, validateError: (item: TestItemModel) => string } {
-  // Switch to right rendering item
-  const renderItemByTestUrl = () => {
-    switch (testUrl) {
-      case "ab-test":
-        return AbSurveyRenderItem
-      case "acr-test":
-        return AcrSurveyRenderItem
-      case "mushra-test":
-        return MushraSurveyRenderItem
-      case "hearing-test":
-        return HearingSurveyRenderItem
-      default:
-        return null;
-    }
-  }
+export function useUserAuthFun(permission?: string) {
+  const {currentUser} = useContext(CurrentUser);
 
-  const validateError = () => {
-    switch (testUrl) {
-      case "ab-test":
-        return questionedExValidateError;
-      case "acr-test":
-      case "mushra-test":
-      case "hearing-test":
-        return sliderItemValidateError;
-      default:
-        return null;
-    }
-  }
-  return {RenderedItem: renderItemByTestUrl(), validateError: validateError()}
+  return (): boolean => {
+    // No permission given, only valid if the user is logged in
+    if (!permission) return currentUser !== null;
+    // If user has permission to this page
+    else return currentUser?.permissions?.includes(permission);
+  };
 }

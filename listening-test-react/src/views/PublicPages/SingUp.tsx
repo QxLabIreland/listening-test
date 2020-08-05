@@ -80,7 +80,7 @@ export default function SignUp() {
                   </Typography>
                 </div>
                 {!!formik.errors.policy && <FormHelperText error>{formik.errors.policy}</FormHelperText>}
-                <Button className={classes.signUpButton} color="primary" fullWidth
+                <Button className={classes.signInUpButton} color="primary" fullWidth
                         size="large" type="submit" variant="contained">
                   Sign up now
                 </Button>

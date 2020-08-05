@@ -16,6 +16,7 @@ import TestListPage from "../../views/shared-views/TestListPage";
 import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
 import ManageUsers from "../../views/ManageUsers";
+import AuthRoute from "../components/AuthRoute";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -83,16 +84,16 @@ export default function AppBarDrawer(props: any) {
         <Route exact path={`${path}/dashboard`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
-        <Route exact path={`${path}/people`}>
+        <AuthRoute exact path={`${path}/people`} permission="User">
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
             <ManageUsers/>
           </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/template`}>
+        </AuthRoute>
+        <AuthRoute exact path={`${path}/template`} permission="Template">
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
 
           </AppBarLayout>
-        </Route>
+        </AuthRoute>
         {/*Test routes*/}
         <Route exact path={`${path}/ab-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>

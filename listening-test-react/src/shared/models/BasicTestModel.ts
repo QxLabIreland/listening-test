@@ -9,6 +9,7 @@ export interface BasicTestModel {
   description: string;
   createdAt?: { $date: Date };
   modifiedAt?: { $date: Date };
+  isTemplate?: boolean;
   // This is the field show how many responses this test have
   responses?: [];
   // In list view, we may get rid of these fields
