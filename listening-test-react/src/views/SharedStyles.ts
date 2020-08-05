@@ -118,9 +118,6 @@ export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
     marginLeft: '-14px'
   },
   // Sign In Styles
-  signUpButton: {
-    margin: theme.spacing(2, 0)
-  },
   socialButtons: {
     marginTop: theme.spacing(3)
   },
@@ -130,7 +127,8 @@ export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
   suggestion: {
     marginTop: theme.spacing(2)
   },
-  signInButton: {
-    margin: theme.spacing(2, 0)
+  signInUpButton: {
+    margin: theme.spacing(2, 0),
+    background: 'linear-gradient(45deg, #2991ff 30%, #ff005b 90%)',
   }
 }));

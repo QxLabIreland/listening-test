@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
@@ -20,6 +20,7 @@ import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalSnackbar} from "../../shared/ReactContexts";
+import {useUserAuthFun} from "../../shared/ReactHooks";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
@@ -37,6 +38,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState(undefined);
   const openSnackbar = useContext(GlobalSnackbar);
+  const authenticate = useUserAuthFun('Template');
 
   useEffect(() => {
     Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true})
@@ -73,6 +75,13 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
       openSnackbar('Duplicate successfully');
     }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
 
+  const handleIsTemplateChange = (test: BasicTestModel) =>
+    Axios.put<boolean>('/api/toggle-template', {testType: testUrl, _id: test._id}).then(res => {
+      test.isTemplate = res.data;
+      // To refresh component
+      setData([...data]);
+    }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
+
   return (
     <Grid container spacing={2}>
       <Grid item container xs={12}>
@@ -101,6 +110,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
+                  {authenticate()&&<TableCell>Template</TableCell>}
                   <TableCell/>
                 </TableRow>
               </TableHead>
@@ -117,6 +127,9 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
                   </TableCell>
+                  {authenticate()&&<TableCell>
+                    <Checkbox checked={!!test.isTemplate} onChange={()=>handleIsTemplateChange(test)}/>
+                  </TableCell>}
                   <TableCell>
                     <Tooltip title="Edit">
 

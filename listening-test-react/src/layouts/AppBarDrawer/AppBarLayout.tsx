@@ -24,10 +24,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
   },
   // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
+  toolbar: {...theme.mixins.toolbar},
   content: {
     flexGrow: 1,
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(2)
   }
 }));
 

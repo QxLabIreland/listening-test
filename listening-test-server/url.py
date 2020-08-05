@@ -18,7 +18,7 @@ from handlers.download_csv.ab_test_responses_download import AbTestResponsesDown
 from handlers.test_response.test_responses import TestResponsesHandler
 from handlers.audio_file import AudioFileHandler
 from handlers.survey.ab_test_survey import AbTestSurveyHandler
-
+from handlers.test_response.toggle_template import ToggleTemplate
 
 path = [
     # Public
@@ -50,8 +50,9 @@ path = [
     ("/api/csv-download/hearing-test", HearingTestCsvDownload),
     ("/api/task/hearing-test", HearingSurveyHandler),
 
-    # Response
+    # Response and Misc
     ("/api/response", TestResponsesHandler),
     ("/api/response-count", ResponsesCountHandler),
+    ("/api/toggle-template", ToggleTemplate),
 ]
 
