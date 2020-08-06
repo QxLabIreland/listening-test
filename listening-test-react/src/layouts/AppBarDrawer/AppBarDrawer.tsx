@@ -9,7 +9,7 @@ import {Redirect, Route, Switch, useRouteMatch} from "react-router";
 import Loading from "../components/Loading";
 import DashboardPage from "../../views/DashboardPage";
 import SettingsPage from "../../views/SettingsPage";
-import ListItemNavLink from "./ListItemNavLink";
+import {ListItemNavLink} from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import Axios from "axios";
 import TestListPage from "../../views/shared-views/TestListPage";
@@ -17,23 +17,15 @@ import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
 import ManageUsers from "../../views/ManageUsers";
 import AuthRoute from "../components/AuthRoute";
+import TemplatesPage from "../../views/TemplatesPage";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  }
+  root: {display: 'flex'},
+  drawer: {[theme.breakpoints.up('sm')]: {width: drawerWidth, flexShrink: 0}},
+  drawerPaper: {width: drawerWidth}
 }));
 
-export default function AppBarDrawer(props: any) {
+export function AppBarDrawer(props: any) {
   const {path} = useRouteMatch();
   const {window} = props;
   const classes = useStyles();
@@ -46,7 +38,7 @@ export default function AppBarDrawer(props: any) {
 
   const handleSignOut = () => Axios.delete('/api/login').then();
 
-  const drawer = <List>
+  const DrawerList = () => <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
@@ -70,11 +62,11 @@ export default function AppBarDrawer(props: any) {
         <Drawer container={container} variant="temporary" anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                 open={mobileOpen} onClose={handleDrawerToggle} classes={{paper: classes.drawerPaper}}
                 ModalProps={{keepMounted: true}}>
-          {drawer}
+          <DrawerList/>
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
-        <Drawer classes={{paper: classes.drawerPaper,}} variant="permanent" open>{drawer}</Drawer>
+        <Drawer classes={{paper: classes.drawerPaper,}} variant="permanent" open><DrawerList/></Drawer>
       </Hidden>
     </nav>
     <Suspense fallback={<Loading/>}>
@@ -91,7 +83,7 @@ export default function AppBarDrawer(props: any) {
         </AuthRoute>
         <AuthRoute exact path={`${path}/template`} permission="Template">
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-
+            <TemplatesPage/>
           </AppBarLayout>
         </AuthRoute>
         {/*Test routes*/}

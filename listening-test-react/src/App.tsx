@@ -2,7 +2,7 @@ import React, {Suspense, useContext} from 'react';
 import Loading from "./layouts/components/Loading";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";
-import AppBarDrawer from "./layouts/AppBarDrawer/AppBarDrawer";
+import {AppBarDrawer} from "./layouts/AppBarDrawer/AppBarDrawer";
 import NotFoundView from "./layouts/components/NotFoundView";
 import PublicContainer from "./layouts/PublicContainer";
 import XsrfAuthUserProvider from "./shared/providers/XsrfAuthUserProvider";

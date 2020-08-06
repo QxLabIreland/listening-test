@@ -5,7 +5,7 @@ import tornado.web
 from bson import ObjectId
 
 from handlers.base import BaseHandler
-from handlers.test_response.test_responses import switch_response_collection
+from handlers.miscellanea.test_responses import switch_response_collection
 from tools.file_helper import write_data_in_csv
 from datetime import datetime
 

@@ -10,7 +10,8 @@ export default function XsrfAuthUserProvider(props: PropsWithChildren<any>) {
   useEffect(() => {
     Axios.get('/api/login').then(res => {
       // Check if the data is UserModel
-      if (res.data.hasOwnProperty('email') && res.data.hasOwnProperty('name')) setCurrentUser(res.data);
+      if (res.data.hasOwnProperty('email') && res.data.hasOwnProperty('name'))
+        setCurrentUser(res.data);
       else setCurrentUser(null);
     }, err => openDialog(err.response.data, 'Server Error'));
   }, []);

@@ -1,14 +1,9 @@
-import tornado.web
 from handlers.base import BaseHandler
 
 
 class UsersHandler(BaseHandler):
     def prepare(self):
-        self.user_id = self.auth_current_user()
-        # Get user and check the permissions
-        user = self.db['users'].find_one({'_id': self.user_id})
-        if 'User' not in user['permissions']:
-            raise tornado.web.Finish
+        self.user_id = self.auth_current_user('User')
 
     def get(self):
         # Exclude current user and administrators

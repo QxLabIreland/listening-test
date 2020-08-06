@@ -57,11 +57,17 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         return ObjectId(id_user.decode("utf-8")) if id_user else None
 
     # if no login send 403, else return id with ObjectId
-    def auth_current_user(self) -> ObjectId:
+    def auth_current_user(self, permission: str = None) -> ObjectId:
         user_id = self.get_current_user()
         if user_id is None:
             self.set_error(403, "You don't have permission")
             # Force connect to stop
             raise tornado.web.Finish
-        else:
-            return user_id
+        elif permission:
+            # Get user and check the permissions
+            user = self.db['users'].find_one({'_id': user_id})
+            if permission not in user['permissions']:
+                self.set_error(403, "You don't have permission")
+                raise tornado.web.Finish
+        # If no exception raised
+        return user_id

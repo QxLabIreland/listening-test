@@ -1,6 +1,7 @@
 import {TestItemType} from "./EnumsAndTypes";
 import {SurveyControlModel} from "./SurveyControlModel";
 import {ItemExampleModel} from "./ItemExampleModel";
+import {UserModel} from "./UserModel";
 
 export interface BasicTestModel {
   _id?: { $oid: string };
@@ -9,7 +10,9 @@ export interface BasicTestModel {
   description: string;
   createdAt?: { $date: Date };
   modifiedAt?: { $date: Date };
+  // Template fields
   isTemplate?: boolean;
+  creator?: UserModel;
   // This is the field show how many responses this test have
   responses?: [];
   // In list view, we may get rid of these fields

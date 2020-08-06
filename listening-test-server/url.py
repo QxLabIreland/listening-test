@@ -13,12 +13,12 @@ from handlers.download_csv.acr_test_csv_download import AcrTestCsvDownload
 from handlers.survey.acr_survey import AcrSurveyHandler
 from handlers.test_handlers.hearing_test import HearingTestHandler
 from handlers.test_handlers.mushra_test import MushraTestHandler
-from handlers.test_response.responses_count import ResponsesCountHandler
+from handlers.miscellanea.responses_count import ResponsesCountHandler
 from handlers.download_csv.ab_test_responses_download import AbTestResponsesDownload
-from handlers.test_response.test_responses import TestResponsesHandler
+from handlers.miscellanea.test_responses import TestResponsesHandler
 from handlers.audio_file import AudioFileHandler
 from handlers.survey.ab_test_survey import AbTestSurveyHandler
-from handlers.test_response.toggle_template import ToggleTemplate
+from handlers.miscellanea.template_handler import TemplateHandler
 
 path = [
     # Public
@@ -53,6 +53,6 @@ path = [
     # Response and Misc
     ("/api/response", TestResponsesHandler),
     ("/api/response-count", ResponsesCountHandler),
-    ("/api/toggle-template", ToggleTemplate),
+    ("/api/template", TemplateHandler),
 ]
 
