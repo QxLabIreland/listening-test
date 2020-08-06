@@ -14,7 +14,13 @@ class TemplateHandler(BaseHandler):
 
     def get(self):
         collection = switch_test_collection(self)
-        data = collection.find({'isTemplate': True}).sort('createdAt', pymongo.DESCENDING)
+        data = collection.aggregate([
+            {'$match': {'isTemplate': True}},
+            {'$lookup': {'from': 'users', 'localField': 'userId', 'foreignField': '_id', 'as': 'creator'}},
+            {'$set': {'creator': {'$arrayElemAt': ['$creator', 0]}}},
+            {'$project': {'items': 0, 'description': 0, 'settings': 0}},
+            {'$sort': {'createdAt': -1}}
+        ])
         self.dumps_write(data)
 
     def put(self):

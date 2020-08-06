@@ -7,15 +7,15 @@ export interface BasicTestModel {
   _id?: { $oid: string };
   userId?: number;
   name: string;
-  description: string;
   createdAt?: { $date: Date };
   modifiedAt?: { $date: Date };
   // Template fields
   isTemplate?: boolean;
   creator?: UserModel;
   // This is the field show how many responses this test have
-  responses?: [];
+  responseNum?: number;
   // In list view, we may get rid of these fields
+  description: string;
   items: TestItemModel[];
   settings?: TestSettingsModel;
 }
