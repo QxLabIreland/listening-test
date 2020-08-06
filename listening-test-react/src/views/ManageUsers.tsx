@@ -1,4 +1,3 @@
-import {TestUrl} from "../shared/models/EnumsAndTypes";
 import React, {useContext, useEffect, useState} from "react";
 import Axios from "axios";
 import {Checkbox, FormControlLabel, Grid, Icon, IconButton} from "@material-ui/core";
@@ -68,7 +67,7 @@ export default function ManageUsers() {
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{fullPermissions.map(per =>
-              <FormControlLabel label={per} disabled={processing} control={
+              <FormControlLabel key={per} label={per} disabled={processing} control={
                 <Checkbox checked={user.permissions?.indexOf(per) > -1}
                           onChange={() => handleAddPermission(per, user)}/>}
               />

@@ -19,13 +19,11 @@ export function useScrollToView(viewRef: RefObject<any> = null) {
   return {scrollToView}
 }
 
-export function useUserAuthFun(permission?: string) {
+export function useUserAuthResult(permission?: string) {
   const {currentUser} = useContext(CurrentUser);
 
-  return (): boolean => {
-    // No permission given, only valid if the user is logged in
-    if (!permission) return currentUser !== null;
-    // If user has permission to this page
-    else return currentUser?.permissions?.includes(permission);
-  };
+  // No permission given, only valid if the user is logged in
+  if (!permission) return !!currentUser;
+  // If user has permission to this page
+  else return currentUser?.permissions?.includes(permission);
 }

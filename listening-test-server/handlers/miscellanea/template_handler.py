@@ -1,12 +1,22 @@
 from typing import Optional
 
+import pymongo
 import tornado.web
 from pymongo.collection import Collection
 
 from handlers.base import BaseHandler
 
 
-class ToggleTemplate(BaseHandler):
+class TemplateHandler(BaseHandler):
+    def prepare(self):
+        # Get user and check the permissions
+        self.user_id = self.auth_current_user('Template')
+
+    def get(self):
+        collection = switch_test_collection(self)
+        data = collection.find({'isTemplate': True}).sort('createdAt', pymongo.DESCENDING)
+        self.dumps_write(data)
+
     def put(self):
         # Get collection and request data
         body = self.loads_body()
@@ -23,8 +33,7 @@ class ToggleTemplate(BaseHandler):
 
 
 def switch_test_collection(self: BaseHandler) -> Optional[Collection]:
-    test_type = self.loads_body()['testType']
-    print(test_type)
+    test_type = self.get_argument('testType')
     # Get right collection
     if test_type == 'ab-test':
         return self.db['abTests']

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Checkbox, FormControlLabel, Grid, Icon, IconButton, Snackbar} from "@material-ui/core";
+import {Checkbox, Grid, Icon, IconButton, Menu, MenuItem, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import SearchInput from "../../shared/components/SearchInput";
@@ -13,39 +13,33 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableBody from "@material-ui/core/TableBody";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalSnackbar} from "../../shared/ReactContexts";
-import {useUserAuthFun} from "../../shared/ReactHooks";
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  content: {
-    padding: 0
-  },
-  button: {
-    marginRight: theme.spacing(1)
-  }
-}));
+import {useUserAuthResult} from "../../shared/ReactHooks";
+import {useMatStyles} from "../SharedStyles";
+import {useTemplateList} from "../TemplatesPage";
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
-  const classes = useStyles();
+  const classes = useMatStyles();
   const [data, setData] = useState<BasicTestModel[]>(null);
   const [searchStr, setSearchStr] = useState<string>('');
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState();
   const openSnackbar = useContext(GlobalSnackbar);
-  const authenticate = useUserAuthFun('Template');
+  // Authenticate if user has permission to template
+  const userAuth = useUserAuthResult('Template');
+  const {templates, handleIsTemplateChange} = useTemplateList(testUrl);
 
   useEffect(() => {
-    Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true})
-      .then((res) => {
-        setData(res.data);
-      }, reason => setError(reason.response.data));
-
+    Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true}).then((res) => {
+      // // Divide templates and nonTemplates
+      // const [temp, nonTemp] = res.data.reduce(([pass, fail], elem) =>
+      //   elem.isTemplate ? [[...pass, elem], fail] : [pass, [...fail, elem]], [[], []]);
+      setData(res.data);
+    }, reason => setError(reason.response.data));
     // Reset state
     return () => {
       setData(null);
@@ -59,7 +53,6 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
     // Date searching
     || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
   );
-
   // When trash button clicked
   const handleDelete = (obj: BasicTestModel) =>
     Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
@@ -67,19 +60,11 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
       setData([...data]);
       openSnackbar('Delete successfully');
     });
-
   const handleCopyTest = (newTest: BasicTestModel) =>
     Axios.post<BasicTestModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
       data.unshift(res.data);
       setData([...data]);
       openSnackbar('Duplicate successfully');
-    }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
-
-  const handleIsTemplateChange = (test: BasicTestModel) =>
-    Axios.put<boolean>('/api/toggle-template', {testType: testUrl, _id: test._id}).then(res => {
-      test.isTemplate = res.data;
-      // To refresh component
-      setData([...data]);
     }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
 
   return (
@@ -90,27 +75,24 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
         </Grid>
         <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
           <span style={{flexGrow: 1}}/>
-          <Button color="primary" variant="contained" component={Link} to={`${path}/0`}>
-            Add test
-          </Button>
+          <AddTestMenu path={path} templates={templates}/>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         {data ? <Card>
-          <CardContent className={classes.content}>
+          <CardContent style={{padding: 0}}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Responses</TableCell>
-                  <TableCell sortDirection="desc">
+                  {/*<TableCell sortDirection="desc">
                     <Tooltip enterDelay={300} title="Sort">
-                      <TableSortLabel active direction="desc">
-                        Creation Date
-                      </TableSortLabel>
+                      <TableSortLabel active direction="desc">Creation Date</TableSortLabel>
                     </Tooltip>
-                  </TableCell>
-                  {authenticate()&&<TableCell>Template</TableCell>}
+                  </TableCell>*/}
+                  <TableCell>Creation Date</TableCell>
+                  {userAuth && <TableCell>Template</TableCell>}
                   <TableCell/>
                 </TableRow>
               </TableHead>
@@ -127,25 +109,22 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                   <TableCell>
                     {new Date(test.createdAt?.$date).toLocaleString()}
                   </TableCell>
-                  {authenticate()&&<TableCell>
-                    <Checkbox checked={!!test.isTemplate} onChange={()=>handleIsTemplateChange(test)}/>
+                  {userAuth && <TableCell>
+                    <Checkbox checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
                   </TableCell>}
-                  <TableCell>
+                  <TableCell className={classes.elementGroup}>
                     <Tooltip title="Edit">
-
-                      <IconButton className={classes.button} size="small" color="primary" component={Link}
+                      <IconButton size="small" color="primary" component={Link}
                                   to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
                     </Tooltip>
-                    <ShareIconButton className={classes.button} url={`/task/${testUrl}/${test._id.$oid}`}/>
+                    <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`}/>
                     <Tooltip title="Duplicate test">
-                      <IconButton className={classes.button} size="small" color="primary"
+                      <IconButton size="small" color="primary"
                                   onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-
-                      <IconButton className={classes.button} size="small" color="default"
-                                  onClick={() => handleDelete(test)}>
-                        <Icon>delete</Icon></IconButton>
+                      <IconButton size="small" color="default"
+                                  onClick={() => handleDelete(test)}><Icon>delete</Icon></IconButton>
                     </Tooltip>
                   </TableCell>
                 </TableRow>) : <TableRow><TableCell colSpan={4}>
@@ -168,10 +147,8 @@ function ShareIconButton({url, ...rest}: any) {
     if (reason === 'clickaway') return
     setSnackbarOpen(false);
   };
-  const handleShareClick = () => {
-    navigator.clipboard.writeText(getCurrentHost() + url)
+  const handleShareClick = () => navigator.clipboard.writeText(getCurrentHost() + url)
       .then(() => setSnackbarOpen(true));
-  }
 
   return <>
     <Tooltip title="Copy test URL">
@@ -198,5 +175,22 @@ function ShareIconButton({url, ...rest}: any) {
         </React.Fragment>
       }
     />
+  </>
+}
+
+function AddTestMenu({path, templates}: { path: string, templates: BasicTestModel[] }) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  return <>
+    <Button color="primary" variant="contained" onClick={handleClick}>Add test</Button>
+    <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+      <MenuItem onClick={handleClose} component={Link} to={`${path}/0`}>Blank test</MenuItem>
+      {templates ? templates.map(temp =>
+          <MenuItem key={temp._id.$oid} component={Link} to={`${path}/0?template=${123123}`}>{temp.name}</MenuItem>)
+        : <MenuItem disabled>No template</MenuItem>}
+    </Menu>
   </>
 }

@@ -8,7 +8,7 @@ export default function DashboardPage() {
         <CardHeader title="Welcome back"/>
         <CardContent>
           <Typography>
-            Welcome to Golisten! Click right side menu to start your tests!
+            Welcome to Golisten! This page is under construction but you can choose an option from the side menu to create a test
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>
