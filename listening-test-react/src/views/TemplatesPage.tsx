@@ -49,7 +49,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
           {templates.map(test => <TableRow hover key={test._id.$oid}>
             <TableCell>{test.name}</TableCell>
             <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
-            <TableCell>{test.creator}</TableCell>
+            <TableCell>{test.creator.name}</TableCell>
             <TableCell>
               <Checkbox checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
             </TableCell>

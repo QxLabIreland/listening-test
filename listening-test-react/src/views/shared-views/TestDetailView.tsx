@@ -1,4 +1,4 @@
-import {Prompt, useHistory, useParams} from "react-router";
+import {Prompt, useHistory, useLocation, useParams} from "react-router";
 import React, {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
 import {AbTestModel} from "../../shared/models/AbTestModel";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
@@ -34,13 +34,18 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const {scrollToView} = useScrollToView(viewRef);
   // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
+  const location = useLocation();
 
   // Request for server methods
   useEffect(() => {
     // If it is edit page, get data from back end
-    if (+id !== 0) Axios.get<AbTestModel>('/api/' + testUrl, {params: {_id: id}})
+    if (location.state || +id !== 0) Axios.get<AbTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       // Successful callback
-      .then((res) => setTests(observable(res.data)), () => setIsError(true));
+      .then((res) => {
+        // Prevent it from becoming a template
+        if (location.state) res.data.isTemplate = false;
+        setTests(observable(res.data));
+      }, () => setIsError(true));
     // If in creation page
     else setTests(observable({name: '', description: '', items: []}));
   }, [id, testUrl]);
