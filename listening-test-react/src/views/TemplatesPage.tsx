@@ -55,7 +55,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
             </TableCell>
           </TableRow>)}
           {!templates.length && <TableRow><TableCell colSpan={3}>
-            There is no template here. You can add template by the checkbox on the list of each test.
+            There is no template here. You can add template by a checkbox on the list of each test.
           </TableCell></TableRow>}
         </TableBody>
       </Table>
