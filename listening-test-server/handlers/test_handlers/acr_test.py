@@ -17,10 +17,11 @@ class AcrTestHandler(BaseHandler):
                 {'$match': {'userId': self.user_id}},
                 {'$lookup': {'from': self.test_name + 'Surveys', 'let': {'testId': '$_id'}, 'pipeline': [
                     {'$match': {'$expr': {'$eq': ["$testId", "$$testId"]}}},
-                    {'$project': {'_id': 1}}
+                    # {'$count': 'responsesNum'}
                 ], 'as': 'responses'}},
-                # {'$group': {'_id': "$responses", "numOfStudent": {'$sum': 1}}},
-                # {'$project': {'items': 0, 'settings': 0}},
+                # {'$replaceRoot': {'newRoot': {'$mergeObjects': [{'$arrayElemAt': ['$responses', 0]}, "$$ROOT"]}}},
+                {'$set': {'responseNum': {'$size': '$responses'}}},
+                {'$project': {'responses': 0}},  # , 'items': 0, 'description': 0, 'settings': 0
                 {'$sort': {'createdAt': -1}}
             ])
         else:
@@ -33,6 +34,8 @@ class AcrTestHandler(BaseHandler):
         # Del some useless fields
         if '_id' in body:
             del body['_id']
+        if 'responseNum' in body:
+            del body['responseNum']
         if 'responses' in body:
             del body['responses']
         body['userId'] = self.user_id

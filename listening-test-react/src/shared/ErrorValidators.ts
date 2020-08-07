@@ -49,7 +49,8 @@ export function sliderItemValidateError(item: TestItemModel): string {
 
 export function testItemsValidateError(tests: BasicTestModel) {
   for (const item of tests.items) {
-    if (item.example && (!item.example.audios || item.example.audios.length < 1)) {
+    // Audios array is null, length is 0, some of them are null
+    if (item.example && (!item.example.audios || item.example.audios.length < 1 || item.example.audios.some(value => value == null))) {
       return 'Please add at least one audio for audio uploading example card'
     }
   }
