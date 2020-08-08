@@ -2,8 +2,8 @@ import React, {DragEvent, MouseEvent, PropsWithChildren, RefObject, useRef} from
 import { Icon, IconButton, Tooltip} from "@material-ui/core";
 import {observer} from "mobx-react";
 
-export const DraggableZone = observer(function({children, index, length, onReorder, contextRefs}: PropsWithChildren<{
-  index: number, length: number, onReorder?: (index: number, newIndex: number) => void, contextRefs?: RefObject<any>[]
+export const DraggableZone = observer(function({children, index, length, onReorder, onMouseDown}: PropsWithChildren<{
+  index: number, length: number, onReorder?: (index: number, newIndex: number) => void, onMouseDown?: (event: MouseEvent<any>) => any
 }>) {
   const ref = React.createRef<HTMLDivElement>();
   const refChildren = React.createRef();
@@ -32,49 +32,50 @@ export const DraggableZone = observer(function({children, index, length, onReord
 
   const handleMouseDown = (event: MouseEvent<any>) => {
     if (!ref.current) return;
-    // const clone = ref.current.cloneNode(true) as HTMLDivElement;
-    // clone.style.position = 'absolute';
-    // clone.style.width = ref.current.clientWidth + 'px';
-    // clone.style.height = ref.current.clientHeight + 'px';
-    // let shiftX = event.clientX - ref.current.getBoundingClientRect().left;
-    // let shiftY = event.clientY - ref.current.getBoundingClientRect().top;
-    // clone.style.left = event.pageX - shiftX + 'px';
-    // clone.style.top = event.pageY - shiftY + 'px';
-    // document.body.append(clone);
-
-    // ref.current.style.position = 'relative';
-    ref.current.style.zIndex = '1000';
-    // ref.current.style.visibility = 'hidden';
-    // document.body.append(ref.current);
-
-    const start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-    const onMouseMove = (event: any) => {
-      if (!ref.current) return;
-      // ref.current.style.left = event.pageX - shiftX + 'px';
-      // clone.style.top = event.pageY - shiftY + 'px';
-
-      const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-      ref.current.style.top = end - start + 'px';
-
-      if (Math.abs(end - start) >= 88) {
-        if (end - start >= 88) onReorder(index, index + 1);
-        else if (end - start <= -88) onReorder(index, index - 1);
-        // clone.style.top = '0';
-      }
-    }
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mousemove', handleMouseUp);
-      if (!ref.current) return;
-      // Reset the styles
-      // clone.remove();
-      // ref.current.style.visibility = 'visible';
-      ref.current.style.top = '0';
-    }
-    // move the ball on mousemove
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    if (onMouseDown) onMouseDown(event);
+    // // const clone = ref.current.cloneNode(true) as HTMLDivElement;
+    // // clone.style.position = 'absolute';
+    // // clone.style.width = ref.current.clientWidth + 'px';
+    // // clone.style.height = ref.current.clientHeight + 'px';
+    // // let shiftX = event.clientX - ref.current.getBoundingClientRect().left;
+    // // let shiftY = event.clientY - ref.current.getBoundingClientRect().top;
+    // // clone.style.left = event.pageX - shiftX + 'px';
+    // // clone.style.top = event.pageY - shiftY + 'px';
+    // // document.body.append(clone);
+    //
+    // // ref.current.style.position = 'relative';
+    // ref.current.style.zIndex = '1000';
+    // // ref.current.style.visibility = 'hidden';
+    // // document.body.append(ref.current);
+    //
+    // const start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
+    // const onMouseMove = (event: any) => {
+    //   if (!ref.current) return;
+    //   // ref.current.style.left = event.pageX - shiftX + 'px';
+    //   // clone.style.top = event.pageY - shiftY + 'px';
+    //
+    //   const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
+    //   ref.current.style.top = end - start + 'px';
+    //
+    //   if (Math.abs(end - start) >= 88) {
+    //     if (end - start >= 88) onReorder(index, index + 1);
+    //     else if (end - start <= -88) onReorder(index, index - 1);
+    //     // clone.style.top = '0';
+    //   }
+    // }
+    //
+    // const handleMouseUp = () => {
+    //   document.removeEventListener('mousemove', onMouseMove);
+    //   document.removeEventListener('mousemove', handleMouseUp);
+    //   if (!ref.current) return;
+    //   // Reset the styles
+    //   // clone.remove();
+    //   // ref.current.style.visibility = 'visible';
+    //   ref.current.style.top = '0';
+    // }
+    // // move the ball on mousemove
+    // document.addEventListener('mousemove', onMouseMove);
+    // document.addEventListener('mouseup', handleMouseUp);
   }
 
   return <div style={{position: 'relative'}} ref={ref}>

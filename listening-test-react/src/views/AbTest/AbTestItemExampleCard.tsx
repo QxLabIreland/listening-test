@@ -33,11 +33,12 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
     if (index === -1) example.audioRef = newAudio;
     else example.audios[index] = newAudio;
   }
+  const SettingsDialog = () => <ExampleSettingsDialog settings={example.settings}
+                                                      onConfirm={settings => example.settings = settings}/>
 
   return <Card>
     <CardHeader title={title} action={<>
-      <ExampleSettingsDialog settings={example.settings}
-                             onConfirm={settings => example.settings = settings}/>
+      <SettingsDialog/>
       {action} </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
