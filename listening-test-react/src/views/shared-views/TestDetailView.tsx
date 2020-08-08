@@ -1,14 +1,5 @@
 import {Prompt, useHistory, useLocation, useParams} from "react-router";
-import React, {
-  FunctionComponent,
-  FunctionComponentElement,
-  MouseEvent,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import React, {FunctionComponent, MouseEvent, RefObject, useContext, useEffect, useRef, useState} from "react";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
@@ -21,7 +12,6 @@ import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel"
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
-import {DraggableZone} from "../../shared/components/DraggableZone";
 import {testItemsValidateError} from "../../shared/ErrorValidators";
 import {TestItemCard} from "../components/TestItemCard";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
@@ -39,8 +29,8 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // Scroll properties
-  const viewRef = useRef(null);
-  const {scrollToView} = useScrollToView(viewRef);
+  const bottomRef = useRef(null);
+  const {scrollToView} = useScrollToView(bottomRef);
   // No submit alert variable
   const [isSubmitted, setIsSubmitted] = useState<boolean>(null);
   const location = useLocation();
@@ -88,12 +78,6 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     tests.items.push(newItem);
     scrollToView();
   }
-  const deleteItem = (index: number) => tests.items.splice(index, 1);
-  const handleReorder = (index: number, newIndex: number) => {
-    // Insert and delete original
-    const value = tests.items.splice(index, 1);
-    tests.items.splice(newIndex, 0, ...value);
-  }
 
   // Some components for performance boost
   const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
@@ -114,19 +98,12 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
 
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
-        {/*{tests.items.map((v, i) =>
-          <Grid item xs={12} ref={viewRef} key={v.id}>
-            <DraggableZone index={i} length={tests.items.length} onReorder={handleReorder}>
-              <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
-            </DraggableZone>
-          </Grid>
-        )}*/}
         <TestItemCardList items={tests.items} TestItemExampleCard={TestItemExampleCard}/>
         <Grid item container justify="center" xs={12}>
           <ButtonGroup onAdd={addItem}/>
         </Grid>
 
-        <Grid item xs={12} container alignItems="center" spacing={1}>
+        <Grid item xs={12} container alignItems="center" spacing={1} ref={bottomRef}>
           <Grid item style={{flexGrow: 1}}/>
           <Grid item><TestSettingsDialog settings={tests.settings}
                                          onConfirm={settings => tests.settings = settings}/></Grid>
@@ -188,11 +165,10 @@ const TestItemCardList = observer(function ({items, TestItemExampleCard}: { item
   const handleMouseDown = (event: MouseEvent<any>, index: number) => {
     // Get index of the element
     params.index = index;
-    console.log(params.index);
     const currentRef = (list[params.index].ref as RefObject<HTMLDivElement>).current;
     const shiftX = event.clientX - currentRef.getBoundingClientRect().left;
     const shiftY = event.clientY - currentRef.getBoundingClientRect().top;
-
+    // Clone a element for items display (move up or down)
     setDraggingEle(React.cloneElement(list[params.index], {
       ref: React.createRef<HTMLDivElement>(),
       style: {
@@ -207,12 +183,12 @@ const TestItemCardList = observer(function ({items, TestItemExampleCard}: { item
     params.start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0
     params.shiftY = shiftY
   }
-
   const reorder = action((previousIndex: number, newIndex: number) => {
     params.index = newIndex;
-    // Reorder the list
+    // Reorder the items list
     items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
   })
+
   const list = items.map((v, i) => React.createElement(Grid, {
       item: true, xs: 12, key: v.id, ref: React.createRef<HTMLDivElement>(),
       style: {position: 'relative', visibility: params.index === i && draggingEle ? 'hidden' : 'visible'}
@@ -221,7 +197,6 @@ const TestItemCardList = observer(function ({items, TestItemExampleCard}: { item
       height: '100%', width: 0, right: 8
     }}><Icon style={{width: 12, cursor: 'grab'}} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon></div>,
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
-  ));
-
+  ))
   return <>{list}{draggingEle}</>
 })
