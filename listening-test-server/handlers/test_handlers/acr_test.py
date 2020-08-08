@@ -27,6 +27,10 @@ class AcrTestHandler(BaseHandler):
         else:
             # Get one test
             data = self.db[self.test_name + 'Tests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+            if not data:
+                data = self.db[self.test_name + 'Tests'].find_one({'_id': ObjectId(_id), 'isTemplate': True})
+            if not data:
+                self.set_error(404, 'Test not found')
         self.dumps_write(data)
 
     async def post(self):
