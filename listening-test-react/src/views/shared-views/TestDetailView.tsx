@@ -1,21 +1,20 @@
 import {Prompt, useHistory, useLocation, useParams} from "react-router";
-import React, {FunctionComponent, MouseEvent, RefObject, useContext, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
-import Grid, {GridTypeMap} from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Icon, TextField} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {observer} from "mobx-react";
-import {action, observable} from "mobx";
+import {observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
 import {testItemsValidateError} from "../../shared/ErrorValidators";
-import {TestItemCard} from "../components/TestItemCard";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {DefaultComponentProps} from "@material-ui/core/OverridableComponent";
+import {TestDetailItemCardList} from "./TestDetailItemCardList";
 
 export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
   testUrl: TestUrl,
@@ -80,10 +79,10 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   }
 
   // Some components for performance boost
-  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name}
+  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name} name="name"
                                     onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-                                   defaultValue={tests.description}
+                                   defaultValue={tests.description} name="description"
                                    onChange={(e) => tests.description = e.target.value}/>;
   return (
     <Grid container spacing={2} justify="center" alignItems="center">
@@ -98,7 +97,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
 
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
-        <TestItemCardList items={tests.items} TestItemExampleCard={TestItemExampleCard}/>
+        <TestDetailItemCardList items={tests.items} TestItemExampleCard={TestItemExampleCard}/>
         <Grid item container justify="center" xs={12}>
           <ButtonGroup onAdd={addItem}/>
         </Grid>
@@ -127,76 +126,3 @@ function templateProcess(tem: BasicTestModel) {
   });
 }
 
-const TestItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }> }) {
-  const [draggingEle, setDraggingEle] = useState<React.FunctionComponentElement<DefaultComponentProps<GridTypeMap>>>();
-  const [params] = useState(observable({start: null, shiftY: null, index: null}));
-  useEffect(() => {
-    if (!draggingEle) return;
-    const onMouseMove = (event: any) => {
-      // Dragging element to move
-      // ref.current.style.left = event.pageX - shiftX + 'px';
-      (draggingEle.ref as RefObject<HTMLDivElement>).current.style.top = event.pageY - params.shiftY + 'px';
-      const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-      // When element position is relative
-      // draggingRef.style.top = end - start + 'px';
-
-      // Give a threshold for movement, and if dragging element is out of list
-      if (end - params.start >= 80 && params.index < items.length - 1) {
-        reorder(params.index, params.index + 1);
-        params.start = end;
-      } else if (end - params.start <= -80 && params.index > 0) {
-        reorder(params.index, params.index - 1);
-        params.start = end;
-      }
-    }
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      setDraggingEle(null);
-    }
-
-    // move the ball on mousemove
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }, [draggingEle]);
-
-  const deleteItem = (index: number) => items.splice(index, 1);
-  const handleMouseDown = (event: MouseEvent<any>, index: number) => {
-    // Get index of the element
-    params.index = index;
-    const currentRef = (list[params.index].ref as RefObject<HTMLDivElement>).current;
-    const shiftX = event.clientX - currentRef.getBoundingClientRect().left;
-    const shiftY = event.clientY - currentRef.getBoundingClientRect().top;
-    // Clone a element for items display (move up or down)
-    setDraggingEle(React.cloneElement(list[params.index], {
-      ref: React.createRef<HTMLDivElement>(),
-      style: {
-        position: 'absolute',
-        width: currentRef.clientWidth,
-        height: currentRef.clientHeight,
-        left: event.pageX - shiftX,
-        top: event.pageY - shiftY,
-        zIndex: 1000
-      }
-    }));
-    params.start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0
-    params.shiftY = shiftY
-  }
-  const reorder = action((previousIndex: number, newIndex: number) => {
-    params.index = newIndex;
-    // Reorder the items list
-    items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
-  })
-
-  const list = items.map((v, i) => React.createElement(Grid, {
-      item: true, xs: 12, key: v.id, ref: React.createRef<HTMLDivElement>(),
-      style: {position: 'relative', visibility: params.index === i && draggingEle ? 'hidden' : 'visible'}
-    }, <div style={{
-      position: 'absolute', display: v.collapsed ? 'flex' : 'none', flexDirection: 'column', justifyContent: 'center',
-      height: '100%', width: 0, right: 8
-    }}><Icon style={{width: 12, cursor: 'grab'}} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon></div>,
-    <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
-  ))
-  return <>{list}{draggingEle}</>
-})

@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {Checkbox, FormControlLabel, FormGroup, IconButton} from "@material-ui/core";
+import {Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {TestSettingsModel} from "../../shared/models/BasicTestModel";
 import {useFormik} from "formik";
@@ -27,7 +27,9 @@ export default function TestSettingsDialog(props: { settings: TestSettingsModel,
   const handleClose = () => setOpen(false);
 
   return <>
-    <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
+    <Tooltip title="Test Global Settings">
+      <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
+    </Tooltip>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle id="form-dialog-title">Test settings</DialogTitle>

@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
-import {Checkbox, FormControlLabel, Icon, IconButton} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@material-ui/core";
 import {useFormik} from "formik";
 
 export default function ExampleSettingsDialog(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
@@ -29,7 +29,9 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
   const handleClose = () => setOpen(false);
 
   return <>
-    <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
+    <Tooltip title="Audio Playback Settings">
+      <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
+    </Tooltip>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle id="form-dialog-title">Audio Playback Settings</DialogTitle>

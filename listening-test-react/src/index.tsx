@@ -1,9 +1,9 @@
-import 'mobx-react/batchingForReactDom'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import App from "./App";
+import 'mobx-react/batchingForReactDom'
 import Axios from "axios";
 
 Axios.defaults.withCredentials = true;
