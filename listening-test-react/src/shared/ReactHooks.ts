@@ -6,7 +6,7 @@ export function useScrollToView(viewRef: RefObject<any> = null) {
   const [isUpdated, setIsUpdated] = useState<boolean>(null);
 
   useEffect(() => {
-    if (viewRef && viewRef.current && isUpdated !== null) {
+    if (viewRef && viewRef.current && viewRef.current.scrollIntoView && isUpdated !== null) {
       viewRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
     }
   }, [isUpdated])

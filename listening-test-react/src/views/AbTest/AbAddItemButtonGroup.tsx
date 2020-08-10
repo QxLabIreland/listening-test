@@ -52,7 +52,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
   };
 
   return <Box className={classes.elementGroup}>
-    <Button variant="outlined" color="primary" onClick={handleAddExample}>
+    <Button variant="outlined" color="primary" onClick={handleAddExample} data-testid='buttonAddEx'>
       <Icon>add</Icon>Add Example
     </Button>
     <Button variant="outlined" color="primary" onClick={handleAddTraining}>

@@ -4,7 +4,7 @@ import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes
 import React, {FunctionComponent, ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse, createStyles, FormControlLabel, Switch, Theme} from "@material-ui/core";
+import {CardContent, Collapse, createStyles, FormControlLabel, Switch, Theme, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
@@ -52,9 +52,15 @@ const useStyles = makeStyles((theme: Theme) => {
 const HeaderIconButtons = observer(function ({onDelete, value}: { value: TestItemModel, onDelete: () => void }) {
   const classes = useStyles();
   return <>
-    <IconButton className={value.collapsed ? classes.expand : classes.expandOpen}
-                onClick={() => value.collapsed = !value.collapsed}><Icon>{value.collapsed ? 'add' : 'remove'}</Icon></IconButton>
-    <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
+    <Tooltip title={`${value.collapsed ? 'Expand' : 'Collapse'} Question`}>
+      <IconButton className={value.collapsed ? classes.expand : classes.expandOpen}
+                  onClick={() => value.collapsed = !value.collapsed}>
+        <Icon>{value.collapsed ? 'add' : 'remove'}</Icon>
+      </IconButton>
+    </Tooltip>
+    <Tooltip title="Delete Question">
+      <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
+    </Tooltip>
   </>
 })
 
