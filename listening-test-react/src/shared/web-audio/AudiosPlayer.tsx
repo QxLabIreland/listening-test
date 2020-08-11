@@ -4,6 +4,7 @@ import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../models/AudioFileModel";
 import {ItemExampleSettingsModel} from "../models/ItemExampleModel";
+import {makeStyles, Theme} from "@material-ui/core/styles";
 
 /** In order to build a custom audio player including rating bar,
  *  use this hook with AudioButton and AudioController components */
@@ -93,6 +94,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
 export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number }) {
   const {refs, sampleRef, currentTime} = props;
+  const classes = useStyles();
 
   const handleSliderLabelFormat = (num: number) => {
     return isNaN(num) ? 0 : num.toFixed(0) + 's'
@@ -107,7 +109,9 @@ export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sa
 
   if (!refs[0]) return null;
 
-  return <Slider aria-labelledby="continuous-slider" defaultValue={0} step={0.1} min={0}
+  return <Slider aria-labelledby="continuous-slider" defaultValue={0} step={0.1} min={0} classes={classes}
                  max={refs[0].current?.duration} value={currentTime} onChange={dragSlider}
                  valueLabelDisplay="auto" valueLabelFormat={handleSliderLabelFormat}/>;
 }
+
+const useStyles = makeStyles((_: Theme) => ({thumb: {zIndex: 1}}));

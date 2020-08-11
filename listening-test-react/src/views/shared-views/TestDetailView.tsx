@@ -12,7 +12,6 @@ import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel"
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
-import {testItemsValidateError} from "../../shared/ErrorValidators";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 
@@ -46,12 +45,6 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   }, [id, testUrl]);
 
   const handleSubmit = () => {
-    // Validate if all examples have been added audios
-    const validationResult = testItemsValidateError(tests);
-    if (validationResult) {
-      openDialog(validationResult);
-      return;
-    }
     // Create a new text or modify current test
     if (+id === 0) requestServer(true);
     else Axios.get('/api/response-count', {params: {testId: id, testType: testUrl}}).then(res => {
@@ -89,8 +82,8 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     <Grid item><FormControlLabel label="Collapse All" control={
       <Checkbox indeterminate={tests.items.some(v => v.collapsed) && !tests.items.every(v => v.collapsed)}
                 checked={tests.items.every(v => v.collapsed)}
-                onChange={e => tests.items.forEach(v => v.collapsed = e.target.checked)}/>}
-    /></Grid>
+                onChange={e => tests.items.forEach(v => v.collapsed = e.target.checked)}/>
+    }/></Grid>
     <Grid item><TestSettingsDialog settings={tests.settings}
                                    onConfirm={settings => tests.settings = settings}/></Grid>
     <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>

@@ -44,8 +44,8 @@ export const TestItemCard = observer(function (props: {
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
   return createStyles({
-    expand: {transform: 'rotate(90deg)', transition: trans},
-    expandOpen: {transform: 'rotate(0deg)', transition: trans},
+    expand: {transform: 'rotate(0deg)', transition: trans},
+    expandOpen: {transform: 'rotate(180deg)', transition: trans},
   });
 });
 
@@ -55,7 +55,7 @@ const HeaderIconButtons = observer(function ({onDelete, value}: { value: TestIte
     <Tooltip title={`${value.collapsed ? 'Expand' : 'Collapse'} Question`}>
       <IconButton className={value.collapsed ? classes.expand : classes.expandOpen}
                   onClick={() => value.collapsed = !value.collapsed}>
-        <Icon>{value.collapsed ? 'add' : 'remove'}</Icon>
+        <Icon>{value.collapsed ? 'unfold_more' : 'unfold_less'}</Icon>
       </IconButton>
     </Tooltip>
     <Tooltip title="Delete Question">

@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     width: 0, right: 0, top: 0, bottom: 0,
     [theme.breakpoints.down(1245)]: {right: 14}
   },
-  reorder: {width: 12, cursor: 'grab', position: 'absolute', left: 7, color: 'rgba(0, 0, 0, 0.54)'}
-
+  reorder: {width: 12, cursor: 'grab', position: 'absolute', left: 7, color: 'rgba(0, 0, 0, 0.54)'},
+  upDown: {fontSize: 18}
 }))
 
 export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }> }) {
@@ -105,13 +105,13 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
     </Tooltip> : <>
       <Tooltip title="Move this card up"><span>
-        <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
-          <Icon>keyboard_arrow_up</Icon>
+        <IconButton disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
+          <Icon className={classes.upDown}>arrow_upward</Icon>
         </IconButton>
       </span></Tooltip>
       <Tooltip title="Move this card down"><span>
-        <IconButton size="small" disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
-          <Icon>keyboard_arrow_down</Icon>
+        <IconButton disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
+          <Icon className={classes.upDown}>arrow_downward</Icon>
         </IconButton>
       </span></Tooltip>
     </>}</Box>
