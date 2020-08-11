@@ -1,9 +1,8 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import React, {FunctionComponent, MouseEvent, RefObject, useEffect, useState} from "react";
+import React, {FunctionComponent, MouseEvent, useState} from "react";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {DefaultComponentProps} from "@material-ui/core/OverridableComponent";
-import Grid, {GridTypeMap} from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid";
 import {action, observable} from "mobx";
 import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
 import {TestItemCard} from "../components/TestItemCard";
@@ -22,86 +21,101 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }))
 
 export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }> }) {
-  const [draggingEle, setDraggingEle] = useState<React.FunctionComponentElement<DefaultComponentProps<GridTypeMap>>>();
-  const [params] = useState(observable({start: null, shiftY: null, index: null}));
+  if (!items) items = observable([]);
+  const [state] = useState(observable({index: null}));
+  const [refs] = useState<HTMLDivElement[]>([]);
   const classes = useStyles();
-  useEffect(() => {
-    if (!draggingEle) return;
-    const onMouseMove = (event: any) => {
-      // Dragging element to move
-      // ref.current.style.left = event.pageX - shiftX + 'px';
-      (draggingEle.ref as RefObject<HTMLDivElement>).current.style.top = event.pageY - params.shiftY + 'px';
-      const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-      // When element position is relative
-      // draggingRef.style.top = end - start + 'px';
 
-      // Give a threshold for movement, and if dragging element is out of list
-      if (end - params.start >= 80 && params.index < items.length - 1) {
-        reorder(params.index, params.index + 1);
-        params.start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-      } else if (end - params.start <= -80 && params.index > 0) {
-        reorder(params.index, params.index - 1);
-        params.start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
-      }
+  const findCollision = (event: MouseEvent<any>) => {
+    for (let i = 0; i < refs.length; i += 1) {
+      if (!refs[i] || i === state.index) continue;
+      const rect = refs[i].getBoundingClientRect();
+      if (event.clientY >= rect.top && event.clientY <= rect.bottom)
+        return refs[i];
     }
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      setDraggingEle(null);
-    }
-
-    // move the ball on mousemove
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }, [draggingEle]);
-
-  const deleteItem = (index: number) => items.splice(index, 1);
+    return undefined;
+  }
+  const deleteItem = action((index: number) => items.splice(index, 1));
   const handleMouseDown = (event: MouseEvent<any>, index: number) => {
     // Get index of the element
-    params.index = index;
-    const currentRef = (list[params.index].ref as RefObject<HTMLDivElement>).current;
-    const shiftX = event.clientX - currentRef.getBoundingClientRect().left;
-    const shiftY = event.clientY - currentRef.getBoundingClientRect().top;
+    state.index = index;
+    const shiftX = event.clientX - refs[state.index].getBoundingClientRect().left;
+    const shiftY = event.clientY - refs[state.index].getBoundingClientRect().top;
     // Clone a element for items display (move up or down)
-    setDraggingEle(React.cloneElement(list[params.index], {
-      ref: React.createRef<HTMLDivElement>(),
-      style: {
-        position: 'absolute',
-        width: currentRef.clientWidth,
-        height: currentRef.clientHeight,
-        left: event.pageX - shiftX,
-        top: event.pageY - shiftY,
-        zIndex: 1000
+    const clonedDragEle = refs[state.index].cloneNode(true) as HTMLDivElement;
+    clonedDragEle.style.position = 'absolute';
+    clonedDragEle.style.width = refs[state.index].clientWidth + 'px';
+    clonedDragEle.style.height = refs[state.index].clientHeight + 'px';
+    clonedDragEle.style.left = event.pageX - shiftX + 'px';
+    clonedDragEle.style.top = event.pageY - shiftY + 'px';
+    clonedDragEle.style.zIndex = '1000';
+    // Find the container and append the clone
+    const listContainer = document?.querySelector('#containerTestDetailItemCardList');
+    listContainer.append(clonedDragEle);
+    // const start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0
+    // About setting interval to scroll the screen
+    let scrollIntervalY: any = null;
+    const onMouseMove = (event: any) => {
+      // Scroll when mouse is close to top or bottom of the window
+      if (!scrollIntervalY) {
+        if (window?.innerHeight - event.clientY <= 20)
+          scrollIntervalY = setInterval(() => window.scrollBy(0, (window?.innerHeight - event.clientY) / 4), 20);
+        else if (event.clientY <= 84)
+          scrollIntervalY = setInterval(() => window.scrollBy(0, -(84 - event.clientY) / 4), 20);
+      } else if (window?.innerHeight - event.clientY > 20 && event.clientY > 84) {
+        clearInterval(scrollIntervalY);
+        scrollIntervalY = null;
       }
-    }));
-    params.start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0
-    params.shiftY = shiftY
+      // Dragging element to move and prevent move outside of list container
+      const rectContainer = listContainer.getBoundingClientRect();
+      if (event.clientY < rectContainer.top || event.clientY > rectContainer.bottom) return;
+      // ref.current.style.left = event.pageX - shiftX + 'px';
+      clonedDragEle.style.top = event.pageY - shiftY + 'px';
+      // Give a threshold for movement, and if dragging element is out of list
+      const collision = findCollision(event);
+      if (collision) handleReorder(state.index, refs.indexOf(collision));
+      // const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
+      // // When element position is relative
+      // draggingRef.style.top = end - start + 'px';
+    }
+    const onMouseUp = () => {
+      // Clear listeners, clone div, interval and index
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener("mouseleave", onMouseUp);
+      clonedDragEle.remove();
+      clearInterval(scrollIntervalY);
+      scrollIntervalY = null;
+      state.index = null;
+    }
+    // Move the clone on mousemove
+    document?.addEventListener('mousemove', onMouseMove);
+    document?.addEventListener('mouseup', onMouseUp);
+    document?.addEventListener("mouseleave", onMouseUp);
   }
-  const reorder = action((previousIndex: number, newIndex: number) => {
-    params.index = newIndex;
+  const handleReorder = action((previousIndex: number, newIndex: number, resetIndex = false) => {
     // Reorder the items list
     items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
+    state.index = resetIndex ? null : newIndex;
   })
 
-  const list = items.map((v, i) => React.createElement(Grid, {
-      item: true, xs: 12, key: v.id, ref: React.createRef<HTMLDivElement>(),
-      className: params.index === i && draggingEle ? classes.gridHidden : classes.grid
-    }, <Box className={classes.container}>{v.collapsed ? <Tooltip title="Hold and drag to reorder">
+  return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => refs[i] = ref}
+                                      className={state.index === i ? classes.gridHidden : classes.grid}>
+    <Box className={classes.container}>{v.collapsed ? <Tooltip title="Hold and drag to reorder">
       <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
     </Tooltip> : <>
       <Tooltip title="Move this card up"><span>
-        <IconButton size="small" disabled={i === 0} onClick={() => reorder(i, i - 1)}>
+        <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
           <Icon>keyboard_arrow_up</Icon>
         </IconButton>
       </span></Tooltip>
       <Tooltip title="Move this card down"><span>
-        <IconButton size="small" disabled={i === items.length - 1} onClick={() => reorder(i, i + 1)}>
+        <IconButton size="small" disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
           <Icon>keyboard_arrow_down</Icon>
         </IconButton>
       </span></Tooltip>
-    </>}</Box>,
+    </>}</Box>
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
-  ))
-  return <>{list}{draggingEle}</>
+  </Grid>)}
+  </>
 })

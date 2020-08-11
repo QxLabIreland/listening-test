@@ -5,7 +5,7 @@ import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {TextField} from "@material-ui/core";
+import {Checkbox, FormControlLabel, TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
@@ -78,36 +78,35 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     scrollToView();
   }
 
-  // Some components for performance boost
+  // Extract those components, they won't be update when onChange, because they are uncontrolled
   const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={tests.name} name="name"
                                     onChange={e => tests.name = e.target.value}/>;
   const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
                                    defaultValue={tests.description} name="description"
                                    onChange={(e) => tests.description = e.target.value}/>;
+  const actions = tests ? <Grid item xs={12} container alignItems="center" spacing={1}>
+    <Grid item style={{flexGrow: 1}}/>
+    <Grid item><FormControlLabel label="Collapse All" control={
+      <Checkbox indeterminate={tests.items.some(v => v.collapsed) && !tests.items.every(v => v.collapsed)}
+                checked={tests.items.every(v => v.collapsed)}
+                onChange={e => tests.items.forEach(v => v.collapsed = e.target.checked)}/>}
+    /></Grid>
+    <Grid item><TestSettingsDialog settings={tests.settings}
+                                   onConfirm={settings => tests.settings = settings}/></Grid>
+    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
+  </Grid> : null
   return (
-    <Grid container spacing={2} justify="center" alignItems="center">
+    <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
       <Prompt when={!isSubmitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
       {tests ? <React.Fragment>
-        <Grid item xs={12} container alignItems="center" spacing={1}>
-          <Grid item style={{flexGrow: 1}}/>
-          <Grid item><TestSettingsDialog settings={tests.settings}
-                                         onConfirm={settings => tests.settings = settings}/></Grid>
-          <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
-        </Grid>
-
+        {actions}
         <Grid item xs={12}><NameText/></Grid>
         <Grid item xs={12}><DesText/></Grid>
         <TestDetailItemCardList items={tests.items} TestItemExampleCard={TestItemExampleCard}/>
         <Grid item container justify="center" xs={12}>
           <ButtonGroup onAdd={addItem}/>
         </Grid>
-
-        <Grid item xs={12} container alignItems="center" spacing={1} ref={bottomRef}>
-          <Grid item style={{flexGrow: 1}}/>
-          <Grid item><TestSettingsDialog settings={tests.settings}
-                                         onConfirm={settings => tests.settings = settings}/></Grid>
-          <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
-        </Grid>
+        {actions}
       </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
     </Grid>
   )
