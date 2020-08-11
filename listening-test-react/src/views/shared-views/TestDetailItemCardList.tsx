@@ -30,7 +30,10 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     for (let i = 0; i < refs.length; i += 1) {
       if (!refs[i] || i === state.index) continue;
       const rect = refs[i].getBoundingClientRect();
-      if (event.clientY >= rect.top && event.clientY <= rect.bottom)
+      const targetRect = refs[state.index].getBoundingClientRect();
+      // Collision item is above target: mouse is below the top of collision, mouse is above
+      if ((rect.y < targetRect.y && event.clientY >= rect.top && event.clientY <= rect.top + targetRect.height * 2/3)
+        || (rect.y > targetRect.y && event.clientY <= rect.bottom && event.clientY >= rect.bottom - targetRect.height * 2/3))
         return refs[i];
     }
     return undefined;
@@ -58,11 +61,11 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     const onMouseMove = (event: any) => {
       // Scroll when mouse is close to top or bottom of the window
       if (!scrollIntervalY) {
-        if (window?.innerHeight - event.clientY <= 20)
-          scrollIntervalY = setInterval(() => window.scrollBy(0, (window?.innerHeight - event.clientY) / 4), 20);
-        else if (event.clientY <= 84)
-          scrollIntervalY = setInterval(() => window.scrollBy(0, -(84 - event.clientY) / 4), 20);
-      } else if (window?.innerHeight - event.clientY > 20 && event.clientY > 84) {
+        if (window?.innerHeight - 40 <= event.clientY)
+          scrollIntervalY = setInterval(() => window.scrollBy(0, (window?.innerHeight - event.clientY) / 2), 20);
+        else if (event.clientY <= 104)
+          scrollIntervalY = setInterval(() => window.scrollBy(0, -(104 - event.clientY) / 2), 20);
+      } else if (window?.innerHeight - 20 > event.clientY && event.clientY > 84) {
         clearInterval(scrollIntervalY);
         scrollIntervalY = null;
       }
@@ -105,12 +108,12 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
     </Tooltip> : <>
       <Tooltip title="Move this card up"><span>
-        <IconButton disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
+        <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
           <Icon className={classes.upDown}>arrow_upward</Icon>
         </IconButton>
       </span></Tooltip>
       <Tooltip title="Move this card down"><span>
-        <IconButton disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
+        <IconButton size="small" disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
           <Icon className={classes.upDown}>arrow_downward</Icon>
         </IconButton>
       </span></Tooltip>
