@@ -14,7 +14,7 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<ItemExampleSettingsModel>({
-    initialValues: {loopTimes: 0, requireClipEnded: false},
+    initialValues: {loopTimes: null, requireClipEnded: false, sectionLooping: false},
     onSubmit: values => {
       onConfirm(values);
       handleClose();
@@ -22,7 +22,7 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
   });
 
   const handleClickOpen = () => {
-    formik.setValues({loopTimes: null, requireClipEnded: false, ...settings});
+    formik.setValues({loopTimes: null, requireClipEnded: false, sectionLooping: false, ...settings});
     setOpen(true);
   }
 
@@ -46,6 +46,11 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
           <FormControlLabel
             control={<Checkbox checked={formik.values.requireClipEnded} {...formik.getFieldProps('requireClipEnded')}/>}
             label="Require the user to listen to each example in full"
+          />
+
+          <FormControlLabel
+            control={<Checkbox checked={formik.values.sectionLooping} {...formik.getFieldProps('sectionLooping')}/>}
+            label="Show section looping slider bar"
           />
         </DialogContent>
         <DialogActions>
