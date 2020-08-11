@@ -1,16 +1,15 @@
 import React from "react";
-import {CircularProgress, Icon, Typography} from "@material-ui/core";
+import {CircularProgress, Typography} from "@material-ui/core";
+import {Alert, AlertTitle} from "@material-ui/lab";
 
 export default class Loading extends React.Component<{ error?: boolean, message?: string}> {
   render() {
     const {error, message} = this.props;
 
-    const errorNode = <React.Fragment>
-      <Icon fontSize="large">error</Icon>
-      <Typography style={{marginLeft: 16,}}>
-        {`Something bad happened. ${message ? message : ''}. Please try again`}
-      </Typography>
-    </React.Fragment>
+    const errorNode = <Alert severity="error">
+      <AlertTitle>Something bad happened</AlertTitle>
+      {`${message}. Please try again`}
+    </Alert>
 
     const loadingNode = <React.Fragment>
       <CircularProgress/>

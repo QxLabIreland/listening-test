@@ -13,7 +13,10 @@ export default function XsrfAuthUserProvider(props: PropsWithChildren<any>) {
       if (res.data.hasOwnProperty('email') && res.data.hasOwnProperty('name'))
         setCurrentUser(res.data);
       else setCurrentUser(null);
-    }, err => openDialog(err.response.data, 'Server Error'));
+    }, err => {
+      setCurrentUser(null);
+      openDialog(err.response.data, 'Server Error')
+    });
   }, []);
 
   return <CurrentUser.Provider value={{currentUser, setCurrentUser}}>
