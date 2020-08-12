@@ -6,10 +6,12 @@ import {minLength, pipeValidator, required} from "../shared/FormikValidator";
 import {GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
 import {useGeneralAlert} from "../shared/components/UseGeneralAlert";
+import {useHistory} from "react-router";
 
 export default function SettingsPage() {
   const openDialog = useContext(GlobalDialog);
   const [PasswordAlert, setPasswordMessage] = useGeneralAlert();
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: {password: '', newPassword: '', confirm: ''},
@@ -32,6 +34,20 @@ export default function SettingsPage() {
       }]
     })
   });
+  const accountDeletion = useFormik({
+    initialValues: {password: ''},
+    onSubmit: values => openDialog('Your account and all the data related to it will be deleted permanently. Once you confirmed, the process cannot be stop',
+      'Are your sure?', null, () => Axios.delete('/api/password', {
+        // Hash all of things
+        data: {password: Md5.hashStr(values.password)}
+      }).then(() => openDialog('You have successfully delete your account', 'Success', () => history.push('/sign-in')),
+        (reason) => openDialog(reason.response.data, 'Error')
+      )
+    ),
+    validate: pipeValidator({
+      password: [required(), minLength(6)]
+    })
+  });
 
   return <Grid container spacing={3}>
     <Grid item xs={12} md={6}>
@@ -51,7 +67,6 @@ export default function SettingsPage() {
                            error={!!formik.errors.newPassword} helperText={formik.errors.newPassword}/>
               </Grid>
               <Grid item xs={12}>
-
                 <TextField fullWidth label="Confirm Password" type="password" variant="outlined"
                            {...formik.getFieldProps('confirm')}
                            error={!!formik.errors.confirm} helperText={formik.errors.confirm}/>
@@ -63,6 +78,25 @@ export default function SettingsPage() {
             <Button color="primary" type="submit">
               Update
             </Button>
+          </CardActions>
+        </form>
+      </Card>
+    </Grid>
+    <Grid item xs={12} md={6}>
+      <Card>
+        <form onSubmit={accountDeletion.handleSubmit}>
+          <CardHeader title="Delete my account"/>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField fullWidth label="Current Password" type="password" variant="outlined"
+                           {...accountDeletion.getFieldProps('password')}
+                           error={!!accountDeletion.errors.password} helperText={accountDeletion.errors.password}/>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions style={{justifyContent: 'flex-end'}}>
+            <Button color="secondary" type="submit">DELETE MY ACCOUNT</Button>
           </CardActions>
         </form>
       </Card>

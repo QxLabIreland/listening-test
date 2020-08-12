@@ -122,7 +122,8 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                     {new Date(test.createdAt?.$date).toLocaleString()}
                   </TableCell>
                   {userAuth && <TableCell>
-                    <Checkbox checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
+                    <Checkbox color="primary" checked={!!test.isTemplate}
+                              onChange={() => handleIsTemplateChange(test)}/>
                   </TableCell>}
                   <TableCell className={classes.elementGroup}>
                     <ActionsGroup testUrl={testUrl} path={path} test={test} handleDelete={handleDelete}
@@ -154,10 +155,11 @@ function ShareIconButton({url, menuItem, ...rest}: any) {
   return <>
     {menuItem ? <MenuItem {...rest} onClick={handleShareClick}>
       <ListItemIcon color="primary"><Icon>share</Icon></ListItemIcon>
-      <ListItemText primary="Copy test URL" />
+      <ListItemText primary="Copy test URL"/>
     </MenuItem> : <Tooltip title="Copy test URL">
       <IconButton {...rest} size="small" color="primary" onClick={handleShareClick}><Icon>share</Icon></IconButton>
-    </Tooltip>}
+    </Tooltip>
+    }
     <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center',}} open={open} autoHideDuration={10_000}
               onClose={handleClose} message="Copy the link to clipboard successfully" action={<>
       <Button size="small" color="secondary" component={Link} target="_blank"
@@ -169,6 +171,7 @@ function ShareIconButton({url, menuItem, ...rest}: any) {
   </>
 }
 
+/** The menu to add using templates or just a blank page*/
 function AddTestMenu({path, templates}: { path: string, templates: BasicTestModel[] }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
 
@@ -187,8 +190,11 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTestMode
   </>
 }
 
-function ActionsGroup(props: { testUrl: TestUrl, path: string, test: BasicTestModel, handleDelete: (_: BasicTestModel) => void, handleCopyTest: (_: BasicTestModel) => void }) {
-  const {testUrl, path, test, handleDelete, handleCopyTest} = props;
+/** When width is less than md, the button will be put into a menu*/
+function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest}: {
+  testUrl: TestUrl, path: string,
+  test: BasicTestModel, handleDelete: (_: BasicTestModel) => void, handleCopyTest: (_: BasicTestModel) => void
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -215,16 +221,22 @@ function ActionsGroup(props: { testUrl: TestUrl, path: string, test: BasicTestMo
       <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem component={Link} to={`${path}/${test._id.$oid}`}>
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
-          <ListItemText primary="Edit" />
+          <ListItemText primary="Edit"/>
         </MenuItem>
         <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} menuItem/>
-        <MenuItem onClick={() => {handleCopyTest(test);handleClose();}}>
+        <MenuItem onClick={() => {
+          handleCopyTest(test);
+          handleClose();
+        }}>
           <ListItemIcon color="primary"><Icon>content_copy</Icon></ListItemIcon>
-          <ListItemText primary="Duplicate" />
+          <ListItemText primary="Duplicate"/>
         </MenuItem>
-        <MenuItem onClick={() => {handleDelete(test);handleClose();}}>
+        <MenuItem onClick={() => {
+          handleDelete(test);
+          handleClose();
+        }}>
           <ListItemIcon><Icon>delete</Icon></ListItemIcon>
-          <ListItemText primary="Delete" />
+          <ListItemText primary="Delete"/>
         </MenuItem>
       </Menu>
     </Hidden>

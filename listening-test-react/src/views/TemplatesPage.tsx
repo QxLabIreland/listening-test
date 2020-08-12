@@ -51,7 +51,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
             <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
             <TableCell>{test.creator.name}</TableCell>
             <TableCell>
-              <Checkbox checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
+              <Checkbox color="primary" checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
             </TableCell>
           </TableRow>)}
           {!templates.length && <TableRow><TableCell colSpan={3}>

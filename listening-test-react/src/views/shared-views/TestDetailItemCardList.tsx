@@ -32,8 +32,8 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       const rect = refs[i].getBoundingClientRect();
       const targetRect = refs[state.index].getBoundingClientRect();
       // Collision item is above target: mouse is below the top of collision, mouse is above
-      if ((rect.y < targetRect.y && event.clientY >= rect.top && event.clientY <= rect.top + targetRect.height * 2/3)
-        || (rect.y > targetRect.y && event.clientY <= rect.bottom && event.clientY >= rect.bottom - targetRect.height * 2/3))
+      if ((rect.top < targetRect.top && event.clientY >= rect.top && event.clientY <= rect.top + targetRect.height * 2/3)
+        || (rect.bottom > targetRect.bottom && event.clientY <= rect.bottom && event.clientY >= rect.bottom - targetRect.height * 2/3))
         return refs[i];
     }
     return undefined;

@@ -20,5 +20,5 @@ export const CurrentUser = createContext<IUserContext>({} as IUserContext);
 type DialogCallback = (description: string, title?: string, onDismiss?: () => void, onConfirm?: () => void) => void;
 export const GlobalDialog = createContext<DialogCallback>(null);
 
-type SnackbarCallback = (message: string, time?: number) => void;
+type SnackbarCallback = (message: string, time?: number, severity?: 'success' | 'error' | 'warning' | 'info') => void;
 export const GlobalSnackbar = createContext<SnackbarCallback>(null);
