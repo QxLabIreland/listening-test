@@ -2,15 +2,15 @@ from handlers.base import BaseHandler
 
 
 class UsersHandler(BaseHandler):
-    def prepare(self):
-        self.user_id = self.auth_current_user('User')
+    async def prepare(self):
+        self.user_id = await self.auth_current_user('User')
 
-    def get(self):
+    async def get(self):
         # Exclude current user and administrators
         data = self.db['users'].find({'isAdmin': {'$ne': True}, '_id': {'$nin': [self.user_id]}}, {'password': 0})
         self.dumps_write(data)
 
-    def post(self):
+    async def post(self):
         body = self.loads_body()
         # Find the user needs to be updated
         user = self.db['users'].find_one({'_id': body['_id']})

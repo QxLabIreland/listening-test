@@ -4,8 +4,8 @@ from handlers.miscellanea.test_responses import switch_response_collection
 
 
 class ResponsesCountHandler(BaseHandler):
-    def prepare(self):
-        self.user_id = self.auth_current_user()
+    async def prepare(self):
+        self.user_id = await self.auth_current_user()
 
     async def get(self):
         test_id = self.get_argument('testId')

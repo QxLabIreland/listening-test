@@ -36,5 +36,6 @@ class LoginHandler(BaseHandler):
         else:
             self.set_error(401, "Incorrect password")
 
+    # Delete the cookie for  current user
     async def delete(self):
         self.clear_cookie("_user")

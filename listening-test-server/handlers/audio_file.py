@@ -3,8 +3,8 @@ from tools import file_helper
 
 
 class AudioFileHandler(BaseHandler):
-    def prepare(self):
-        self.auth_current_user()
+    async def prepare(self):
+        await self.auth_current_user()
 
     async def post(self):
         file_metas = self.request.files["audioFile"]

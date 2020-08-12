@@ -4,8 +4,8 @@ from handlers.base import BaseHandler
 
 
 class AcrTestHandler(BaseHandler):
-    def prepare(self):
-        self.user_id = self.auth_current_user()
+    async def prepare(self):
+        self.user_id = await self.auth_current_user()
         # self.test_name + ' -> 'acr
         self.test_name = 'acr'
 
