@@ -1,4 +1,5 @@
 from handlers.base import BaseHandler
+from tools.constants import permission_list
 
 
 class UsersHandler(BaseHandler):
@@ -7,7 +8,8 @@ class UsersHandler(BaseHandler):
 
     async def get(self):
         # Exclude current user and administrators
-        data = self.db['users'].find({'isAdmin': {'$ne': True}, '_id': {'$nin': [self.user_id]}}, {'password': 0})
+        # data = self.db['users'].find({'isAdmin': {'$ne': True}, '_id': {'$nin': [self.user_id]}}, {'password': 0})
+        data = self.db['users'].find({'isAdmin': {'$ne': True}}, {'password': 0})
         self.dumps_write(data)
 
     async def post(self):
@@ -32,4 +34,3 @@ class UsersHandler(BaseHandler):
         self.dumps_write(user['permissions'])
 
 
-permission_list = ['User', 'Template']

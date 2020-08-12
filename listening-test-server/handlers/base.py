@@ -65,7 +65,7 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
             raise tornado.web.Finish
         elif permission:
             # Get user and check the permissions
-            user = await self.db['users'].find_one({'_id': user_id})
+            user = self.db['users'].find_one({'_id': user_id})
             if permission not in user['permissions']:
                 self.set_error(403, "You don't have permission")
                 raise tornado.web.Finish
