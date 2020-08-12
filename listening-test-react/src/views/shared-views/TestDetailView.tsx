@@ -80,8 +80,8 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const actions = tests ? <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
     <Grid item><FormControlLabel label="Collapse All" control={
-      <Checkbox indeterminate={tests.items.some(v => v.collapsed) && !tests.items.every(v => v.collapsed)}
-                checked={tests.items.every(v => v.collapsed)}
+      <Checkbox color="primary" checked={tests.items.every(v => v.collapsed)}
+                indeterminate={tests.items.some(v => v.collapsed) && !tests.items.every(v => v.collapsed)}
                 onChange={e => tests.items.forEach(v => v.collapsed = e.target.checked)}/>
     }/></Grid>
     <Grid item><TestSettingsDialog settings={tests.settings}
