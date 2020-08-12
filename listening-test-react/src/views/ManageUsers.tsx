@@ -41,7 +41,7 @@ export default function ManageUsers() {
       user.permissions = res.data;
       setProcessing(false);
     }, reason => {
-      openSnackbar(reason.response.data);
+      openSnackbar(reason.response.data, undefined, 'error');
       setProcessing(false);
     });
   }
@@ -59,7 +59,7 @@ export default function ManageUsers() {
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Permissions</TableCell>
-            <TableCell/>
+            {/*<TableCell/>*/}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -68,16 +68,16 @@ export default function ManageUsers() {
             <TableCell>{user.email}</TableCell>
             <TableCell>{fullPermissions.map(per =>
               <FormControlLabel key={per} label={per} disabled={processing} control={
-                <Checkbox checked={user.permissions?.indexOf(per) > -1}
+                <Checkbox color="primary" checked={user.permissions?.indexOf(per) > -1}
                           onChange={() => handleAddPermission(per, user)}/>}
               />
             )}</TableCell>
-            <TableCell>
+            {/*<TableCell>
               <Tooltip title="Reset password">
                 <IconButton size="small"
                             color="primary"><Icon>rotate_left</Icon></IconButton>
               </Tooltip>
-            </TableCell>
+            </TableCell>*/}
           </TableRow>) : <TableRow><TableCell colSpan={4}>There is no user</TableCell></TableRow>}
         </TableBody>
       </Table></CardContent></Card> : <Loading error={!!error} message={error}/>}
