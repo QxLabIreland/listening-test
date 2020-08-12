@@ -8,11 +8,11 @@ from handlers.base import BaseHandler
 
 
 class TemplateHandler(BaseHandler):
-    def prepare(self):
+    async def prepare(self):
         # Get user and check the permissions
         self.user_id = self.auth_current_user('Template')
 
-    def get(self):
+    async def get(self):
         collection = switch_test_collection(self)
         data = collection.aggregate([
             {'$match': {'isTemplate': True}},
@@ -23,7 +23,7 @@ class TemplateHandler(BaseHandler):
         ])
         self.dumps_write(data)
 
-    def put(self):
+    async def put(self):
         # Get collection and request data
         body = self.loads_body()
         collection = switch_test_collection(self)

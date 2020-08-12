@@ -7,8 +7,8 @@ from handlers.download_csv.acr_test_csv_download import build_tags, check_is_tim
 
 
 class AbTestResponsesDownload(BaseHandler):
-    def prepare(self):
-        self.user_id = self.auth_current_user()
+    async def prepare(self):
+        self.user_id = await self.auth_current_user()
 
     # Download api
     async def get(self):

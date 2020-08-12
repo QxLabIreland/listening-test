@@ -11,8 +11,8 @@ from datetime import datetime
 
 
 class AbTestResponsesDownload(BaseHandler):
-    def prepare(self):
-        self.user_id = self.auth_current_user()
+    async def prepare(self):
+        self.user_id = await self.auth_current_user()
 
     # Download api
     async def get(self):
