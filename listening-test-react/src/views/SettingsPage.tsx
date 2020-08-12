@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField, Typography} from "@material-ui/core";
 import {useFormik} from "formik";
 import Axios from "axios";
 import {minLength, pipeValidator, required} from "../shared/FormikValidator";
@@ -10,7 +10,8 @@ import {useHistory} from "react-router";
 
 export default function SettingsPage() {
   const openDialog = useContext(GlobalDialog);
-  const [PasswordAlert, setPasswordMessage] = useGeneralAlert();
+  const [passwordAlert, setPasswordMessage] = useGeneralAlert();
+  const [accountDeletionAlert, setAccountDeletionMessage] = useGeneralAlert();
   const history = useHistory();
 
   const formik = useFormik({
@@ -41,7 +42,7 @@ export default function SettingsPage() {
         // Hash all of things
         data: {password: Md5.hashStr(values.password)}
       }).then(() => openDialog('You have successfully delete your account', 'Success', () => history.push('/sign-in')),
-        (reason) => openDialog(reason.response.data, 'Error')
+        (reason) => setAccountDeletionMessage('error', reason.response.data)
       )
     ),
     validate: pipeValidator({
@@ -56,6 +57,9 @@ export default function SettingsPage() {
           <CardHeader title="Update password"/>
           <CardContent>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="body2" color="textSecondary">Enter your current and new password to update your password.</Typography>
+              </Grid>
               <Grid item xs={12}>
                 <TextField fullWidth label="Current Password" type="password" variant="outlined"
                            {...formik.getFieldProps('password')}
@@ -72,7 +76,7 @@ export default function SettingsPage() {
                            error={!!formik.errors.confirm} helperText={formik.errors.confirm}/>
               </Grid>
             </Grid>
-            {PasswordAlert}
+            {passwordAlert}
           </CardContent>
           <CardActions style={{justifyContent: 'flex-end'}}>
             <Button color="primary" type="submit">
@@ -89,11 +93,18 @@ export default function SettingsPage() {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
+                <Typography variant="body2" color="textSecondary">
+                  If you would like delete your account, fill your current password and click DELETE MY ACCOUNT button.
+                  This action will delete your account and related data permanently and they cannot be recovered.
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
                 <TextField fullWidth label="Current Password" type="password" variant="outlined"
                            {...accountDeletion.getFieldProps('password')}
                            error={!!accountDeletion.errors.password} helperText={accountDeletion.errors.password}/>
               </Grid>
             </Grid>
+            {accountDeletionAlert}
           </CardContent>
           <CardActions style={{justifyContent: 'flex-end'}}>
             <Button color="secondary" type="submit">DELETE MY ACCOUNT</Button>

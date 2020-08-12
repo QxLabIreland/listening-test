@@ -17,14 +17,14 @@ export default function SignIn() {
   const location = useLocation();
 
   const formik = useFormik({
-    initialValues: {email: '', password: ''},
+    initialValues: {email: (location.state as any)?.email || '', password: ''},
     // Hash the password
     onSubmit: values => Axios.post('/api/login', {...values, password: Md5.hashStr(values.password)})
       .then((res) => {
         // Set current user and navigate to dashboard
         setCurrentUser(res.data);
         // Get state where user has been blocked by authentication
-        const {from} = location.state as any || { from: { pathname: '/user' } };
+        const from = (location.state as any)?.from || { pathname: '/user' };
         history.push(from);
       }, (reason) => {
         openDialog(reason.response.data);
@@ -74,7 +74,7 @@ export default function SignIn() {
                 <Typography className={classes.suggestion} gutterBottom color="textSecondary" variant="body1">
                   Login with email address
                 </Typography>
-                <TextField name="email" type="text" onChange={formik.handleChange} className={classes.textField}
+                <TextField name="email" type="text" onChange={formik.handleChange} value={formik.values.email} className={classes.textField}
                            fullWidth label="Email address" variant="outlined"
                            error={!!formik.errors.email} helperText={formik.errors.email}/>
 

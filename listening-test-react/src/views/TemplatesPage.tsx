@@ -19,11 +19,11 @@ export default function () {
   const handleChange = (event: React.ChangeEvent<any>, newValue: TestUrl) => setTestUrl(newValue);
 
   return <>
-    <Tabs value={testUrl} onChange={handleChange} aria-label="simple tabs example">
-      <Tab color="primary" label="AB Test" value='ab-test'/>
-      <Tab color="primary" label="Acr Test" value='acr-test'/>
-      <Tab color="primary" label="Mushra Test" value='mushra-test'/>
-      <Tab color="primary" label="Hearing Sensitivity Test" value='hearing-test'/>
+    <Tabs value={testUrl} onChange={handleChange} indicatorColor="primary" aria-label="simple tabs example">
+      <Tab label="AB Test" value='ab-test'/>
+      <Tab label="Acr Test" value='acr-test'/>
+      <Tab label="Mushra Test" value='mushra-test'/>
+      <Tab label="Hearing Sensitivity Test" value='hearing-test'/>
     </Tabs>
     <Box paddingTop={2}>
       {testUrl && <TemplatesList testUrl={testUrl}/>}

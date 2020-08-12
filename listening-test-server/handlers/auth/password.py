@@ -36,3 +36,5 @@ class PasswordHandler(BaseHandler):
             self.write('done')
             # Clean the cookie
             self.clear_cookie("_user")
+        else:
+            self.set_error(400, 'user not found or the password is incorrect')
