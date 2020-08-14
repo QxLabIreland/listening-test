@@ -33,6 +33,7 @@ try:
 
     print('Move configuration files...')
     shutil.copyfile("tornado.ini", os.path.join(base_dir, "tornado.ini"))
+    shutil.copyfile("golisten.conf", os.path.join(base_dir, "golisten.conf"))
 
     print('Create tar file...')
     with tarfile.open(base_dir_tgz, "w:gz") as tar:
