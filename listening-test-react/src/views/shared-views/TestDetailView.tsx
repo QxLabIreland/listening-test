@@ -62,7 +62,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
       method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: tests
     }).then(() => {
       history.push('./');
-      openSnackbar('Save successfully');
+      openSnackbar('Save successfully', undefined, 'success');
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
   // Local methods
