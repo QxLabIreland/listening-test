@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Box, Checkbox, Tab, Tabs} from "@material-ui/core";
+import {Box, Checkbox, Icon, IconButton, Tab, Tabs} from "@material-ui/core";
 import {TestUrl} from "../shared/models/EnumsAndTypes";
 import {BasicTestModel} from "../shared/models/BasicTestModel";
 import Axios from "axios";
@@ -10,8 +10,10 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Card from "@material-ui/core/Card";
-import {GlobalSnackbar} from "../shared/ReactContexts";
+import {GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
 import Loading from "../layouts/components/Loading";
+import {useHistory} from "react-router";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export default function () {
   const [testUrl, setTestUrl] = useState<TestUrl>('ab-test');
@@ -32,7 +34,7 @@ export default function () {
 }
 
 function TemplatesList({testUrl}: { testUrl: TestUrl }) {
-  const {templates, templatesError, handleIsTemplateChange} = useTemplateList(testUrl);
+  const {templates, templatesError, handleIsTemplateChange, handleTemplateEdit} = useTemplateList(testUrl);
 
   return <>{templates ? <Card>
     <CardContent style={{padding: 0}}>
@@ -42,6 +44,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
             <TableCell>Name</TableCell>
             <TableCell>Creation Date</TableCell>
             <TableCell>Creator</TableCell>
+            <TableCell>Template</TableCell>
             <TableCell/>
           </TableRow>
         </TableHead>
@@ -52,6 +55,11 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
             <TableCell>{test.creator.name}</TableCell>
             <TableCell>
               <Checkbox color="primary" checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
+            </TableCell>
+            <TableCell>
+              <Tooltip title="Edit Template">
+                <IconButton size="medium" color="primary" onClick={() => handleTemplateEdit(test)}><Icon>edit</Icon></IconButton>
+              </Tooltip>
             </TableCell>
           </TableRow>)}
           {!templates.length && <TableRow><TableCell colSpan={3}>
@@ -67,6 +75,9 @@ export function useTemplateList(testUrl: TestUrl) {
   const openSnackbar = useContext(GlobalSnackbar);
   const [templates, setTemplates] = useState<BasicTestModel[]>();
   const [templatesError, setTemplatesError] = useState();
+  const openDialog = useContext(GlobalDialog);
+  const history = useHistory();
+
   useEffect(() => {
     Axios.get('/api/template', {params: {testType: testUrl}}).then(res => setTemplates(res.data),
       reason => setTemplatesError(reason.response.data));
@@ -77,8 +88,8 @@ export function useTemplateList(testUrl: TestUrl) {
     }
   }, [testUrl]);
 
-  const handleIsTemplateChange = (test: BasicTestModel) =>
-    Axios.put<boolean>('/api/template', {_id: test._id}, {params: {testType: testUrl}}).then(res => {
+  const handleIsTemplateChange = (test: BasicTestModel) => {
+    const openRequest = () => Axios.put<boolean>('/api/template', {_id: test._id}, {params: {testType: testUrl}}).then(res => {
       test.isTemplate = res.data;
       // Append test at the end
       if (test.isTemplate) setTemplates([...templates, test]);
@@ -88,6 +99,17 @@ export function useTemplateList(testUrl: TestUrl) {
         setTemplates([...templates])
       }
     }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
+    if (test.isTemplate) openDialog(
+      'This test is currently being used as a template. Are you sure you want to remove this from templates?',
+      'Are you sure?', null, openRequest
+    ); else openRequest().catch();
+  }
+  const handleTemplateEdit = (aTest: BasicTestModel) => {
+    if (aTest.isTemplate) openDialog('This test is currently being used as a template. Are you sure you want to edit this template?'
+      ,'Are you sure?',null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`));
+    else history.push(`/user/${testUrl}/${aTest._id.$oid}`);
+  }
 
-  return {templates, templatesError, handleIsTemplateChange};
+
+  return {templates, templatesError, handleIsTemplateChange, handleTemplateEdit};
 }
