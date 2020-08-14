@@ -28,7 +28,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {BasicTestModel} from "../../shared/models/BasicTestModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {GlobalSnackbar} from "../../shared/ReactContexts";
+import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useUserAuthResult} from "../../shared/ReactHooks";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
@@ -42,7 +42,8 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const openSnackbar = useContext(GlobalSnackbar);
   // Authenticate if user has permission to template
   const userAuth = useUserAuthResult('Template');
-  const {templates, handleIsTemplateChange} = useTemplateList(testUrl);
+  const {templates, handleIsTemplateChange, handleTemplateEdit} = useTemplateList(testUrl);
+  const openDialog = useContext(GlobalDialog);
 
   useEffect(() => {
     Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true}).then((res) => {
@@ -64,18 +65,25 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
     // Date searching
     || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
   );
-  // When trash button clicked
-  const handleDelete = (obj: BasicTestModel) =>
-    Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
+  // When trash button clicked. If it is a temple there will be alert
+  const handleDelete = (obj: BasicTestModel) => {
+    const openRequest = () => Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
       data.splice(data.indexOf(obj), 1);
       setData([...data]);
-      openSnackbar('Delete successfully');
+      openSnackbar('Delete successfully', undefined, 'success');
     });
+    if (obj.isTemplate) openDialog('This test is currently being used as a template. Are you sure you want to delete this template?'
+      ,'Are you sure?',null, openRequest);
+    else openRequest().catch();
+  }
   const handleCopyTest = (newTest: BasicTestModel) => {
     Axios.post<BasicTestModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
+      // Give a 0 responseNum and put at the top of the list
+      res.data.responseNum = 0;
+      // res.data.isTemplate = false;
       data.unshift(res.data);
       setData([...data]);
-      openSnackbar('Duplicate successfully');
+      openSnackbar('Duplicate successfully', undefined, 'success');
     }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
   }
 
@@ -127,7 +135,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                   </TableCell>}
                   <TableCell className={classes.elementGroup}>
                     <ActionsGroup testUrl={testUrl} path={path} test={test} handleDelete={handleDelete}
-                                  handleCopyTest={handleCopyTest}/>
+                                  handleCopyTest={handleCopyTest} handleEdit={handleTemplateEdit}/>
                   </TableCell>
                 </TableRow>) : <TableRow><TableCell colSpan={4}>
                   There is no test here. You can add test by the button top right.
@@ -191,8 +199,8 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTestMode
 }
 
 /** When width is less than md, the button will be put into a menu*/
-function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest}: {
-  testUrl: TestUrl, path: string,
+function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest, handleEdit}: {
+  testUrl: TestUrl, path: string, handleEdit: (_: BasicTestModel) => void,
   test: BasicTestModel, handleDelete: (_: BasicTestModel) => void, handleCopyTest: (_: BasicTestModel) => void
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
@@ -203,8 +211,8 @@ function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest}: {
   return <>
     <Hidden mdDown>
       <Tooltip title="Edit">
-        <IconButton size="small" color="primary" component={Link}
-                    to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
+        {test.isTemplate ? <IconButton size="small" color="primary" onClick={() => handleEdit(test)}><Icon>edit</Icon></IconButton>
+        : <IconButton size="small" color="primary" component={Link} to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>}
       </Tooltip>
       <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`}/>
       <Tooltip title="Duplicate test">
