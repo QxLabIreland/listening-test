@@ -31,7 +31,7 @@ export default function PublicContainer() {
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route exact path="/sign-in" component={SignIn}/>
-        <Route exact path="/sign-up" component={SignUp}/>
+        {/*<Route exact path="/sign-up" component={SignUp}/>*/}
         <Redirect to="/not-found" />
       </Switch>
     </Suspense>
