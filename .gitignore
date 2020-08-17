@@ -2,3 +2,5 @@
 /listeningTest.tgz
 /listeningTestDb
 /*.pem
+/*.conf
+/pack_tansfer.py

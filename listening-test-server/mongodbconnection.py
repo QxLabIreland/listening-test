@@ -26,7 +26,7 @@ class MongoDBConnection:
     def __init__(self):
         try:
             self.client = pymongo.MongoClient("mongodb://localhost:27017/")
-            self.db = self.client["listeningTestDb"]
+            self.db = self.client["golisten_db"]
         except():
             print(Exception)
 

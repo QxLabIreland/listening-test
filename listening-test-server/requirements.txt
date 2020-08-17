@@ -1,0 +1,2 @@
+pymongo~=3.10.1
+tornado~=6.0.4
