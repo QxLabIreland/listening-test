@@ -9,15 +9,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 type severityType = 'success' | 'error' | 'warning' | 'info';
 
-interface GeneralAlertMessage {
+interface SimpleAlertMessage {
   severity: severityType;
   title?: string;
   content: string;
 }
 
-export function useGeneralAlert(): [JSX.Element, (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => void] {
+export function useSimpleAlert(): [JSX.Element, (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => void, SimpleAlertMessage] {
   const [open, setOpen] = useState<boolean>();
-  const [message, setMessage] = useState<GeneralAlertMessage>();
+  const [message, setMessage] = useState<SimpleAlertMessage>();
   const classes = useStyles();
 
   const handleClose = () => {
@@ -40,5 +40,5 @@ export function useGeneralAlert(): [JSX.Element, (severity: 'success' | 'error' 
       {message?.title && <AlertTitle>{message?.title}</AlertTitle>}
       {message?.content}
     </Alert>
-  </Collapse>, setGeneralAlertMessage];
+  </Collapse>, setGeneralAlertMessage, message];
 }

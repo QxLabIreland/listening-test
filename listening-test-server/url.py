@@ -2,6 +2,7 @@ from handlers.auth.users import UsersHandler
 from handlers.dashboard import DashboardHandler
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
+from handlers.miscellanea.storage_status import StorageStatusHandler
 from handlers.survey.hearing_survey import HearingSurveyHandler
 from handlers.survey.mushra_survey import MushraSurveyHandler
 from handlers.test_handlers.acr_test import AcrTestHandler
@@ -54,5 +55,6 @@ path = [
     ("/api/response", TestResponsesHandler),
     ("/api/response-count", ResponsesCountHandler),
     ("/api/template", TemplateHandler),
+    ("/api/storage", StorageStatusHandler),
 ]
 

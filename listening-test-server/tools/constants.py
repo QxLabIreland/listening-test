@@ -1,1 +1,1 @@
-permission_list = ['User', 'Template']
+permission_list = ['User', 'Template', 'Storage']

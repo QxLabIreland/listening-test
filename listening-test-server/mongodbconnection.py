@@ -41,5 +41,10 @@ def create_default_user():
         'isAdmin': True,
         'permissions': permission_list
     }
-    if not con.db['users'].find_one({'isAdmin': True}):
+    admin = con.db['users'].find_one({'isAdmin': True})
+    if not admin:
         con.db['users'].insert(default_user)
+        print('default admin user created')
+    elif admin['permissions'] != permission_list:
+        con.db['users'].update_one({'_id': admin['_id']}, {'$set': {'permissions': permission_list}})
+        print('admin permissions updated')

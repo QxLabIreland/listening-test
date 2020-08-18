@@ -22,7 +22,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
 }) {
   const {id} = useParams();
   const [tests, setTests] = useState<BasicTestModel>(null);
-  const [isError, setIsError] = useState(false);
+  const [loadingError, setLoadingError] = useState<string>();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
@@ -39,7 +39,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
       .then((res) => {
         if (location.state) templateProcess(res.data);
         setTests(observable(res.data));
-      }, () => setIsError(true));
+      }, res => setLoadingError(res.response.data));
     // If in creation page
     else setTests(observable({name: '', description: '', items: []}));
   }, [id, testUrl]);
@@ -100,7 +100,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
           <ButtonGroup onAdd={addItem}/>
         </Grid>
         {actions}
-      </React.Fragment> : <Grid item><Loading error={isError}/></Grid>}
+      </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
     </Grid>
   )
 })

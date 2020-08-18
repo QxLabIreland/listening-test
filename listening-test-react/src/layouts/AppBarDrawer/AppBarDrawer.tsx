@@ -18,6 +18,7 @@ import TestTabPage from "../../views/shared-views/TestTabPage";
 import ManageUsers from "../../views/ManageUsers";
 import AuthRoute from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
+import ManageStorage from "../../views/ManageStorage";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -40,6 +41,7 @@ export function AppBarDrawer(props: any) {
 
   const DrawerList = () => <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
+    <ListItemNavLink to={`${path}/storage`} icon='storage' permission="Storage">Storage Status</ListItemNavLink>
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
@@ -76,6 +78,11 @@ export function AppBarDrawer(props: any) {
         <Route exact path={`${path}/dashboard`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
+        <AuthRoute exact path={`${path}/storage`} permission="Storage">
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <ManageStorage/>
+          </AppBarLayout>
+        </AuthRoute>
         <AuthRoute exact path={`${path}/people`} permission="User">
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
             <ManageUsers/>
