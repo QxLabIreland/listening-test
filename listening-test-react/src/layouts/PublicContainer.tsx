@@ -13,7 +13,8 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
     backgroundColor: theme.palette.grey["800"]
-  }
+  },
+  button: {fontWeight: 700}
 }));
 
 export default function PublicContainer() {
@@ -22,10 +23,10 @@ export default function PublicContainer() {
     <Suspense fallback={<Loading/>}>
       <AppBar position="sticky" color="primary" elevation={6}>
         <Toolbar className={classes.toolbar}>
-          <Button component={Link} to='/' color="inherit">Golisten.io</Button>
+          <Button component={Link} to='/' color="inherit" className={classes.button}>Go Listen</Button>
           {/*<Button component={Link} to='about'>About</Button>*/}
           <span style={{flexGrow: 1}}/>
-          <Button component={Link} to='sign-in' color="inherit" variant="outlined">Login</Button>
+          <Button component={Link} to='sign-in' color="inherit" variant="outlined" className={classes.button}>Login</Button>
         </Toolbar>
       </AppBar>
       <Switch>
