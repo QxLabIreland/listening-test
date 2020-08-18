@@ -4,3 +4,4 @@
 /*.pem
 /*.conf
 /pack_tansfer.py
+/pack_test_server.py

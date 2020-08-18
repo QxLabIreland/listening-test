@@ -71,6 +71,7 @@ def get_audios_in_using(db: Database) -> set:
                 for i in d['items']:
                     if 'example' in i and i['example'] and 'audios' in i['example']:
                         for a in i['example']['audios']:
-                            audios_checklist.add(os.path.split(a['src'])[-1])
+                            if 'src' in a and a['src']:
+                                audios_checklist.add(os.path.split(a['src'])[-1])
     return audios_checklist
 
