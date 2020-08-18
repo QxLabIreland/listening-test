@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: theme.spacing(16),
     color: 'white'
   },
+  small: {fontSize: '0.75rem'},
+  mail: {color: theme.palette.primary.contrastText},
   footer: {
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
@@ -53,13 +55,13 @@ export default function Home() {
       <CssBaseline />
       <Container component="main" className={classes.main} maxWidth="md">
         <Typography variant="h2" component="h1" gutterBottom align="center" style={{fontWeight: 800}}>
-          Golisten.io
+          Go Listen!
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom align="center">
           Create and share a subjective listening test in a few minutes<br/>
 
         </Typography>
-        {/*<Typography variant="body1" gutterBottom align="center">Click sign in to start your tests.</Typography>*/}
+        <Typography variant="body2" gutterBottom align="center" className={classes.small}>We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" className={classes.mail}>dan.barry@ucd.ie</a> to discuss access</Typography>
 
       </Container>
       {/*<footer className={classes.footer}>
