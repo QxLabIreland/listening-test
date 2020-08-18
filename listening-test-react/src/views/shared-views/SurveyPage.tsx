@@ -124,7 +124,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
         backButton={null}
       />
     </Grid>
-  </Grid> : <Loading error={!!error} message={error}/>}</Box>
+  </Grid> : <Loading error={error}/>}</Box>
 })
 
 // An hook to switch different views of card

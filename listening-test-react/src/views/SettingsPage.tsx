@@ -5,13 +5,13 @@ import Axios from "axios";
 import {minLength, pipeValidator, required} from "../shared/FormikValidator";
 import {GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
-import {useGeneralAlert} from "../shared/components/UseGeneralAlert";
+import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
 import {useHistory} from "react-router";
 
 export default function SettingsPage() {
   const openDialog = useContext(GlobalDialog);
-  const [passwordAlert, setPasswordMessage] = useGeneralAlert();
-  const [accountDeletionAlert, setAccountDeletionMessage] = useGeneralAlert();
+  const [passwordAlert, setPasswordMessage] = useSimpleAlert();
+  const [accountDeletionAlert, setAccountDeletionMessage] = useSimpleAlert();
   const history = useHistory();
 
   const formik = useFormik({

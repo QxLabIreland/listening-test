@@ -143,7 +143,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
               </TableBody>
             </Table>
           </CardContent>
-        </Card> : <Loading error={!!error} message={error}/>}
+        </Card> : <Loading error={error}/>}
       </Grid>
 
     </Grid>

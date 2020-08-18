@@ -2,13 +2,13 @@ import React from "react";
 import {CircularProgress, Typography} from "@material-ui/core";
 import {Alert, AlertTitle} from "@material-ui/lab";
 
-export default class Loading extends React.Component<{ error?: boolean, message?: string}> {
+export default class Loading extends React.Component<{ error?: string}> {
   render() {
-    const {error, message} = this.props;
+    const {error} = this.props;
 
     const errorNode = <Alert severity="error">
       <AlertTitle>Something bad happened</AlertTitle>
-      {`${message}. Please try again`}
+      {`${error}. Please try again`}
     </Alert>
 
     const loadingNode = <React.Fragment>

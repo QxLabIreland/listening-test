@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import Axios from "axios";
-import {Checkbox, FormControlLabel, Grid, Icon, IconButton} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Grid} from "@material-ui/core";
 import SearchInput from "../shared/components/SearchInput";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -8,13 +8,12 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
 import TableBody from "@material-ui/core/TableBody";
 import Loading from "../layouts/components/Loading";
 import {UserModel} from "../shared/models/UserModel";
 import {GlobalSnackbar} from "../shared/ReactContexts";
 
-const fullPermissions = ['User', 'Template'];
+const fullPermissions = ['User', 'Template', 'Storage'];
 
 export default function ManageUsers() {
   const [data, setData] = useState<UserModel[]>();
@@ -80,7 +79,7 @@ export default function ManageUsers() {
             </TableCell>*/}
           </TableRow>) : <TableRow><TableCell colSpan={4}>There is no user</TableCell></TableRow>}
         </TableBody>
-      </Table></CardContent></Card> : <Loading error={!!error} message={error}/>}
+      </Table></CardContent></Card> : <Loading error={error}/>}
     </Grid>
   </Grid>
 }

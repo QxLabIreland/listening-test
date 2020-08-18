@@ -116,7 +116,7 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
                            onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
                            rowsPerPageOptions={[10, 25, 50]}/>
         </CardActions>
-      </Card> : <Loading error={!!error} message={error}/>}
+      </Card> : <Loading error={error}/>}
     </Grid>
     <Grid item xs={12} className={classes.actions}>
       <Tooltip title="Download all Responses for This Test">
