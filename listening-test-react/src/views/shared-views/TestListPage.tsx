@@ -32,7 +32,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useUserAuthResult} from "../../shared/ReactHooks";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
-import {testItemsValidateTips} from "../../shared/ErrorValidators";
+import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
@@ -161,7 +161,7 @@ function ShareIconButton({url, menuItem, test}: { url: string, menuItem?: boolea
   };
   const handleShareClick = () => {
     // Give a dialog alert that ask if user want to continue. The survey may confuse people.
-    const error = testItemsValidateTips(test);
+    const error = testItemsValidateIncomplete(test);
     if (error) openDialog(error, 'Required');
     else navigator.clipboard.writeText(getCurrentHost() + url).then(() => setSnackbarOpen(true));
   }

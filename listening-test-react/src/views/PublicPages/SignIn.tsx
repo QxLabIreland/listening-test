@@ -7,6 +7,7 @@ import Axios from "axios";
 import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5';
 import {useSignInUpStyles} from "../SharedStyles";
+import Container from "@material-ui/core/Container";
 
 export default function SignIn() {
   const classes = useSignInUpStyles();
@@ -92,6 +93,8 @@ export default function SignIn() {
                     Sign up
                   </Link>
                 </Typography>*/}
+                <Typography variant="body2" gutterBottom color="textSecondary">We are in closed beta! Contact dan.barry@ucd.ie to discuss access</Typography>
+
               </form>
             </div>
           </div>

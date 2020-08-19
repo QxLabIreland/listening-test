@@ -78,15 +78,16 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 To install them, just run `sudo apt-get install -y nginx supervisor && chmod +x install-mongodb.sh && sudo sh install-mongodb.sh`
 
-There are lots of ways to install python3.8, and every linux has different python preinstalled. In our case, we got python3.5, so we need to upgrade it and remove the old one.
+There are lots of ways to install python3.8, and every linux has different python preinstalled. In our case, we got python3.5, so we need to upgrade it.
 
 ```bash
 sudo apt-get update
 sudo apt-get install -y python3.8
-sudo apt remove python3.5 python3.5-minimal
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+# In our case, we need to add alternatives to switch python3 version.
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 wget https://bootstrap.pypa.io/get-pip.py
-sudo python3 get-pip.py
+sudo python3.8 get-pip.py
 ```
 
 ### Serve frontend and backend on a server
@@ -103,7 +104,7 @@ A python automatic script can help use scp command and ssh to restart backend.
 
 4. Log into the server. Move conf files into conf.d folder of nginx and supervisor and install backend dependencies.
 
-```
+```bash
 echo 'Move nginx conf files'
 sudo mv /home/golistenadmin/golisten/golisten.nginx.conf /etc/nginx/conf.d/
 sudo systemctl restart nginx
@@ -112,19 +113,40 @@ echo 'Edit supervisord.conf'
 sudo mv /home/golistenadmin/golisten/golisten.supervisor.conf /etc/supervisor/conf.d/
 sudo supervisorctl reload
 
-echo 'Add pip packages'
-pip3 install --upgrade pip
-pip3 install tornado pymongo
+echo 'Add packages'
+sudo pip3 install --upgrade pip
+sudo pip3 install tornado pymongo
 ```
 
 5. Done.
 
 ### Example of conf files
 
-#### golisten.supervisor.conf
+Here is some examples of config files for a server. You need to do some modification to meet your requirements.
+
+#### /usr/lib/systemd/system/supervisord.service
+
+The purpose of supervisord.service is to make supervisor running after the a reboot of server. 
+
+```conf
+[Unit] 
+Description=Supervisor daemon
+[Service] 
+Type=forking
+ExecStart=/usr/bin/supervisord
+ExecStop=/usr/bin/supervisorctl shutdown 
+ExecReload=/usr/bin/supervisorctl reload 
+KillMode=process 
+Restart=on-failure 
+RestartSec=42s
+[Install] 
+WantedBy=multi-user.target
 ```
+
+#### golisten.supervisor.conf
+```conf
 [program:golisten]
-command=sudo python3 /home/golistenadmin/golisten/server/server.py
+command=sudo python3.8 /home/golistenadmin/golisten/server/server.py
 directory=/home/golistenadmin/golisten/server
 user=root
 autorestart=true
@@ -134,7 +156,7 @@ loglevel=info
 ```
 
 #### golisten.nginx.conf
-```
+```conf
 server {
     listen       443 ssl http2;
     listen       [::]:443 ssl http2;
