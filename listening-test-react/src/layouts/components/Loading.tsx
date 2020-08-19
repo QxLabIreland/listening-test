@@ -8,7 +8,7 @@ export default class Loading extends React.Component<{ error?: string}> {
 
     const errorNode = <Alert severity="error">
       <AlertTitle>Something bad happened</AlertTitle>
-      {`${error}. Please try again`}
+      {error ? error : 'Please try again later'}
     </Alert>
 
     const loadingNode = <React.Fragment>

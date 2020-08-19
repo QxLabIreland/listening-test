@@ -20,7 +20,7 @@ import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
 import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
 import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
 import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
-import {questionedExValidateError, sliderItemValidateError} from "../../shared/ErrorValidators";
+import {questionedExValidateError, sliderItemValidateError, testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -36,8 +36,11 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
 
   useEffect(() => {
     if (value) return;
-    Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}})
-      .then(res => setQuestionnaire(observable(res.data)), reason => setError(reason.response.data));
+    Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
+      const validateError = testItemsValidateIncomplete(res.data);
+      if (validateError) setError('The survey is incomplete. If you are creator: ' + validateError);
+      else setQuestionnaire(observable(res.data));
+    }, reason => setError(reason.response.data));
   }, [testUrl, id, value]);
   // If isIndividual, goto description
   useEffect(() => {
@@ -46,7 +49,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
 
   function handlePanelChange(v: boolean, newIndex: number) {
     const validationError = validateError(questionnaire.items[openedPanel]);
-    if (validationError) openDialog(validationError, 'Required');
+    if (validationError) openDialog(validationError, 'Answer Required');
     // Set which panel will open, if validation pass.
     else if (v) {
       // Timing process
@@ -79,8 +82,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     // Set opened to make sure active is false
     setOpenedPanel(null);
     // Start request
-    if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(() => {
-      history.replace('/task/finish');
+    if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(res => {
+      history.replace(`/task/finish?${res.data?.$oid}&${testUrl}`, true);
     });
   }
 
@@ -148,7 +151,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
   const validateError = () => {
     switch (testUrl) {
       case "ab-test":
-        return questionedExValidateError;
+        return (item: TestItemModel) => questionedExValidateError(item, true);
       case "acr-test":
       case "mushra-test":
       case "hearing-test":

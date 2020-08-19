@@ -38,7 +38,7 @@ const RenderQuestionedExample = observer(function (props: { value: ItemExampleMo
 
       {value.audios.map((v, i) => <Grid item key={i}>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} settings={value.settings}
-                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{i + 1}</AudioButton>
+                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{value.fields[0]?.options[i]}</AudioButton>
         {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
       </Grid>)}
 

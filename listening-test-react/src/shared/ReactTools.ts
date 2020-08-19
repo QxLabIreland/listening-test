@@ -1,14 +1,14 @@
 import Axios, {AxiosRequestConfig} from "axios";
 
-const DEV_HOST = 'http://localhost:8889';
-const PRODUCTION_HOST = 'https://event.holacodes.com';
+const DEV_HOST = 'http://localhost:3000';
+const PRODUCTION_HOST = 'https://golisten.ucd.ie';
 
 export function isDevMode() {
   return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 }
 
 export function downloadFileTool(config?: AxiosRequestConfig) {
-  const host = isDevMode() ? DEV_HOST : '';
+  const host = isDevMode() ? 'http://localhost:8889' : '';
   config.url = host + config.url;
   const uri = Axios.getUri(config);
   window.open(uri);

@@ -19,13 +19,16 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
   else return null;
 }
 
-export function questionedExValidateError(item: TestItemModel): string {
+export function questionedExValidateError(item: TestItemModel, isAb?: boolean): string {
   if (!item) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
     // Make sure ab test questions have been answered
     for (const a of item.example.fields) {
-      const error = surveyControlValidateError(a);
+      const error = a.type === SurveyControlType.radio && isAb
+        // If the type is radio and current check is ab test
+        ? (a.required ? (a.value ? null : 'Please select a preference. You must answer this question to continue') : null)
+        : surveyControlValidateError(a);
       if (error) return error;
     }
     // Audio validation
@@ -38,6 +41,7 @@ export function sliderItemValidateError(item: TestItemModel): string {
   if (item == null) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
+    // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.audios) {
       if (item.example.settings?.requireClipEnded && !a.playedOnce) return 'Please fully listen to these clips'
       if (!a.value) return 'You must complete this example to continue'
@@ -47,7 +51,7 @@ export function sliderItemValidateError(item: TestItemModel): string {
   else return null;
 }
 
-export function testItemsValidateTips(tests: BasicTestModel) {
+export function testItemsValidateIncomplete(tests: BasicTestModel) {
   for (const item of tests.items) {
     // Audios array is null, length is 0, some of them are null
     if (item.example && (!item.example.audios || item.example.audios.length < 1 || item.example.audios.some(value => value == null))) {
