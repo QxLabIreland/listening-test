@@ -5,9 +5,7 @@ import {ItemExampleModel} from "./models/ItemExampleModel";
 
 function validatePlayedOnceError(example: ItemExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
-  for (const a of example.audios) {
-    if (!a.playedOnce) return 'Please fully listen to these clips'
-  }
+  if (!example.playedOnce) return 'Please fully listen to these clips'
   return null;
 }
 
@@ -43,10 +41,9 @@ export function sliderItemValidateError(item: TestItemModel): string {
   else if (item.type === TestItemType.example) {
     // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.audios) {
-      if (item.example.settings?.requireClipEnded && !a.playedOnce) return 'Please fully listen to these clips'
       if (!a.value) return 'You must complete this example to continue'
     }
-    return null;
+    return validatePlayedOnceError(item.example);
   } else if (item.type === TestItemType.training) return validatePlayedOnceError(item.example);
   else return null;
 }

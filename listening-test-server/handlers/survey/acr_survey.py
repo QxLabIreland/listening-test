@@ -19,4 +19,5 @@ class AcrSurveyHandler(BaseHandler):
     async def post(self):
         body = self.loads_body()
         body['createdAt'] = datetime.now()
-        self.db[self.test_name + 'Surveys'].insert_one(body)
+        result = self.db[self.test_name + 'Surveys'].insert_one(body)
+        self.dumps_write(result.inserted_id)

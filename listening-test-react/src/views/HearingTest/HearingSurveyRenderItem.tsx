@@ -45,7 +45,7 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       audio.isPlaying = false;
     }
     else {
-      audio.playedOnce = true;
+      // value.playedOnce = true;
       // Stop others first
       gos.forEach((v, i) => {
         if (i === index || !v?.oscillator) return;

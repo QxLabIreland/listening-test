@@ -9,7 +9,9 @@ export interface ItemExampleModel {
   fields: SurveyControlModel[];
   tags?: string;
   // Settings make example play specific times
-  settings?: ItemExampleSettingsModel
+  settings?: ItemExampleSettingsModel;
+  // To check if the example has been played once
+  playedOnce?: boolean;
 }
 
 export interface ItemExampleSettingsModel {

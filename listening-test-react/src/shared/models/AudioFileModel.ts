@@ -7,7 +7,6 @@ export interface AudioFileModel {
   settings?: AudioSettings;
   // Additional attributes
   isPlaying?: boolean;
-  playedOnce?: boolean;
 }
 
 export interface AudioSettings {
