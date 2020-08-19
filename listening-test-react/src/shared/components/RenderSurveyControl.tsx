@@ -59,7 +59,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
 
   return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend">{control.question}</FormLabel>
-    <FormGroup row>
+    <FormGroup>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} label={o} control={
           <Checkbox name={o} onChange={handleCheckbox}/>

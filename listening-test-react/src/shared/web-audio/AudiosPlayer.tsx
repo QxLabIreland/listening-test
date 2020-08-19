@@ -3,15 +3,17 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../models/AudioFileModel";
-import {ItemExampleSettingsModel} from "../models/ItemExampleModel";
+import {ItemExampleModel, ItemExampleSettingsModel} from "../models/ItemExampleModel";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 
 /** In order to build a custom audio player including rating bar,
  *  use this hook with AudioButton and AudioController components */
-export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel) {
+export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel, example: ItemExampleModel) {
   const [currentTime, setCurrentTime] = useState(0);
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
   const sampleRef = useRef<HTMLAudioElement>();
+  // played times records how many times the audio played #
+  const [playedTimes, setPlayedTimes] = useState(0);
 
   // Include the reference audio for player controller, make sure they work in the same way
   const includeAll = (): { allAudio: AudioFileModel[], allRefs: RefObject<HTMLAudioElement>[] } => Object.create({
@@ -40,9 +42,21 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
       // console.log(allRefs[i].current.readyState)
     });
   }
-
   const handleTimeUpdate = () => {
     setCurrentTime(refs[0].current.currentTime);
+  }
+  // When loop attribute is true, this won't be called
+  const handleEnded = () => {
+    example.playedOnce = true;
+    // playedTimes will be added when the audio ENDS
+    if (!example.settings?.loopTimes || playedTimes + 1 < example.settings?.loopTimes) {
+      // Find the one is playing
+      const current = includeAll().allAudio.find(a => a.isPlaying);
+      if (current) handlePlay(current);
+    }
+    // Make sure the button style looks right
+    else handlePause();
+    setPlayedTimes(playedTimes + 1);
   }
 
   // // Reference audio
@@ -54,33 +68,19 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel)
   // );
   // const controllerNode = <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
 
-  return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate};
+  return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate, handleEnded};
 }
 
 // This component exposes the audio to outside. Control audio with ref attribute.
 export const AudioButton = forwardRef<HTMLAudioElement, {
-  audio: AudioFileModel, onPlay: (v: AudioFileModel) => void, onPause: () => void, onTimeUpdate?: () => void, settings?: ItemExampleSettingsModel, children?: any
+  audio: AudioFileModel, onPlay: (v: AudioFileModel) => void, onPause: () => void, onTimeUpdate?: () => void, onEnded?: () => void, children?: any
 }>(function (props, ref) {
-  const {audio, onTimeUpdate, onPlay, onPause, settings} = props;
-  const [playedTimes, setPlayedTimes] = useState(0);
-
-  // When loop attribute is true, this won't be called
-  const handleAudioEnded = () => {
-    audio.playedOnce = true;
-    // playedTimes will be added when the audio ENDS
-    if (!settings?.loopTimes || playedTimes + 1 < settings?.loopTimes) {
-      (ref as RefObject<HTMLAudioElement>).current.play().then();
-      audio.isPlaying = true;
-    }
-    // Make sure the button style looks right
-    else audio.isPlaying = false;
-    setPlayedTimes(playedTimes + 1);
-  }
+  const {audio, onTimeUpdate, onPlay, onPause, onEnded} = props;
 
   // An AudioButton contains an audio element and a button. Use loop attribute, onEnded Event will not trigger.
   return <>
     <audio src={audio.src} controls ref={ref} style={{display: 'none'}} preload="auto"
-           onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnded}/>
+           onTimeUpdate={onTimeUpdate} onEnded={onEnded}/>
 
     <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
             style={{transition: 'none'}}
