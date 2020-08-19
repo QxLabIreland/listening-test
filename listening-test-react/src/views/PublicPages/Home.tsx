@@ -1,17 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="inherit">
-      Copyright © Golisten.io {new Date().getFullYear()}.
-    </Typography>
-  );
-}
+import {Button, Dialog} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   main: {
@@ -44,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end'
-  }
+  },
+  seeDemo: {background: 'linear-gradient(45deg, #2991ff 30%, #ff005b 90%)', color: 'white'}
 }));
 
 export default function Home() {
@@ -53,6 +46,8 @@ export default function Home() {
   return (
     <div className={classes.background}>
       <CssBaseline />
+      <Typography align="center"><SimpleDialog/></Typography>
+
       <Container component="main" className={classes.main} maxWidth="md">
         <Typography variant="h2" component="h1" gutterBottom align="center" style={{fontWeight: 800}}>
           Go Listen!
@@ -72,9 +67,32 @@ export default function Home() {
               <span>Photo by Tanner Boriack on Unsplash</span>
             </small>
           </Typography>
-          <Copyright />
+          <Typography variant="body2" color="inherit">
+            Copyright © Golisten.io {new Date().getFullYear()}.
+          </Typography>
         </Container>
       </footer>*/}
     </div>
   );
+}
+
+function SimpleDialog() {
+  const classes = useStyles();
+  const [open, setOpen] = useState<boolean>();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+  return <>
+    <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen}>See a demo</Button>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <iframe title="A Demo" width="560" height="315" src="https://www.youtube.com/embed/_YkuqJOs3rc" frameBorder="0"
+  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+    </Dialog>
+  </>
 }

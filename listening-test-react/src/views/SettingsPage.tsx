@@ -14,6 +14,8 @@ export default function SettingsPage() {
   const [accountDeletionAlert, setAccountDeletionMessage] = useSimpleAlert();
   const history = useHistory();
 
+  // TODO Extract components for a card
+
   const formik = useFormik({
     initialValues: {password: '', newPassword: '', confirm: ''},
     onSubmit: values => Axios.put('/api/password', {

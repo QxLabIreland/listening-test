@@ -32,6 +32,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useUserAuthResult} from "../../shared/ReactHooks";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
+import {testItemsValidateTips} from "../../shared/ErrorValidators";
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
@@ -150,22 +151,27 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   )
 }
 
-function ShareIconButton({url, menuItem, ...rest}: any) {
+function ShareIconButton({url, menuItem, test}: { url: string, menuItem?: boolean, test: BasicTestModel }) {
   const [open, setSnackbarOpen] = useState(false);
+  const openDialog = useContext(GlobalDialog);
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') return;
     setSnackbarOpen(false);
   };
-  const handleShareClick = () => navigator.clipboard.writeText(getCurrentHost() + url)
-    .then(() => setSnackbarOpen(true));
+  const handleShareClick = () => {
+    // Give a dialog alert that ask if user want to continue. The survey may confuse people.
+    const error = testItemsValidateTips(test);
+    if (error) openDialog(error, 'Required');
+    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => setSnackbarOpen(true));
+  }
 
   return <>
-    {menuItem ? <MenuItem {...rest} onClick={handleShareClick}>
+    {menuItem ? <MenuItem onClick={handleShareClick}>
       <ListItemIcon color="primary"><Icon>share</Icon></ListItemIcon>
       <ListItemText primary="Copy test URL"/>
     </MenuItem> : <Tooltip title="Copy test URL">
-      <IconButton {...rest} size="small" color="primary" onClick={handleShareClick}><Icon>share</Icon></IconButton>
+      <IconButton size="small" color="primary" onClick={handleShareClick}><Icon>share</Icon></IconButton>
     </Tooltip>
     }
     <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center',}} open={open} autoHideDuration={10_000}
@@ -214,7 +220,7 @@ function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest, handle
         {test.isTemplate ? <IconButton size="small" color="primary" onClick={() => handleEdit(test)}><Icon>edit</Icon></IconButton>
         : <IconButton size="small" color="primary" component={Link} to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>}
       </Tooltip>
-      <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`}/>
+      <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} test={test}/>
       <Tooltip title="Duplicate test">
         <IconButton size="small" color="primary"
                     onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
@@ -231,7 +237,7 @@ function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest, handle
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
         </MenuItem>
-        <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} menuItem/>
+        <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} menuItem test={test}/>
         <MenuItem onClick={() => {
           handleCopyTest(test);
           handleClose();

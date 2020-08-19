@@ -10,7 +10,7 @@ from handlers.base import BaseHandler
 class TemplateHandler(BaseHandler):
     async def prepare(self):
         # Get user and check the permissions
-        self.user_id = self.auth_current_user('Template')
+        self.user_id = await self.auth_current_user('Template')
 
     async def get(self):
         collection = switch_test_collection(self)
