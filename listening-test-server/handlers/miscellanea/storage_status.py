@@ -9,7 +9,7 @@ from tools.file_helper import sizeof_fmt
 class StorageStatusHandler(BaseHandler):
     async def prepare(self):
         # Get user and check the permissions
-        self.user_id = self.auth_current_user('Storage')
+        self.user_id = await self.auth_current_user('Storage')
 
     async def get(self):
         audios_checklist = get_audios_in_using(self.db)
