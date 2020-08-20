@@ -15,8 +15,9 @@ import {
 import React from "react";
 import {observer} from "mobx-react";
 
-export const RenderSurveyControl = observer(function (props: { control: SurveyControlModel }) {
-  const {control} = props;
+export const RenderSurveyControl = observer(function ({control}: { control: SurveyControlModel }) {
+  if (control.disabled) return null;
+
   switch (control.type) {
     case SurveyControlType.text:
       return <TextField fullWidth variant="filled" label={control.question} required={control.required}

@@ -14,6 +14,7 @@ export const TagsGroup = observer((props: {value: string, onChange: (value: stri
       // Add a new tag into the file model
       if (!value) {
         onChange(newLabel);
+        setNewLabel('');
         return;
       }
       // Check duplicate

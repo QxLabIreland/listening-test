@@ -26,7 +26,7 @@ export default function SurveyContainer() {
       <AppBar position="sticky" color="primary" elevation={6}>
         <Toolbar className={classes.toolbar}>
           {/*<Button component={Link} to='/' color="inherit">Golisten.io</Button>*/}
-          <Button color="inherit">Golisten.io</Button>
+          <Button color="inherit">Go Listen</Button>
           <span style={{flexGrow: 1}}/>
           {/*<Typography>Subject View</Typography>*/}
         </Toolbar>
