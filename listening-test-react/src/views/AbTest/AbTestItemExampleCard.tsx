@@ -56,7 +56,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
 
           <Grid item xs={12} md={4}>
             <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
-                          label="Reference (Optional)"/>
+                          label="Labeled Reference (Optional)"/>
           </Grid>
 
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>

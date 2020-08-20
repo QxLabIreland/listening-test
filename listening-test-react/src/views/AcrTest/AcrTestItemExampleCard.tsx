@@ -59,7 +59,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
           {/*Reference place*/}
           <Grid item xs={12} md={4}>
             <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
-                          label="Reference (Optional)"/>
+                          label="Labeled Reference (Optional)"/>
           </Grid>
           {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
             <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
