@@ -89,10 +89,10 @@ function SimpleDialog() {
   }
 
   return <>
-    <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen} disabled>See a demo</Button>
+    <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen}>See a demo</Button>
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="md">
-      <iframe title="Demo" width="960" height="540" src="https://www.youtube.com/embed/5TbUxGZtwGI" frameBorder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+      <iframe width="960" height="540" src="https://www.youtube.com/embed/xd37rCfvA-4" frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
     </Dialog>
   </>
 }

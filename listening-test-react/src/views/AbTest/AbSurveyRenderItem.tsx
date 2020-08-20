@@ -9,6 +9,8 @@ import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-aud
 import {RenderTraining} from "../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../shared/web-audio/AudiosLoading";
 
+const alphabetList = Array.apply(undefined, Array(26)).map(function(x,y) { return String.fromCharCode(y + 65); }).join('');
+
 export const AbSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
   switch (item.type) {
@@ -38,7 +40,7 @@ const RenderQuestionedExample = observer(function (props: { value: ItemExampleMo
 
       {value.audios.map((v, i) => <Grid item key={i}>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} onEnded={i === 0 ? handleEnded : undefined}
-                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{value.fields[0]?.options[i]}</AudioButton>
+                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{value.fields[0]?.options[i] || alphabetList[i]}</AudioButton>
         {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
       </Grid>)}
 
