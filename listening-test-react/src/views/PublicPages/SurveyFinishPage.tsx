@@ -15,15 +15,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export default function SurveyFinishPage() {
   const classes = useStyles();
   const openDialog = useContext(GlobalDialog);
-  const [alert, setMessage] = useSimpleAlert();
+  const [alert, setMessage, message] = useSimpleAlert();
   const location = useLocation();
   // If we got state, we show link, otherwise hid the confirm
   const [id, testUrl] = location.search.replace('?', '').split('&');
   const deletionLink = `${getCurrentHost()}/task/finish?${id}&${testUrl}`;
 
   const handleConfirmClick = () => openDialog('This action will delete your response permanently', 'Are you sure?', undefined,
-    () => Axios.delete('/api/responses', {params: {'_id': id, 'testType': testUrl}}).then(
-      () => setMessage('success', 'Your data has been deleted successfully'),
+    () => Axios.delete(`/api/task/${testUrl}`, {params: {'_id': id}}).then(
+      () => setMessage('success', 'Your data has been deleted successfully, you can close this page now.'),
       res => setMessage('error', res.response.data)
     )
   );
@@ -46,7 +46,7 @@ export default function SurveyFinishPage() {
           Are you sure you want to delete your responses to test {id}?. Your responses are anonymous if you do wish delete your responses please
           click CONFIRM.
           <div className={classes.actions}>
-            <Button color="secondary" onClick={handleConfirmClick}>CONFIRM</Button>
+            <Button color="secondary" onClick={handleConfirmClick} disabled={!!message}>CONFIRM</Button>
             {alert}
           </div>
         </Typography>

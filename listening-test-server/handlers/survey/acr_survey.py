@@ -2,6 +2,7 @@ from datetime import datetime
 
 from bson import ObjectId
 from handlers.base import BaseHandler
+from handlers.miscellanea.test_responses import switch_response_collection
 
 
 class AcrSurveyHandler(BaseHandler):
@@ -21,3 +22,9 @@ class AcrSurveyHandler(BaseHandler):
         body['createdAt'] = datetime.now()
         result = self.db[self.test_name + 'Surveys'].insert_one(body)
         self.dumps_write(result.inserted_id)
+
+    async def delete(self):
+        _id = self.get_argument('_id')
+
+        result = self.db[self.test_name + 'Surveys'].delete_one({'_id': ObjectId(_id)})
+        print(result.deleted_count)
