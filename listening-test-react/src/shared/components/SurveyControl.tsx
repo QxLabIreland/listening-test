@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Box, Grid, TextField, Typography} from "@material-ui/core";
+import {Box, Grid, TextField, Tooltip, Typography} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControlModel} from "../models/SurveyControlModel";
@@ -76,7 +76,9 @@ const SurveyOptions = observer(function (props: { options: string[], type: Surve
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
         <Grid item>
-          <IconButton size="small" onClick={() => handleDelete(i)}><Icon>clear</Icon></IconButton>
+          <Tooltip title="Delete this option">
+            <IconButton size="small" onClick={() => handleDelete(i)}><Icon>clear</Icon></IconButton>
+          </Tooltip>
         </Grid>
       </Grid>
     )}

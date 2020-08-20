@@ -68,7 +68,7 @@ export default function Home() {
             </small>
           </Typography>
           <Typography variant="body2" color="inherit">
-            Copyright © Golisten.io {new Date().getFullYear()}.
+            Copyright © Go Listen {new Date().getFullYear()}.
           </Typography>
         </Container>
       </footer>*/}
@@ -89,10 +89,10 @@ function SimpleDialog() {
   }
 
   return <>
-    <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen}>See a demo</Button>
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <iframe title="A Demo" width="560" height="315" src="https://www.youtube.com/embed/_YkuqJOs3rc" frameBorder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+    <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen} disabled>See a demo</Button>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="md">
+      <iframe title="Demo" width="960" height="540" src="https://www.youtube.com/embed/5TbUxGZtwGI" frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
     </Dialog>
   </>
 }

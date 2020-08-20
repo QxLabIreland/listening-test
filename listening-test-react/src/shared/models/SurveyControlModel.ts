@@ -5,6 +5,7 @@ export interface SurveyControlModel {
   question: string;
   options?: string[];
   value: any;
+  // Setting options
   required?: boolean;
-  otherOption?: boolean;
+  disabled?: boolean;
 }

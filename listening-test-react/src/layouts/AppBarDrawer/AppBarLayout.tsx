@@ -53,7 +53,7 @@ export default function AppBarLayout(props: any) {
             </IconButton>
           }
           <Typography variant="h6" noWrap>
-            {fixedTitle ? 'Golisten Dashboard' : title}
+            {fixedTitle ? 'Go Listen Dashboard' : title}
           </Typography>
         </Toolbar>
       </AppBar>
