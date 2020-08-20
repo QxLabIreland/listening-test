@@ -93,7 +93,7 @@ export default function SignIn() {
                     Sign up
                   </Link>
                 </Typography>*/}
-                <Typography variant="body2" gutterBottom color="textSecondary">We are in closed beta! Contact dan.barry@ucd.ie to discuss access</Typography>
+                <Typography variant="body2" gutterBottom color="textSecondary">We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" style={{color: 'black'}}>dan.barry@ucd.ie</a> to discuss access</Typography>
 
               </form>
             </div>
