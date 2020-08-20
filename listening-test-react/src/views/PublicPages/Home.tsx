@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   background: {
     // Background
+    backgroundColor: 'black',// theme.palette.background.default,
     backgroundImage: 'url(/images/homepage.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

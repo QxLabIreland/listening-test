@@ -1,13 +1,12 @@
 import React, {useContext} from 'react';
-import {Link as RouterLink, useHistory, useLocation} from 'react-router-dom';
-import {Button, Grid, Link, TextField, Typography} from '@material-ui/core';
+import {useHistory, useLocation} from 'react-router-dom';
+import {Button, Grid, TextField, Typography} from '@material-ui/core';
 import {useFormik} from "formik";
 import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
 import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5';
 import {useSignInUpStyles} from "../SharedStyles";
-import Container from "@material-ui/core/Container";
 
 export default function SignIn() {
   const classes = useSignInUpStyles();
@@ -89,9 +88,7 @@ export default function SignIn() {
                 </Button>
                 {/*<Typography color="textSecondary" variant="body1">
                   Don't have an account?{' '}
-                  <Link component={RouterLink} to="/sign-up" variant="h6">
-                    Sign up
-                  </Link>
+                  <Link component={RouterLink} to="/sign-up" variant="h6">Sign up</Link>
                 </Typography>*/}
                 <Typography variant="body2" gutterBottom color="textSecondary">We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" style={{color: 'black'}}>dan.barry@ucd.ie</a> to discuss access</Typography>
 
