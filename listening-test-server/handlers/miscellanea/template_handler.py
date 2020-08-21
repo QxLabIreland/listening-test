@@ -8,10 +8,6 @@ from handlers.base import BaseHandler
 
 
 class TemplateHandler(BaseHandler):
-    async def prepare(self):
-        # Get user and check the permissions
-        self.user_id = await self.auth_current_user('Template')
-
     async def get(self):
         collection = switch_test_collection(self)
         data = collection.aggregate([
@@ -24,6 +20,8 @@ class TemplateHandler(BaseHandler):
         self.dumps_write(data)
 
     async def put(self):
+        # Get user and check the permissions
+        self.user_id = await self.auth_current_user('Template')
         # Get collection and request data
         body = self.loads_body()
         collection = switch_test_collection(self)

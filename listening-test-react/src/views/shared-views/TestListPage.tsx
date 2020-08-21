@@ -151,7 +151,8 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   )
 }
 
-function ShareIconButton({url, menuItem, test}: { url: string, menuItem?: boolean, test: BasicTestModel }) {
+// TODO extract snackbar into action group
+function ShareIconButton({url, menuItem, test, onClick}: { url: string, menuItem?: boolean, test: BasicTestModel, onClick: () => void }) {
   const [open, setSnackbarOpen] = useState(false);
   const openDialog = useContext(GlobalDialog);
 
@@ -160,6 +161,7 @@ function ShareIconButton({url, menuItem, test}: { url: string, menuItem?: boolea
     setSnackbarOpen(false);
   };
   const handleShareClick = () => {
+    onClick();
     // Give a dialog alert that ask if user want to continue. The survey may confuse people.
     const error = testItemsValidateIncomplete(test);
     if (error) openDialog(error, 'Required');
@@ -196,7 +198,7 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTestMode
     <Button color="primary" variant="contained" onClick={handleClick}>Add test</Button>
     <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
       <MenuItem onClick={handleClose} component={Link} to={`${path}/0`}>Blank test</MenuItem>
-      {templates ? templates.map(temp =>
+      {templates && templates.length ? templates.map(temp =>
           <MenuItem key={temp._id.$oid} component={Link}
                     to={{pathname: `${path}/0`, state: temp._id.$oid}}>{temp.name}</MenuItem>)
         : <MenuItem disabled>No template</MenuItem>}
@@ -220,7 +222,7 @@ function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest, handle
         {test.isTemplate ? <IconButton size="small" color="primary" onClick={() => handleEdit(test)}><Icon>edit</Icon></IconButton>
         : <IconButton size="small" color="primary" component={Link} to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>}
       </Tooltip>
-      <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} test={test}/>
+      <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} test={test} onClick={handleClose}/>
       <Tooltip title="Duplicate test">
         <IconButton size="small" color="primary"
                     onClick={() => handleCopyTest(test)}><Icon>content_copy</Icon></IconButton>
@@ -237,7 +239,7 @@ function ActionsGroup({testUrl, path, test, handleDelete, handleCopyTest, handle
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
         </MenuItem>
-        <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} menuItem test={test}/>
+        <ShareIconButton url={`/task/${testUrl}/${test._id.$oid}`} menuItem test={test} onClick={handleClose}/>
         <MenuItem onClick={() => {
           handleCopyTest(test);
           handleClose();
