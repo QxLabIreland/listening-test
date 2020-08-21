@@ -8,11 +8,11 @@ class LoginHandler(BaseHandler):
             # Check user logged or not
             if self.get_current_user():
                 # Get user information
-                user = self.db['users'].find_one({'_id': self.get_current_user()})
+                user = self.db['users'].find_one({'_id': self.get_current_user()}, {'password': 0})
+                # Check if user is existed
                 if not user:
                     self.set_error(200, 'No such user')
                 else:
-                    del user['password']
                     self.dumps_write(user)
             else:
                 self.set_error(200, 'No user login')

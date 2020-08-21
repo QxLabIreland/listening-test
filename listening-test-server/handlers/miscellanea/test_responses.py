@@ -25,14 +25,16 @@ class TestResponsesHandler(BaseHandler):
         self.dumps_write(data)
 
     async def delete(self):
-        # Multiple deletion
         _ids = self.loads_body()
         collection = switch_response_collection(self)
         if not collection:
             return
-        # Delete with a list
-        for _id in _ids:
-            collection.delete_one({'userId': self.user_id, '_id': _id})
+        # Multiple deletion
+        result = collection.delete_many({'userId': self.user_id, '_id': {'$in': _ids}})
+        self.dumps_write(result.raw_result)
+        # # Delete with a list
+        # for _id in _ids:
+        #     collection.delete_one({'userId': self.user_id, '_id': _id})
 
 
 def switch_response_collection(self: BaseHandler) -> Optional[Collection]:

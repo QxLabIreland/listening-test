@@ -27,4 +27,4 @@ class AcrSurveyHandler(BaseHandler):
         _id = self.get_argument('_id')
 
         result = self.db[self.test_name + 'Surveys'].delete_one({'_id': ObjectId(_id)})
-        print(result.deleted_count)
+        self.dumps_write(result.raw_result)
