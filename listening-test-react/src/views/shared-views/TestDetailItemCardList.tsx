@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.down(1245)]: {right: 14}
   },
   reorder: {width: 12, cursor: 'grab', position: 'absolute', left: 7, color: 'rgba(0, 0, 0, 0.54)'},
-  upDown: {fontSize: 18}
+  upDown: {fontSize: 16}
 }))
 
 export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }> }) {
@@ -102,7 +102,10 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     state.index = resetIndex ? null : newIndex;
   })
 
-  return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => refs[i] = ref}
+  return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
+    // ref?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+    refs[i] = ref;
+  }}
                                       className={state.index === i ? classes.gridHidden : classes.grid}>
     <Box className={classes.container}>{v.collapsed ? <Tooltip title="Hold and drag to reorder">
       <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>

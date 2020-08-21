@@ -2,11 +2,12 @@ import React, {PropsWithChildren} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 import IconButton from "@material-ui/core/IconButton";
-import {AppBar, Container, Icon} from "@material-ui/core";
+import {AppBar, Container, createStyles, Icon} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import {makeStyles} from "@material-ui/core/styles";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -15,13 +16,17 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const useStyles = makeStyles((theme) => createStyles({
+  paperFullScreen: {backgroundColor: theme.palette.background.default}
+}))
+
 export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
   const [open, setOpen] = React.useState(false);
+  const classes = useStyles();
 
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -30,7 +35,9 @@ export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
     <IconButton size="small" onClick={handleClickOpen}>
       <Icon>pageview</Icon>
     </IconButton>
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+    <CssBaseline/>
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}
+            classes={classes}>
       <AppBar position="static">
         <Toolbar style={{display: 'flex'}}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -41,8 +48,7 @@ export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <CssBaseline />
-      <Container maxWidth="md">
+      <Container component="main" maxWidth="md">
         {props.children}
       </Container>
     </Dialog>
