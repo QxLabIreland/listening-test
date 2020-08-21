@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import clsx from 'clsx';
 import {createStyles, Icon, Input, makeStyles, Paper, Theme} from '@material-ui/core';
 
@@ -22,15 +22,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function SearchInput (props: any) {
-  const { className, onChange, style, ...rest } = props;
-
+export default function SearchInput (props: { placeholder: string, onChange: (_: ChangeEvent<HTMLInputElement>) => void, className?: string}) {
+  const {className, onChange, placeholder} = props;
   const classes = useStyles();
 
   return (
-    <Paper{...rest} className={clsx(classes.root, className)} style={style}>
+    <Paper className={clsx(classes.root, className)}>
       <Icon>search</Icon>
-      <Input {...rest}
+      <Input placeholder={placeholder}
         className={classes.input}
         disableUnderline
         onChange={onChange}

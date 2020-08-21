@@ -18,7 +18,8 @@ class TestResponsesHandler(BaseHandler):
         # Get a list or a response
         if not _id:
             test_id = self.get_argument('testId')
-            data = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)}).sort('createdAt', pymongo.DESCENDING)
+            data = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)}).sort(
+                'createdAt', pymongo.DESCENDING)
             # data = collection.find({'userId': self.user_id}).sort('createdAt', pymongo.DESCENDING)
         else:
             data = collection.find_one({'userId': self.user_id, '_id': ObjectId(_id)})
@@ -32,9 +33,6 @@ class TestResponsesHandler(BaseHandler):
         # Multiple deletion
         result = collection.delete_many({'userId': self.user_id, '_id': {'$in': _ids}})
         self.dumps_write(result.raw_result)
-        # # Delete with a list
-        # for _id in _ids:
-        #     collection.delete_one({'userId': self.user_id, '_id': _id})
 
 
 def switch_response_collection(self: BaseHandler) -> Optional[Collection]:

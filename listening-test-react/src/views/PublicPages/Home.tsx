@@ -82,7 +82,7 @@ export default function Home() {
 
 function SimpleDialog() {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>();
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleClose = () => {
     setOpen(false);

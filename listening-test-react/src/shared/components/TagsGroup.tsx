@@ -1,11 +1,18 @@
 import React, {useState} from "react";
-import {Box, Chip} from "@material-ui/core";
+import {Box, Chip, createStyles} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {observer} from "mobx-react";
 import {useMatStyles} from "../../views/SharedStyles";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => createStyles({
+  chip: {fontSize: '1.1rem'},
+  input: {border: 'none', outline: 'none', width: 53, background: 'transparent'}
+}))
 
 export const TagsGroup = observer((props: {value: string, onChange: (value: string) => void}) => {
   const classes = useMatStyles();
+  const classes1 = useStyles();
   const [newLabel, setNewLabel] = useState('Add Tag');
   const {value, onChange} = props;
 
@@ -37,10 +44,10 @@ export const TagsGroup = observer((props: {value: string, onChange: (value: stri
     {value && value.split(',').map((l, i) =>
       <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l}/>)}
 
-    <Chip size="small" variant="outlined" icon={<Icon style={{fontSize: '1.2rem'}}>add</Icon>}
+    <Chip size="small" variant="outlined" icon={<Icon className={classes1.chip}>add</Icon>}
           label={<input onKeyUp={handleEnter} value={newLabel} onChange={(e => setNewLabel(e.target.value))}
                         onFocus={event => event.target.select()} onBlur={() => setNewLabel('Add Tag')}
-                        style={{border: 'none', outline: 'none', width: 53, background: 'transparent'}}/>}
+                        className={classes1.input}/>}
     />
   </Box>
 })

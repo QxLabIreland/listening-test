@@ -39,19 +39,18 @@ export default function SurveyFinishPage() {
       </Typography>
 
       {location.state ? <Typography variant="body2" color="textSecondary" className={classes.paragraphCenter}>
-          Your responses are anonymous but if you do wish delete your responses at a later time, please save and visit
-          this link: <Link href={deletionLink} target="_blank">{deletionLink}</Link>
+        Your responses are anonymous but if you do wish delete your responses at a later time, please save and visit
+        this link: <Link href={deletionLink} target="_blank">{deletionLink}</Link>
+      </Typography> : <>
+        <Typography variant="body2" className={classes.paragraph}>
+          Are you sure you want to delete your responses to test {id}?. Your responses are anonymous but if you do
+          wish delete your responses please click CONFIRM button.
         </Typography>
-
-        : <Typography variant="body2" className={classes.paragraph}>
-          Are you sure you want to delete your responses to test {id}?. Your responses are anonymous but if you do wish delete your responses please
-          click CONFIRM button.
-          <div className={classes.actions}>
-            <Button color="secondary" onClick={handleConfirmClick} disabled={!!message}>CONFIRM</Button>
-            {alert}
-          </div>
-        </Typography>
-      }
+        <div className={classes.actions}>
+          <Button color="secondary" onClick={handleConfirmClick} disabled={!!message}>CONFIRM</Button>
+          {alert}
+        </div>
+      </>}
 
     </Grid>
   </Box>;

@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {AudioFileModel} from "../models/AudioFileModel";
-import {ItemExampleModel, ItemExampleSettingsModel} from "../models/ItemExampleModel";
+import {ItemExampleModel} from "../models/ItemExampleModel";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 
 /** In order to build a custom audio player including rating bar,
