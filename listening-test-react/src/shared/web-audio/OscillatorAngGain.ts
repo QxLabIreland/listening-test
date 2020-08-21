@@ -1,5 +1,8 @@
 // Make sure it works on safari and firefox. And create only one for the application
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+let audioContext: AudioContext = undefined;
+window.onload = function() {
+  audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+}
 
 export interface OscillatorAngGain {
   oscillator: OscillatorNode;

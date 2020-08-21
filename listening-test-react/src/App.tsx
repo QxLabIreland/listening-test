@@ -1,6 +1,6 @@
-import React, {Suspense, useContext} from 'react';
+import React, {Suspense} from 'react';
 import Loading from "./layouts/components/Loading";
-import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";
 import {AppBarDrawer} from "./layouts/AppBarDrawer/AppBarDrawer";
 import NotFoundView from "./layouts/components/NotFoundView";

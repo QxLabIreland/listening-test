@@ -34,7 +34,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const location = useLocation();
   // Request for server methods
   useEffect(() => {
-    // If it is edit page, get data from back end
+    // If it is edit page, get data from back end. If there is value in location.state, we gonna use a template
     if (location.state || +id !== 0) Axios.get<BasicTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
         if (location.state) templateProcess(res.data);
