@@ -7,8 +7,8 @@ import {Button, Dialog} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   main: {
-    marginTop: theme.spacing(16),
-    marginBottom: theme.spacing(16),
+    marginTop: '10vh',
+    marginBottom: '10vh',
     color: 'white'
   },
   small: {fontSize: '0.75rem'},
@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'column',
     justifyContent: 'flex-end'
   },
-  seeDemo: {background: 'linear-gradient(45deg, #2991ff 30%, #ff005b 90%)', color: 'white'}
+  seeDemo: {background: 'linear-gradient(45deg, #2991ff 30%, #ff005b 90%)', color: 'white'},
+  demoFrame: {width: 'calc(100vw - 64px)', maxWidth: 960, height: 'calc((100vw - 64px) * 0.5625)', maxHeight: 540}
 }));
 
 export default function Home() {
@@ -57,7 +58,9 @@ export default function Home() {
           Create and share a subjective listening test in a few minutes<br/>
 
         </Typography>
-        <Typography variant="body2" gutterBottom align="center" className={classes.small}>We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" className={classes.mail}>dan.barry@ucd.ie</a> to discuss access</Typography>
+        <Typography variant="body2" gutterBottom align="center" className={classes.small}>
+          We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" className={classes.mail}>dan.barry@ucd.ie</a> to discuss access
+        </Typography>
 
       </Container>
       {/*<footer className={classes.footer}>
@@ -92,8 +95,8 @@ function SimpleDialog() {
   return <>
     <Button variant={"contained"} className={classes.seeDemo} onClick={handleOpen}>See a demo</Button>
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="md">
-      <iframe width="960" height="540" src="https://www.youtube.com/embed/xd37rCfvA-4" frameBorder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+      <iframe title="demo" className={classes.demoFrame} src="https://www.youtube.com/embed/xd37rCfvA-4" frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
     </Dialog>
   </>
 }

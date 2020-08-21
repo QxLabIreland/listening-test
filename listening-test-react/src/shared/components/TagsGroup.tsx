@@ -37,7 +37,7 @@ export const TagsGroup = observer((props: {value: string, onChange: (value: stri
     {value && value.split(',').map((l, i) =>
       <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l}/>)}
 
-    <Chip size="small" variant="outlined" icon={<Icon>add</Icon>}
+    <Chip size="small" variant="outlined" icon={<Icon style={{fontSize: '1.2rem'}}>add</Icon>}
           label={<input onKeyUp={handleEnter} value={newLabel} onChange={(e => setNewLabel(e.target.value))}
                         onFocus={event => event.target.select()} onBlur={() => setNewLabel('Add Tag')}
                         style={{border: 'none', outline: 'none', width: 53, background: 'transparent'}}/>}
