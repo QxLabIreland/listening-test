@@ -43,7 +43,7 @@ export default function SurveyFinishPage() {
         this link: <Link href={deletionLink} target="_blank">{deletionLink}</Link>
       </Typography> : <>
         <Typography variant="body2" className={classes.paragraph}>
-          Are you sure you want to delete your responses to test {id}?. Your responses are anonymous but if you do
+          Are you sure you want to delete your responses {id}?. Your responses are anonymous but if you do
           wish delete your responses please click CONFIRM button.
         </Typography>
         <div className={classes.actions}>
