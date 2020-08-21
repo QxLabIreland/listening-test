@@ -25,7 +25,7 @@ class AcrTestHandler(BaseHandler):
                 {'$sort': {'createdAt': -1}}
             ])
         else:
-            # Get one test
+            # Get one test, if there is no data we gonna look for it in templates
             data = self.db[self.test_name + 'Tests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
             if not data:
                 data = self.db[self.test_name + 'Tests'].find_one({'_id': ObjectId(_id), 'isTemplate': True})
@@ -45,17 +45,21 @@ class AcrTestHandler(BaseHandler):
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
         _id = self.db[self.test_name + 'Tests'].insert(body)
+        # Find the inserted test
         data = self.db[self.test_name + 'Tests'].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
         self.dumps_write(data)
 
     async def put(self):
         body = self.loads_body()
+        # Add modification date
         body['modifiedAt'] = datetime.now()
-        data = self.db[self.test_name + 'Tests'].update_one({'userId': self.user_id, '_id': body['_id']}, {"$set": body}).raw_result
-        self.dumps_write(data)
+        result = self.db[self.test_name + 'Tests'].update_one({'userId': self.user_id, '_id': body['_id']},
+                                                              {"$set": body})
+        self.dumps_write(result.raw_result)
 
     async def delete(self):
         _id = ObjectId(self.get_argument('_id'))
-        data = self.db[self.test_name + 'Tests'].delete_one({'_id': ObjectId(_id)}).raw_result
+        result = self.db[self.test_name + 'Tests'].delete_one({'_id': ObjectId(_id)})
+        # Delete related surveys
         self.db[self.test_name + 'Surveys'].delete_many({'testId': ObjectId(_id)})
-        self.dumps_write(data)
+        self.dumps_write(result.raw_result)

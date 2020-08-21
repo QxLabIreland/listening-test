@@ -15,6 +15,7 @@ class PasswordHandler(BaseHandler):
         else:
             self.set_error(400, reason="Current password is wrong or the user not found")
 
+    # This is DELETE ACCOUNT method
     async def delete(self):
         body = self.loads_body()
         user = self.db['users'].find_one({'_id': self.user_id})

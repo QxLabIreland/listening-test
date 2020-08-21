@@ -1,7 +1,5 @@
 import os
-
 from pymongo.database import Database
-
 from handlers.base import BaseHandler
 from tools.file_helper import sizeof_fmt
 
@@ -51,6 +49,7 @@ class StorageStatusHandler(BaseHandler):
             if f not in audios_checklist:
                 os.remove(os.path.join(target_path, f))
             else:
+                # Add size and increase number
                 total_size += os.path.getsize(os.path.join(target_path, f))
                 total_num += 1
 
@@ -63,7 +62,7 @@ class StorageStatusHandler(BaseHandler):
 
 def get_audios_in_using(db: Database) -> set:
     audios_checklist = set()
-    # Get all collections
+    # Get all collections and map data
     for col in db.list_collection_names():
         data = db[col].find({}, {'items.example.audios.src': 1})
         for d in data:

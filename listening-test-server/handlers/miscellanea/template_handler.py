@@ -14,7 +14,8 @@ class TemplateHandler(BaseHandler):
             {'$match': {'isTemplate': True}},
             {'$lookup': {'from': 'users', 'localField': 'userId', 'foreignField': '_id', 'as': 'creator'}},
             {'$set': {'creator': {'$arrayElemAt': ['$creator', 0]}}},
-            {'$project': {'items': 0, 'description': 0, 'settings': 0}},
+            {'$project': {'items': 0, 'description': 0, 'settings': 0, 'creator.permissions': 0,
+                          'creator.password': 0, 'creator.policy': 0, 'creator.createdAt': 0}},
             {'$sort': {'createdAt': -1}}
         ])
         self.dumps_write(data)
@@ -22,6 +23,7 @@ class TemplateHandler(BaseHandler):
     async def put(self):
         # Get user and check the permissions
         self.user_id = await self.auth_current_user('Template')
+
         # Get collection and request data
         body = self.loads_body()
         collection = switch_test_collection(self)
