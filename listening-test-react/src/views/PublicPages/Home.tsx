@@ -58,9 +58,9 @@ export default function Home() {
           Create and share a subjective listening test in a few minutes<br/>
 
         </Typography>
-        <Typography variant="body2" gutterBottom align="center" className={classes.small}>
+        {/*<Typography variant="body2" gutterBottom align="center" className={classes.small}>
           We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" className={classes.mail}>dan.barry@ucd.ie</a> to discuss access
-        </Typography>
+        </Typography>*/}
 
       </Container>
       {/*<footer className={classes.footer}>

@@ -5,7 +5,7 @@ import {TestItemType} from "../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Grid from "@material-ui/core/Grid";
-import {Box, Slider} from "@material-ui/core";
+import {createStyles, Slider, Theme} from "@material-ui/core";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
@@ -16,6 +16,12 @@ import {
   OscillatorAngGain
 } from "../../shared/web-audio/OscillatorAngGain";
 import {ratingAreaStyle} from "../SharedStyles";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  volumeBarContainer: {margin: `${theme.spacing(2)}px 0`},
+  volumeBar: {height: theme.spacing(16)}
+}));
 
 export const HearingSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -78,6 +84,8 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
 })
 
 const VolumeBar = observer(function ({audio, gainNode}: { audio: AudioFileModel, gainNode: GainNode }) {
+  const classes = useStyles();
+
   const handleSliderChange = (_: any, nv: number | number[]) => {
     audio.value = (+nv).toString();
     if (!gainNode) return;
@@ -87,14 +95,12 @@ const VolumeBar = observer(function ({audio, gainNode}: { audio: AudioFileModel,
 
   if (!Number(audio.value) && audio.value !== '0') audio.value = audio.settings?.initVolume.toString();
 
-  return <Box mb={2} mt={2} style={{height: 200}}>
-    <Grid container spacing={1} direction="column" alignItems="center" style={{height: '100%'}}>
-      <Grid item><Icon>volume_up</Icon></Grid>
-      <Grid item xs>
-        <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01}
-                value={+audio.value} onChange={handleSliderChange}/>
-      </Grid>
-      <Grid item><Icon>volume_down</Icon></Grid>
+  return <Grid container spacing={1} direction="column" alignItems="center" className={classes.volumeBarContainer}>
+    <Grid item><Icon>volume_up</Icon></Grid>
+    <Grid item xs className={classes.volumeBar}>
+      <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={1} step={0.01}
+              value={+audio.value} onChange={handleSliderChange}/>
     </Grid>
-  </Box>
+    <Grid item><Icon>volume_down</Icon></Grid>
+  </Grid>
 })

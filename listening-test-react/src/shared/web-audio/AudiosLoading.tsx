@@ -8,7 +8,10 @@ export function useAllAudioReady(refs: RefObject<HTMLAudioElement>[]) {
   useEffect(() => {
     // Audio ready promise function for creating callback
     Promise.all(refs.map((el) =>
-      new Promise((resolve) => el.current.addEventListener('canplay', resolve))
+      new Promise((resolve) => {
+        el.current.addEventListener('canplaythrough', resolve);
+        el.current.load();
+      }) // loadedmetadata, canplay, canplaythrough
     )).then(() => setLoading(false), () => setLoading(false));
   }, []);
 
