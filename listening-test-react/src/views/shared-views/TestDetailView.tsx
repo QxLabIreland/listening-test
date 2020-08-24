@@ -1,7 +1,6 @@
 import {Prompt, useHistory, useLocation, useParams} from "react-router";
-import React, {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useContext, useEffect, useState} from "react";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
-import {useScrollToView} from "../../shared/ReactHooks";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -14,6 +13,7 @@ import {observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
+import {deepObserve} from "mobx-utils";
 
 export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
   testUrl: TestUrl,
@@ -27,7 +27,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // No submit alert variable
-  const [submitted, setSubmitted] = useState<boolean>(null);
+  const [isTestChanged, setIsTestChanged] = useState<boolean>(false);
   const location = useLocation();
   // Request for server methods
   useEffect(() => {
@@ -35,9 +35,16 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     if (location.state || +id !== 0) Axios.get<BasicTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
         if (location.state) templateProcess(res.data);
-        setTestModel(observable(res.data));
         // Stringify the data for unsaved modification detection
-        // setSubmitted(JSON.stringify(res.data))
+        const theTestStr = JSON.stringify(res.data);
+        const observableTest = observable(res.data);
+        // Add an observe to set if is data changed
+        deepObserve(observableTest, (newValue) => {
+          console.log(JSON.stringify(newValue.object))
+          console.log(theTestStr)
+          setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
+        });
+        setTestModel(observableTest);
       }, res => setLoadingError(res.response.data));
     // If in creation page
     else setTestModel(observable({name: '', description: '', items: []}));
@@ -55,7 +62,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     });
   }
   const requestServer = (isNew: boolean) => {
-    setSubmitted(true);
+    setIsTestChanged(false);
     // Request server based on is New or not.
     Axios.request({
       method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: testModel
@@ -68,12 +75,12 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   const addItem = (newItem: TestItemModel) => testModel.items.push(newItem)
 
   // Extract those components, they won't be update when onChange, because they are uncontrolled
-  const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
-                                    onChange={e => testModel.name = e.target.value}/>;
-  const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-                                   defaultValue={testModel.description} name="description"
-                                   onChange={(e) => testModel.description = e.target.value}/>;
-  const actions = testModel ? <Grid item xs={12} container alignItems="center" spacing={1}>
+  // const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
+  //                                   onChange={e => testModel.name = e.target.value}/>;
+  // const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+  //                                  defaultValue={testModel.description} name="description"
+  //                                  onChange={(e) => testModel.description = e.target.value}/>;
+  const actions = !!testModel && <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
     <Grid item><FormControlLabel label="Collapse All" control={
       <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
@@ -82,15 +89,22 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     }/></Grid>
     <Grid item><TestSettingsDialog settings={testModel.settings}
                                    onConfirm={settings => testModel.settings = settings}/></Grid>
-    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit}>Save</Button></Grid>
-  </Grid> : null
+    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>Save{!isTestChanged && 'd'}</Button></Grid>
+  </Grid>
   return (
     <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
-      <Prompt when={!submitted} message={'You have unsaved changes, are you sure you want to leave?'}/>
+      <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
       {testModel ? <React.Fragment>
         {actions}
-        <Grid item xs={12}><NameText/></Grid>
-        <Grid item xs={12}><DesText/></Grid>
+        <Grid item xs={12}>
+          <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
+                     onChange={e => testModel.name = e.target.value}/>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+                     defaultValue={testModel.description} name="description"
+                     onChange={(e) => testModel.description = e.target.value}/>
+        </Grid>
         <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard}/>
         <Grid item container justify="center" xs={12}>
           <ButtonGroup onAdd={addItem}/>
@@ -113,4 +127,3 @@ function templateProcess(tem: BasicTestModel) {
     }
   });
 }
-

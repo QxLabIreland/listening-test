@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Card from "@material-ui/core/Card";
-import {GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
+import {CurrentUser, GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
 import Loading from "../layouts/components/Loading";
 import {useHistory} from "react-router";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -35,40 +35,38 @@ export default function () {
 
 function TemplatesList({testUrl}: { testUrl: TestUrl }) {
   const {templates, templatesError, handleIsTemplateChange, handleTemplateEdit} = useTemplateList(testUrl);
+  const {currentUser} = useContext(CurrentUser);
 
-  return <>{templates ? <Card>
-    <CardContent style={{padding: 0}}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Creation Date</TableCell>
-            <TableCell>Creator</TableCell>
-            <TableCell>Template</TableCell>
-            <TableCell/>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {templates.map(test => <TableRow hover key={test._id.$oid}>
-            <TableCell>{test.name}</TableCell>
-            <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
-            <TableCell>{test.creator.name}</TableCell>
-            <TableCell>
-              <Checkbox color="primary" checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
-            </TableCell>
-            <TableCell>
-              <Tooltip title="Edit Template">
-                <IconButton size="medium" color="primary" onClick={() => handleTemplateEdit(test)}><Icon>edit</Icon></IconButton>
-              </Tooltip>
-            </TableCell>
-          </TableRow>)}
-          {!templates.length && <TableRow><TableCell colSpan={3}>
-            There is no template here. You can add template by a checkbox on the list of each test.
-          </TableCell></TableRow>}
-        </TableBody>
-      </Table>
-    </CardContent>
-  </Card> : <Loading error={templatesError}/>}</>
+  return <>{templates ? <Card><CardContent style={{padding: 0}}><Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>Name</TableCell>
+        <TableCell>Creation Date</TableCell>
+        <TableCell>Creator</TableCell>
+        <TableCell>Template</TableCell>
+        <TableCell/>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {templates.map(test => <TableRow hover key={test._id.$oid}>
+        <TableCell>{test.name}</TableCell>
+        <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
+        <TableCell>{test.creator.name}</TableCell>
+        <TableCell>
+          <Checkbox color="primary" checked={!!test.isTemplate} onChange={() => handleIsTemplateChange(test)}/>
+        </TableCell>
+        <TableCell>
+          {currentUser._id.$oid === test.creator._id.$oid && <Tooltip title="Edit Template">
+            <IconButton size="medium" color="primary"
+                        onClick={() => handleTemplateEdit(test)}><Icon>edit</Icon></IconButton>
+          </Tooltip>}
+        </TableCell>
+      </TableRow>)}
+      {!templates.length && <TableRow><TableCell colSpan={3}>
+        There is no template here. You can add template by a checkbox on the list of each test.
+      </TableCell></TableRow>}
+    </TableBody>
+  </Table></CardContent></Card> : <Loading error={templatesError}/>}</>
 }
 
 export function useTemplateList(testUrl: TestUrl) {
@@ -106,7 +104,7 @@ export function useTemplateList(testUrl: TestUrl) {
   }
   const handleTemplateEdit = (aTest: BasicTestModel) => {
     if (aTest.isTemplate) openDialog('This test is currently being used as a template. Are you sure you want to edit this template?'
-      ,'Are you sure?',null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`));
+      , 'Are you sure?', null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`));
     else history.push(`/user/${testUrl}/${aTest._id.$oid}`);
   }
 

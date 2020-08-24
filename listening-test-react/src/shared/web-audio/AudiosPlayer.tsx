@@ -79,7 +79,7 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
 
   // An AudioButton contains an audio element and a button. Use loop attribute, onEnded Event will not trigger.
   return <>
-    <audio src={audio.src} controls ref={ref} style={{display: 'none'}} preload="auto"
+    <audio preload="auto" src={audio.src} controls ref={ref} style={{display: 'none'}}
            onTimeUpdate={onTimeUpdate} onEnded={onEnded}/>
 
     <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
