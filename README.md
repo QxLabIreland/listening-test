@@ -34,17 +34,23 @@ The back-end of this platform is based on Tornado (a python web server) and Mong
 - Node.js
 - Npm (if you node.js doesn't contain npm)
     - react
+    - react-dom
+    - react-router
+    - react-router-dom
     - @material-ui/core
     - @material-ui/lab
-    - formik
     - axios
+    - formik
     - mobx
+    - mobx-react
+    - mobx-utils
     - ts-md5
-    - uuidv4
     - typescript
+    - uuidv4
     ...
+    more dependencies in package.json
 
-`npm install` to install all dependencies of the front end
+`npm install` to install all dependencies of the front end. (This project is created by `create-react-app` tool)
 
 ### To run the frontend `npm start`
 
