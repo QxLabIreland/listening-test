@@ -34,14 +34,12 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     // If it is edit page, get data from back end. If there is value in location.state, we gonna use a template
     if (location.state || +id !== 0) Axios.get<BasicTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
-        if (location.state) templateProcess(res.data);
-        // Stringify the data for unsaved modification detection
+        if (location.state) templateProcess(res.data, testUrl);
+        /** Stringify the data for unsaved modification detection */
         const theTestStr = JSON.stringify(res.data);
         const observableTest = observable(res.data);
         // Add an observe to set if is data changed
         deepObserve(observableTest, (newValue) => {
-          console.log(JSON.stringify(newValue.object))
-          console.log(theTestStr)
           setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
         });
         setTestModel(observableTest);
@@ -115,15 +113,17 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   )
 })
 
-function templateProcess(tem: BasicTestModel) {
+function templateProcess(tem: BasicTestModel, testUrl: TestUrl) {
   // Prevent it from becoming a template and some process
   tem.isTemplate = false;
   tem.name = 'Name of template ' + tem.name;
   tem.items.forEach(item => {
     // Remove the links of audios and audioRef
     if (item.type === TestItemType.example || item.type === TestItemType.training) {
-      item.example.audios.forEach((_, index) => item.example.audios[index] = null);
-      item.example.audioRef = null;
+      // Only ab test has different actions
+      if (testUrl !== 'ab-test') item.example.audios = [];
+      else item.example.audios.forEach((_, index) => item.example.audios[index] = null);
+      item.example.audioRef = undefined;
     }
   });
 }

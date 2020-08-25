@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+
 from tornado import web, ioloop, httpserver
 from tornado.options import define, options
 from mongodbconnection import create_default_user
@@ -28,9 +29,11 @@ if __name__ == "__main__":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     # Accept args, such as port
     options.parse_command_line()
+    application = web.Application(path, **settings)
+    # application.settings['db']: MotorDatabase = MotorClient()['golisten_db']
     # Make an application based on path and settings
-    app = httpserver.HTTPServer(web.Application(path, **settings))
-    app.listen(options.port)
+    app_server = httpserver.HTTPServer(application)
+    app_server.listen(options.port)
     before_starting()
     # Start tornado server
     print("The server is now on http://localhost:" + str(options.port))

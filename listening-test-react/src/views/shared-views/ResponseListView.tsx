@@ -77,6 +77,8 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
   const handleDownload = () => downloadFileTool({
     url: '/api/csv-download/' + testUrl, params: {testId: id}
   });
+  const handleDownloadInJSON = () =>
+    downloadFileTool({url: '/api/response', params: {testType: testUrl, testId: id, downloadable: true}})
 
   return (<Grid container spacing={2}>
     <Grid item xs={12}>
@@ -119,9 +121,13 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
       </Card> : <Loading error={error}/>}
     </Grid>
     <Grid item xs={12} className={classes.actions}>
-      <Tooltip title="Download all Responses for This Test">
-        <Button variant="outlined" color="primary" onClick={handleDownload}>
-          <Icon>get_app</Icon>Download all Responses</Button>
+      <Tooltip title="Download all Responses in JSON format">
+        <Button variant="outlined" color="primary" className={classes.button} onClick={handleDownloadInJSON}>
+          <Icon>code</Icon>Download in JSON</Button>
+      </Tooltip>
+      <Tooltip title="Download all Responses">
+        <Button variant="outlined" color="primary" className={classes.button} onClick={handleDownload}>
+          <Icon>get_app</Icon>Download in CSV</Button>
       </Tooltip>
       <Button variant="outlined" className={classes.button} onClick={handleDelete}><Icon>delete</Icon>Delete Selected</Button>
       {/*<Button variant="contained" color="primary" className={classes.button}><Icon>get_app</Icon>Download Responses</Button>*/}

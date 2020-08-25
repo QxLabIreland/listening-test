@@ -6,15 +6,16 @@ from bson import ObjectId
 from bson.json_util import dumps, loads
 from mongodbconnection import MongoDBConnection
 
+conn = MongoDBConnection()
+
 
 class BaseHandler(tornado.web.RequestHandler, ABC):
     def __init__(self, application, request, **kwargs):
         super().__init__(application, request, **kwargs)
         self.user_id: Optional[ObjectId] = None
         # Current db means the db which a handler is currently using
-        self.mongo_client = MongoDBConnection().client
-        self.db = MongoDBConnection().db
-
+        self.mongo_client = conn.client
+        self.db = conn.db
         self.test_name = None
 
     # When data received, it will be called before PUT and POST
@@ -29,7 +30,8 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         self.set_header("Content-Type", "application/json")
 
     def on_finish(self):
-        self.mongo_client.close()
+        # self.mongo_client.close()
+        pass
 
     # Custom error handling
     def set_error(self, status_code: int = 500, reason: str = None) -> None:
@@ -37,8 +39,8 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         self.write(f'{status_code}: {reason}')
 
     # Write BSON data to client
-    def dumps_write(self, data):
-        json_data = dumps(data, json_options=bson.json_util.RELAXED_JSON_OPTIONS)
+    def dumps_write(self, data, indent=None):
+        json_data = dumps(data, json_options=bson.json_util.RELAXED_JSON_OPTIONS, indent=indent)
         self.write(json_data)
 
     # Loads BSON from request body
