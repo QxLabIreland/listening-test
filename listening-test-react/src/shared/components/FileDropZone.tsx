@@ -77,10 +77,11 @@ export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>v
                   onDragOver={handleDragOver} onDrop={handleFileDrop}>
       {fileModel?.filename ? <>
         <Typography>{fileModel.filename}</Typography>
-        <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}><small>{label?.slice(0, 3)}</small>
-        <Tooltip title="Click to delete this one">
-          <IconButton size="small" onClick={handleDelete}><Icon>delete_outline</Icon></IconButton>
-        </Tooltip>
+        <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <small>{label?.slice(0, 3)}</small>
+          <Tooltip title="Click to delete this one">
+            <IconButton size="small" onClick={handleDelete}><Icon>delete_outline</Icon></IconButton>
+          </Tooltip>
         </Box>
       </> : <><Typography>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>attachment</Icon></>}
     </Box>}

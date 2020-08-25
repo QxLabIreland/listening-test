@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 import pymongo
 from bson import ObjectId
@@ -11,6 +12,8 @@ class TestResponsesHandler(BaseHandler):
 
     async def get(self):
         _id = self.get_argument('_id', None)
+        # Downloadable is not a necessary parameter
+        downloadable = self.get_argument('downloadable', None)
         collection = switch_response_collection(self)
         if not collection:
             self.set_error(400, 'Invalid test type')
@@ -23,7 +26,14 @@ class TestResponsesHandler(BaseHandler):
             # data = collection.find({'userId': self.user_id}).sort('createdAt', pymongo.DESCENDING)
         else:
             data = collection.find_one({'userId': self.user_id, '_id': ObjectId(_id)})
-        self.dumps_write(data)
+        # Check if the responses are downloadable
+        if downloadable:
+            json_file_name = f"{self.test_name}_Test-{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
+            # Set http response header for downloading file
+            self.set_header('Content-Type', 'application/octet-stream')
+            self.set_header('Content-Disposition', f'attachment; filename="{json_file_name}"')
+        # If it is downloadable, we will need 2 intent
+        self.dumps_write(data, 2 if downloadable else None)
 
     async def delete(self):
         _ids = self.loads_body()

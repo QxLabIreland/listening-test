@@ -4,22 +4,19 @@ An open source platform for browser based speech and audio subjective quality te
 
 ## Tornado python back-end
 
-The back-end of this platform is based on Tornado (a python web server) and MongoDB.
+The back-end of this platform is using **Tornado** (a python web server) and **MongoDB**.
 
 ### Dependencies and how to run
 
-- python3.8 (pip dependencies)
-- pip3 (if python doesn't contain pip)
+- python3.8
+- pip3 (some python installation doesn't have pip)
     - tornado
     - pymongo
+- MongoDB
 
 `pip install -r requirements.txt` to install all dependencies for the backend.
 
 `python server.py` to run tornado server. If you wanna specify port `python server.py --port=8080`. Default host and port `localhost:8889`.
-
-### Some configuration
-
-`tornado.ini` is supervisor config file. After add it into `supervisord.conf`, the server should run automatically as along as supervisor configured properly (such as auto start of supervisord service).
 
 ### Naming styles
 
@@ -29,10 +26,12 @@ The back-end of this platform is based on Tornado (a python web server) and Mong
 
 ## React frontend
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 ### Dependencies
 
 - Node.js
-- Npm (if you node.js doesn't contain npm)
+- Npm (some node.js installation may skip npm installation)
     - react
     - react-dom
     - react-router
@@ -46,11 +45,15 @@ The back-end of this platform is based on Tornado (a python web server) and Mong
     - mobx-utils
     - ts-md5
     - typescript
-    - uuidv4
-    ...
+    - uuidv4  
+    ...  
     more dependencies in package.json
 
-`npm install` to install all dependencies of the front end. (This project is created by `create-react-app` tool)
+In the project directory, you can run:
+
+### To install dependency `npm install`
+
+To install all npm dependencies (`node_modules` folder) of the frontend based on `package.json`, so you do not need to install each package by yourself.
 
 ### To run the frontend `npm start`
 
@@ -72,6 +75,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Server dependencies and tips of how to install them
 
+With the steps of previous sections, you can run the app on your local machine. So, if you **do not need to deploy** this project on server you can skip this section.
+
+### Server dependencies, and introduction
+
 - nginx
 - supervisor
 - python3.8
@@ -80,11 +87,11 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     - pymongo
 - mongodb
 
-`nginx` is for server static pages(React.js), `supervisor` serve python3 backend to restart tornado.
+`nginx` is for server static pages(React.js), `supervisor` is to mange tornado server, such as logging and restarting.
 
 To install them, just run `sudo apt-get install -y nginx supervisor && chmod +x install-mongodb.sh && sudo sh install-mongodb.sh`
 
-There are lots of ways to install python3.8, and every linux has different python preinstalled. In our case, we got python3.5, so we need to upgrade it.
+There are lots of ways to install python3.8, and every linux has different version of python preinstalled. In our case, we got python3.5, so we need to upgrade it.
 
 ```bash
 sudo apt-get update
@@ -92,6 +99,7 @@ sudo apt-get install -y python3.8
 # In our case, we need to add alternatives to switch python3 version.
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
+# Get and install pip
 wget https://bootstrap.pypa.io/get-pip.py
 sudo python3.8 get-pip.py
 ```
@@ -190,31 +198,7 @@ server {
 
 For more settings, please check [nginx documentation](https://nginx.org/en/docs/) 
 
-# React front-end
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts and how to run the frontend
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## More about create-react-app project
 
 ### `npm run eject`
 
@@ -251,7 +235,3 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/ad
 ### Deployment
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
