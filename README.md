@@ -2,6 +2,36 @@
 
 An open source platform for browser based speech and audio subjective quality tests. Version: `0.1.0`
 
+## Run with docker and docker compose
+
+Make sure your system has `docker` and `docker-compose` and run it as root user (or you can add `sudo` manually).
+
+```bash
+wget https://github.com/QxLabIreland/listening-test/releases/download/v0.1.0-beta/listeningTest.tgz
+tar -xvzf listeningTest.tgz
+cd listeningTest
+docker-compose up
+```
+
+Check release section to get the newest release
+
+### Some description
+
+There will be 3 container, mongo database, backend and frontend. Each container exposes some ports, you can check them in `docker-compose.yml` file. Such as frontend exposes 80 and 443 (you need to config your ssl and listening on 443).
+
+Without SSL certificate, some functions **will not** work. As far as we know, these functions will be affected without HTTPS:
+- Copy test url to clipboard (the view button is working, so you can click VIEW button and copy the url from a browser navigation bar)
+
+In backend container, there is no processes management tool such as supervisor. It just uses python3 to run.
+
+### pack_transfer.py for building and generate release zip file
+
+You can also use `pack_transfer.py` to build and pack the newest version of the app. It will create `listeningTest.tgz` just like the released one.
+
+To build the frontend, you will need `node.js` and `npm`. Run `npm install` to install packages in order to run `python3 pack_transfer.py`.
+
+You may need to delete some transfer code to our server, before using it.
+
 ## Tornado python back-end
 
 The back-end of this platform is using **Tornado** (a python web server) and **MongoDB**.
