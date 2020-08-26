@@ -2,6 +2,6 @@
 /listeningTest.tgz
 /listeningTestDb
 /*.pem
-/*.conf
-/pack_tansfer.py
+/golisten.nginx.conf
+/golisten.supervisor.conf
 /pack_test_server.py

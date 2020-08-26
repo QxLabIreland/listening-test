@@ -1,0 +1,7 @@
+FROM python:3
+
+RUN mkdir /server
+COPY . /server/
+RUN pip install --no-cache-dir -r /server/requirements.txt
+RUN sed -i 's/mongodb:\/\/localhost:27017\//mongodb:\/\/root:1234@database:27017\//g' /server/mongodbconnection.py
+CMD python3 /server/server.py
