@@ -1,0 +1,6 @@
+FROM nginx
+
+RUN mkdir /html
+COPY . /html/
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY golisten.nginx80.conf /etc/nginx/conf.d/
