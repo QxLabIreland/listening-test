@@ -13,6 +13,8 @@ cd listeningTest
 docker-compose up
 ```
 
+When it finished, the app will be served on localhost:80
+
 Check release section to get the newest release
 
 ### Some description
