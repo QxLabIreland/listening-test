@@ -35,19 +35,27 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     if (location.state || +id !== 0) Axios.get<BasicTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
         if (location.state) templateProcess(res.data, testUrl);
-        /** Stringify the data for unsaved modification detection */
-        const theTestStr = JSON.stringify(res.data);
-        const observableTest = observable(res.data);
-        // Add an observe to set if is data changed
-        deepObserve(observableTest, (newValue) => {
-          setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
-        });
+        const observableTest = addAnObserveForChanges(res.data);
         setTestModel(observableTest);
       }, res => setLoadingError(res.response.data));
     // If in creation page
-    else setTestModel(observable({name: '', description: '', items: []}));
+    else {
+      const data = {name: '', description: '', items: [] as TestItemModel[]};
+      const observable = addAnObserveForChanges(data);
+      setTestModel(observable);
+    }
   }, [id, testUrl, location.state]);
 
+  const addAnObserveForChanges = (data: BasicTestModel) => {
+    /** Stringify the data for unsaved modification detection */
+    const theTestStr = JSON.stringify(data);
+    const anObservable = observable(data);
+    // Add an observe to set if is data changed
+    deepObserve(anObservable, (newValue) => {
+      setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
+    });
+    return anObservable;
+  }
   const handleSubmit = () => {
     // Create a new text or modify current test
     if (+id === 0) requestServer(true);
