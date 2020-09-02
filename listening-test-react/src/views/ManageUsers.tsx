@@ -28,11 +28,11 @@ export default function ManageUsers() {
     }, reason => setError(reason.response.data));
   }, []);
 
+  // Filter data through search input
   const getFilterData = () => data.filter(value =>
     // Name, email and permissions searching
     [value.name, value.email, value.permissions?.toString()].toString().toLowerCase().includes(searchStr.toLowerCase())
   );
-
   const handleAddPermission = (newPermission: string, user: UserModel) => {
     // Adding processing prevents user click too many times
     setProcessing(true);

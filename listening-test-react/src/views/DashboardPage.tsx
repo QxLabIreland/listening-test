@@ -12,7 +12,7 @@ export default function DashboardPage() {
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>
-          <Button color="primary">OK</Button>
+          {/*<Button color="primary">OK</Button>*/}
         </CardActions>
       </Card>
     </Grid>

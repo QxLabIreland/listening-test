@@ -34,12 +34,13 @@ export default function() {
     'Are your sure?', undefined, () => {
     setProcessing(true);
     Axios.delete<StorageStatus>('/api/storage').then(res => {
-      setData(res.data);
+      setData(res.data ? res.data : null);
       setAlert('success', 'Delete redundant files successfully');
     }, res => setAlert('error', res.response.data)).finally(() => setProcessing(false));
   });
 
-  if (!data) return <Loading error={alertMessage?.content}/>;
+  // If data is undefined, show loading
+  if (data === undefined || alertMessage?.content) return <Loading error={alertMessage?.content}/>;
 
   return <Grid container spacing={2}>
     <Grid item>

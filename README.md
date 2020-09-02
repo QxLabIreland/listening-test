@@ -2,7 +2,7 @@
 
 An open source platform for browser based speech and audio subjective quality tests. Version: `0.1.0`
 
-## Run with docker and docker compose
+## Run with docker and docker compose or with aws
 
 Make sure your system has `docker` and `docker-compose` and run it as root user (or you can add `sudo` manually).
 
@@ -13,7 +13,7 @@ cd listeningTest
 docker-compose up
 ```
 
-When it finished, the app will be served on localhost:80
+When it finished, the app will be served on localhost:80. The default email and password for admin user are `admin@yourdomain.com` `123456` (Use them in localhost:80/sign-in). The 443 port is reserved for nginx, the port of 8889 is for backend and the port 27017 is for MongoDB.
 
 Check release section to get the newest release
 
@@ -25,6 +25,14 @@ Without SSL certificate, some functions **will not** work. As far as we know, th
 - Copy test url to clipboard (the view button is working, so you can click VIEW button and copy the url from a browser navigation bar)
 
 In backend container, there is no processes management tool such as supervisor. It just uses python3 to run.
+
+### Run with our AWS AMI and EC2
+
+### Run with an AWS EC2
+
+With AWS EC2, get instance first and then you will need to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/). Please make sure ports of 80 and 443 of EC2 are open for public access.
+
+When everything is ready, you can run the command above (get release, extract compiled files and `docker-compose up`)
 
 ### pack_transfer.py for building and generate release zip file
 
@@ -172,16 +180,16 @@ Here is some examples of config files for a server. You need to do some modifica
 
 #### /usr/lib/systemd/system/supervisord.service
 
-The purpose of supervisord.service is to make supervisor running after the a reboot of server. 
+The purpose of supervisord.service is to make supervisor running after the a reboot of server. The location of supervisor problem maybe different, so you can use `type supervisord` to check the location and create `.service` file.
 
 ```conf
 [Unit] 
 Description=Supervisor daemon
 [Service] 
 Type=forking
-ExecStart=/usr/bin/supervisord
-ExecStop=/usr/bin/supervisorctl shutdown 
-ExecReload=/usr/bin/supervisorctl reload 
+ExecStart=/usr/local/bin/supervisord
+ExecStop=/usr/local/bin/supervisorctl shutdown 
+ExecReload=/usr/local/bin/supervisorctl reload 
 KillMode=process 
 Restart=on-failure 
 RestartSec=42s

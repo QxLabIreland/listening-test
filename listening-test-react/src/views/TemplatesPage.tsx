@@ -16,6 +16,7 @@ import {useHistory} from "react-router";
 import Tooltip from "@material-ui/core/Tooltip";
 
 export default function () {
+  // Change Test URL and the active tab will change
   const [testUrl, setTestUrl] = useState<TestUrl>('ab-test');
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: TestUrl) => setTestUrl(newValue);
@@ -69,6 +70,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
   </Table></CardContent></Card> : <Loading error={templatesError}/>}</>
 }
 
+/** This hook is reusable. There are two place using this hook: TemplatesList and TestListPage */
 export function useTemplateList(testUrl: TestUrl) {
   const openSnackbar = useContext(GlobalSnackbar);
   const [templates, setTemplates] = useState<BasicTestModel[]>();
@@ -79,7 +81,7 @@ export function useTemplateList(testUrl: TestUrl) {
   useEffect(() => {
     Axios.get('/api/template', {params: {testType: testUrl}}).then(res => setTemplates(res.data),
       reason => setTemplatesError(reason.response.data));
-    // Unmount process
+    // Unmount process to make sure data in current tab will change
     return () => {
       setTemplates(null);
       setTemplatesError(null);
@@ -87,6 +89,7 @@ export function useTemplateList(testUrl: TestUrl) {
   }, [testUrl]);
 
   const handleIsTemplateChange = (test: BasicTestModel) => {
+    // Create a request method for reusing purpose
     const openRequest = () => Axios.put<boolean>('/api/template', {_id: test._id}, {params: {testType: testUrl}}).then(res => {
       test.isTemplate = res.data;
       // Append test at the end
@@ -97,17 +100,19 @@ export function useTemplateList(testUrl: TestUrl) {
         setTemplates([...templates])
       }
     }, reason => openSnackbar('Something went wrong: ' + reason.response.data));
+    // If it is a template, the dialog will be opened for warning
     if (test.isTemplate) openDialog(
       'This test is currently being used as a template. Are you sure you want to remove this from templates?',
       'Are you sure?', null, openRequest
     ); else openRequest().catch();
   }
   const handleTemplateEdit = (aTest: BasicTestModel) => {
-    if (aTest.isTemplate) openDialog('This test is currently being used as a template. Are you sure you want to edit this template?'
-      , 'Are you sure?', null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`));
-    else history.push(`/user/${testUrl}/${aTest._id.$oid}`);
+    // If it is a template, the dialog will be opened for warning
+    if (aTest.isTemplate) openDialog(
+      'This test is currently being used as a template. Are you sure you want to edit this template?'
+      , 'Are you sure?', null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`)
+    ); else history.push(`/user/${testUrl}/${aTest._id.$oid}`);
   }
-
 
   return {templates, templatesError, handleIsTemplateChange, handleTemplateEdit};
 }

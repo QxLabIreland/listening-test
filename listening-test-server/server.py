@@ -11,7 +11,7 @@ define("port", default=8889, help="run on the given port", type=int)
 settings = dict(
     cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
     xsrf_cookies=True,
-    debug=True,
+    debug=sys.platform == 'win32',
     static_path=os.path.join(os.path.dirname(__file__), "static2"),
     static_url_prefix='/static2/',
     xheaders=True,
