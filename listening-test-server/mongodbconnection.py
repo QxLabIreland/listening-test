@@ -39,7 +39,8 @@ def create_default_user():
         'password': 'e10adc3949ba59abbe56e057f20f883e',
         'email': 'admin@yourdomain.com',
         'isAdmin': True,
-        'permissions': permission_list
+        'permissions': permission_list,
+        'activated': True
     }
     admin = con.db['users'].find_one({'isAdmin': True})
     if not admin:

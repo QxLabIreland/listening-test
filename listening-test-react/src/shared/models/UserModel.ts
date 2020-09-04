@@ -3,6 +3,7 @@ export class UserModel {
   name: string;
   email: string;
   password?: string;
+  activated?: boolean;
   policy?: boolean;
   isAdmin?: boolean;
   permissions?: string[];

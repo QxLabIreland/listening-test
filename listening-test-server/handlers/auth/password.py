@@ -3,7 +3,7 @@ from handlers.base import BaseHandler
 
 class PasswordHandler(BaseHandler):
     async def prepare(self):
-        self.user_id = await self.auth_current_user()
+        self.user_id = await self.auth_current_user(check_activated=False)
 
     async def put(self):
         body = self.loads_body()

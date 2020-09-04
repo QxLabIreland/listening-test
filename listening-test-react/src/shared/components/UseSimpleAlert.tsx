@@ -15,7 +15,7 @@ interface SimpleAlertMessage {
   content: string;
 }
 
-export function useSimpleAlert(): [JSX.Element, (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => void, SimpleAlertMessage] {
+export function useSimpleAlert(disableClose: boolean = false): [JSX.Element, (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => void, SimpleAlertMessage] {
   const [open, setOpen] = useState<boolean>();
   const [message, setMessage] = useState<SimpleAlertMessage>();
   const classes = useStyles();
@@ -34,7 +34,7 @@ export function useSimpleAlert(): [JSX.Element, (severity: 'success' | 'error' |
 
   return [<Collapse in={open} onExited={handleExited}>
     <Alert className={classes.alertTop} severity={message?.severity} action={
-      <IconButton aria-label="close" color="inherit" size="small" onClick={handleClose}>
+      !disableClose && <IconButton aria-label="close" color="inherit" size="small" onClick={handleClose}>
         <Icon fontSize="inherit">close</Icon>
       </IconButton>}>
       {message?.title && <AlertTitle>{message?.title}</AlertTitle>}

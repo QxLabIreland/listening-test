@@ -1,3 +1,4 @@
+from handlers.auth.find_password import FindPasswordHandler
 from handlers.auth.users import UsersHandler
 from handlers.dashboard import DashboardHandler
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
@@ -26,9 +27,10 @@ path = [
     ("/api/login", LoginHandler),
     ("/api/sign-up", SignUpHandler),
 
-    # Tools and others
+    # Tools and password
     ("/api/audio-file", AudioFileHandler),
     ("/api/password", PasswordHandler),
+    ("/api/find-password", FindPasswordHandler),
 
     # Web app management
     ("/api/dashboard", DashboardHandler),
