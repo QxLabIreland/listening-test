@@ -3,12 +3,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import {Button} from "@material-ui/core";
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
-
 import Home from "../views/PublicPages/Home";
 import SignIn from "../views/PublicPages/SignIn";
 import SignUp from "../views/PublicPages/SingUp";
 import Loading from "./components/Loading";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import FindPassword from "../views/PublicPages/FindPassword";
+import ConfirmEmail from "../views/PublicPages/ConfirmEmail";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -33,6 +34,8 @@ export default function PublicContainer() {
         <Route exact path="/" component={Home}/>
         <Route exact path="/sign-in" component={SignIn}/>
         <Route exact path="/sign-up" component={SignUp}/>
+        <Route exact path="/find-password" component={FindPassword}/>
+        <Route exact path="/confirm-email" component={ConfirmEmail}/>
         <Redirect to="/not-found" />
       </Switch>
     </Suspense>

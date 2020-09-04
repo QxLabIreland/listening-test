@@ -28,6 +28,10 @@ In backend container, there is no processes management tool such as supervisor. 
 
 ### Run with our AWS AMI and EC2
 
+Launch a AWS EC2, select community AMIs, and then search `ami-0e8863cb7176cf461`. The region of this AMIs is in `eu-west-1`. 
+
+After the successful launch, you can use `cd ~/listeningTest && sudo docker-compose up` to bring the app online. Make sure inbound port of 80 is open to public in AWS security group settings.
+
 ### Run with an AWS EC2
 
 With AWS EC2, get instance first and then you will need to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/). Please make sure ports of 80 and 443 of EC2 are open for public access.

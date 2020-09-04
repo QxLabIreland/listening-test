@@ -1,7 +1,24 @@
-import React from 'react';
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import React, {useContext, useState} from 'react';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Icon,
+  IconButton,
+  Typography
+} from "@material-ui/core";
+import {Alert, AlertTitle} from "@material-ui/lab";
+import Axios from "axios";
+import {CurrentUser} from "../shared/ReactContexts";
 
 export default function DashboardPage() {
+  const [sent, setSent] = useState(false);
+  const handleResend = () => Axios.put('/api/dashboard').then(() => setSent(true));
+  const {currentUser} = useContext(CurrentUser);
+
   return <Grid container spacing={3}>
     <Grid item xs>
       <Card>
@@ -16,16 +33,12 @@ export default function DashboardPage() {
         </CardActions>
       </Card>
     </Grid>
-    {/*<Grid item xs={12} md={6}>
-      <Card>
-        <CardHeader title="MUSHRA Test"/>
-        <CardContent>
-
-        </CardContent>
-        <CardActions style={{justifyContent: 'flex-end'}}>
-          <Button color="primary">Check</Button>
-        </CardActions>
-      </Card>
-    </Grid>*/}
+    {!currentUser?.activated && <Grid item xs={12}>
+      <Alert severity='info'
+             action={<Button onClick={handleResend} disabled={sent}>{sent ? 'Sent' : 'Resend'}</Button>}>
+        <AlertTitle>Please confirm your email address</AlertTitle>
+        Please check the link which has been sent to your email address. Or you can send another one.
+      </Alert>
+    </Grid>}
   </Grid>
 }

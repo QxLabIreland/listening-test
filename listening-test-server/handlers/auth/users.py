@@ -9,7 +9,7 @@ class UsersHandler(BaseHandler):
     async def get(self):
         # Exclude current user and administrators
         # data = self.db['users'].find({'isAdmin': {'$ne': True}, '_id': {'$nin': [self.user_id]}}, {'password': 0})
-        user = self.db['users'].find({'isAdmin': {'$ne': True}}, {'password': 0})
+        user = self.db['users'].find({'isAdmin': {'$ne': True}}, {'password': 0, 'confirmationCode': 0})
         self.dumps_write(user)
 
     async def post(self):
