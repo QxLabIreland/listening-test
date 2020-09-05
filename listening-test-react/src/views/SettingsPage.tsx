@@ -12,7 +12,7 @@ export default function SettingsPage() {
 
   return <Grid container spacing={3}>
     <Grid item xs={12} md={6}>
-      <PasswordChanging/>
+      <ChangePassword/>
     </Grid>
     <Grid item xs={12} md={6}>
       <AccountDeletion/>
@@ -31,24 +31,23 @@ export default function SettingsPage() {
   </Grid>
 }
 
-function PasswordChanging() {
+function ChangePassword() {
   const [passwordAlert, setPasswordMessage] = useSimpleAlert();
   const formik = useFormik({
-    initialValues: {password: '', newPassword: '', confirm: ''},
+    initialValues: {currentPassword: '', newPassword: '', newPasswordConfirm: ''},
     onSubmit: values => Axios.put('/api/password', {
       // Hash all of things
-      password: Md5.hashStr(values.password),
-      newPassword: Md5.hashStr(values.newPassword),
-      confirm: Md5.hashStr(values.confirm)
+      password: Md5.hashStr(values.currentPassword),
+      newPassword: Md5.hashStr(values.newPassword)
     }).then(() => setPasswordMessage('success', 'You have successfully updated your password'),
       (reason) => setPasswordMessage('error', reason.response.data)),
     // Validation before submitting
     validate: pipeValidator({
-      password: [required(), minLength(6)],
+      currentPassword: [required(), minLength(6)],
       newPassword: [required(), minLength(6)],
-      confirm: [required(), minLength(6), (value, errors, name) => {
+      newPasswordConfirm: [required(), minLength(6), (value, errors, name) => {
         if (value !== formik.values.newPassword) {
-          errors[name] = 'Confirm password is not match with password';
+          errors[name] = 'New password confirmation is not match with new password';
           return true;
         }
         return false;
@@ -65,8 +64,8 @@ function PasswordChanging() {
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="Current Password" type="password" variant="outlined"
-                       {...formik.getFieldProps('password')}
-                       error={!!formik.errors.password} helperText={formik.errors.password}/>
+                       {...formik.getFieldProps('currentPassword')}
+                       error={!!formik.errors.currentPassword} helperText={formik.errors.currentPassword}/>
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="New Password" type="password" variant="outlined"
@@ -75,8 +74,8 @@ function PasswordChanging() {
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="Confirm Password" type="password" variant="outlined"
-                       {...formik.getFieldProps('confirm')}
-                       error={!!formik.errors.confirm} helperText={formik.errors.confirm}/>
+                       {...formik.getFieldProps('newPasswordConfirm')}
+                       error={!!formik.errors.newPasswordConfirm} helperText={formik.errors.newPasswordConfirm}/>
           </Grid>
         </Grid>
         {passwordAlert}
