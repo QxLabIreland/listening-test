@@ -21,7 +21,7 @@ export default function SignUp() {
     initialValues: {name: '', email: '', password: '', policy: false},
     onSubmit: values => Axios.post('/api/sign-up', {...values, password: Md5.hashStr(values.password)})
       .then(() => {
-        openSnackbar('The confirmation link has been sent', undefined, 'info');
+        openSnackbar('The confirmation link has been sent. If you didn\'t receive anything please check your spam inbox', undefined, 'info');
         // Get state where user has been blocked by authentication
         history.push('/sign-in', {email: values.email});
       }, (reason) => openDialog(reason.response.data)),

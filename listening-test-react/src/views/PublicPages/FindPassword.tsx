@@ -16,7 +16,7 @@ export default function () {
   const findPasswordForm = useFormik({
     initialValues: {email: ''},
     onSubmit: values => Axios.put('/api/find-password', {email: values.email}).then(
-      () => setEmailAlert('info', 'A link has been sent to you email address'),
+      () => setEmailAlert('info', 'A link has been sent to you email address. If you didn\'t receive anything please check your spam inbox'),
       reason => setEmailAlert('error', reason.response.data)
     ),
     validate: pipeValidator({
@@ -48,19 +48,19 @@ function ResetPassword({classes}: {classes: any}) {
   const [alert, setAlert, message] = useSimpleAlert(true);
 
   const formik = useFormik({
-    initialValues: {password: '', confirmPassword: ''},
+    initialValues: {newPassword: '', newPasswordConfirm: ''},
     // Hash the password
     onSubmit: values => {
       if (location.search) Axios.post('/api/find-password', {
-        confirmationCode: location.search.replace('?', ''), password: Md5.hashStr(values.password)
+        confirmationCode: location.search.replace('?', ''), password: Md5.hashStr(values.newPassword)
       }).then((res) => setAlert('success', 'Success, you can login with your new password now'),
         reason => setAlert('error', reason.response.data));
     },
     validate: pipeValidator({
-      password: [required(), minLength(6)],
-      confirmPassword: [required(), minLength(6), (value, errors, name) => {
-        if (value !== formik.values.password) {
-          errors[name] = 'Confirm password is not match with password';
+      newPassword: [required(), minLength(6)],
+      newPasswordConfirm: [required(), minLength(6), (value, errors, name) => {
+        if (value !== formik.values.newPassword) {
+          errors[name] = 'New password confirmation is not match with new password';
           return true;
         }
         return false;
@@ -76,11 +76,11 @@ function ResetPassword({classes}: {classes: any}) {
       Please set your new password
     </Typography>
     <TextField type="password" className={classes.textField} fullWidth label="Password" variant="outlined"
-               {...formik.getFieldProps('password')}
-               error={!!formik.errors.password} helperText={formik.errors.password}/>
+               {...formik.getFieldProps('newPassword')}
+               error={!!formik.errors.newPassword} helperText={formik.errors.newPassword}/>
     <TextField type="password" className={classes.textField} fullWidth label="Confirm Password" variant="outlined"
-               {...formik.getFieldProps('confirmPassword')}
-               error={!!formik.errors.confirmPassword} helperText={formik.errors.confirmPassword}/>
+               {...formik.getFieldProps('newPasswordConfirm')}
+               error={!!formik.errors.newPasswordConfirm} helperText={formik.errors.newPasswordConfirm}/>
     {alert}
     <Button className={classes.signInUpButton} color="primary" fullWidth size="large" type="submit"
             variant="contained" disabled={!!message}>Submit</Button>
