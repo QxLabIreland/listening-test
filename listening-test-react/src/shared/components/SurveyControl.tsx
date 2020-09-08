@@ -76,6 +76,9 @@ const SurveyOptions = observer(function (props: { options: string[], type: Surve
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
         <Grid item>
+          <Tooltip title="Config skip option">
+            <IconButton size="small"><Icon>forward</Icon></IconButton>
+          </Tooltip>
           <Tooltip title="Delete this option">
             <IconButton size="small" onClick={() => handleDelete(i)}><Icon>clear</Icon></IconButton>
           </Tooltip>
