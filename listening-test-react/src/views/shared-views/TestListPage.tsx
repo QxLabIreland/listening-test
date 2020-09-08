@@ -169,7 +169,10 @@ function ActionsGroup({testUrl, path, test, onDelete, onCopy, handleEdit}: {
     // Give a dialog alert that ask if user want to continue. The survey may confuse people.
     const error = testItemsValidateIncomplete(test);
     if (error) openDialog(error, 'Required');
-    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => setSnackbarOpen(true));
+    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => {
+      setSnackbarOpen(true);
+      window.open(getCurrentHost() + url);
+    });
   }
   const handleShareClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') return;
@@ -191,7 +194,7 @@ function ActionsGroup({testUrl, path, test, onDelete, onCopy, handleEdit}: {
         : <IconButton size="small" color="primary" component={Link}
                       to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
       }</Tooltip>
-      <Tooltip title="Copy test URL">
+      <Tooltip title="Open and share this test">
         <IconButton size="small" color="primary" onClick={handleShareClick}><Icon>share</Icon></IconButton>
       </Tooltip>
       <Tooltip title="Duplicate test"><IconButton size="small" color="primary" onClick={() => onCopy(test)}>
@@ -226,11 +229,10 @@ function ActionsGroup({testUrl, path, test, onDelete, onCopy, handleEdit}: {
       </Menu>
     </Hidden>
     <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center',}} open={snackbarOpen} autoHideDuration={10_000}
-              onClose={handleShareClose} message="Copy the link to clipboard successfully" action={<>
-      <Button size="small" color="secondary" component={Link} target="_blank" to={url}>View</Button>
+              onClose={handleShareClose} message="Copy the link to clipboard successfully" action={
       <IconButton size="small" aria-label="close" color="inherit" onClick={handleShareClose}>
         <Icon fontSize="small">cancel</Icon>
       </IconButton>
-    </>}/>
+    }/>
   </>
 }

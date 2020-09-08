@@ -4,7 +4,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Checkbox, FormControlLabel, TextField} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Icon, IconButton, TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
@@ -14,6 +14,9 @@ import TestSettingsDialog from ".//TestSettingsDialog";
 import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
+import Tooltip from "@material-ui/core/Tooltip";
+import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
+import {getCurrentHost} from "../../shared/ReactTools";
 
 export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
   testUrl: TestUrl,
@@ -79,6 +82,15 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   }
   // Local methods
   const addItem = (newItem: TestItemModel) => testModel.items.push(newItem)
+  const handleShareClick = () => {
+    const url = `/task/${testUrl}/${testModel._id.$oid}`;
+    const error = testItemsValidateIncomplete(testModel);
+    if (error) openDialog(error, 'Required');
+    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => {
+      window.open(getCurrentHost() + url);
+    });
+  }
+
 
   // Extract those components, they won't be update when onChange, because they are uncontrolled
   // const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
@@ -95,30 +107,31 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     }/></Grid>
     <Grid item><TestSettingsDialog settings={testModel.settings}
                                    onConfirm={settings => testModel.settings = settings}/></Grid>
+    <Grid item><Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}><span>
+      <IconButton onClick={handleShareClick} disabled={isTestChanged}><Icon>share</Icon></IconButton>
+    </span></Tooltip></Grid>
     <Grid item><Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>Save{!isTestChanged && 'd'}</Button></Grid>
   </Grid>
-  return (
-    <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
-      <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
-      {testModel ? <React.Fragment>
-        {actions}
-        <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
-                     onChange={e => testModel.name = e.target.value}/>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-                     defaultValue={testModel.description} name="description"
-                     onChange={(e) => testModel.description = e.target.value}/>
-        </Grid>
-        <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard}/>
-        <Grid item container justify="center" xs={12}>
-          <ButtonGroup onAdd={addItem}/>
-        </Grid>
-        {actions}
-      </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
-    </Grid>
-  )
+  return <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
+    <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
+    {testModel ? <React.Fragment>
+      {actions}
+      <Grid item xs={12}>
+        <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
+                   onChange={e => testModel.name = e.target.value}/>
+      </Grid>
+      <Grid item xs={12}>
+        <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+                   defaultValue={testModel.description} name="description"
+                   onChange={(e) => testModel.description = e.target.value}/>
+      </Grid>
+      <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard}/>
+      <Grid item container justify="center" xs={12}>
+        <ButtonGroup onAdd={addItem}/>
+      </Grid>
+      {actions}
+    </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
+  </Grid>
 })
 
 function templateProcess(tem: BasicTestModel, testUrl: TestUrl) {
