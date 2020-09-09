@@ -1,4 +1,4 @@
-import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
+import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse} from "@material-ui/core";
@@ -10,13 +10,9 @@ import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
 import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
+import {TestItemExampleCardProps} from "../components/SomeTypes";
 
-export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
-  example: ItemExampleModel,
-  title: React.ReactNode,
-  action: React.ReactNode,
-  collapsed?: boolean
-}>) => {
+export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
 
   // Methods for audios changed

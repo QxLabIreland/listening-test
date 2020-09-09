@@ -1,4 +1,3 @@
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
@@ -11,10 +10,9 @@ import {TagsGroup} from "../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
 import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../shared/web-audio/OscillatorAngGain";
+import {TestItemExampleCardProps} from "../components/SomeTypes";
 
-export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{
-  example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, collapsed?: boolean
-}>) => {
+export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
 
   return <Card>
@@ -44,7 +42,6 @@ export const HearingTestItemExampleCard = observer((props: React.PropsWithChildr
 const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel }) {
   // Go means Gain and Oscillator
   const [go, setGo] = useState(null);
-
   // Make sure go will be disposed
   useEffect(() => () => disposeOscillatorAndGain(go), [go]);
 
@@ -58,13 +55,11 @@ const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel })
     newGos.oscillator.start();
     setGo(newGos);
   }
-
   // When frequency changed, the oscillator will be stopped
   const handleFrequencyChange = (event: any) => {
     audio.settings.frequency = +event.target.value;
     if (go) setGo(disposeOscillatorAndGain(go));
   }
-
   // When volume changed, the oscillator sound volume changed
   const handleSliderChange = (_: any, nv: number | number[]) => {
     audio.settings.initVolume = +nv;

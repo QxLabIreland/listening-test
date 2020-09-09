@@ -1,4 +1,3 @@
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse, FormControlLabel, Icon, IconButton, Switch, Tooltip} from "@material-ui/core";
@@ -11,13 +10,9 @@ import {FileDropZone} from "../../shared/components/FileDropZone";
 import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
+import {TestItemExampleCardProps} from "../components/SomeTypes";
 
-export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
-  example: ItemExampleModel,
-  title: React.ReactNode,
-  action: React.ReactNode,
-  collapsed?: boolean
-}>) => {
+export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, action, title, collapsed} = props;
   // Methods for audios changed
   const handleDelete = (index: number) => {
@@ -49,16 +44,15 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
           <Grid item xs={12}>
             <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
           </Grid>
-
+          {/*File drop area*/}
           {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
             <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
           </Grid>)}
-
           <Grid item xs={12} md={4}>
             <FileDropZone fileModel={example.audioRef} onChange={fm => handleChange(fm, -1)}
                           label="Labeled Reference (Optional)"/>
           </Grid>
-
+          {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
             <div style={{textAlign: 'right'}}>
               <FormControlLabel label="Required" control={
@@ -70,12 +64,12 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
             </div>
             <SurveyControl control={q}/>
           </Grid>)}
-
-            {example.fields?.length < 2 && <Grid item xs={12} style={{textAlign: 'right'}}>
-              <Tooltip title="Add an additional question">
-                <IconButton onClick={handleDeletedQuestionAdd}><Icon>add</Icon></IconButton>
-              </Tooltip>
-            </Grid>}
+          {/*An ability to delete one of special question*/}
+          {example.fields?.length < 2 && <Grid item xs={12} style={{textAlign: 'right'}}>
+            <Tooltip title="Add an additional question">
+              <IconButton onClick={handleDeletedQuestionAdd}><Icon>add</Icon></IconButton>
+            </Tooltip>
+          </Grid>}
         </Grid>
       </CardContent>
     </Collapse>

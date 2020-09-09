@@ -11,16 +11,16 @@ import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel"
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import TestSettingsDialog from ".//TestSettingsDialog";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
 import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 import {getCurrentHost} from "../../shared/ReactTools";
+import {TestItemExampleCardType} from "../components/SomeTypes";
 
 export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
   testUrl: TestUrl,
-  TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }>,
+  TestItemExampleCard: TestItemExampleCardType,
   ButtonGroup: FunctionComponent<{ onAdd: (type: TestItemModel) => void }>
 }) {
   const {id} = useParams();
@@ -90,7 +90,6 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
       window.open(getCurrentHost() + url);
     });
   }
-
 
   // Extract those components, they won't be update when onChange, because they are uncontrolled
   // const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"

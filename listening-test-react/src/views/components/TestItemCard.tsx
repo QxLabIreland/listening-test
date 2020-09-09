@@ -1,25 +1,25 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
-import React, {FunctionComponent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse, createStyles, FormControlLabel, Switch, Theme, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
-import {ItemExampleModel, ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
+import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
 import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
+import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
+import {TestItemExampleCardProps, TestItemExampleCardType} from "./SomeTypes";
 
 export const TestItemCard = observer(function (props: {
-  value: TestItemModel, onDelete: () => void, TestItemExampleCard: FunctionComponent<{
-    example: ItemExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
-  }>
+  value: TestItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType, gotoQuestionItems?: GotoQuestionItemModel[]
 }) {
   const {value, TestItemExampleCard} = props;
   // Label methods
@@ -27,13 +27,13 @@ export const TestItemCard = observer(function (props: {
     value.title = event.target.value;
   }
 
-  const ExampleCard = value.type === TestItemType.example ? TestItemExampleCard : TestItemTrainingCard;
-
   // Switch to correct card
-  if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard title={
-    <input style={labelInputStyle} onFocus={event => event.target.select()}
-           value={value.title} onChange={handleLabelChange}/>
-  } example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}/>
+  const ExampleCard: TestItemExampleCardType = value.type === TestItemType.example ? TestItemExampleCard : TestItemTrainingCard;
+  if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard
+    title={<input style={labelInputStyle} onFocus={event => event.target.select()}
+                  value={value.title} onChange={handleLabelChange}/>}
+    example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}
+  />
 
   else if (value.type === TestItemType.question)
     return <TestItemQuestionCard {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}/>
@@ -64,7 +64,9 @@ const HeaderIconButtons = observer(function ({onDelete, value}: { value: TestIte
   </>
 })
 
-const TestItemQuestionCard = observer(function ({value, action, collapsed}: { value: TestItemModel, action: ReactNode, collapsed?: boolean }) {
+const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQuestionItems}: {
+  value: TestItemModel, action: ReactNode, collapsed?: boolean, gotoQuestionItems?: GotoQuestionItemModel[]
+}) {
   return <Card>
     <CardHeader action={<>
       {value.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
@@ -76,22 +78,20 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed}: { va
     </CardHeader>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
-        <SurveyControl control={value.questionControl}/>
+        <SurveyControl control={value.questionControl}
+                       // Filter current item out of list
+                       gotoQuestionItems={gotoQuestionItems.filter(cur => cur.id !== value.id)}/>
       </CardContent>
     </Collapse>
   </Card>
 })
 
-const TestItemTrainingCard = observer((props: React.PropsWithChildren<{
-  example: ItemExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
-}>) => {
+const TestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
 
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
-
   const handleDelete = (index: number) => example.audios.splice(index, 1);
-
   const handleChange = (newAudio: AudioFileModel, index: number) => {
     if (newAudio == null) {
       handleDelete(index);
@@ -99,7 +99,6 @@ const TestItemTrainingCard = observer((props: React.PropsWithChildren<{
     }
     example.audios[index] = newAudio;
   }
-
   // Setting submitted
   const handleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
 

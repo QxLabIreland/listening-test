@@ -1,12 +1,12 @@
 import {observer} from "mobx-react";
 import {TestItemModel} from "../../shared/models/BasicTestModel";
-import React, {FunctionComponent, MouseEvent, useState} from "react";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
+import React, {MouseEvent, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {action, observable} from "mobx";
 import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
 import {TestItemCard} from "../components/TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
+import {TestItemExampleCardType} from "../components/SomeTypes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   upDown: {fontSize: 16}
 }))
 
-export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: FunctionComponent<{ example: ItemExampleModel, title: React.ReactNode, action: React.ReactNode, expanded?: boolean }> }) {
+export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: TestItemExampleCardType }) {
   if (!items) items = observable([]);
   const [state] = useState(observable({index: null}));
   const [refs] = useState<HTMLDivElement[]>([]);
@@ -121,7 +121,8 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
         </IconButton>
       </span></Tooltip>
     </>}</Box>
-    <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}/>
+    <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
+                  gotoQuestionItems={items.map(item => ({id: item.id, title: item.title}))}/>
   </Grid>)}
   </>
 })
