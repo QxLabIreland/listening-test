@@ -1,16 +1,29 @@
 import React, {useState} from "react";
-import {Box, Grid, TextField, Tooltip, Typography} from "@material-ui/core";
+import {
+  Box,
+  createStyles,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Theme,
+  Tooltip,
+  Typography
+} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
-import {SurveyControlModel} from "../models/SurveyControlModel";
+import {gotoQuestionAbortValue, GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControlModel";
 import {SurveyControlType} from "../models/EnumsAndTypes";
 import {observer} from "mobx-react";
+import {makeStyles} from "@material-ui/core/styles";
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
-  label?: string
+  label?: string,
+  gotoQuestionItems?: GotoQuestionItemModel[]
 }) {
-  const {control} = props;
+  const {control, gotoQuestionItems} = props;
   const {label = control.type === SurveyControlType.description ? 'Your description' : 'Your question'} = props;
 
   // Render second field for the control
@@ -21,7 +34,7 @@ export const SurveyControl = observer(function (props: {
                           value="Subject will answer the question here..." disabled/>
       case SurveyControlType.radio:
       case SurveyControlType.checkbox:
-        return <SurveyOptions options={control.options} type={control.type}/>
+        return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems}/>
       case SurveyControlType.description:
         return <Typography>{control.question}</Typography>
       default:
@@ -40,45 +53,68 @@ export const SurveyControl = observer(function (props: {
   </>
 });
 
-const SurveyOptions = observer(function (props: { options: string[], type: SurveyControlType }) {
-  const {options, type} = props;
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    gridGrow: {flexGrow: 1},
+    selectWidth: {width: theme.spacing(30)}
+  }),
+);
+
+const SurveyOptions = observer(function ({control, gotoQuestionItems}: { control: SurveyControlModel, gotoQuestionItems?: GotoQuestionItemModel[]}) {
   const [autoFocus, setAutoFocus] = useState(false);
+  const classes = useStyles();
 
   function handleDelete(index: number) {
-    options.splice(index, 1);
+    control.options.splice(index, 1);
+    delete control.gotoQuestionMapping[index];
   }
-
   const handleAdd = (event: any) => {
     setAutoFocus(true);
     event.preventDefault();
     event.stopPropagation();
-    options.push('Option ' + (options.length + 1));
+    control.options.push('Option ' + (control.options.length + 1));
   }
-
   const handleChange = (newValue: string, i: number) => {
-    options[i] = newValue;
+    control.options[i] = newValue;
+  }
+  // When blur, fill the empty option
+  const handleBlur = (event: any, index: number) => {
+    if (!event.target.value) control.options[index] = 'Option ' + (index + 1);
+  }
+  const handleGotoQuestionChange = (event: any, index: number) => {
+    if (!control.gotoQuestionMapping) control.gotoQuestionMapping = {};
+    // If got value, we create a mapping. Else: delete mapping
+    if (event.target.value) control.gotoQuestionMapping[index] = event.target.value;
+    else delete control.gotoQuestionMapping[index];
   }
 
   // radio_button_unchecked
   return <Grid container spacing={2}>
-    {options?.map((o, i) =>
+    {control.options?.map((o, i) =>
       <Grid key={i} item xs={12} container spacing={1} alignItems="flex-end">
         <Grid item>
           <IconButton size="small" disabled>
-            {type === SurveyControlType.radio && <Icon>radio_button_unchecked</Icon>}
-            {type === SurveyControlType.checkbox && <Icon>check_box_outline_blank</Icon>}
+            {control.type === SurveyControlType.radio && <Icon>radio_button_unchecked</Icon>}
+            {control.type === SurveyControlType.checkbox && <Icon>check_box_outline_blank</Icon>}
           </IconButton>
         </Grid>
         {/*Options text field*/}
-        <Grid item style={{flexGrow: 1, paddingRight: 16}}>
+        <Grid item className={classes.gridGrow}>
           <TextField fullWidth variant="standard" value={o} autoFocus={autoFocus}
-                     onFocus={event => event.target.select()}
+                     onFocus={event => event.target.select()} onBlur={event => handleBlur(event, i)}
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
+        {gotoQuestionItems && <Grid item>
+          <FormControl className={classes.selectWidth}>
+            <Select inputProps={{name: 'goto'}} displayEmpty onChange={event => handleGotoQuestionChange(event, i)}
+                    value={control.gotoQuestionMapping ? control.gotoQuestionMapping[i] ? control.gotoQuestionMapping[i] : '' : ''}>
+              <MenuItem value={''}>Continue to next question</MenuItem>
+              <MenuItem value={gotoQuestionAbortValue}>Abort the test</MenuItem>
+              {gotoQuestionItems.map(item => <MenuItem value={item.id} key={item.id}>{item.title}</MenuItem>)}
+            </Select>
+          </FormControl>
+        </Grid>}
         <Grid item>
-          <Tooltip title="Config skip option">
-            <IconButton size="small"><Icon>forward</Icon></IconButton>
-          </Tooltip>
           <Tooltip title="Delete this option">
             <IconButton size="small" onClick={() => handleDelete(i)}><Icon>clear</Icon></IconButton>
           </Tooltip>
@@ -88,8 +124,8 @@ const SurveyOptions = observer(function (props: { options: string[], type: Surve
     <Grid item xs={12} container spacing={1} alignItems="flex-end">
       <Grid item>
         <IconButton size="small" disabled>
-          {type === SurveyControlType.radio && <Icon>radio_button_unchecked</Icon>}
-          {type === SurveyControlType.checkbox && <Icon>check_box_outline_blank</Icon>}
+          {control.type === SurveyControlType.radio && <Icon>radio_button_unchecked</Icon>}
+          {control.type === SurveyControlType.checkbox && <Icon>check_box_outline_blank</Icon>}
         </IconButton>
       </Grid>
       <Grid item>
