@@ -32,7 +32,7 @@ export default function TestSettingsDialog(props: { settings: TestSettingsModel,
     </Tooltip>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle id="form-dialog-title">Test settings</DialogTitle>
+        <DialogTitle id="form-dialog-title">Test Global Settings</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Settings for the whole test

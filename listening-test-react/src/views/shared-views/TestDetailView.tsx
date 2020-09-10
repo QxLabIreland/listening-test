@@ -124,7 +124,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
                    defaultValue={testModel.description} name="description"
                    onChange={(e) => testModel.description = e.target.value}/>
       </Grid>
-      <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard}/>
+      <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard} testSettings={testModel.settings}/>
       <Grid item container justify="center" xs={12}>
         <ButtonGroup onAdd={addItem}/>
       </Grid>
