@@ -15,12 +15,16 @@ import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
 import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
 import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
 import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
 import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
-import {questionedExValidateError, sliderItemValidateError, testItemsValidateIncomplete} from "../../shared/ErrorValidators";
+import {
+  questionedExValidateError,
+  sliderItemValidateError,
+  testItemsValidateIncomplete
+} from "../../shared/ErrorValidators";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
@@ -33,7 +37,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
   const {RenderedItem, validateError} = useSurveyRenderItem(testUrl);
-
+  // To get data from the server
   useEffect(() => {
     if (value) return;
     Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
@@ -60,16 +64,16 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
         if (questionnaire.items[openedPanel])
           questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
       }
+      const indexOverride = gotoQuestionChecking(questionnaire.items[openedPanel], questionnaire);
       // useState is async method, so put it at the end
-      setOpenedPanel(newIndex);
+      setOpenedPanel(indexOverride !== null ? indexOverride : newIndex);
     }
     // If the survey setting is individual question, DO NOTHING
     else if (!questionnaire.settings?.isIndividual) setOpenedPanel(null);
   }
-
   function handleSubmit() {
-    // Check all items' validation before submission
-    for (const item of questionnaire.items) {
+    // Check all items' validation before submission. Only if the questionnaire is not individual
+    if (!questionnaire.settings?.isIndividual) for (const item of questionnaire.items) {
       const validationError = validateError(item);
       // If there is no error, check the next item
       if (!validationError) continue;
@@ -79,7 +83,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     // Record the last item time
     if (questionnaire.settings?.isTimed)
       questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
-    // Set opened to make sure active is false
+    // Set opened to make sure an active variable of the audio is false
     setOpenedPanel(null);
     // Start request
     if (!value) Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(res => {
@@ -109,10 +113,9 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
             <RenderedItem item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
-            {i !== questionnaire.items.length - 1
+            {i < questionnaire.items.length - 1
               ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
-              : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-            }
+              : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>}
           </ExpansionPanelActions>
         </ExpansionPanel>
       </Grid>
@@ -129,6 +132,18 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
     </Grid>
   </Grid> : <Loading error={error}/>}</Box>
 })
+
+function gotoQuestionChecking(item: TestItemModel, questionnaire: BasicTestModel): number {
+  // Don't override when it is not an individual questionnaire
+  if (item?.type !== TestItemType.question || !questionnaire.settings?.isIndividual) return null;
+  const control = item.questionControl;
+  // Make sure the type and the mapping has value
+  if (control.type === SurveyControlType.radio && control.gotoQuestionMapping) {
+    const targetId = control.gotoQuestionMapping[control.options.indexOf(control.value)];
+    if (targetId) return questionnaire.items.findIndex(item => item.id === targetId);
+  }
+  return null;
+}
 
 // An hook to switch different views of card
 function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: TestItemModel, active?: boolean }) => JSX.Element, validateError: (item: TestItemModel) => string } {

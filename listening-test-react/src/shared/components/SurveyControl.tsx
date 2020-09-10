@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
-import {gotoQuestionAbortValue, GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControlModel";
+import {GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControlModel";
 import {SurveyControlType} from "../models/EnumsAndTypes";
 import {observer} from "mobx-react";
 import {makeStyles} from "@material-ui/core/styles";
@@ -21,9 +21,10 @@ import {makeStyles} from "@material-ui/core/styles";
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
   label?: string,
-  gotoQuestionItems?: GotoQuestionItemModel[]
+  gotoQuestionItems?: GotoQuestionItemModel[],
+  disableGoto?: boolean
 }) {
-  const {control, gotoQuestionItems} = props;
+  const {control, gotoQuestionItems, disableGoto} = props;
   const {label = control.type === SurveyControlType.description ? 'Your description' : 'Your question'} = props;
 
   // Render second field for the control
@@ -34,7 +35,7 @@ export const SurveyControl = observer(function (props: {
                           value="Subject will answer the question here..." disabled/>
       case SurveyControlType.radio:
       case SurveyControlType.checkbox:
-        return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems}/>
+        return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
       case SurveyControlType.description:
         return <Typography>{control.question}</Typography>
       default:
@@ -60,7 +61,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const SurveyOptions = observer(function ({control, gotoQuestionItems}: { control: SurveyControlModel, gotoQuestionItems?: GotoQuestionItemModel[]}) {
+const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGoto}: {
+  control: SurveyControlModel, gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean
+}) {
   const [autoFocus, setAutoFocus] = useState(false);
   const classes = useStyles();
 
@@ -105,14 +108,17 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems}: { control
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
         {gotoQuestionItems && <Grid item>
-          <FormControl className={classes.selectWidth}>
-            <Select inputProps={{name: 'goto'}} displayEmpty onChange={event => handleGotoQuestionChange(event, i)}
-                    value={control.gotoQuestionMapping ? control.gotoQuestionMapping[i] ? control.gotoQuestionMapping[i] : '' : ''}>
-              <MenuItem value={''}>Continue to next question</MenuItem>
-              <MenuItem value={gotoQuestionAbortValue}>Abort the test</MenuItem>
-              {gotoQuestionItems.map(item => <MenuItem value={item.id} key={item.id}>{item.title}</MenuItem>)}
-            </Select>
-          </FormControl>
+          <Tooltip title={disableGoto ? 'You must enable Individual Question in Global settings' : ''}>
+            <FormControl className={classes.selectWidth}>
+              <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto}
+                      onChange={event => handleGotoQuestionChange(event, i)}
+                      value={control.gotoQuestionMapping ? control.gotoQuestionMapping[i] ? control.gotoQuestionMapping[i] : '' : ''}>
+                <MenuItem value={''}>Continue to next question</MenuItem>
+                {/*<MenuItem value={gotoQuestionAbortValue}>Abort the test</MenuItem>*/}
+                {gotoQuestionItems.map(item => <MenuItem value={item.id} key={item.id}>Go to {item.title}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Tooltip>
         </Grid>}
         <Grid item>
           <Tooltip title="Delete this option">

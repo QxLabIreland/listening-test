@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
+import {TestItemModel, TestSettingsModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
 import React, {ReactNode} from "react";
 import Card from "@material-ui/core/Card";
@@ -19,7 +19,8 @@ import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {TestItemExampleCardProps, TestItemExampleCardType} from "./SomeTypes";
 
 export const TestItemCard = observer(function (props: {
-  value: TestItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType, gotoQuestionItems?: GotoQuestionItemModel[]
+  value: TestItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType,
+  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean
 }) {
   const {value, TestItemExampleCard} = props;
   // Label methods
@@ -64,9 +65,13 @@ const HeaderIconButtons = observer(function ({onDelete, value}: { value: TestIte
   </>
 })
 
-const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQuestionItems}: {
-  value: TestItemModel, action: ReactNode, collapsed?: boolean, gotoQuestionItems?: GotoQuestionItemModel[]
+const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQuestionItems, disableGoto}: {
+  value: TestItemModel, action: ReactNode, collapsed?: boolean,
+  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean
 }) {
+  // If the index is at end of list, the goto feature will be delete
+  const gotoQuestionItemsFiltered = gotoQuestionItems.findIndex(cur => cur.id === value.id) >= gotoQuestionItems.length - 1
+    ? undefined : gotoQuestionItems.filter(cur => cur.id !== value.id);
   return <Card>
     <CardHeader action={<>
       {value.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
@@ -78,9 +83,9 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQ
     </CardHeader>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
-        <SurveyControl control={value.questionControl}
-                       // Filter current item out of list
-                       gotoQuestionItems={gotoQuestionItems.filter(cur => cur.id !== value.id)}/>
+        <SurveyControl control={value.questionControl} disableGoto={disableGoto}
+          // Filter current item out of list
+                       gotoQuestionItems={gotoQuestionItemsFiltered}/>
       </CardContent>
     </Collapse>
   </Card>

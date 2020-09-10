@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
+import {TestItemModel, TestSettingsModel} from "../../shared/models/BasicTestModel";
 import React, {MouseEvent, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {action, observable} from "mobx";
@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   upDown: {fontSize: 16}
 }))
 
-export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard}: { items: TestItemModel[], TestItemExampleCard: TestItemExampleCardType }) {
+export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard, testSettings}: {
+  items: TestItemModel[], TestItemExampleCard: TestItemExampleCardType, testSettings?: TestSettingsModel
+}) {
   if (!items) items = observable([]);
   const [state] = useState(observable({index: null}));
   const [refs] = useState<HTMLDivElement[]>([]);
@@ -122,7 +124,9 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       </span></Tooltip>
     </>}</Box>
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
-                  gotoQuestionItems={items.map(item => ({id: item.id, title: item.title}))}/>
+                  gotoQuestionItems={items.map(item => ({id: item.id, title: item.title}))}
+                  disableGoto={!testSettings?.isIndividual}
+    />
   </Grid>)}
   </>
 })

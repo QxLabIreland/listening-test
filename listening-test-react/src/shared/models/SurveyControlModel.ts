@@ -17,4 +17,4 @@ export interface GotoQuestionItemModel {
 }
 
 // undefined/'': No mapping, 'abort': Abort, uuid: Go to this question
-export const gotoQuestionAbortValue = 'abort';
+// export const gotoQuestionAbortValue = 'abort';
