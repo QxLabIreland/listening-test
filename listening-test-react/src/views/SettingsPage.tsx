@@ -3,7 +3,7 @@ import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField, Typ
 import {useFormik} from "formik";
 import Axios from "axios";
 import {minLength, password, pipeValidator, required} from "../shared/FormikValidator";
-import {GlobalDialog} from "../shared/ReactContexts";
+import {CurrentUser, GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
 import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
 import {useHistory} from "react-router";
@@ -33,6 +33,7 @@ export default function SettingsPage() {
 
 function ChangePassword() {
   const [passwordAlert, setPasswordMessage] = useSimpleAlert();
+  const {currentUser} = useContext(CurrentUser);
   const formik = useFormik({
     initialValues: {currentPassword: '', newPassword: '', newPasswordConfirm: ''},
     onSubmit: values => Axios.put('/api/password', {
@@ -62,6 +63,7 @@ function ChangePassword() {
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">Enter your current and new password to update your password.</Typography>
           </Grid>
+          <input type="hidden" value={currentUser.email} name="email"/>
           <Grid item xs={12}>
             <TextField fullWidth label="Current Password" type="password" variant="outlined"
                        {...formik.getFieldProps('currentPassword')}
@@ -69,12 +71,12 @@ function ChangePassword() {
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="New Password" type="password" variant="outlined"
-                       {...formik.getFieldProps('newPassword')}
+                       {...formik.getFieldProps('newPassword')} autoComplete="new-password"
                        error={!!formik.errors.newPassword} helperText={formik.errors.newPassword}/>
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="Confirm Password" type="password" variant="outlined"
-                       {...formik.getFieldProps('newPasswordConfirm')}
+                       {...formik.getFieldProps('newPasswordConfirm')} autoComplete="new-password"
                        error={!!formik.errors.newPasswordConfirm} helperText={formik.errors.newPasswordConfirm}/>
           </Grid>
         </Grid>
