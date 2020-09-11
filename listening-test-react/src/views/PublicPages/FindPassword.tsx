@@ -4,7 +4,7 @@ import {useSignInUpStyles} from "../SharedStyles";
 import {Button, TextField, Typography} from "@material-ui/core";
 import Axios from "axios";
 import {Md5} from "ts-md5";
-import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
+import {email, minLength, password, pipeValidator, required} from "../../shared/FormikValidator";
 import {useFormik} from "formik";
 import {useLocation} from "react-router";
 import {useSimpleAlert} from "../../shared/components/UseSimpleAlert";
@@ -57,8 +57,8 @@ function ResetPassword({classes}: {classes: any}) {
         reason => setAlert('error', reason.response.data));
     },
     validate: pipeValidator({
-      newPassword: [required(), minLength(6)],
-      newPasswordConfirm: [required(), minLength(6), (value, errors, name) => {
+      newPassword: [required(), minLength(6), password()],
+      newPasswordConfirm: [required(), (value, errors, name) => {
         if (value !== formik.values.newPassword) {
           errors[name] = 'New password confirmation is not match with new password';
           return true;
@@ -75,7 +75,7 @@ function ResetPassword({classes}: {classes: any}) {
     <Typography className={classes.suggestion} gutterBottom color="textSecondary" variant="body1">
       Please set your new password
     </Typography>
-    <TextField type="password" className={classes.textField} fullWidth label="Password" variant="outlined"
+    <TextField type="password" className={classes.textField} fullWidth label="New Password" variant="outlined"
                {...formik.getFieldProps('newPassword')}
                error={!!formik.errors.newPassword} helperText={formik.errors.newPassword}/>
     <TextField type="password" className={classes.textField} fullWidth label="Confirm Password" variant="outlined"
