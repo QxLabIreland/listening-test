@@ -76,10 +76,10 @@ function ResetPassword({classes}: {classes: any}) {
       Please set your new password
     </Typography>
     <TextField type="password" className={classes.textField} fullWidth label="New Password" variant="outlined"
-               {...formik.getFieldProps('newPassword')}
+               {...formik.getFieldProps('newPassword')} autoComplete="new-password"
                error={!!formik.errors.newPassword} helperText={formik.errors.newPassword}/>
     <TextField type="password" className={classes.textField} fullWidth label="Confirm Password" variant="outlined"
-               {...formik.getFieldProps('newPasswordConfirm')}
+               {...formik.getFieldProps('newPasswordConfirm')} autoComplete="new-password"
                error={!!formik.errors.newPasswordConfirm} helperText={formik.errors.newPasswordConfirm}/>
     {alert}
     <Button className={classes.signInUpButton} color="primary" fullWidth size="large" type="submit"

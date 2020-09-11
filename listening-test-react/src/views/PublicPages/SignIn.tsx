@@ -71,10 +71,10 @@ export default function SignIn() {
               variant="contained">
         Sign in now
       </Button>
-      {/*<Typography color="textSecondary" variant="body1">
+      <Typography color="textSecondary" variant="body1">
         Don't have an account?{' '}
         <Link component={RouterLink} to="/sign-up" variant="h6">Sign up</Link>
-      </Typography>*/}
+      </Typography>
       <Typography color="textSecondary" variant="body1">
         <Link component={RouterLink} to="/find-password" variant="body1">Forget password</Link>
       </Typography>

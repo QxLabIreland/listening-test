@@ -50,7 +50,7 @@ export default function SignUp() {
                  onChange={formik.handleChange} type="text" variant="outlined"/>
 
       <TextField className={classes.textField} error={!!formik.errors.password} fullWidth
-                 helperText={formik.errors.password} label="Password" name="password"
+                 helperText={formik.errors.password} label="Password" name="password" autoComplete="new-password"
                  onChange={formik.handleChange} type="password" variant="outlined"/>
       <div className={classes.policy}>
         <Checkbox checked={formik.values.policy} className={classes.policyCheckbox}

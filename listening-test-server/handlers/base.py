@@ -56,7 +56,12 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
 
     def get_current_user(self):
         id_user = self.get_secure_cookie("_user", None)
-        return ObjectId(id_user.decode("utf-8")) if id_user else None
+        try:  # Use try and except to make sure oid has been assigned correctly
+            oid = ObjectId(id_user.decode("utf-8"))
+        except Exception as e:
+            oid = None
+            print(e)
+        return oid if oid else None
 
     # if no login send 403, else return id with ObjectId
     async def auth_current_user(self, permission: str = None, check_activated=True) -> ObjectId:
