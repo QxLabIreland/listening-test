@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField, Typography} from "@material-ui/core";
 import {useFormik} from "formik";
 import Axios from "axios";
-import {minLength, pipeValidator, required} from "../shared/FormikValidator";
+import {minLength, password, pipeValidator, required} from "../shared/FormikValidator";
 import {GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
 import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
@@ -44,8 +44,8 @@ function ChangePassword() {
     // Validation before submitting
     validate: pipeValidator({
       currentPassword: [required(), minLength(6)],
-      newPassword: [required(), minLength(6)],
-      newPasswordConfirm: [required(), minLength(6), (value, errors, name) => {
+      newPassword: [required(), minLength(6), password()],
+      newPasswordConfirm: [required(), (value, errors, name) => {
         if (value !== formik.values.newPassword) {
           errors[name] = 'New password confirmation is not match with new password';
           return true;

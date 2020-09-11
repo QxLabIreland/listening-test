@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import {Button, Checkbox, FormHelperText, Link, TextField, Typography} from '@material-ui/core';
 import {useFormik} from "formik";
-import {email, maxLength, minLength, mustBeTrue, pipeValidator, required} from "../../shared/FormikValidator";
+import {email, maxLength, minLength, mustBeTrue, password, pipeValidator, required} from "../../shared/FormikValidator";
 import Axios from "axios";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5/dist/md5';
@@ -28,7 +28,7 @@ export default function SignUp() {
     validate: pipeValidator({
       name: [required(), maxLength(128)],
       email: [email(), required()],
-      password: [required(), minLength(6)],
+      password: [required(), minLength(6), password()],
       policy: [mustBeTrue()],
     })
   });

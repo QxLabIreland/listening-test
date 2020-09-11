@@ -52,6 +52,18 @@ export function email(message?: string) {
   }
 }
 
+export function password(message?: string) {
+  return (value: any, errors: {[key: string]: string}, name: string): boolean => {
+    // If the password not a string, continue validate
+    if (typeof value !== 'string') return false;
+    // Use regex to validate password a digital, an uppercase, a lowercase and a special character
+    // const notPass: boolean = !/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[\]:;<>,?/~_+-=|\\]).{6,}$/i.test(value);
+    const notPass: boolean = !/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$/i.test(value);
+    if (notPass) errors[name] = message ? message : 'Password must contain a digital, an uppercase and a lowercase ';
+    return notPass;
+  }
+}
+
 export function mustBeTrue(message?: string) {
   return (value: any, errors: {[key: string]: string}, name: string): boolean => {
     const condition: boolean = !value;
