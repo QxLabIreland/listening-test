@@ -140,7 +140,10 @@ function gotoQuestionChecking(item: TestItemModel, questionnaire: BasicTestModel
   // Make sure the type and the mapping has value
   if (control.type === SurveyControlType.radio && control.gotoQuestionMapping) {
     const targetId = control.gotoQuestionMapping[control.options.indexOf(control.value)];
-    if (targetId) return questionnaire.items.findIndex(item => item.id === targetId);
+    if (targetId) {
+      const index = questionnaire.items.findIndex(item => item.id === targetId);
+      if (index > -1) return index;
+    }
   }
   return null;
 }
