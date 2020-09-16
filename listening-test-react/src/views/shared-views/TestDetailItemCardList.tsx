@@ -34,8 +34,8 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       const rect = refs[i].getBoundingClientRect();
       const targetRect = refs[state.index].getBoundingClientRect();
       // Collision item is above target: mouse is below the top of collision, mouse is above
-      if ((rect.top < targetRect.top && event.clientY >= rect.top && event.clientY <= rect.top + targetRect.height * 2/3)
-        || (rect.bottom > targetRect.bottom && event.clientY <= rect.bottom && event.clientY >= rect.bottom - targetRect.height * 2/3))
+      if ((rect.top < targetRect.top && event.clientY >= rect.top && event.clientY <= rect.top + targetRect.height * 2 / 3)
+        || (rect.bottom > targetRect.bottom && event.clientY <= rect.bottom && event.clientY >= rect.bottom - targetRect.height * 2 / 3))
         return refs[i];
     }
     return undefined;
@@ -102,13 +102,15 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     // Reorder the items list
     items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
     state.index = resetIndex ? null : newIndex;
-  })
+  });
+  // Get filtered and mapped items
+  const gotoQuestionItems = (index: number) =>
+    items.filter((_, i1) => i1 > index + 1).map(item => ({id: item.id, title: item.title}));
 
   return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
     // ref?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
     refs[i] = ref;
-  }}
-                                      className={state.index === i ? classes.gridHidden : classes.grid}>
+  }} className={state.index === i ? classes.gridHidden : classes.grid}>
     <Box className={classes.container}>{v.collapsed ? <Tooltip title="Hold and drag to reorder">
       <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
     </Tooltip> : <>
@@ -124,7 +126,7 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       </span></Tooltip>
     </>}</Box>
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
-                  gotoQuestionItems={items.map(item => ({id: item.id, title: item.title}))}
+                  gotoQuestionItems={gotoQuestionItems(i)}
                   disableGoto={!testSettings?.isIndividual}
     />
   </Grid>)}
