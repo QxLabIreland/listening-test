@@ -108,7 +108,7 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
         {gotoQuestionItems && <Grid item>
-          <Tooltip title={disableGoto ? 'You must enable Individual Question in Global settings' : ''}>
+          <Tooltip title={disableGoto ? 'You must enable "Show each question individually" in Global settings' : ''}>
             <FormControl className={classes.selectWidth}>
               <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto}
                       onChange={event => handleGotoQuestionChange(event, i)}
