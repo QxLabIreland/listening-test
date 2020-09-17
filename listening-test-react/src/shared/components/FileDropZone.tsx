@@ -6,9 +6,11 @@ import Axios from "axios";
 import {TagsGroup} from "./TagsGroup";
 import {observer} from "mobx-react";
 
-export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>void, fileModel?: AudioFileModel, label?: string, isTag?: boolean }) => {
+export const FileDropZone = observer(({onChange, fileModel, label, isTag, onDragStart, onDrop, disabled}: {
+  onChange: (fm: AudioFileModel)=>void, fileModel?: AudioFileModel, label?: string, isTag?: boolean,
+  onDragStart?: () => void, onDrop?: () => void, disabled?: boolean
+}) => {
   // Default label
-  const {onChange, fileModel, label, isTag} = props;
   const fileRef = useRef<HTMLInputElement>();
   // Style of file boxes
   const boxStyle = {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4, cursor: 'pointer'} as CSSProperties;
@@ -25,10 +27,13 @@ export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>v
   }
 
   const handleFileDrop = (event: any) => {
+    if (disabled) return;
     event.preventDefault();
     let files = event.target.files;
     // If event is not a File Input Choose
     if (!files) files = event.dataTransfer.files;
+    // Avoid empty upload
+    if (!files[0]) return;
     const formData = new FormData();
     formData.append("audioFile", files[0]);
 
@@ -66,7 +71,7 @@ export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>v
     onChange(null);
   }
 
-  return <React.Fragment>
+  return <div onDrop={onDrop} onDragStart={onDragStart} draggable={!!onDragStart}>
     <input type="file" ref={fileRef} onChange={handleFileDrop} hidden={true}/>
     {/*Uploading animation and text box*/}
     {isUploading ? <Box p={2} style={boxStyle}>
@@ -86,5 +91,5 @@ export const FileDropZone = observer((props: { onChange: (fm: AudioFileModel)=>v
       </> : <><Typography>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>attachment</Icon></>}
     </Box>}
     {fileModel && isTag && <TagsGroup value={fileModel.tags} onChange={handleTagsChange}/>}
-  </React.Fragment>
+  </div>
 })

@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {TestItemModel, TestSettingsModel} from "../../shared/models/BasicTestModel";
+import {TestItemModel} from "../../shared/models/BasicTestModel";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
 import React, {ReactNode} from "react";
 import Card from "@material-ui/core/Card";
@@ -17,6 +17,7 @@ import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {TestItemExampleCardProps, TestItemExampleCardType} from "./SomeTypes";
+import {TestItemCardFileDropGrid} from "./TestItemCardFileDropGrid";
 
 export const TestItemCard = observer(function (props: {
   value: TestItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType,
@@ -96,14 +97,6 @@ const TestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemEx
 
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
-  const handleDelete = (index: number) => example.audios.splice(index, 1);
-  const handleChange = (newAudio: AudioFileModel, index: number) => {
-    if (newAudio == null) {
-      handleDelete(index);
-      return;
-    }
-    example.audios[index] = newAudio;
-  }
   // Setting submitted
   const handleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
 
@@ -119,9 +112,7 @@ const TestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemEx
             <SurveyControl control={q}/>
           </Grid>)}
 
-          {example.audios.map((a, i) => <Grid item xs={12} md={4} key={i}>
-            <FileDropZone fileModel={a} onChange={fm => handleChange(fm, i)}/>
-          </Grid>)}
+          <TestItemCardFileDropGrid example={example}/>
 
           {/*Placeholder for adding to list*/}
           <Grid item xs={12} md={4}>
