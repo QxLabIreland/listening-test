@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useImperativeHandle} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,7 +10,7 @@ import Icon from "@material-ui/core/Icon";
 import {TestSettingsModel} from "../../shared/models/BasicTestModel";
 import {useFormik} from "formik";
 
-export default function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {
+export default function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }, ref: any) {
   const [open, setOpen] = React.useState(false);
   const formik = useFormik<TestSettingsModel>({
     initialValues: {isIndividual: false, isTimed: false},
@@ -28,7 +28,7 @@ export default function TestSettingsDialog(props: { settings: TestSettingsModel,
 
   return <>
     <Tooltip title="Test Global Settings">
-      <IconButton onClick={handleClickOpen}><Icon>settings</Icon></IconButton>
+      <IconButton onClick={handleClickOpen} id="testGlobalSettingButton"><Icon>settings</Icon></IconButton>
     </Tooltip>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
       <form onSubmit={formik.handleSubmit}>

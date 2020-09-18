@@ -92,8 +92,8 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
   </>
 })
 
-export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number }) {
-  const {refs, sampleRef, currentTime} = props;
+export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number, disabled?: boolean }) {
+  const {refs, sampleRef, currentTime, disabled} = props;
   const classes = useStyles();
 
   const handleSliderLabelFormat = (num: number) => {
@@ -111,7 +111,9 @@ export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sa
 
   return <Slider aria-labelledby="continuous-slider" defaultValue={0} step={0.1} min={0} classes={classes}
                  max={refs[0].current?.duration} value={currentTime} onChange={dragSlider}
-                 valueLabelDisplay="auto" valueLabelFormat={handleSliderLabelFormat}/>;
+                 valueLabelDisplay="auto" valueLabelFormat={handleSliderLabelFormat}
+                 disabled={disabled}
+  />;
 }
 
 const useStyles = makeStyles((_: Theme) => ({thumb: {zIndex: 1}}));

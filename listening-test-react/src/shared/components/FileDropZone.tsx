@@ -1,15 +1,21 @@
 import React, {CSSProperties, useRef, useState} from "react";
-import {Box, IconButton, LinearProgress, Tooltip, Typography} from "@material-ui/core";
+import {Box, createStyles, IconButton, LinearProgress, Theme, Tooltip, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
 import {TagsGroup} from "./TagsGroup";
 import {observer} from "mobx-react";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}
+}))
 
 export const FileDropZone = observer(({onChange, fileModel, label, isTag, onDragStart, onDrop, disabled}: {
   onChange: (fm: AudioFileModel)=>void, fileModel?: AudioFileModel, label?: string, isTag?: boolean,
   onDragStart?: () => void, onDrop?: () => void, disabled?: boolean
 }) => {
+  const classes = useStyles();
   // Default label
   const fileRef = useRef<HTMLInputElement>();
   // Style of file boxes
@@ -81,14 +87,16 @@ export const FileDropZone = observer(({onChange, fileModel, label, isTag, onDrag
     </Box> : <Box p={2} style={boxStyle} onClick={() => fileRef.current.click()}
                   onDragOver={handleDragOver} onDrop={handleFileDrop}>
       {fileModel?.filename ? <>
-        <Typography>{fileModel.filename}</Typography>
+        <Tooltip title={fileModel.filename} enterDelay={1000} placement="top">
+          <Typography className={classes.fileNameEllipsis}>{fileModel.filename}</Typography>
+        </Tooltip>
         <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <small>{label?.slice(0, 3)}</small>
           <Tooltip title="Click to delete this one">
             <IconButton size="small" onClick={handleDelete}><Icon>delete_outline</Icon></IconButton>
           </Tooltip>
         </Box>
-      </> : <><Typography>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>attachment</Icon></>}
+      </> : <><Typography className={classes.fileNameEllipsis}>{label ? label : 'Click to choose or Drop a file'}</Typography><Icon>attachment</Icon></>}
     </Box>}
     {fileModel && isTag && <TagsGroup value={fileModel.tags} onChange={handleTagsChange}/>}
   </div>

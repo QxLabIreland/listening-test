@@ -90,6 +90,9 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
     if (event.target.value) control.gotoQuestionMapping[index] = event.target.value;
     else delete control.gotoQuestionMapping[index];
   }
+  const openGlobalSetting = () => {
+    if (disableGoto) document.querySelector<HTMLButtonElement>('#testGlobalSettingButton').click();
+  }
 
   // radio_button_unchecked
   return <Grid container spacing={2}>
@@ -107,10 +110,11 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
                      onFocus={event => event.target.select()} onBlur={event => handleBlur(event, i)}
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
+        {/*Goto question selection*/}
         {gotoQuestionItems && <Grid item>
-          <Tooltip title={disableGoto ? 'You must enable "Show each question individually" in Global settings' : ''}>
+          <Tooltip title={disableGoto ? 'You must enable "Show each question individually" in Global settings. Click to open the settings to check the option' : ''}>
             <FormControl className={classes.selectWidth}>
-              <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto}
+              <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto} onClick={openGlobalSetting}
                       onChange={event => handleGotoQuestionChange(event, i)}
                       value={control.gotoQuestionMapping ? control.gotoQuestionMapping[i] ? control.gotoQuestionMapping[i] : '' : ''}>
                 <MenuItem value={''}>Continue to next question</MenuItem>

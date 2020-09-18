@@ -18,4 +18,5 @@ export interface ItemExampleSettingsModel {
   loopTimes?: number;
   requireClipEnded?: boolean;
   sectionLooping?: boolean;
+  disablePlayerSlider?: boolean;
 }

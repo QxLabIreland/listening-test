@@ -10,11 +10,15 @@ import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@material-ui/core";
 import {useFormik} from "formik";
 
+const initialValues: ItemExampleSettingsModel = {
+  loopTimes: null, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false
+};
+
 export default function ExampleSettingsDialog(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<ItemExampleSettingsModel>({
-    initialValues: {loopTimes: null, requireClipEnded: false, sectionLooping: false},
+    initialValues: {...initialValues},
     onSubmit: values => {
       onConfirm(values);
       handleClose();
@@ -22,7 +26,7 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
   });
 
   const handleClickOpen = () => {
-    formik.setValues({loopTimes: null, requireClipEnded: false, sectionLooping: false, ...settings});
+    formik.setValues({...initialValues, ...settings});
     setOpen(true);
   }
 
@@ -46,6 +50,11 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
           <FormControlLabel
             control={<Checkbox checked={formik.values.requireClipEnded} {...formik.getFieldProps('requireClipEnded')}/>}
             label="Require the user to listen to each example in full"
+          />
+
+          <FormControlLabel
+            control={<Checkbox checked={formik.values.disablePlayerSlider} {...formik.getFieldProps('disablePlayerSlider')}/>}
+            label="Disable audio player slider bar"
           />
 
           <FormControlLabel

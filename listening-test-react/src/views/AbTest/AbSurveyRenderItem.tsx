@@ -55,7 +55,7 @@ const RenderQuestionedExample = observer(function (props: { value: ItemExampleMo
       </Grid>)}
 
       <Grid item xs={12}>
-        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime} disabled={value.settings?.disablePlayerSlider}/>
       </Grid>
     </Grid>
   </>
