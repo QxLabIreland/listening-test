@@ -42,7 +42,7 @@ export const RenderRatingExample = observer(function (props: { value: ItemExampl
       </Grid>}
 
       <Grid item xs={12}>
-        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime} disabled={value.settings?.disablePlayerSlider}/>
         {value.settings?.sectionLooping && <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs} currentTime={currentTime}/>}
       </Grid>
     </Grid>

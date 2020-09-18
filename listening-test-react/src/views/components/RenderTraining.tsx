@@ -27,7 +27,7 @@ export const RenderTraining = observer(function (props: { value: ItemExampleMode
     </Grid>)}
 
     {!disableSlider && <Grid item xs={12}>
-      <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
+      <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime} disabled={value.settings?.disablePlayerSlider}/>
     </Grid>}
   </Grid>
 })
