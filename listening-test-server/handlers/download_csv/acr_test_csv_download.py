@@ -97,16 +97,13 @@ def build_row(item, value_source='audios'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
             # Checkbox has comma, so we need "
-            if item['questionControl']['type'] == 2:
-                return '"' + (item['questionControl']['value'] or '') + '"'
-            else:
-                return item['questionControl']['value'] or ''
+            return f'"{item["questionControl"]["value"] or ""}"'
         else:
             return ''
     elif item['type'] == 2:  # Example
         if 'example' in item and value_source in item['example']:
             row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example'][value_source]]
-            return '"' + ','.join(row_values) + '"'
+            return f'"{",".join(row_values)}"'
         else:
             return ''
     else:  # 0: Section header, 3 Training
