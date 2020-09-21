@@ -54,7 +54,7 @@ export default function ExampleSettingsDialog(props: { settings: ItemExampleSett
 
           <FormControlLabel
             control={<Checkbox checked={formik.values.disablePlayerSlider} {...formik.getFieldProps('disablePlayerSlider')}/>}
-            label="Disable audio player slider bar"
+            label="Disable audio player slider bar (can't change position of thumb)"
           />
 
           <FormControlLabel
