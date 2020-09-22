@@ -67,9 +67,9 @@ class AcrTestCsvDownload(BaseHandler):
 
 
 def build_tags(item):
-    if item['type'] == 1:
+    if item['type'] == 1 or item['type'] == 3:  # Question or training type
         return ''
-    if item['type'] == 2:  # Example
+    elif item['type'] == 2:  # Example
         if 'example' in item and 'tags' in item['example']:
             return (item['example']['tags'] or '').replace(',', '|')
         else:
@@ -84,9 +84,9 @@ def build_header(item, suffix='rating'):
             return f'"{item["questionControl"]["question"] or ""}"'
         else:
             return ''
-    elif item['type'] == 2:  # Example
+    elif item['type'] == 2 or item['type'] == 3:  # Example with suffix or training
         if 'example' in item:
-            return f'"{item["title"]} {suffix}"'
+            return f'"{item["title"]} {suffix if item["type"] == 2 else ""}"'
         else:
             return ''
     else:  # 0: Section header, 3 Training
@@ -106,7 +106,13 @@ def build_row(item, value_source='audios'):
             return f'"{",".join(row_values)}"'
         else:
             return ''
-    else:  # 0: Section header, 3 Training
+    elif item['type'] == 3:  # Training
+        if 'example' in item and 'fields' in item['example'] \
+                and len(item['example']['fields']) > 1 and 'value' in item['example']['fields'][1]:
+            return f'"{item["example"]["fields"][1]["value"] or ""}"'
+        else:
+            return ''
+    else:  # 0: Section header
         return None
 
 
