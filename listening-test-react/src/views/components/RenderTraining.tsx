@@ -34,6 +34,7 @@ export const RenderTraining = observer(function (props: { value: ItemExampleMode
   const handleTimeUpdate = () => setCurrentTime(refs[currentAudioIndex].currentTime);
   // When loop attribute is true, this won't be called
   const handleEnded = () => {
+    value.audios[currentAudioIndex].isPlaying = false;
     value.playedOnce = true;
   }
   const dragSlider = (event: any, newValue: number | number[]) =>
