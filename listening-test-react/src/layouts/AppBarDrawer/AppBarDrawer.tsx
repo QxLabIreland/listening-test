@@ -19,6 +19,7 @@ import ManageUsers from "../../views/ManageUsers";
 import AuthRoute from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
 import ManageStorage from "../../views/ManageStorage";
+import {ListSubheader} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -45,11 +46,20 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
+    <ListSubheader>Listening Task</ListSubheader>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/audio-labeling`} icon='beenhere'>Audio Labeling</ListItemNavLink>
     <Divider/>
+    <ListSubheader>Image Task</ListSubheader>
+    <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labeling</ListItemNavLink>
+    <Divider/>
+    <ListSubheader>Video Task</ListSubheader>
+    <ListItemNavLink to={`${path}/video-labeling`} icon='video_label'>Video Labeling</ListItemNavLink>
+    <Divider/>
+    <ListSubheader>Others</ListSubheader>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
     <ListItemNavLink to="/sign-in" icon='exit_to_app' onClick={handleSignOut}>Sign out</ListItemNavLink>
   </List>

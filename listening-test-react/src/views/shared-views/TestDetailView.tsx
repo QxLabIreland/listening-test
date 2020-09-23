@@ -140,7 +140,7 @@ function templateProcess(tem: BasicTestModel, testUrl: TestUrl) {
   tem.items.forEach(item => {
     // Remove the links of audios and audioRef
     if (item.type === TestItemType.example || item.type === TestItemType.training) {
-      // Only ab test has different actions
+      // Only ab test needs to keep audio placeholders
       if (testUrl !== 'ab-test') item.example.audios = [];
       else item.example.audios.forEach((_, index) => item.example.audios[index] = null);
       item.example.audioRef = undefined;

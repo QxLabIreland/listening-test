@@ -4,8 +4,9 @@ import React, {useState} from "react";
 import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Grid from "@material-ui/core/Grid";
 import {FileDropZone} from "../../shared/components/FileDropZone";
-
-export const TestItemCardFileDropGrid = observer(function ({example, reference}: {example: ItemExampleModel, reference?: boolean}) {
+// reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
+export const TestItemCardFileDropGrid = observer(function ({example, reference, keepPlace}: {
+  example: ItemExampleModel, reference?: boolean, keepPlace?: boolean}) {
   const [draggingIndex, setDraggingIndex] = useState<number>();
 
   const swapFiles = (dropIndex: number) => {
@@ -18,7 +19,10 @@ export const TestItemCardFileDropGrid = observer(function ({example, reference}:
     setDraggingIndex(index);
   }
 
-  const handleDelete = (index: number) => example.audios.splice(index, 1);
+  const handleDelete = (index: number) => {
+    if (keepPlace) example.audios[index] = null;
+    else example.audios.splice(index, 1);
+  }
   const handleChange = (newAudio: AudioFileModel, index: number) => {
     if (newAudio == null) {
       handleDelete(index);

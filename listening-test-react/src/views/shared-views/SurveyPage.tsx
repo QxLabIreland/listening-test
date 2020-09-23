@@ -169,7 +169,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
   const validateError = () => {
     switch (testUrl) {
       case "ab-test":
-        return (item: TestItemModel) => questionedExValidateError(item, true);
+        return questionedExValidateError;
       case "acr-test":
       case "mushra-test":
       case "hearing-test":
