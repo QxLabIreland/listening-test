@@ -131,11 +131,17 @@ const TestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemEx
           {example.fields && !(example.fields.length > 1) ?
             <Grid item xs={12} className={classes.innerQuestionContainer}>
               <AddAdditionalQuestionButton onQuestionAdd={addAdditionalQuestion}/>
-            </Grid> : <Grid item xs={12} container>
-              <Grid xs><SurveyControl control={example.fields[1]}/></Grid>
-              <Grid><Tooltip title="Remove this question">
-                <IconButton onClick={deleteAdditionalQuestion}><Icon>remove</Icon></IconButton>
-              </Tooltip></Grid>
+            </Grid> : <Grid item xs={12}>
+              <div className={classes.innerQuestionContainer}>
+                <FormControlLabel label="Required" control={
+                  <Switch checked={example.fields[1].required}
+                          onChange={e => example.fields[1].required = e.target.checked}/>}
+                />
+                <Tooltip title="Remove this question">
+                  <IconButton onClick={deleteAdditionalQuestion}><Icon>clear</Icon></IconButton>
+                </Tooltip>
+              </div>
+              <SurveyControl control={example.fields[1]}/>
             </Grid>}
 
           <TestItemCardFileDropGrid example={example}/>
@@ -146,8 +152,6 @@ const TestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemEx
         </Grid>
       </CardContent>
     </Collapse>
-    {/*<CardActions style={{justifyContent: 'flex-end', paddingTop: 0}}>
-    </CardActions>*/}
   </Card>;
 })
 // A button can add additional questions for training example, including menu
@@ -180,8 +184,7 @@ const AddAdditionalQuestionButton = observer(function (props: { onQuestionAdd: (
 
   return <>
     {/*Adding menu Button*/}
-    <Button color="primary" onClick={handleAddMenuClick}>
-      Ask a question</Button>
+    <Button color="primary" onClick={handleAddMenuClick}><Icon>add</Icon> Ask a question</Button>
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
       <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
         <ListItemIcon>

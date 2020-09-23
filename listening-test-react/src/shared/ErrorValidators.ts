@@ -17,37 +17,37 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
   else return null;
 }
 
-export function questionedExValidateError(item: TestItemModel, isAb?: boolean): string {
+/** A validation method for an example item with questions. Normally for AB test */
+export function questionedExValidateError(item: TestItemModel): string {
   if (!item) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
-  else if (item.type === TestItemType.example) {
+  else if ((item.type === TestItemType.example || item.type === TestItemType.training) && item.example.fields) {
     // Make sure ab test questions have been answered
     for (const a of item.example.fields) {
-      const error = a.type === SurveyControlType.radio && isAb
-        // If the type is radio and current check is ab test
-        ? (a.required ? (a.value ? null : 'Please select a preference. You must answer this question to continue') : null)
-        : surveyControlValidateError(a);
+      const error = surveyControlValidateError(a);
       if (error) return error;
     }
     // Audio validation
     return validatePlayedOnceError(item.example);
-  } else if (item.type === TestItemType.training) return validatePlayedOnceError(item.example);
+  }
   else return null;
 }
-
+/** For an example item with a slider or a value field */
 export function sliderItemValidateError(item: TestItemModel): string {
   if (item == null) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
     // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.audios) {
+      delete a.isPlaying;
       if (!a.value) return 'You must complete this example to continue'
     }
     return validatePlayedOnceError(item.example);
-  } else if (item.type === TestItemType.training) return validatePlayedOnceError(item.example);
+  } else if (item.type === TestItemType.training) return questionedExValidateError(item);
   else return null;
 }
 
+/** Check if the test or task has been completed (uploaded audio, no null field in audios) */
 export function testItemsValidateIncomplete(tests: BasicTestModel) {
   for (const item of tests.items) {
     // Audios array is null, length is 0, some of them are null

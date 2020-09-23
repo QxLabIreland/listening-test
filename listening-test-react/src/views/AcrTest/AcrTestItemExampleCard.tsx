@@ -36,7 +36,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<T
             <SurveyControl control={q}/>
           </Grid>)}
 
-          <TestItemCardFileDropGrid example={example} reference={true}/>
+          <TestItemCardFileDropGrid example={example}/>
 
           {/*Placeholder for adding to list*/}
           <Grid item xs={12} md={4}>

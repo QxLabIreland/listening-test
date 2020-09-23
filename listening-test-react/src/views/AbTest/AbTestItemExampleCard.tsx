@@ -1,6 +1,6 @@
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse, FormControlLabel, Icon, IconButton, Switch, Tooltip} from "@material-ui/core";
+import {Button, CardContent, Collapse, FormControlLabel, Icon, IconButton, Switch} from "@material-ui/core";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import React from "react";
 import {TagsGroup} from "../../shared/components/TagsGroup";
@@ -31,7 +31,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
             <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
           </Grid>
 
-          <TestItemCardFileDropGrid example={example} reference={true}/>
+          <TestItemCardFileDropGrid example={example} reference keepPlace/>
           {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
             <div style={{textAlign: 'right'}}>
@@ -46,9 +46,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
           </Grid>)}
           {/*An ability to delete one of special question*/}
           {example.fields?.length < 2 && <Grid item xs={12} style={{textAlign: 'right'}}>
-            <Tooltip title="Add an additional question">
-              <IconButton onClick={handleDeletedQuestionAdd}><Icon>add</Icon></IconButton>
-            </Tooltip>
+            <Button color="primary" onClick={handleDeletedQuestionAdd}><Icon>add</Icon> Add an additional question</Button>
           </Grid>}
         </Grid>
       </CardContent>
