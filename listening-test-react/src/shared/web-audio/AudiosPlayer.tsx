@@ -4,9 +4,12 @@ import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {AudioExampleModel, AudioFileModel} from "../models/AudioTestModel";
+import {observer} from "mobx-react";
 
-/** In order to build a custom audio player including rating bar,
- *  use this hook with AudioButton and AudioController components */
+/**
+ * In order to build a custom audio player including rating bar,
+ *  use this hook with AudioButton and AudioController components
+ */
 export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel, example: AudioExampleModel) {
   const [currentTime, setCurrentTime] = useState(0);
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
@@ -70,8 +73,8 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
   return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate, handleEnded};
 }
 
-// This component exposes the audio to outside. Control audio with ref attribute.
-export const AudioButton = forwardRef<HTMLAudioElement, {
+/** This component exposes the audio to outside. Control audio with ref attribute. */
+export const AudioButton = observer(forwardRef<HTMLAudioElement, {
   audio: AudioFileModel, onPlay: (v: AudioFileModel) => void, onPause: () => void, onTimeUpdate?: () => void, onEnded?: () => void, children?: any
 }>(function (props, ref) {
   const {audio, onTimeUpdate, onPlay, onPause, onEnded} = props;
@@ -89,7 +92,9 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
       {props.children}
     </Button>
   </>
-})
+}))
+
+const useStyles = makeStyles((_: Theme) => ({thumb: {zIndex: 1}}));
 
 export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sampleRef: RefObject<HTMLAudioElement>, currentTime: number, disabled?: boolean }) {
   const {refs, sampleRef, currentTime, disabled} = props;
@@ -114,5 +119,3 @@ export function AudioController(props: { refs: RefObject<HTMLAudioElement>[], sa
                  disabled={disabled}
   />;
 }
-
-const useStyles = makeStyles((_: Theme) => ({thumb: {zIndex: 1}}));
