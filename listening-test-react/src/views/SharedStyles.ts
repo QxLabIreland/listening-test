@@ -25,7 +25,8 @@ export const useMatStyles = makeStyles((theme: Theme) => {
     elementGroup: {
       '& > *': {margin: theme.spacing(0.5)}
     },
-    animated: {transition: transitionAll}
+    animated: {transition: transitionAll},
+    flexEnd: {display: 'flex', justifyContent: 'flex-end'}
   });
 });
 

@@ -10,6 +10,7 @@ import {observer} from "mobx-react";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
 import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
 import {TestItemCardFileDropGrid} from "../../components/TestItemCardFileDropGrid";
+import {RemovableSurveyControl} from "../../../shared/components/RemovableSurveyControl";
 
 export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, action, title, collapsed} = props;
@@ -34,15 +35,8 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
           <TestItemCardFileDropGrid example={example} reference keepPlace/>
           {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-            <div style={{textAlign: 'right'}}>
-              <FormControlLabel label="Required" control={
-                <Switch checked={q.required} onChange={e => q.required = e.target.checked}/>}
-              />
-              {qi === 1 && <IconButton onClick={() => example.fields.splice(qi, 1)}>
-                <Icon>clear</Icon>
-              </IconButton>}
-            </div>
-            <SurveyControl control={q}/>
+            <RemovableSurveyControl question={q} hideRemove={qi !== 1}
+                                    onRemove={() => example.fields.splice(qi, 1)}/>
           </Grid>)}
           {/*An ability to delete one of special question*/}
           {example.fields?.length < 2 && <Grid item xs={12} style={{textAlign: 'right'}}>
