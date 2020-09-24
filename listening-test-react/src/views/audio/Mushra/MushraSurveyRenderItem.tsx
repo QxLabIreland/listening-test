@@ -1,14 +1,13 @@
 import React from "react";
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
+import {AudioFileModel, AudioTestItemModel} from "../../../shared/models/AudioTestModel";
+import {TestItemType} from "../../../shared/models/EnumsAndTypes";
+import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import {Box, Slider} from "@material-ui/core";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import {RenderTraining} from "../components/RenderTraining";
-import {RenderRatingExample} from "../components/RenderRatingExample";
+import {RenderTraining} from "../../components/RenderTraining";
+import {RenderRatingExample} from "../../components/RenderRatingExample";
 
-export const MushraSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
+export const MushraSurveyRenderItem = observer(function (props: { item: AudioTestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
   switch (item.type) {
     case TestItemType.question:

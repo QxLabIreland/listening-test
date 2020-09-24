@@ -2,7 +2,7 @@ import {act} from "react-dom/test-utils";
 import {render} from "react-dom";
 import {AbAddItemButtonGroup} from "./AbAddItemButtonGroup";
 import React from "react";
-import {jestTestContainer as container} from "../../setupTests";
+import {jestTestContainer as container} from "../../../setupTests";
 
 it("Add button behaviour", () => {
   const onAdd = jest.fn();

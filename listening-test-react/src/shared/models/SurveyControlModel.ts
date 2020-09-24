@@ -8,6 +8,8 @@ export interface SurveyControlModel {
   // Setting options
   required?: boolean;
   disabled?: boolean;
+  // A mapping allows subject to skip some question
+  // value equals: undefined or '': No mapping. [uuid]: Go to this question
   gotoQuestionMapping?: {[key: number]: string}
 }
 
@@ -16,5 +18,3 @@ export interface GotoQuestionItemModel {
   title: string;
 }
 
-// undefined/'': No mapping, 'abort': Abort, uuid: Go to this question
-// export const gotoQuestionAbortValue = 'abort';

@@ -7,24 +7,23 @@ import Button from "@material-ui/core/Button";
 import {Checkbox, FormControlLabel, Icon, IconButton, TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
-import TestSettingsDialog from ".//TestSettingsDialog";
+import {TestSettingsDialog} from "./TestSettingsDialog";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
 import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 import {getCurrentHost} from "../../shared/ReactTools";
-import {TestItemExampleCardType} from "../components/SomeTypes";
+import {overrideExampleItem, overrideTrainingItem} from "../components/TypesAndItemOverrides";
 
-export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, ButtonGroup}: {
+export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   testUrl: TestUrl,
-  TestItemExampleCard: TestItemExampleCardType,
-  ButtonGroup: FunctionComponent<{ onAdd: (type: TestItemModel) => void }>
+  ButtonGroup: FunctionComponent<{ onAdd: (type: BasicTaskItemModel) => void }>
 }) {
   const {id} = useParams();
-  const [testModel, setTestModel] = useState<BasicTestModel>(null);
+  const [testModel, setTestModel] = useState<BasicTaskModel>(null);
   const [loadingError, setLoadingError] = useState<string>();
   const history = useHistory();
   const openDialog = useContext(GlobalDialog);
@@ -35,7 +34,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   // Request for server methods
   useEffect(() => {
     // If it is edit page, get data from back end. If there is value in location.state, we gonna use a template
-    if (location.state || +id !== 0) Axios.get<BasicTestModel>('/api/' + testUrl, {params: {_id: location.state || id}})
+    if (location.state || +id !== 0) Axios.get<BasicTaskModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
         if (location.state) templateProcess(res.data, testUrl);
         const observableTest = addAnObserveForChanges(res.data);
@@ -43,13 +42,13 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
       }, res => setLoadingError(res.response.data));
     // If in creation page
     else {
-      const data = {name: '', description: '', items: [] as TestItemModel[]};
+      const data = {name: '', description: '', items: [] as BasicTaskItemModel[]};
       const observable = addAnObserveForChanges(data);
       setTestModel(observable);
     }
   }, [id, testUrl, location.state]);
 
-  const addAnObserveForChanges = (data: BasicTestModel) => {
+  const addAnObserveForChanges = (data: BasicTaskModel) => {
     /** Stringify the data for unsaved modification detection */
     const theTestStr = JSON.stringify(data);
     const anObservable = observable(data);
@@ -81,7 +80,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
   // Local methods
-  const addItem = (newItem: TestItemModel) => testModel.items.push(newItem)
+  const addItem = (newItem: BasicTaskItemModel) => testModel.items.push(newItem)
   const handleShareClick = () => {
     const url = `/task/${testUrl}/${testModel._id.$oid}`;
     const error = testItemsValidateIncomplete(testModel);
@@ -91,12 +90,6 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     });
   }
 
-  // Extract those components, they won't be update when onChange, because they are uncontrolled
-  // const NameText = () => <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
-  //                                   onChange={e => testModel.name = e.target.value}/>;
-  // const DesText = () => <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
-  //                                  defaultValue={testModel.description} name="description"
-  //                                  onChange={(e) => testModel.description = e.target.value}/>;
   const actions = !!testModel && <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
     <Grid item><FormControlLabel label="Collapse All" control={
@@ -109,7 +102,9 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
     <Grid item><Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}><span>
       <IconButton onClick={handleShareClick} disabled={isTestChanged}><Icon>share</Icon></IconButton>
     </span></Tooltip></Grid>
-    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>Save{!isTestChanged && 'd'}</Button></Grid>
+    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>
+      Save{!isTestChanged && 'd'}
+    </Button></Grid>
   </Grid>
   return <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
     <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
@@ -124,7 +119,8 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
                    defaultValue={testModel.description} name="description"
                    onChange={(e) => testModel.description = e.target.value}/>
       </Grid>
-      <TestDetailItemCardList items={testModel.items} TestItemExampleCard={TestItemExampleCard} testSettings={testModel.settings}/>
+      <TestDetailItemCardList items={testModel.items} TestItemExampleCard={overrideExampleItem(testUrl)}
+                              testSettings={testModel.settings} TestItemTrainingCard={overrideTrainingItem(testUrl)}/>
       <Grid item container justify="center" xs={12}>
         <ButtonGroup onAdd={addItem}/>
       </Grid>
@@ -133,7 +129,7 @@ export const TestDetailView = observer(function ({testUrl, TestItemExampleCard, 
   </Grid>
 })
 
-function templateProcess(tem: BasicTestModel, testUrl: TestUrl) {
+function templateProcess(tem: BasicTaskModel, testUrl: TestUrl) {
   // Prevent it from becoming a template and some process
   tem.isTemplate = false;
   tem.name = 'Name of template ' + tem.name;
@@ -141,9 +137,9 @@ function templateProcess(tem: BasicTestModel, testUrl: TestUrl) {
     // Remove the links of audios and audioRef
     if (item.type === TestItemType.example || item.type === TestItemType.training) {
       // Only ab test needs to keep audio placeholders
-      if (testUrl !== 'ab-test') item.example.audios = [];
-      else item.example.audios.forEach((_, index) => item.example.audios[index] = null);
-      item.example.audioRef = undefined;
+      if (testUrl !== 'ab-test') item.example.medias = [];
+      else item.example.medias.forEach((_, index) => item.example.medias[index] = null);
+      item.example.mediaRef = undefined;
     }
   });
 }

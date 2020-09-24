@@ -2,13 +2,12 @@ import React, {forwardRef, RefObject, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import Slider from "@material-ui/core/Slider";
-import {AudioFileModel} from "../models/AudioFileModel";
-import {ItemExampleModel} from "../models/ItemExampleModel";
 import {makeStyles, Theme} from "@material-ui/core/styles";
+import {AudioExampleModel, AudioFileModel} from "../models/AudioTestModel";
 
 /** In order to build a custom audio player including rating bar,
  *  use this hook with AudioButton and AudioController components */
-export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel, example: ItemExampleModel) {
+export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel, example: AudioExampleModel) {
   const [currentTime, setCurrentTime] = useState(0);
   const [refs] = useState(audios.map(() => React.createRef<HTMLAudioElement>()));
   const sampleRef = useRef<HTMLAudioElement>();
@@ -25,7 +24,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     const {allAudio, allRefs} = includeAll();
     allAudio.forEach((a, i: number) => {
       // Adjust properties
-      allAudio[i].isPlaying = a === v;
+      allAudio[i].isActive = a === v;
       allRefs[i].current.volume = a === v ? 1 : 0;
       // Play after
       allRefs[i].current.play().then();
@@ -36,7 +35,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     // Deconstruction for all including reference audio
     const {allAudio, allRefs} = includeAll();
     allRefs.forEach((_, i: number) => {
-      allAudio[i].isPlaying = false;
+      allAudio[i].isActive = false;
       allRefs[i].current.pause();
       // State that if it is ready
       // console.log(allRefs[i].current.readyState)
@@ -51,7 +50,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     // playedTimes will be added when the audio ENDS
     if (!example.settings?.loopTimes || playedTimes + 1 < example.settings?.loopTimes) {
       // Find the one is playing
-      const current = includeAll().allAudio.find(a => a.isPlaying);
+      const current = includeAll().allAudio.find(a => a.isActive);
       if (current) handlePlay(current);
     }
     // Make sure the button style looks right
@@ -82,11 +81,11 @@ export const AudioButton = forwardRef<HTMLAudioElement, {
     <audio preload="auto" src={audio.src} controls ref={ref} style={{display: 'none'}}
            onTimeUpdate={onTimeUpdate} onEnded={onEnded}/>
 
-    <Button variant={audio.isPlaying ? 'contained' : 'outlined'} color="primary" size="large"
+    <Button variant={audio.isActive ? 'contained' : 'outlined'} color="primary" size="large"
             style={{transition: 'none'}}
       // disabled={playedTimes >= settings?.loopTimes}
-            startIcon={<Icon>{audio.isPlaying ? 'pause' : 'play_arrow'}</Icon>}
-            onClick={() => audio.isPlaying ? onPause() : onPlay(audio)}>
+            startIcon={<Icon>{audio.isActive ? 'pause' : 'play_arrow'}</Icon>}
+            onClick={() => audio.isActive ? onPause() : onPlay(audio)}>
       {props.children}
     </Button>
   </>

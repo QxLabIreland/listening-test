@@ -1,4 +1,4 @@
-import React, {useImperativeHandle} from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,10 +7,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
-import {TestSettingsModel} from "../../shared/models/BasicTestModel";
 import {useFormik} from "formik";
+import {TestSettingsModel} from "../../shared/models/BasicTaskModel";
 
-export default function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }, ref: any) {
+export function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {
   const [open, setOpen] = React.useState(false);
   const formik = useFormik<TestSettingsModel>({
     initialValues: {isIndividual: false, isTimed: false},

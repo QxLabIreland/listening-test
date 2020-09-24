@@ -2,7 +2,7 @@ from handlers.base import BaseHandler
 from tools import file_helper
 
 
-class AudioFileHandler(BaseHandler):
+class FileHandler(BaseHandler):
     async def prepare(self):
         await self.auth_current_user()
 

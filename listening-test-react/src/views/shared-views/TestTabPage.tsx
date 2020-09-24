@@ -5,12 +5,9 @@ import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
-import {AcrTestItemExampleCard} from "../AcrTest/AcrTestItemExampleCard";
-import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
-import {AcrAddItemButtonGroup} from "../AcrTest/AcrAddItemButtonGroup";
-import {HearingAddItemButtons} from "../HearingTest/HearingAddItemButtons";
-import {HearingTestItemExampleCard} from "../HearingTest/HearingTestItemExampleCard";
-import {AbTestItemExampleCard} from "../AbTest/AbTestItemExampleCard";
+import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
+import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
+import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -54,12 +51,12 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
 function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
   switch (testUrl) {
     case "ab-test":
-      return <TestDetailView testUrl={testUrl} TestItemExampleCard={AbTestItemExampleCard} ButtonGroup={AbAddItemButtonGroup}/>
+      return <TestDetailView testUrl={testUrl} ButtonGroup={AbAddItemButtonGroup}/>
     case "acr-test":
     case "mushra-test":
-      return <TestDetailView testUrl={testUrl} TestItemExampleCard={AcrTestItemExampleCard} ButtonGroup={AcrAddItemButtonGroup}/>
+      return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup}/>
     case "hearing-test":
-      return <TestDetailView testUrl={testUrl} TestItemExampleCard={HearingTestItemExampleCard} ButtonGroup={HearingAddItemButtons}/>
+      return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons}/>
     default:
       return null;
   }

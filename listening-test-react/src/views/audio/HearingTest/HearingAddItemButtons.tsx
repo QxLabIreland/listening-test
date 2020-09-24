@@ -1,16 +1,16 @@
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
+import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
+import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {useMatStyles} from "../SharedStyles";
+import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
+import {useMatStyles} from "../../SharedStyles";
 
-export const HearingAddItemButtons = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
+export const HearingAddItemButtons = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
   const {onAdd} = props;
   const classes = useMatStyles();
 
@@ -18,14 +18,14 @@ export const HearingAddItemButtons = observer(function (props: { onAdd: (type: T
     switch (type) {
       case TestItemType.example: onAdd({
           id: uuid(), type: TestItemType.example, title: 'Example (Click to edit this)', example: {
-            audios: [{filename: null, src: null, value: null, settings: {initVolume: 0.5, frequency: 500}}], fields: [
+            medias: [{filename: null, src: null, value: null, settings: {initVolume: 0.5, frequency: 500}}], fields: [
               {type: SurveyControlType.description, question: 'Use the slider below to reduce the volume of this tone until it is just audible. When complete, click "Next"', value: null}
             ]
           }
         }); break;
       case TestItemType.training: onAdd({
         id: uuid(), type: TestItemType.training, title: 'Calibration for hardware volume (Click to edit this)', example: {
-          audios: [], fields: [
+          medias: [], fields: [
             {type: SurveyControlType.description, question: 'Please listen and follow the instruction to calibrate your device.', value: null}
           ]
         }

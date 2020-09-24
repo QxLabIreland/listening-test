@@ -1,12 +1,12 @@
 import {observer} from "mobx-react";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {AudioButton, AudioController} from "../../shared/web-audio/AudiosPlayer";
+import {AudioButton} from "../../shared/web-audio/AudiosPlayer";
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import Slider from "@material-ui/core/Slider";
+import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 
-export const RenderTraining = observer(function (props: { value: ItemExampleModel, active?: boolean}) {
+export const RenderTraining = observer(function (props: { value: AudioExampleModel, active?: boolean}) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   useEffect(() => {
@@ -16,25 +16,25 @@ export const RenderTraining = observer(function (props: { value: ItemExampleMode
   const [currentTime, setCurrentTime] = useState(0);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   // TODO Implement audios loop and played once checking
-  const [playedTimes] = useState(new Array(value.audios.length).fill(0));
+  const [playedTimes] = useState(new Array(value.medias.length).fill(0));
 
   const handlePlay = (index: number) => {
     // Pause others, and play the one we clicked
     handlePause();
     refs[index].play().then();
     setCurrentTime(refs[index].currentTime);
-    value.audios[index].isPlaying = true;
+    value.medias[index].isActive = true;
     // Set current index for slider bar
     setCurrentAudioIndex(index);
   }
   const handlePause = () => {
     refs[currentAudioIndex].pause();
-    value.audios[currentAudioIndex].isPlaying = false;
+    value.medias[currentAudioIndex].isActive = false;
   }
   const handleTimeUpdate = () => setCurrentTime(refs[currentAudioIndex].currentTime);
   // When loop attribute is true, this won't be called
   const handleEnded = () => {
-    value.audios[currentAudioIndex].isPlaying = false;
+    value.medias[currentAudioIndex].isActive = false;
     value.playedOnce = true;
   }
   const dragSlider = (event: any, newValue: number | number[]) =>
@@ -45,7 +45,7 @@ export const RenderTraining = observer(function (props: { value: ItemExampleMode
       <RenderSurveyControl control={value}/>
     </Grid>)}
 
-    {value.audios.map((v, i) => <Grid item key={i}>
+    {value.medias.map((v, i) => <Grid item key={i}>
       <AudioButton ref={ref => refs[i] = ref} audio={v} onPlay={() => handlePlay(i)} onPause={handlePause}
                    onEnded={handleEnded} onTimeUpdate={handleTimeUpdate}>{i + 1}</AudioButton>
     </Grid>)}

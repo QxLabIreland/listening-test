@@ -1,15 +1,15 @@
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {Button, CardContent, Collapse, FormControlLabel, Icon, IconButton, Switch} from "@material-ui/core";
-import {SurveyControl} from "../../shared/components/SurveyControl";
+import {SurveyControl} from "../../../shared/components/SurveyControl";
 import React from "react";
-import {TagsGroup} from "../../shared/components/TagsGroup";
+import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
+import AudioExampleSettingsDialog from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
-import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
-import {TestItemExampleCardProps} from "../components/SomeTypes";
-import {TestItemCardFileDropGrid} from "../components/TestItemCardFileDropGrid";
+import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
+import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
+import {TestItemCardFileDropGrid} from "../../components/TestItemCardFileDropGrid";
 
 export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, action, title, collapsed} = props;
@@ -18,7 +18,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
     type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false
   });
   const SettingsDialog = () =>
-    <ExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings}/>
+    <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings}/>
 
   return <Card>
     <CardHeader title={title} action={<>

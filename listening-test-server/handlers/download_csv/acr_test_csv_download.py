@@ -93,7 +93,7 @@ def build_header(item, suffix='rating'):
         return None
 
 
-def build_row(item, value_source='audios'):
+def build_row(item, value_source='medias'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
             # Checkbox has comma, so we need "

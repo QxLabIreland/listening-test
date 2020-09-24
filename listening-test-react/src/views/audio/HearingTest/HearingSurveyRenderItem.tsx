@@ -1,21 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
+import {AudioExampleModel, AudioFileModel, AudioTestItemModel} from "../../../shared/models/AudioTestModel";
+import {TestItemType} from "../../../shared/models/EnumsAndTypes";
+import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import Grid from "@material-ui/core/Grid";
 import {createStyles, Slider, Theme} from "@material-ui/core";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
-import {RenderTraining} from "../components/RenderTraining";
+import {RenderTraining} from "../../components/RenderTraining";
 import {
   createOscillatorAndGain,
   disposeOscillatorAndGain,
   OscillatorAngGain
-} from "../../shared/web-audio/OscillatorAngGain";
-import {ratingAreaStyle} from "../SharedStyles";
+} from "../../../shared/web-audio/OscillatorAngGain";
+import {ratingAreaStyle} from "../../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -23,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   volumeBar: {height: theme.spacing(16)}
 }));
 
-export const HearingSurveyRenderItem = observer(function (props: { item: TestItemModel, active?: boolean }) {
+export const HearingSurveyRenderItem = observer(function (props: { item: AudioTestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
   switch (item.type) {
     case TestItemType.question:
@@ -37,18 +35,18 @@ export const HearingSurveyRenderItem = observer(function (props: { item: TestIte
   }
 })
 
-const RenderVolumeExample = observer(function (props: { value: ItemExampleModel, active?: boolean }) {
+const RenderVolumeExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
-  const [gos] = useState<OscillatorAngGain[]>(Array(value.audios.length));
+  const [gos] = useState<OscillatorAngGain[]>(Array(value.medias.length));
 
   useEffect(() => {
     gos.forEach(go => disposeOscillatorAndGain(go))
   }, [active]);
 
   const handleButtonClick = (audio: AudioFileModel, index: number) => {
-    if (audio.isPlaying) {
+    if (audio.isActive) {
       gos[index] = disposeOscillatorAndGain(gos[index]);
-      audio.isPlaying = false;
+      audio.isActive = false;
     }
     else {
       // value.playedOnce = true;
@@ -56,12 +54,12 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       gos.forEach((v, i) => {
         if (i === index || !v?.oscillator) return;
         gos[i] = disposeOscillatorAndGain(v);
-        props.value.audios[i].isPlaying = false;
+        props.value.medias[i].isActive = false;
       })
       // Create a Oscillator and Gain object
       gos[index] = createOscillatorAndGain(audio.value? +audio.value : audio.settings.initVolume, audio.settings.frequency);
       gos[index].oscillator.start();
-      audio.isPlaying = true;
+      audio.isActive = true;
     }
   }
 
@@ -70,13 +68,13 @@ const RenderVolumeExample = observer(function (props: { value: ItemExampleModel,
       <RenderSurveyControl control={value}/>
     </Grid>)}
 
-    {value.audios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
+    {value.medias.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
       <VolumeBar audio={v} gainNode={gos[i]?.gainNode}/>
-      <Button variant={v.isPlaying ? 'contained' : 'outlined'} color="primary" size="large" disableElevation
+      <Button variant={v.isActive ? 'contained' : 'outlined'} color="primary" size="large" disableElevation
               style={{transition: 'none'}}
         // disabled={playedTimes >= settings?.loopTimes}
               onClick={() => handleButtonClick(v, i)}>
-        <Icon>{v.isPlaying ? 'pause' : 'play_arrow'}</Icon>
+        <Icon>{v.isActive ? 'pause' : 'play_arrow'}</Icon>
       </Button>
     </Grid>)}
 

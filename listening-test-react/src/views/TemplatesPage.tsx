@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Box, Checkbox, Icon, IconButton, Tab, Tabs} from "@material-ui/core";
 import {TestUrl} from "../shared/models/EnumsAndTypes";
-import {BasicTestModel} from "../shared/models/BasicTestModel";
 import Axios from "axios";
 import CardContent from "@material-ui/core/CardContent";
 import Table from "@material-ui/core/Table";
@@ -14,6 +13,7 @@ import {CurrentUser, GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts
 import Loading from "../layouts/components/Loading";
 import {useHistory} from "react-router";
 import Tooltip from "@material-ui/core/Tooltip";
+import {BasicTaskModel} from "../shared/models/BasicTaskModel";
 
 export default function () {
   // Change Test URL and the active tab will change
@@ -73,7 +73,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
 /** This hook is reusable. There are two place using this hook: TemplatesList and TestListPage */
 export function useTemplateList(testUrl: TestUrl) {
   const openSnackbar = useContext(GlobalSnackbar);
-  const [templates, setTemplates] = useState<BasicTestModel[]>();
+  const [templates, setTemplates] = useState<BasicTaskModel[]>();
   const [templatesError, setTemplatesError] = useState();
   const openDialog = useContext(GlobalDialog);
   const history = useHistory();
@@ -88,7 +88,7 @@ export function useTemplateList(testUrl: TestUrl) {
     }
   }, [testUrl]);
 
-  const handleIsTemplateChange = (test: BasicTestModel) => {
+  const handleIsTemplateChange = (test: BasicTaskModel) => {
     // Create a request method for reusing purpose
     const openRequest = () => Axios.put<boolean>('/api/template', {_id: test._id}, {params: {testType: testUrl}}).then(res => {
       test.isTemplate = res.data;
@@ -106,7 +106,7 @@ export function useTemplateList(testUrl: TestUrl) {
       'Are you sure?', null, openRequest
     ); else openRequest().catch();
   }
-  const handleTemplateEdit = (aTest: BasicTestModel) => {
+  const handleTemplateEdit = (aTest: BasicTaskModel) => {
     // If it is a template, the dialog will be opened for warning
     if (aTest.isTemplate) openDialog(
       'This test is currently being used as a template. Are you sure you want to edit this template?'

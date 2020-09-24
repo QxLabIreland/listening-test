@@ -1,9 +1,9 @@
-import {BasicTestModel, TestItemModel} from "./models/BasicTestModel";
+import {AudioTestItemModel, AudioExampleModel} from "./models/AudioTestModel";
 import {SurveyControlType, TestItemType} from "./models/EnumsAndTypes";
 import {SurveyControlModel} from "./models/SurveyControlModel";
-import {ItemExampleModel} from "./models/ItemExampleModel";
+import {BasicTaskModel} from "./models/BasicTaskModel";
 
-function validatePlayedOnceError(example: ItemExampleModel): string {
+function validatePlayedOnceError(example: AudioExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
   if (!example.playedOnce) return 'Please fully listen to these clips'
   return null;
@@ -18,7 +18,7 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
 }
 
 /** A validation method for an example item with questions. Normally for AB test */
-export function questionedExValidateError(item: TestItemModel): string {
+export function questionedExValidateError(item: AudioTestItemModel): string {
   if (!item) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if ((item.type === TestItemType.example || item.type === TestItemType.training) && item.example.fields) {
@@ -33,13 +33,13 @@ export function questionedExValidateError(item: TestItemModel): string {
   else return null;
 }
 /** For an example item with a slider or a value field */
-export function sliderItemValidateError(item: TestItemModel): string {
+export function sliderItemValidateError(item: AudioTestItemModel): string {
   if (item == null) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
     // Map all audio and make sure played at least once and value is fill
-    for (const a of item.example.audios) {
-      delete a.isPlaying;
+    for (const a of item.example.medias) {
+      delete a.isActive;
       if (!a.value) return 'You must complete this example to continue'
     }
     return validatePlayedOnceError(item.example);
@@ -48,10 +48,10 @@ export function sliderItemValidateError(item: TestItemModel): string {
 }
 
 /** Check if the test or task has been completed (uploaded audio, no null field in audios) */
-export function testItemsValidateIncomplete(tests: BasicTestModel) {
+export function testItemsValidateIncomplete(tests: BasicTaskModel) {
   for (const item of tests.items) {
     // Audios array is null, length is 0, some of them are null
-    if (item.example && (!item.example.audios || item.example.audios.length < 1 || item.example.audios.some(value => value == null))) {
+    if (item.example && (!item.example.medias || item.example.medias.length < 1 || item.example.medias.some(value => value == null))) {
       return "Your haven't added an audio or filled placeholders for every items. Please fill them and try again."
     }
   }

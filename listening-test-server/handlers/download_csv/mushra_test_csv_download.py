@@ -37,10 +37,10 @@ class MushraTestCsvDownload(BaseHandler):
                     t = build_tags(x)
                     if t is not None:
                         tag_list.append(t)
-                        # Give audios spaces
+                        # Give medias spaces
                         if x['type'] == 2:  # Example
-                            if 'example' in x and 'audios' in x['example']:
-                                tag_list += [''] * (len(x['example']['audios']) - 1)
+                            if 'example' in x and 'medias' in x['example']:
+                                tag_list += [''] * (len(x['example']['medias']) - 1)
                         # Check if it is timed
                         if check_is_timed(row):
                             tag_list.append('')
@@ -49,17 +49,17 @@ class MushraTestCsvDownload(BaseHandler):
 
                 # Questions header. Examples header: Example and Comment
                 header_list = ['Name', 'Date']
-                # Additional row for audios' names
+                # Additional row for medias' names
                 audio_names = ['', '']
                 for x in row['items']:
                     t = build_header(x)
                     if t is not None:
                         header_list.append(t)
-                        # Give audios spaces
+                        # Give medias spaces
                         if x['type'] == 2:  # Example
-                            if 'example' in x and 'audios' in x['example']:
-                                header_list += [''] * (len(x['example']['audios']) - 1)
-                                audio_names += [a['filename'] for a in x['example']['audios']]
+                            if 'example' in x and 'medias' in x['example']:
+                                header_list += [''] * (len(x['example']['medias']) - 1)
+                                audio_names += [a['filename'] for a in x['example']['medias']]
                         else:
                             audio_names.append('')
                         # Check if it is timed
@@ -94,8 +94,8 @@ def build_mushra_row(item):
                 return item['questionControl']['value'] or ''
 
     elif item['type'] == 2:  # Example
-        if 'example' in item and 'audios' in item['example']:
-            row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example']['audios']]
+        if 'example' in item and 'medias' in item['example']:
+            row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example']['medias']]
             return ','.join(row_values)
 
     return ''

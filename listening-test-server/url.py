@@ -18,7 +18,7 @@ from handlers.test_handlers.mushra_test import MushraTestHandler
 from handlers.miscellanea.responses_count import ResponsesCountHandler
 from handlers.download_csv.ab_test_responses_download import AbTestResponsesDownload
 from handlers.miscellanea.test_responses import TestResponsesHandler
-from handlers.audio_file import AudioFileHandler
+from handlers.file_handler import FileHandler
 from handlers.survey.ab_test_survey import AbTestSurveyHandler
 from handlers.miscellanea.template_handler import TemplateHandler
 
@@ -28,7 +28,7 @@ path = [
     ("/api/sign-up", SignUpHandler),
 
     # Tools and password
-    ("/api/audio-file", AudioFileHandler),
+    ("/api/audio-file", FileHandler),
     ("/api/password", PasswordHandler),
     ("/api/find-password", FindPasswordHandler),
 
@@ -36,7 +36,7 @@ path = [
     ("/api/dashboard", DashboardHandler),
     ("/api/users", UsersHandler),
 
-    # # Tests and Survey
+    # Listening tests and Survey
     ("/api/ab-test", AbTestHandler),
     ("/api/csv-download/ab-test", AbTestResponsesDownload),
     ("/api/task/ab-test", AbTestSurveyHandler),
@@ -59,4 +59,3 @@ path = [
     ("/api/template", TemplateHandler),
     ("/api/storage", StorageStatusHandler),
 ]
-
