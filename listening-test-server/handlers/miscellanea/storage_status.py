@@ -10,7 +10,7 @@ class StorageStatusHandler(BaseHandler):
         self.user_id = await self.auth_current_user('Storage')
 
     async def get(self):
-        audios_checklist = get_audios_in_using(self.db)
+        medias_checklist = get_medias_in_using(self.db)
         target_path = 'static2/audio_files'
         # Get size of static folder
         total_size = 0
@@ -28,7 +28,7 @@ class StorageStatusHandler(BaseHandler):
                     total_size += f_size
                     total_num += 1
                     # If a file is not in use, mark it as redundant
-                    if f not in audios_checklist:
+                    if f not in medias_checklist:
                         redundant_size += f_size
 
         self.dumps_write({
@@ -38,7 +38,7 @@ class StorageStatusHandler(BaseHandler):
         })
 
     async def delete(self):
-        audios_checklist = get_audios_in_using(self.db)
+        medias_checklist = get_medias_in_using(self.db)
         target_path = 'static2/audio_files'
         total_size = 0
         total_num = 0
@@ -46,7 +46,7 @@ class StorageStatusHandler(BaseHandler):
             return
         for f in os.listdir(target_path):
             # Check if file has been used, if it has then delete it
-            if f not in audios_checklist:
+            if f not in medias_checklist:
                 os.remove(os.path.join(target_path, f))
             else:
                 # Add size and increase number
@@ -60,17 +60,16 @@ class StorageStatusHandler(BaseHandler):
         })
 
 
-def get_audios_in_using(db: Database) -> set:
-    audios_checklist = set()
+def get_medias_in_using(db: Database) -> set:
+    medias_checklist = set()
     # Get all collections and map data
     for col in db.list_collection_names():
-        data = db[col].find({}, {'items.example.audios.src': 1})
+        data = db[col].find({}, {'items.example.medias.src': 1})
         for d in data:
             if 'items' in d and d['items']:
                 for i in d['items']:
-                    if 'example' in i and i['example'] and 'audios' in i['example']:
-                        for a in i['example']['audios']:
+                    if 'example' in i and i['example'] and 'medias' in i['example']:
+                        for a in i['example']['medias']:
                             if 'src' in a and a['src']:
-                                audios_checklist.add(os.path.split(a['src'])[-1])
-    return audios_checklist
-
+                                medias_checklist.add(os.path.split(a['src'])[-1])
+    return medias_checklist

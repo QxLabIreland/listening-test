@@ -13,21 +13,21 @@ import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
-import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import {AbSurveyRenderItem} from "../AbTest/AbSurveyRenderItem";
-import {AcrSurveyRenderItem} from "../AcrTest/AcrSurveyRenderItem";
-import {MushraSurveyRenderItem} from "../Mushra/MushraSurveyRenderItem";
-import {HearingSurveyRenderItem} from "../HearingTest/HearingSurveyRenderItem";
+import {AbSurveyRenderItem} from "../audio/AbTest/AbSurveyRenderItem";
+import {AcrSurveyRenderItem} from "../audio/AcrTest/AcrSurveyRenderItem";
+import {MushraSurveyRenderItem} from "../audio/Mushra/MushraSurveyRenderItem";
+import {HearingSurveyRenderItem} from "../audio/HearingTest/HearingSurveyRenderItem";
 import {
   questionedExValidateError,
   sliderItemValidateError,
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
 
-export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTestModel, testUrl: TestUrl }) {
-  const [questionnaire, setQuestionnaire] = useState<BasicTestModel>(value ? value : null);
+export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
+  const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>(value ? value : null);
   const [error, setError] = useState(undefined);
   const [openedPanel, setOpenedPanel] = useState(0);
   const {id} = useParams();
@@ -40,7 +40,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   // To get data from the server
   useEffect(() => {
     if (value) return;
-    Axios.get<BasicTestModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
+    Axios.get<BasicTaskModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
       const validateError = testItemsValidateIncomplete(res.data);
       if (validateError) setError('The survey is incomplete. If you are creator: ' + validateError);
       else setQuestionnaire(observable(res.data));
@@ -133,7 +133,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTe
   </Grid> : <Loading error={error}/>}</Box>
 })
 
-function gotoQuestionChecking(item: TestItemModel, questionnaire: BasicTestModel): number {
+function gotoQuestionChecking(item: BasicTaskItemModel, questionnaire: BasicTaskModel): number {
   // Don't override when it is not an individual questionnaire
   if (item?.type !== TestItemType.question || !questionnaire.settings?.isIndividual) return null;
   const control = item.questionControl;
@@ -149,7 +149,7 @@ function gotoQuestionChecking(item: TestItemModel, questionnaire: BasicTestModel
 }
 
 // An hook to switch different views of card
-function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: TestItemModel, active?: boolean }) => JSX.Element, validateError: (item: TestItemModel) => string } {
+function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: BasicTaskItemModel, active?: boolean }) => JSX.Element, validateError: (item: BasicTaskItemModel) => string } {
   // Switch to right rendering item
   const renderItemByTestUrl = () => {
     switch (testUrl) {

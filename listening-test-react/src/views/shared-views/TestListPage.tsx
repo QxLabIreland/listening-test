@@ -25,7 +25,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
 import TableBody from "@material-ui/core/TableBody";
-import {BasicTestModel} from "../../shared/models/BasicTestModel";
+import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
@@ -37,7 +37,7 @@ import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
   const classes = useMatStyles();
-  const [data, setData] = useState<BasicTestModel[]>(null);
+  const [data, setData] = useState<BasicTaskModel[]>(null);
   const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState();
   const openSnackbar = useContext(GlobalSnackbar);
@@ -46,7 +46,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {templates, handleIsTemplateChange, handleTemplateEdit} = useTemplateList(testUrl);
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
-    Axios.get<BasicTestModel[]>('/api/' + testUrl, {withCredentials: true})
+    Axios.get<BasicTaskModel[]>('/api/' + testUrl, {withCredentials: true})
       .then(res => setData(res.data), reason => setError(reason.response.data));
     // Reset state
     return () => {
@@ -62,7 +62,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
     || value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase())
   );
   // When trash button clicked. If it is a temple there will be alert
-  const handleDelete = (obj: BasicTestModel) => {
+  const handleDelete = (obj: BasicTaskModel) => {
     const openRequest = () => Axios.delete('/api/' + testUrl, {params: {_id: obj._id.$oid}}).then(() => {
       data.splice(data.indexOf(obj), 1);
       setData([...data]);
@@ -72,8 +72,8 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
       , 'Are you sure?', null, openRequest);
     else openRequest().catch();
   }
-  const handleCopyTest = (newTest: BasicTestModel) => {
-    Axios.post<BasicTestModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
+  const handleCopyTest = (newTest: BasicTaskModel) => {
+    Axios.post<BasicTaskModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
       // Give a 0 responseNum and put at the top of the list
       res.data.responseNum = 0;
       // res.data.isTemplate = false;
@@ -133,7 +133,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
 }
 
 /** The menu to add using templates or just a blank page*/
-function AddTestMenu({path, templates}: { path: string, templates: BasicTestModel[] }) {
+function AddTestMenu({path, templates}: { path: string, templates: BasicTaskModel[] }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -153,8 +153,8 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTestMode
 
 /** When width is less than md, the button will be put into a menu*/
 function ActionsGroup({testUrl, path, test, onDelete, onCopy, handleEdit}: {
-  testUrl: TestUrl, path: string, handleEdit: (_: BasicTestModel) => void,
-  test: BasicTestModel, onDelete: (_: BasicTestModel) => void, onCopy: (_: BasicTestModel) => void
+  testUrl: TestUrl, path: string, handleEdit: (_: BasicTaskModel) => void,
+  test: BasicTaskModel, onDelete: (_: BasicTaskModel) => void, onCopy: (_: BasicTaskModel) => void
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
   // Snackbar hooks

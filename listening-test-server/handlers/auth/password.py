@@ -20,6 +20,7 @@ class PasswordHandler(BaseHandler):
         body = self.loads_body()
         user = self.db['users'].find_one({'_id': self.user_id})
         if user and user['password'] == body["password"]:
+            # TODO change this to a loop for collection names
             # Delete user's records and survey
             self.db['abTests'].delete_many({'userId': self.user_id})
             self.db['abSurveys'].delete_many({'userId': self.user_id})

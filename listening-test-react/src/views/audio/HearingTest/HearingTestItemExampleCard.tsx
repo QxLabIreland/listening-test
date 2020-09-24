@@ -3,14 +3,14 @@ import Icon from "@material-ui/core/Icon";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse, Slider, TextField, Tooltip} from "@material-ui/core";
-import {SurveyControl} from "../../shared/components/SurveyControl";
+import {SurveyControl} from "../../../shared/components/SurveyControl";
 import React, {useEffect, useState} from "react";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import {TagsGroup} from "../../shared/components/TagsGroup";
+import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
-import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../shared/web-audio/OscillatorAngGain";
-import {TestItemExampleCardProps} from "../components/SomeTypes";
+import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../../shared/web-audio/OscillatorAngGain";
+import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
+import {AudioFileModel} from "../../../shared/models/AudioTestModel";
 
 export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
@@ -29,7 +29,7 @@ export const HearingTestItemExampleCard = observer((props: React.PropsWithChildr
           </Grid>)}
 
           {/*Audios*/}
-          {example.audios.map((a, i) => <Grid key={i} item xs={12} md={12}>
+          {example.medias.map((a, i) => <Grid key={i} item xs={12} md={12}>
             <AudioSettingsView audio={a}/>
           </Grid>)}
 

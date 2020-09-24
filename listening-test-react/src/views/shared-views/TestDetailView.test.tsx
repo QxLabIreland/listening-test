@@ -2,11 +2,11 @@ import React from "react";
 import {render} from "react-dom";
 import {act} from "react-dom/test-utils";
 import {TestDetailView} from "./TestDetailView";
-import {AbTestItemExampleCard} from "../AbTest/AbTestItemExampleCard";
-import {AbAddItemButtonGroup} from "../AbTest/AbAddItemButtonGroup";
+import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
+import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
 import {MemoryRouter} from "react-router";
 import Axios, {AxiosResponse} from "axios";
-import {BasicTestModel, TestItemModel} from "../../shared/models/BasicTestModel";
+import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {jestTestContainer as container} from "../../setupTests";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 
@@ -24,9 +24,9 @@ it("renders detail data of a test", async () => {
     name: "Joni Baez",
     description: 'This is the description',
     items: []
-  } as BasicTestModel;
+  } as BasicTaskModel;
   jest.spyOn(Axios, "get").mockImplementation(() =>
-    Promise.resolve({data: fakeUser} as AxiosResponse<BasicTestModel>)
+    Promise.resolve({data: fakeUser} as AxiosResponse<BasicTaskModel>)
   );
 
   // Use the asynchronous version of act to apply resolved promises
@@ -41,7 +41,7 @@ it("renders detail data of a test", async () => {
 });
 
 it("reorder test item card in the list", () => {
-  const items = [] as TestItemModel[];
+  const items = [] as BasicTaskItemModel[];
   act(() => {
     render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} />, container);
   });

@@ -1,18 +1,18 @@
 import React, {CSSProperties, useRef, useState} from "react";
 import {Box, createStyles, IconButton, LinearProgress, Theme, Tooltip, Typography} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
-import {AudioFileModel} from "../models/AudioFileModel";
 import Axios from "axios";
 import {TagsGroup} from "./TagsGroup";
 import {observer} from "mobx-react";
 import {makeStyles} from "@material-ui/core/styles";
+import {BasicFileModel} from "../models/BasicTaskModel";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles((_: Theme) => createStyles({
   fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}
 }))
 
 export const FileDropZone = observer(({onChange, fileModel, label, isTag, onDragStart, onDrop, disabled}: {
-  onChange: (fm: AudioFileModel)=>void, fileModel?: AudioFileModel, label?: string, isTag?: boolean,
+  onChange: (fm: BasicFileModel)=>void, fileModel?: BasicFileModel, label?: string, isTag?: boolean,
   onDragStart?: () => void, onDrop?: () => void, disabled?: boolean
 }) => {
   const classes = useStyles();
@@ -52,7 +52,7 @@ export const FileDropZone = observer(({onChange, fileModel, label, isTag, onDrag
         setProgress(percentCompleted);
       }
     }).then((res) => {
-      const newFileModel = {} as AudioFileModel;
+      const newFileModel = {} as BasicFileModel;
       // File fields
       newFileModel.src = res.data;
       newFileModel.filename = files[0].name;

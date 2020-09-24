@@ -1,12 +1,12 @@
 import {observer} from "mobx-react";
-import {TestItemModel, TestSettingsModel} from "../../shared/models/BasicTestModel";
 import React, {MouseEvent, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {action, observable} from "mobx";
 import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
 import {TestItemCard} from "../components/TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
-import {TestItemExampleCardType} from "../components/SomeTypes";
+import {TestItemExampleCardType} from "../components/TypesAndItemOverrides";
+import {TestSettingsModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -20,8 +20,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   upDown: {fontSize: 16}
 }))
 
-export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard, testSettings}: {
-  items: TestItemModel[], TestItemExampleCard: TestItemExampleCardType, testSettings?: TestSettingsModel
+/**
+ * The list of items for Detail page. It converts testUrl into different Cards
+ * This component is for reordering purpose
+ */
+export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard, testSettings, TestItemTrainingCard}: {
+  items: BasicTaskItemModel[], TestItemExampleCard: TestItemExampleCardType, testSettings?: TestSettingsModel,
+  TestItemTrainingCard: TestItemExampleCardType
 }) {
   if (!items) items = observable([]);
   const [state] = useState(observable({index: null}));
@@ -41,6 +46,7 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     return undefined;
   }
   const deleteItem = action((index: number) => items.splice(index, 1));
+  // When mouse down, start dragging
   const handleMouseDown = (event: MouseEvent<any>, index: number) => {
     // Get index of the element
     state.index = index;
@@ -126,7 +132,7 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
       </span></Tooltip>
     </>}</Box>
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
-                  gotoQuestionItems={gotoQuestionItems(i)}
+                  gotoQuestionItems={gotoQuestionItems(i)} TestItemTrainingCard={TestItemTrainingCard}
                   disableGoto={!testSettings?.isIndividual}
     />
   </Grid>)}

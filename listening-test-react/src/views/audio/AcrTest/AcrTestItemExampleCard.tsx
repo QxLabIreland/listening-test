@@ -1,29 +1,28 @@
-import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse} from "@material-ui/core";
-import {SurveyControl} from "../../shared/components/SurveyControl";
+import {SurveyControl} from "../../../shared/components/SurveyControl";
 import React from "react";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
-import {TagsGroup} from "../../shared/components/TagsGroup";
+import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import {FileDropZone} from "../../shared/components/FileDropZone";
-import ExampleSettingsDialog from "../shared-views/ExampleSettingsDialog";
+import {FileDropZone} from "../../../shared/components/FileDropZone";
+import AudioExampleSettingsDialog from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
-import {TestItemExampleCardProps} from "../components/SomeTypes";
-import {TestItemCardFileDropGrid} from "../components/TestItemCardFileDropGrid";
+import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
+import {TestItemCardFileDropGrid} from "../../components/TestItemCardFileDropGrid";
+import {AudioFileModel, AudioExampleSettingsModel} from "../../../shared/models/AudioTestModel";
 
 export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
 
   // Methods for audios changed
-  const handleAdd = (newAudio: AudioFileModel) => example.audios.push(newAudio);
+  const handleAdd = (newAudio: AudioFileModel) => example.medias.push(newAudio);
   // Setting submitted
-  const handleSettingChange = (settings: ItemExampleSettingsModel) => example.settings = settings;
+  const handleSettingChange = (settings: AudioExampleSettingsModel) => example.settings = settings;
 
   return <Card>
     <CardHeader title={title} action={<>
-      <ExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
       {action}</>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
@@ -36,7 +35,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<T
             <SurveyControl control={q}/>
           </Grid>)}
 
-          <TestItemCardFileDropGrid example={example}/>
+          <TestItemCardFileDropGrid example={example} reference/>
 
           {/*Placeholder for adding to list*/}
           <Grid item xs={12} md={4}>

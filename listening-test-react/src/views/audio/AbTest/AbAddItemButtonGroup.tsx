@@ -1,16 +1,16 @@
 import {observer} from "mobx-react";
-import {TestItemModel} from "../../shared/models/BasicTestModel";
-import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
+import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
+import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {useMatStyles} from "../SharedStyles";
+import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
+import {useMatStyles} from "../../SharedStyles";
 
-export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: TestItemModel) => void }) {
+export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
   const {onAdd} = props;
   const classes = useMatStyles();
 
@@ -26,7 +26,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
         value: null,
         required: true
       }, {type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false}],
-      audios: [null, null]
+      medias: [null, null]
     }
   });
 
@@ -34,7 +34,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Te
     id: uuid(), type: TestItemType.training, title: 'Training (click to edit)', example: {
       fields: [
         {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
-      ], audios: []
+      ], medias: []
     }
   });
 

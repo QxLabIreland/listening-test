@@ -6,18 +6,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ItemExampleSettingsModel} from "../../shared/models/ItemExampleModel";
 import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@material-ui/core";
 import {useFormik} from "formik";
+import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
 
-const initialValues: ItemExampleSettingsModel = {
+const initialValues: AudioExampleSettingsModel = {
   loopTimes: null, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false
 };
 
-export default function ExampleSettingsDialog(props: { settings: ItemExampleSettingsModel, onConfirm: (settings: ItemExampleSettingsModel) => void }) {
+export default function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void }) {
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
-  const formik = useFormik<ItemExampleSettingsModel>({
+  const formik = useFormik<AudioExampleSettingsModel>({
     initialValues: {...initialValues},
     onSubmit: values => {
       onConfirm(values);

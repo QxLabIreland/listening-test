@@ -1,6 +1,4 @@
 import {observer} from "mobx-react";
-import {ItemExampleModel} from "../../shared/models/ItemExampleModel";
-import {AudioFileModel} from "../../shared/models/AudioFileModel";
 import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
 import {AudioLoading, useAllAudioReady} from "../../shared/web-audio/AudiosLoading";
 import React, {RefObject, useEffect, useState} from "react";
@@ -9,12 +7,13 @@ import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ratingAreaStyle} from "../SharedStyles";
 import {Box, createStyles, Slider, Theme, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import {AudioExampleModel, AudioFileModel} from "../../shared/models/AudioTestModel";
 
-export const RenderRatingExample = observer(function (props: { value: ItemExampleModel, RatingBar: (props: { audio: AudioFileModel }) => JSX.Element, active?: boolean }) {
+export const RenderRatingExample = observer(function (props: { value: AudioExampleModel, RatingBar: (props: { audio: AudioFileModel }) => JSX.Element, active?: boolean }) {
   const {value, RatingBar, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.audios, value.audioRef, value);
-  const allRefs = value.audioRef ? [...refs, sampleRef] : refs;
+  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
+  const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
   const loading = useAllAudioReady(allRefs);
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
@@ -28,7 +27,7 @@ export const RenderRatingExample = observer(function (props: { value: ItemExampl
         <RenderSurveyControl control={value}/>
       </Grid>)}
 
-      {value.audios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
+      {value.medias.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
         <RatingBar audio={v}/>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} onEnded={i === 0 ? handleEnded : undefined}
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>{i + 1}</AudioButton>
@@ -36,8 +35,8 @@ export const RenderRatingExample = observer(function (props: { value: ItemExampl
       </Grid>)}
 
       {/*Reference*/}
-      {value.audioRef && <Grid item style={ratingAreaStyle}>
-        <AudioButton ref={sampleRef} audio={value.audioRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
+      {value.mediaRef && <Grid item style={ratingAreaStyle}>
+        <AudioButton ref={sampleRef} audio={value.mediaRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
         {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
       </Grid>}
 
