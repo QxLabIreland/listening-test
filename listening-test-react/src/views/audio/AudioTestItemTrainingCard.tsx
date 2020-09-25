@@ -33,7 +33,6 @@ export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildre
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
         <Grid container spacing={2}>
-          <TestItemCardFileDropGrid example={example}/>
           {/*Description for this example*/}
           {example.fields && example.fields[0] && <Grid item xs={12}>
             <SurveyControl control={example.fields[0]}/>
@@ -45,6 +44,7 @@ export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildre
             </Grid> : <Grid item xs={12}>
               <RemovableSurveyControl question={example.fields[1]} onRemove={deleteAdditionalQuestion}/>
             </Grid>}
+          <TestItemCardFileDropGrid example={example}/>
           {/*Placeholder for adding to list*/}
           <Grid item xs={12} md={4}>
             <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>

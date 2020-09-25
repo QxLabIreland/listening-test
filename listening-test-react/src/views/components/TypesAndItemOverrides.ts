@@ -33,6 +33,7 @@ export function overrideTrainingItem(testUrl: TestUrl): TestItemExampleCardType 
     case "acr-test":
     case "mushra-test":
     case "hearing-test":
+    case "audio-labeling":
       return AudioTestItemTrainingCard
     default:
       return null;

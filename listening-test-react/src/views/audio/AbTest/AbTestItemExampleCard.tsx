@@ -1,7 +1,6 @@
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {Button, CardContent, Collapse, FormControlLabel, Icon, IconButton, Switch} from "@material-ui/core";
-import {SurveyControl} from "../../../shared/components/SurveyControl";
+import {Button, CardContent, Collapse, Icon} from "@material-ui/core";
 import React from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";

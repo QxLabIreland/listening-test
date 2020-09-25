@@ -6,7 +6,7 @@ import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
+import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
 import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 import {useMatStyles} from "../../SharedStyles";
 
@@ -45,15 +45,6 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     onAdd(newItem);
   }
 
-  const handleQuestionAdd = (question: SurveyControlModel) => {
-    // Bad solution for scrolling
-    const timer = setTimeout(() => {
-      onAdd({
-        id: uuid(), type: TestItemType.question, title: 'Survey Question (Click to edit this)', questionControl: question
-      });
-      clearTimeout(timer);
-    });
-  };
 
   return <Box className={classes.elementGroup}>
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
@@ -62,6 +53,6 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     {!disableTraining && <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
       <Icon>add</Icon>Add Training Example
     </Button>}
-    <AddQuestionButton onQuestionAdd={handleQuestionAdd}/>
+    <AddQuestionButton onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}/>
   </Box>
 });

@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 import pymongo
+import tornado.web
 from bson import ObjectId
 from pymongo.collection import Collection
 from handlers.base import BaseHandler
@@ -14,7 +15,8 @@ class TestResponsesHandler(BaseHandler):
         _id = self.get_argument('_id', None)
         # Downloadable is not a necessary parameter
         downloadable = self.get_argument('downloadable', None)
-        collection = switch_response_collection(self)
+        test_type = self.get_argument('testType')
+        collection = switch_response_collection(self, test_type)
         if not collection:
             self.set_error(400, 'Invalid test type')
             return
@@ -37,7 +39,8 @@ class TestResponsesHandler(BaseHandler):
 
     async def delete(self):
         _ids = self.loads_body()
-        collection = switch_response_collection(self)
+        test_type = self.get_argument('testType')
+        collection = switch_response_collection(self, test_type)
         if not collection:
             return
         # Multiple deletion
@@ -45,8 +48,7 @@ class TestResponsesHandler(BaseHandler):
         self.dumps_write(result.raw_result)
 
 
-def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
-    test_type = self.get_argument('testType')
+def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
     # Get right collection
     if test_type == 'ab-test':
         return self.db['abSurveys']
@@ -56,5 +58,8 @@ def switch_response_collection(self: BaseHandler) -> Optional[Collection]:
         return self.db['mushraSurveys']
     elif test_type == 'hearing-test':
         return self.db['hearingSurveys']
+    elif test_type == 'audio-labeling':
+        return self.db['audioLabelingSurveys']
     else:
-        return None
+        self.set_error(400, 'Invalid task url')
+        raise tornado.web.Finish

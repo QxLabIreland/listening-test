@@ -13,6 +13,7 @@ from handlers.auth.password import PasswordHandler
 from handlers.test_handlers.ab_test import AbTestHandler
 from handlers.download_csv.acr_test_csv_download import AcrTestCsvDownload
 from handlers.survey.acr_survey import AcrSurveyHandler
+from handlers.test_handlers.audio_labeling_task import AudioLabelingHandler
 from handlers.test_handlers.hearing_test import HearingTestHandler
 from handlers.test_handlers.mushra_test import MushraTestHandler
 from handlers.miscellanea.responses_count import ResponsesCountHandler
@@ -27,12 +28,10 @@ path = [
     ("/api/login", LoginHandler),
     ("/api/sign-up", SignUpHandler),
 
-    # Tools and password
+    # Tools, password and Web app management
     ("/api/audio-file", FileHandler),
     ("/api/password", PasswordHandler),
     ("/api/find-password", FindPasswordHandler),
-
-    # Web app management
     ("/api/dashboard", DashboardHandler),
     ("/api/users", UsersHandler),
 
@@ -53,6 +52,9 @@ path = [
     ("/api/csv-download/hearing-test", HearingTestCsvDownload),
     ("/api/task/hearing-test", HearingSurveyHandler),
 
+    ("/api/audio-labeling", AudioLabelingHandler),
+    # Image
+    # Video
     # Response and Misc
     ("/api/response", TestResponsesHandler),
     ("/api/response-count", ResponsesCountHandler),
