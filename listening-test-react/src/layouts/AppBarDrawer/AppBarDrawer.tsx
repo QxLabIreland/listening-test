@@ -103,7 +103,7 @@ export function AppBarDrawer(props: any) {
             <TemplatesPage/>
           </AppBarLayout>
         </AuthRoute>
-        {/*Test routes*/}
+        {/*Listening Test routes*/}
         <Route exact path={`${path}/ab-test`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
             <TestListPage testUrl="ab-test"/>
@@ -124,6 +124,13 @@ export function AppBarDrawer(props: any) {
             <TestListPage testUrl="hearing-test"/>
           </AppBarLayout>
         </Route>
+        <Route exact path={`${path}/audio-labeling`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListPage testUrl="audio-labeling"/>
+          </AppBarLayout>
+        </Route>
+        {/*Image*/}
+        {/*Video*/}
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
         </Route>
@@ -148,6 +155,13 @@ export function AppBarDrawer(props: any) {
             <TestTabPage testName="Hearing Sensitivity Test" testUrl="hearing-test"/>
           </AppBarLayout>
         </Route>
+        <Route exact path={`${path}/audio-labeling/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <TestTabPage testName="Audio Labeling Task" testUrl="audio-labeling"/>
+          </AppBarLayout>
+        </Route>
+        {/*Image*/}
+        {/*Video*/}
         {/*Context make this not working*/}
         {!isDevMode() && <Redirect to="/not-found"/>}
       </Switch>

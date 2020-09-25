@@ -8,6 +8,7 @@ import {TestDetailView} from "./TestDetailView";
 import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
 import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
 import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
+import {AudioLabelingButtonGroup} from "../audio/AudioLabeling/AudioLabelingButtonGroup";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -57,6 +58,8 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
       return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup}/>
     case "hearing-test":
       return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons}/>
+    case "audio-labeling":
+      return <TestDetailView testUrl={testUrl} ButtonGroup={AudioLabelingButtonGroup}/>
     default:
       return null;
   }

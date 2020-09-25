@@ -16,7 +16,8 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         # Current db means the db which a handler is currently using
         self.mongo_client = conn.client
         self.db = conn.db
-        self.test_name = None
+        # Additional fields for simplicity
+        self.taskCollectionName = self.surveyCollectionName = None
 
     # When data received, it will be called before PUT and POST
     def data_received(self, chunk):

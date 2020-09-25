@@ -15,6 +15,8 @@ const initialValues: AudioExampleSettingsModel = {
 };
 
 export default function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void }) {
+  // TODO Add prop that allow to disable some settings
+
   const {settings, onConfirm} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<AudioExampleSettingsModel>({

@@ -9,7 +9,8 @@ from handlers.base import BaseHandler
 
 class TemplateHandler(BaseHandler):
     async def get(self):
-        collection = switch_test_collection(self)
+        test_type = self.get_argument('testType')
+        collection = switch_test_collection(self, test_type)
         data = collection.aggregate([
             {'$match': {'isTemplate': True}},
             {'$lookup': {'from': 'users', 'localField': 'userId', 'foreignField': '_id', 'as': 'creator'}},
@@ -23,10 +24,11 @@ class TemplateHandler(BaseHandler):
     async def put(self):
         # Get user and check the permissions
         self.user_id = await self.auth_current_user('Template')
+        test_type = self.get_argument('testType')
 
         # Get collection and request data
         body = self.loads_body()
-        collection = switch_test_collection(self)
+        collection = switch_test_collection(self, test_type)
         # Find the test and update
         data = collection.find_one({'_id': body['_id']})
         if 'isTemplate' not in data:
@@ -38,8 +40,7 @@ class TemplateHandler(BaseHandler):
         self.dumps_write(data['isTemplate'])
 
 
-def switch_test_collection(self: BaseHandler) -> Optional[Collection]:
-    test_type = self.get_argument('testType')
+def switch_test_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
     # Get right collection
     if test_type == 'ab-test':
         return self.db['abTests']
@@ -49,6 +50,8 @@ def switch_test_collection(self: BaseHandler) -> Optional[Collection]:
         return self.db['mushraTests']
     elif test_type == 'hearing-test':
         return self.db['hearingTests']
+    elif test_type == 'audio-labeling':
+        return self.db['audioLabelingTests']
     else:
-        self.set_error(400, 'Invalid test url')
+        self.set_error(400, 'Invalid task url')
         raise tornado.web.Finish

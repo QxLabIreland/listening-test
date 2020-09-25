@@ -9,6 +9,7 @@ class ResponsesCountHandler(BaseHandler):
 
     async def get(self):
         test_id = self.get_argument('testId')
-        collection = switch_response_collection(self)
+        test_type = self.get_argument('testType')
+        collection = switch_response_collection(self, test_type)
         responses_count = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)}).count()
         self.dumps_write(responses_count)
