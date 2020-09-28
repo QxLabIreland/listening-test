@@ -14,4 +14,4 @@ export enum TestItemType {
 }
 
 // Types of string for kinds of test
-export type TestUrl = 'ab-test' | 'acr-test' | 'mushra-test' | 'hearing-test' | 'audio-labeling';
+export type TestUrl = 'ab-test' | 'acr-test' | 'mushra-test' | 'hearing-test' | 'audio-labeling' | 'image-labeling';

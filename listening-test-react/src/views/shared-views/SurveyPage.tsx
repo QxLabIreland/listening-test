@@ -155,6 +155,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
     switch (testUrl) {
       case "ab-test":
         return AbSurveyRenderItem
+      case "audio-labeling": // Only use training render of acr
       case "acr-test":
         return AcrSurveyRenderItem
       case "mushra-test":
@@ -169,6 +170,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
   const validateError = () => {
     switch (testUrl) {
       case "ab-test":
+      case "audio-labeling": // Fields validation
         return questionedExValidateError;
       case "acr-test":
       case "mushra-test":

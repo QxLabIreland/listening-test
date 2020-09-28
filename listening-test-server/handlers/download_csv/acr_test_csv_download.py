@@ -7,21 +7,21 @@ from datetime import datetime
 class AcrTestCsvDownload(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user()
-        self.test_name = 'acr'
+        self.surveyCollectionName = 'acrSurveys'
 
     # Download api
     async def get(self):
         # Get responses, based on 1 test
         test_id = self.get_argument('testId')
-        data = self.db[self.test_name + 'Surveys'].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
+        data = self.db[self.surveyCollectionName].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
             .sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
-            self.set_error(404, 'There is no enough ' + self.test_name + ' Test responses')
+            self.set_error(404, 'There is no enough responses')
             return
 
         # Build file name with test type and datetime
-        csv_name = f"{self.test_name}_Test-{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+        csv_name = f"{self.surveyCollectionName}-{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
         # Set http response header for downloading file
         self.set_header('Content-Type', 'application/octet-stream')
         self.set_header('Content-Disposition', f'attachment; filename="{csv_name}"')

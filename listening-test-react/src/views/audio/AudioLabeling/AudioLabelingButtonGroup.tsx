@@ -15,9 +15,11 @@ export const AudioLabelingButtonGroup = observer(function (props: { onAdd: (_: A
 
   const handleAddTraining = () => onAdd({
     id: uuid(), type: TestItemType.training, title: 'Audio Labeling (click to edit)', example: {
-      fields: [
-        {type: SurveyControlType.description, question: 'Please listen these clips and try to write down what you heard.', value: null}
-      ], medias: []
+      fields: [{
+        type: SurveyControlType.description,
+        question: 'Please listen these clips and try to write down what you heard.',
+        value: null
+      }], medias: []
     }
   });
 
