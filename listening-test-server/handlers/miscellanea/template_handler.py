@@ -51,7 +51,7 @@ def switch_test_collection(self: BaseHandler, test_type: str) -> Optional[Collec
     elif test_type == 'hearing-test':
         return self.db['hearingTests']
     elif test_type == 'audio-labeling':
-        return self.db['audioLabelingTests']
+        return self.db['audioLabelingTasks']
     else:
         self.set_error(400, 'Invalid task url')
         raise tornado.web.Finish

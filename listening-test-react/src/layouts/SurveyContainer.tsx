@@ -40,6 +40,8 @@ export default function SurveyContainer() {
             <Route exact path={`${path}/acr-test/:id`}><SurveyPage testUrl="acr-test"/></Route>
             <Route exact path={`${path}/mushra-test/:id`}><SurveyPage testUrl="mushra-test"/></Route>
             <Route exact path={`${path}/hearing-test/:id`}><SurveyPage testUrl="hearing-test"/></Route>
+            <Route exact path={`${path}/audio-labeling/:id`}><SurveyPage testUrl="audio-labeling"/></Route>
+            <Route exact path={`${path}/image-labeling/:id`}><SurveyPage testUrl="image-labeling"/></Route>
             {!isDevMode() && <Redirect to="/not-found"/>}
           </Switch>
         </Suspense>

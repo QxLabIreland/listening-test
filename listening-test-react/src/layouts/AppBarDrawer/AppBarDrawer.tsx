@@ -51,7 +51,7 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/audio-labeling`} icon='beenhere'>Audio Labeling</ListItemNavLink>
+    <ListItemNavLink to={`${path}/audio-labeling`} icon='label_important'>Audio Labeling</ListItemNavLink>
     <Divider/>
     <ListSubheader>Image Task</ListSubheader>
     <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labeling</ListItemNavLink>
@@ -130,6 +130,11 @@ export function AppBarDrawer(props: any) {
           </AppBarLayout>
         </Route>
         {/*Image*/}
+        <Route exact path={`${path}/image-labeling`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListPage testUrl="image-labeling"/>
+          </AppBarLayout>
+        </Route>
         {/*Video*/}
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
@@ -161,6 +166,11 @@ export function AppBarDrawer(props: any) {
           </AppBarLayout>
         </Route>
         {/*Image*/}
+        <Route exact path={`${path}/image-labeling/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <TestTabPage testName="Audio Labeling Task" testUrl="image-labeling"/>
+          </AppBarLayout>
+        </Route>
         {/*Video*/}
         {/*Context make this not working*/}
         {!isDevMode() && <Redirect to="/not-found"/>}

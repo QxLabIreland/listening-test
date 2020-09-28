@@ -6,7 +6,7 @@ export interface TestSettingsModel {
   isIndividual?: boolean;
   isTimed?: boolean;
 }
-/** Those basic models should not be used directly. They should be use in models */
+/** Those basic models should not be used directly, except shared component. */
 export interface BasicTaskModel {
   _id?: { $oid: string };
   userId?: number;

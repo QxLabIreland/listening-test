@@ -1,26 +1,26 @@
 from handlers.auth.find_password import FindPasswordHandler
 from handlers.auth.users import UsersHandler
 from handlers.dashboard import DashboardHandler
+from handlers.download_csv.audio_labeling_csv_download import AudioLabelingCsvDownload
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
+from handlers.download_csv.image_labeling_csv_download import ImageLabelingCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
 from handlers.miscellanea.storage_status import StorageStatusHandler
-from handlers.survey.hearing_survey import HearingSurveyHandler
-from handlers.survey.mushra_survey import MushraSurveyHandler
-from handlers.test_handlers.acr_test import AcrTestHandler
+from handlers.test_and_survey.acr_test import AcrTestHandler
 from handlers.auth.sign_up_handler import SignUpHandler
 from handlers.auth.login import LoginHandler
 from handlers.auth.password import PasswordHandler
-from handlers.test_handlers.ab_test import AbTestHandler
+from handlers.test_and_survey.ab_test import AbTestHandler, AbTestSurveyHandler
 from handlers.download_csv.acr_test_csv_download import AcrTestCsvDownload
-from handlers.survey.acr_survey import AcrSurveyHandler
-from handlers.test_handlers.audio_labeling_task import AudioLabelingHandler
-from handlers.test_handlers.hearing_test import HearingTestHandler
-from handlers.test_handlers.mushra_test import MushraTestHandler
+from handlers.test_and_survey.acr_survey import AcrSurveyHandler
+from handlers.test_and_survey.audio_labeling_task import AudioLabelingHandler, AudioLabelingSurveyHandler
+from handlers.test_and_survey.hearing_test import HearingTestHandler, HearingSurveyHandler
+from handlers.test_and_survey.image_labeling_task import ImageLabelingHandler, ImageLabelingSurveyHandler
+from handlers.test_and_survey.mushra_test import MushraTestHandler, MushraSurveyHandler
 from handlers.miscellanea.responses_count import ResponsesCountHandler
 from handlers.download_csv.ab_test_responses_download import AbTestResponsesDownload
 from handlers.miscellanea.test_responses import TestResponsesHandler
 from handlers.file_handler import FileHandler
-from handlers.survey.ab_test_survey import AbTestSurveyHandler
 from handlers.miscellanea.template_handler import TemplateHandler
 
 path = [
@@ -53,7 +53,12 @@ path = [
     ("/api/task/hearing-test", HearingSurveyHandler),
 
     ("/api/audio-labeling", AudioLabelingHandler),
+    ("/api/task/audio-labeling", AudioLabelingSurveyHandler),
+    ("/api/csv-download/audio-labeling", AudioLabelingCsvDownload),
     # Image
+    ("/api/image-labeling", ImageLabelingHandler),
+    ("/api/task/image-labeling", ImageLabelingSurveyHandler),
+    ("/api/csv-download/image-labeling", ImageLabelingCsvDownload),
     # Video
     # Response and Misc
     ("/api/response", TestResponsesHandler),
