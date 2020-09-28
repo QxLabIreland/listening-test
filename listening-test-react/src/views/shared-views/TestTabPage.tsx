@@ -9,6 +9,7 @@ import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
 import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
 import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
 import {AudioLabelingButtonGroup} from "../audio/AudioLabeling/AudioLabelingButtonGroup";
+import {ImageLabelingButtonGroup} from "../image/ImageLabelingButtonGroup";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -60,6 +61,8 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
       return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons}/>
     case "audio-labeling":
       return <TestDetailView testUrl={testUrl} ButtonGroup={AudioLabelingButtonGroup}/>
+    case "image-labeling":
+      return <TestDetailView testUrl={testUrl} ButtonGroup={ImageLabelingButtonGroup}/>
     default:
       return null;
   }

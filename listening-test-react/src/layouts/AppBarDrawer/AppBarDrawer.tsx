@@ -168,7 +168,7 @@ export function AppBarDrawer(props: any) {
         {/*Image*/}
         <Route exact path={`${path}/image-labeling/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="Audio Labeling Task" testUrl="image-labeling"/>
+            <TestTabPage testName="Image Labeling Task" testUrl="image-labeling"/>
           </AppBarLayout>
         </Route>
         {/*Video*/}

@@ -69,7 +69,8 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
 
   function handleDelete(index: number) {
     control.options.splice(index, 1);
-    delete control.gotoQuestionMapping[index];
+    // Null checking for mapping
+    if (control.gotoQuestionMapping) delete control.gotoQuestionMapping[index];
   }
   const handleAdd = (event: any) => {
     setAutoFocus(true);
@@ -86,9 +87,10 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
   }
   const handleGotoQuestionChange = (event: any, index: number) => {
     if (!control.gotoQuestionMapping) control.gotoQuestionMapping = {};
-    // If got value, we create a mapping. Else: delete mapping
+    // If got value, we create a mapping.
     if (event.target.value) control.gotoQuestionMapping[index] = event.target.value;
-    else delete control.gotoQuestionMapping[index];
+    // Delete mapping and null checking for mapping
+    else if (control.gotoQuestionMapping) delete control.gotoQuestionMapping[index];
   }
   const openGlobalSetting = () => {
     if (disableGoto) document.querySelector<HTMLButtonElement>('#testGlobalSettingButton').click();
