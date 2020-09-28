@@ -29,7 +29,7 @@ path = [
     ("/api/sign-up", SignUpHandler),
 
     # Tools, password and Web app management
-    ("/api/audio-file", FileHandler),
+    ("/api/upload-file", FileHandler),
     ("/api/password", PasswordHandler),
     ("/api/find-password", FindPasswordHandler),
     ("/api/dashboard", DashboardHandler),

@@ -5,6 +5,7 @@ import {HearingTestItemExampleCard} from "../audio/HearingTest/HearingTestItemEx
 import {AudioTestItemTrainingCard} from "../audio/AudioTestItemTrainingCard";
 import {BasicExampleModel} from "../../shared/models/BasicTaskModel";
 import {AcrTestItemExampleCard} from "../audio/AcrTest/AcrTestItemExampleCard";
+import {ImageLabelingExampleItem} from "../image/ImageLabelingExampleItem";
 
 /** The purpose of this file is to simplify the code, because there are lots of places using this type and props */
 export type TestItemExampleCardProps = {
@@ -22,6 +23,8 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
       return AcrTestItemExampleCard
     case "hearing-test":
       return HearingTestItemExampleCard
+    case "image-labeling":
+      return ImageLabelingExampleItem
     default:
       return null;
   }

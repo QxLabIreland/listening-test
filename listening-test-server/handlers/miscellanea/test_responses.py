@@ -60,6 +60,8 @@ def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Co
         return self.db['hearingSurveys']
     elif test_type == 'audio-labeling':
         return self.db['audioLabelingSurveys']
+    elif test_type == 'image-labeling':
+        return self.db['imageLabelingSurveys']
     else:
         self.set_error(400, 'Invalid task url')
         raise tornado.web.Finish
