@@ -30,11 +30,10 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
           <Grid item xs={12}>
             <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
           </Grid>
-
           <TestItemCardFileDropGrid example={example} reference keepPlace/>
           {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-            <RemovableSurveyControl question={q} hideRemove={qi !== 1}
+            <RemovableSurveyControl question={q} hideRemoveButton={qi < 1}
                                     onRemove={() => example.fields.splice(qi, 1)}/>
           </Grid>)}
           {/*An ability to delete one of special question*/}

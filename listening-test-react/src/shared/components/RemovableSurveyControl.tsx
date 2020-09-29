@@ -7,8 +7,8 @@ import React from "react";
 import {SurveyControlModel} from "../models/SurveyControlModel";
 import {useMatStyles} from "../../views/SharedStyles";
 
-export const RemovableSurveyControl = observer(function ({question, onRemove}: {
-  question: SurveyControlModel, onRemove: () => void, hideRemove?: boolean
+export const RemovableSurveyControl = observer(function ({question, onRemove, hideRemoveButton}: {
+  question: SurveyControlModel, onRemove: () => void, hideRemoveButton?: boolean
 }) {
   const classes = useMatStyles();
 
@@ -18,9 +18,9 @@ export const RemovableSurveyControl = observer(function ({question, onRemove}: {
         <Switch checked={question.required}
                 onChange={e => question.required = e.target.checked}/>}
       />
-      <Tooltip title="Remove this question">
+      {!hideRemoveButton && <Tooltip title="Remove this question">
         <IconButton onClick={onRemove}><Icon>clear</Icon></IconButton>
-      </Tooltip>
+      </Tooltip>}
     </div>
     <SurveyControl control={question}/>
   </>
