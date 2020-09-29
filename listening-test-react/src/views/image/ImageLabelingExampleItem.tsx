@@ -32,16 +32,16 @@ export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren
           {example.fields && example.fields[0] && <Grid item xs={12}>
             <SurveyControl control={example.fields[0]}/>
           </Grid>}
+          {/*File drop grid with type*/}
+          <Grid item xs={12}>
+            <TestItemDropGridList example={example}/>
+          </Grid>
           {/*Question fields*/}
           {example.fields && !(example.fields.length > 1) ? <Grid item xs={12} className={classes.flexEnd}>
             <AddQuestionButton onQuestionAdd={addAdditionalQuestion} onlyCore/>
           </Grid> : <Grid item xs={12}>
             <RemovableSurveyControl question={example.fields[1]} onRemove={deleteAdditionalQuestion}/>
           </Grid>}
-          {/*File drop grid with type*/}
-          <Grid item xs={12}>
-            <TestItemDropGridList example={example}/>
-          </Grid>
         </Grid>
       </CardContent>
     </Collapse>

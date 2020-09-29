@@ -46,17 +46,17 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
-    <ListSubheader>Listening Task</ListSubheader>
-    <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Test</ListItemNavLink>
+    <ListSubheader>Listening Tasks</ListSubheader>
+    <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Audio Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Audio Test</ListItemNavLink>
+    <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Audio Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test</ListItemNavLink>
     <ListItemNavLink to={`${path}/audio-labeling`} icon='label_important'>Audio Labeling</ListItemNavLink>
     <Divider/>
-    <ListSubheader>Image Task</ListSubheader>
+    <ListSubheader>Image Tasks</ListSubheader>
     <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labeling</ListItemNavLink>
     <Divider/>
-    <ListSubheader>Video Task</ListSubheader>
+    <ListSubheader>Video Tasks</ListSubheader>
     <ListItemNavLink to={`${path}/video-labeling`} icon='video_label'>Video Labeling</ListItemNavLink>
     <Divider/>
     <ListSubheader>Others</ListSubheader>
