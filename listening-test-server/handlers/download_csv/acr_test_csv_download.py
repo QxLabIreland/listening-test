@@ -10,7 +10,7 @@ class AcrTestCsvDownload(BaseHandler):
         self.surveyCollectionName = 'acrSurveys'
 
     # Download api
-    async def get(self):
+    async def get(self, head_suffix=None, value_source=None):
         # Get responses, based on 1 test
         test_id = self.get_argument('testId')
         data = self.db[self.surveyCollectionName].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
@@ -44,7 +44,7 @@ class AcrTestCsvDownload(BaseHandler):
                 # Questions header. Examples header: Example and Comment
                 header_list = ['Name', 'Date']
                 for x in row['items']:
-                    t = build_header(x)
+                    t = build_header(x, head_suffix)
                     if t is not None:
                         header_list.append(t)
                         if check_is_timed(row):
@@ -55,7 +55,7 @@ class AcrTestCsvDownload(BaseHandler):
             # Build three different lists of data
             value_list = [row['name'], row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
             for x in row['items']:
-                t = build_row(x)
+                t = build_row(x, value_source)
                 if t is not None:
                     value_list.append(t)
                     if check_is_timed(row):
@@ -67,9 +67,9 @@ class AcrTestCsvDownload(BaseHandler):
 
 
 def build_tags(item):
-    if item['type'] == 1 or item['type'] == 3:  # Question or training type
+    if item['type'] == 1:  # Question
         return ''
-    elif item['type'] == 2:  # Example
+    elif item['type'] == 2 or item['type'] == 3:  # Example or training also will get tags fields
         if 'example' in item and 'tags' in item['example']:
             return (item['example']['tags'] or '').replace(',', '|')
         else:
@@ -96,17 +96,22 @@ def build_header(item, suffix='rating'):
 def build_row(item, value_source='medias'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
-            # Checkbox has comma, so we need "
+            # Checkbox has comma, so we need quotation marks
             return f'"{item["questionControl"]["value"] or ""}"'
         else:
             return ''
     elif item['type'] == 2:  # Example
         if 'example' in item and value_source in item['example']:
-            row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example'][value_source]]
+            row_values = []
+            for a in item['example'][value_source]:
+                # Ignore description question type
+                if 'type' in a and a['type'] == 3:
+                    continue
+                row_values.append((a['value'] or '') if 'value' in a else '')
             return f'"{",".join(row_values)}"'
         else:
             return ''
-    elif item['type'] == 3:  # Training
+    elif item['type'] == 3:  # Training with only one 'ask a question'
         if 'example' in item and 'fields' in item['example'] \
                 and len(item['example']['fields']) > 1 and 'value' in item['example']['fields'][1]:
             return f'"{item["example"]["fields"][1]["value"] or ""}"'

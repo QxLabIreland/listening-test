@@ -4,7 +4,7 @@ import pymongo
 from bson import ObjectId
 
 from handlers.base import BaseHandler
-from handlers.download_csv.acr_test_csv_download import build_tags, check_is_timed, build_header
+from handlers.download_csv.acr_test_csv_download import check_is_timed, build_tags, build_header, build_row
 
 
 class MushraTestCsvDownload(BaseHandler):
@@ -87,15 +87,20 @@ class MushraTestCsvDownload(BaseHandler):
 def build_mushra_row(item):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
-            # Checkbox has comma, so we need "
-            if item['questionControl']['type'] == 2:
-                return '"' + (item['questionControl']['value'] or '') + '"'
-            else:
-                return item['questionControl']['value'] or ''
+            return '"' + (item['questionControl']['value'] or '') + '"'
 
     elif item['type'] == 2:  # Example
         if 'example' in item and 'medias' in item['example']:
             row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example']['medias']]
             return ','.join(row_values)
+
+    elif item['type'] == 3:  # Training with only one 'ask a question'
+        if 'example' in item and 'fields' in item['example']:
+            row_values = []
+            for a in item['example']['fields']:
+                if 'type' in a and a['type'] == 3:
+                    continue
+                row_values.append((a['value'] or '') if 'value' in a else '')
+            return f'"{item["example"]["fields"][1]["value"] or ""}"'
 
     return ''
