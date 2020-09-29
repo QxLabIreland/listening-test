@@ -29,7 +29,8 @@ export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildre
   return <Card>
     <CardHeader title={title} action={<>
       <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
-      {action} </>}/>
+      {action}
+    </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
         <Grid container spacing={2}>
@@ -38,16 +39,16 @@ export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildre
             <SurveyControl control={example.fields[0]}/>
           </Grid>}
           <TestItemCardFileDropGrid example={example}/>
+          {/*Placeholder for adding to list*/}
+          <Grid item xs={12} md={4}>
+            <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
+          </Grid>
           {/*Additional question add*/}
           {example.fields && !(example.fields.length > 1) ? <Grid item xs={12} className={classes.flexEnd}>
             <AddQuestionButton onQuestionAdd={addAdditionalQuestion} onlyCore/>
           </Grid> : <Grid item xs={12}>
             <RemovableSurveyControl question={example.fields[1]} onRemove={deleteAdditionalQuestion}/>
           </Grid>}
-          {/*Placeholder for adding to list*/}
-          <Grid item xs={12} md={4}>
-            <FileDropZone onChange={handleAdd} label="Drop or click to add a file"/>
-          </Grid>
         </Grid>
       </CardContent>
     </Collapse>
