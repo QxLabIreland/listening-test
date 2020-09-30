@@ -15,6 +15,7 @@ export interface AudioExampleModel extends BasicExampleModel {
   // Settings make example play specific times
   settings?: AudioExampleSettingsModel;
   // To check if the example has been played once
+  // TODO Move it into AudioFileModel and remember to delete them in validation
   playedOnce?: boolean;
 }
 

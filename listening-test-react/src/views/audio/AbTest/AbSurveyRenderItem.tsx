@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {observer} from "mobx-react";
 import {AudioExampleModel, AudioTestItemModel} from "../../../shared/models/AudioTestModel";
 import {TestItemType} from "../../../shared/models/EnumsAndTypes";
@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
 import {RenderTraining} from "../../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
+import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
 
 const alphabetList = Array.apply(undefined, Array(26)).map(function(x,y) { return String.fromCharCode(y + 65); }).join('');
 
@@ -29,6 +30,8 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
   const loading = useAllAudioReady(value.mediaRef ? [...refs, sampleRef] : refs);
+  const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
+  const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
 
   useEffect(() => {
     if (active === false) handlePause();
@@ -39,7 +42,9 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
 
       {value.medias.map((v, i) => <Grid item key={i}>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} onEnded={i === 0 ? handleEnded : undefined}
-                     onTimeUpdate={i === 0 ? handleTimeUpdate : undefined}>{value.fields[0]?.options[i] || alphabetList[i]}</AudioButton>
+                     onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>
+          {value.fields[0]?.options[i] || alphabetList[i]}
+        </AudioButton>
         {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
       </Grid>)}
 
@@ -55,6 +60,7 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
 
       <Grid item xs={12}>
         <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime} disabled={value.settings?.disablePlayerSlider}/>
+        {value.settings?.sectionLooping && <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs} currentTime={currentTime}/>}
       </Grid>
     </Grid>
   </>

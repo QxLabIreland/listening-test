@@ -35,7 +35,12 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
   // When loop attribute is true, this won't be called
   const handleEnded = () => {
     value.medias[currentAudioIndex].isActive = false;
-    value.playedOnce = true;
+    playedTimes[currentAudioIndex] += 1;
+    // If didn't specify loopTimes or playedTimes < loopTimes, it will play again
+    if (!value.settings?.loopTimes || playedTimes[currentAudioIndex] < value.settings?.loopTimes)
+      handlePlay(currentAudioIndex);
+    // Check all clips have been played
+    if (playedTimes.every(t => t > 0)) value.playedOnce = true;
   }
   const dragSlider = (event: any, newValue: number | number[]) =>
     refs[currentAudioIndex].currentTime = newValue ? Number(newValue) : 0;

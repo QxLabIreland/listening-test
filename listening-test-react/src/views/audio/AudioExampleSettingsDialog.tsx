@@ -14,10 +14,9 @@ const initialValues: AudioExampleSettingsModel = {
   loopTimes: null, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false
 };
 
-export default function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void }) {
-  // TODO Add prop that allow to disable some settings
-
-  const {settings, onConfirm} = props;
+export default function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean }) {
+  // Add disable prop that allow to disable some settings
+  const {settings, onConfirm, disableSectionLoop} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<AudioExampleSettingsModel>({
     initialValues: {...initialValues},
@@ -59,10 +58,10 @@ export default function AudioExampleSettingsDialog(props: { settings: AudioExamp
             label="Disable audio player slider bar (can't change position of thumb)"
           />
 
-          <FormControlLabel
+          {!disableSectionLoop && <FormControlLabel
             control={<Checkbox checked={formik.values.sectionLooping} {...formik.getFieldProps('sectionLooping')}/>}
             label="Show section looping slider bar"
-          />
+          />}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" type="button">
