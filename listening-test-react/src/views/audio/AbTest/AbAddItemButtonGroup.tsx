@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
-import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 import {useMatStyles} from "../../SharedStyles";
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {

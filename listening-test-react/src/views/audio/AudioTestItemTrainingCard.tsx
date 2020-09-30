@@ -28,7 +28,7 @@ export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildre
 
   return <Card>
     <CardHeader title={title} action={<>
-      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange} disableSectionLoop/>
       {action}
     </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
