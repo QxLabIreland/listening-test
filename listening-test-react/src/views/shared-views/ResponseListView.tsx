@@ -7,14 +7,14 @@ import {
   Checkbox,
   createStyles,
   Grid,
-  Icon,
+  Icon, IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
+  Tooltip, withStyles,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
@@ -24,21 +24,20 @@ import {downloadFileTool} from "../../shared/ReactTools";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
+import {red} from "@material-ui/core/colors";
 
-const useStyles = makeStyles(() => (createStyles({
-  content: {
-    padding: 0
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  button: {
-    marginLeft: 8,
-  }
+const useStyles = makeStyles((theme) => (createStyles({
+  content: {padding: 0},
+  actions: {display: 'flex', justifyContent: 'space-between', paddingLeft: 0},
+  button: {marginLeft: 8,}
 })));
 
-export default function ResponseListView(props: {testUrl: TestUrl}) {
+const DangerCheckbox = withStyles((theme) => ({
+  root: {'&$checked': {color: red[500]}},
+  checked: null
+}))(Checkbox);
+
+export default function ResponseListView(props: { testUrl: TestUrl }) {
   const {testUrl} = props;
   const classes = useStyles();
   // Prefix is the router prefix of a detail
@@ -87,9 +86,11 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
-                <Checkbox checked={currentPageList().every(v => v.selected)} color="primary"
-                          indeterminate={currentPageList().some(v => v.selected) && !currentPageList().every(v => v.selected)}
-                          onChange={handleSelectAll}/>
+                <Tooltip title="Select all to delete">
+                  <DangerCheckbox checked={currentPageList().every(v => v.selected)}
+                                  indeterminate={currentPageList().some(v => v.selected) && !currentPageList().every(v => v.selected)}
+                                  onChange={handleSelectAll}/>
+                </Tooltip>
               </TableCell>
               <TableCell>Test Name</TableCell>
               <TableCell>Submitted At</TableCell>
@@ -99,7 +100,10 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
           <TableBody>
             {currentPageList().length ? currentPageList().map(r => <TableRow hover key={r._id.$oid}>
               <TableCell padding="checkbox">
-                <Checkbox checked={!!r.selected} color="primary" onChange={event => handleSelectOne(event, r)}/>
+                <Tooltip title="Select to delete">
+
+                  <DangerCheckbox checked={!!r.selected} onChange={event => handleSelectOne(event, r)}/>
+                </Tooltip>
               </TableCell>
               <TableCell>{r.name}</TableCell>
               <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
@@ -108,19 +112,22 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
                   <SurveyPage testUrl={testUrl} value={r}/>
                 </ResponsePreviewDialog>
               </TableCell>
-            </TableRow>) :<TableRow>
+            </TableRow>) : <TableRow>
               <TableCell colSpan={4}>There is no response here for this page.</TableCell>
             </TableRow>}
           </TableBody>
         </Table></CardContent>
         <CardActions className={classes.actions}>
+          <Tooltip title="Delete selected items">
+            <IconButton onClick={handleDelete}><Icon>delete</Icon></IconButton>
+          </Tooltip>
           <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
                            onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
                            rowsPerPageOptions={[10, 25, 50]}/>
         </CardActions>
       </Card> : <Loading error={error}/>}
     </Grid>
-    <Grid item xs={12} className={classes.actions}>
+    <Grid item xs={12} container justify="flex-end">
       <Tooltip title="Download all Responses in JSON format">
         <Button variant="outlined" color="primary" className={classes.button} onClick={handleDownloadInJSON}>
           <Icon>code</Icon>Download in JSON</Button>
@@ -129,7 +136,6 @@ export default function ResponseListView(props: {testUrl: TestUrl}) {
         <Button variant="outlined" color="primary" className={classes.button} onClick={handleDownload}>
           <Icon>get_app</Icon>Download in CSV</Button>
       </Tooltip>
-      <Button variant="outlined" className={classes.button} onClick={handleDelete}><Icon>delete</Icon>Delete Selected</Button>
       {/*<Button variant="contained" color="primary" className={classes.button}><Icon>get_app</Icon>Download Responses</Button>*/}
     </Grid>
   </Grid>);
