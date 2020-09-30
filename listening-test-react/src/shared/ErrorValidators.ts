@@ -50,8 +50,8 @@ export function sliderItemValidateError(item: AudioTestItemModel): string {
 /** Check if the test or task has been completed (uploaded audio, no null field in audios) */
 export function testItemsValidateIncomplete(tests: BasicTaskModel) {
   for (const item of tests.items) {
-    // Audios array is null, length is 0, some of them are null
-    if (item.example && (!item.example.medias || item.example.medias.length < 1 || item.example.medias.some(value => value == null))) {
+    // Make sure audios array exists. When length is 0, some of them are null, there will be error
+    if (item.example && item.example.medias && (item.example.medias.length < 1 || item.example.medias.some(value => value == null))) {
       return "Your haven't added an audio or filled placeholders for every items. Please fill them and try again."
     }
   }
