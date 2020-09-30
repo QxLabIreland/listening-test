@@ -4,7 +4,7 @@ import pymongo
 from bson import ObjectId
 
 from handlers.base import BaseHandler
-from handlers.download_csv.acr_test_csv_download import check_is_timed, build_tags, build_header, build_row
+from handlers.download_csv.acr_test_csv_download import check_is_timed, build_tags, build_header
 
 
 class MushraTestCsvDownload(BaseHandler):

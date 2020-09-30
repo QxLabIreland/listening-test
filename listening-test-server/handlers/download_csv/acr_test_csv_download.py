@@ -10,7 +10,7 @@ class AcrTestCsvDownload(BaseHandler):
         self.surveyCollectionName = 'acrSurveys'
 
     # Download api
-    async def get(self, head_suffix=None, value_source=None):
+    async def get(self, head_suffix='rating', value_source='medias'):
         # Get responses, based on 1 test
         test_id = self.get_argument('testId')
         data = self.db[self.surveyCollectionName].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
