@@ -68,7 +68,7 @@ export const TestItemDropGridList = observer(function ({example, keepPlace}: {
       </GridListTile>
     )}
     <GridListTile>
-      <SimpleFileDropZone onChange={handleAdd} fileType="imageFile">
+      <SimpleFileDropZone onChange={handleAdd} fileType="image">
         <Typography>Image File</Typography>
         <Icon>attachment</Icon>
       </SimpleFileDropZone>
@@ -77,8 +77,8 @@ export const TestItemDropGridList = observer(function ({example, keepPlace}: {
   </GridList>
 })
 const SimpleFileDropZone = observer(function (props: PropsWithChildren<{
-  onChange: (fm: BasicFileModel) => void, disabled?: boolean, fileType: 'imageFile'
-}>) {
+  onChange: (fm: BasicFileModel) => void, disabled?: boolean, fileType: 'image'
+}>) { // fileType will not be used directly
   const {onChange, disabled, fileType} = props;
   const classes = useStyles();
   // Default label
@@ -102,12 +102,12 @@ const SimpleFileDropZone = observer(function (props: PropsWithChildren<{
     // If event is not a File Input Choose
     if (!files) files = event.dataTransfer.files;
     // Avoid empty upload
-    if (!files[0]) return;
+    if (!files[0] || files[0].type.indexOf(fileType + '/') < 0) return;
 
     // Start uploading and animation
     setIsUploading(true);
     const formData = new FormData();
-    formData.append(fileType, files[0]);
+    formData.append(fileType + 'File', files[0]);
     // File upload handling
     Axios.post('/api/upload-file', formData, {
       onUploadProgress: (progress) => {
@@ -126,7 +126,7 @@ const SimpleFileDropZone = observer(function (props: PropsWithChildren<{
   }
 
   return <>
-    <input type="file" ref={fileRef} onChange={handleFileUploadDrop} hidden={true}/>
+    <input type="file" ref={fileRef} onChange={handleFileUploadDrop} hidden={true} accept={fileType + '/*'}/>
     {/*Uploading animation and text box*/}
     {isUploading ? <Box p={2} className={classes.uploadBox}>
       <LinearProgress variant="determinate" value={progress}/>

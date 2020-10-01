@@ -15,7 +15,7 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
   const [refs] = useState<HTMLAudioElement[]>([]);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-  // TODO Implement audios loop and played once checking
+  // Audios loop and played once checking
   const [playedTimes] = useState(new Array(value.medias.length).fill(0));
 
   const handlePlay = (index: number) => {
@@ -46,15 +46,15 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
     refs[currentAudioIndex].currentTime = newValue ? Number(newValue) : 0;
 
   return <Grid container spacing={3}>
-    {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
-    </Grid>)}
-
+    {/*Description for the example*/}
+    {value.fields && value.fields[0] && <Grid item xs={12}>
+      <RenderSurveyControl control={value.fields[0]}/>
+    </Grid>}
     {value.medias.map((v, i) => <Grid item key={i}>
       <AudioButton ref={ref => refs[i] = ref} audio={v} onPlay={() => handlePlay(i)} onPause={handlePause}
                    onEnded={handleEnded} onTimeUpdate={handleTimeUpdate}>{i + 1}</AudioButton>
     </Grid>)}
-
+    {/*Slider bar of player */}
     <Grid item xs={12}>
       <Slider aria-labelledby="continuous-slider" defaultValue={0} step={0.1} min={0}
               max={refs[currentAudioIndex]?.duration} value={currentTime} onChange={dragSlider}
@@ -62,5 +62,9 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
               disabled={value.settings?.disablePlayerSlider}
       />
     </Grid>
+    {/*Ask a question for training*/}
+    {value.fields?.slice(1).map((v, i) => <Grid item xs={12} key={i}>
+      <RenderSurveyControl control={v}/>
+    </Grid>)}
   </Grid>
 })

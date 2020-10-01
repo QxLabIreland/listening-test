@@ -46,18 +46,22 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
-    <ListSubheader>Listening Tasks</ListSubheader>
-    <ListItemNavLink to={`${path}/ab-test`} icon='headset'>AB Audio Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>ACR Audio Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>MUSHRA Audio Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test</ListItemNavLink>
-    <ListItemNavLink to={`${path}/audio-labeling`} icon='label_important'>Audio Labeling</ListItemNavLink>
+    <ListSubheader>Audio Tasks</ListSubheader>
+    <ListItemNavLink to={`${path}/ab-test`} icon='headset'>Audio AB</ListItemNavLink>
+    <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>Audio ACR</ListItemNavLink>
+    <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>Audio MUSHRA</ListItemNavLink>
+    <ListItemNavLink to={`${path}/audio-labeling`} icon='label_important'>Audio Labelling</ListItemNavLink>
+    <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test (Beta)</ListItemNavLink>
     <Divider/>
     <ListSubheader>Image Tasks</ListSubheader>
-    <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labeling</ListItemNavLink>
+    {/*<ListItemNavLink to={`${path}/image-ab`} icon='image_search'>Image AB</ListItemNavLink>*/}
+    {/*<ListItemNavLink to={`${path}/image-acr`} icon='image_search'>Image ACR</ListItemNavLink>*/}
+    <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labelling</ListItemNavLink>
     <Divider/>
     <ListSubheader>Video Tasks</ListSubheader>
-    <ListItemNavLink to={`${path}/video-labeling`} icon='video_label'>Video Labeling</ListItemNavLink>
+    {/*<ListItemNavLink to={`${path}/video-ab`} icon='video_label'>Video AB</ListItemNavLink>*/}
+    {/*<ListItemNavLink to={`${path}/video-acr`} icon='video_label'>Video ACR</ListItemNavLink>*/}
+    <ListItemNavLink to={`${path}/video-labeling`} icon='video_label'>Video Labelling</ListItemNavLink>
     <Divider/>
     <ListSubheader>Others</ListSubheader>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
