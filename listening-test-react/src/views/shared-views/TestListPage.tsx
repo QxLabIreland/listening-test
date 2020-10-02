@@ -29,10 +29,10 @@ import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
-import {useUserAuthResult} from "../../shared/ReactHooks";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
 import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
+import {useUserAuthResult} from "../../layouts/components/AuthRoute";
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();

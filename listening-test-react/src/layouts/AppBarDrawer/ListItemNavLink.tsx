@@ -4,7 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import React, {PropsWithChildren, useEffect, useState} from "react";
 import {useTheme} from "@material-ui/core/styles";
-import {useUserAuthResult} from "../../shared/ReactHooks";
+import {useUserAuthResult} from "../components/AuthRoute";
 
 export function ListItemNavLink (props: PropsWithChildren<any>) {
   const {to, icon, permission, ...rest} = props;
