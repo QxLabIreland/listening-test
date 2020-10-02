@@ -21,3 +21,12 @@ export default function AuthRoute(props: PropsWithChildren<any>) {
     currentUser === undefined ? <Loading/> : authenticate(location)
   }/>
 }
+
+export function useUserAuthResult(permission?: string) {
+  const {currentUser} = useContext(CurrentUser);
+
+  // No permission given, only valid if the user is logged in
+  if (!permission) return !!currentUser;
+  // If user has permission to this page
+  else return currentUser?.permissions?.includes(permission);
+}
