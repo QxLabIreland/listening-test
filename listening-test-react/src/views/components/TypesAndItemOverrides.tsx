@@ -1,4 +1,4 @@
-import {FunctionComponent, ReactNode} from "react";
+import React, {FunctionComponent, ReactNode} from "react";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
 import {HearingTestItemExampleCard} from "../audio/HearingTest/HearingTestItemExampleCard";
@@ -25,6 +25,8 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
       return HearingTestItemExampleCard
     case "image-labeling":
       return ImageLabelingExampleItem
+    case "video-labeling":
+      return (props) => <ImageLabelingExampleItem {...props} type="video"/>
     default:
       return null;
   }

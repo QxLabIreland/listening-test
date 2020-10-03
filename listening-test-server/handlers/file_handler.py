@@ -17,6 +17,9 @@ class FileHandler(BaseHandler):
         elif 'imageFile' in self.request.files:
             file_metas = self.request.files['imageFile']
             url = file_helper.write_in_md5(file_metas[0], 'imageFile')
+        elif 'videoFile' in self.request.files:
+            file_metas = self.request.files['videoFile']
+            url = file_helper.write_in_md5(file_metas[0], 'videoFile')
         else:
             self.set_error(400, 'Folder name is invalid')
             raise tornado.web.Finish

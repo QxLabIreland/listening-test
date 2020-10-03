@@ -26,6 +26,7 @@ import {
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
 import {ImageLabelingRenderItem} from "../image/ImageLabelingRenderItem";
+import {VideoLabelingRenderItem} from "../video/VideoLabelingRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>(value ? value : null);
@@ -165,6 +166,8 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
         return HearingSurveyRenderItem
       case "image-labeling":
         return ImageLabelingRenderItem
+      case "video-labeling":
+        return VideoLabelingRenderItem
       default:
         return null;
     }
@@ -175,6 +178,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
       case "ab-test":
       case "audio-labeling": // Only use fields validation
       case "image-labeling":
+      case "video-labeling":
         return questionedExValidateError;
       case "acr-test":
       case "mushra-test":

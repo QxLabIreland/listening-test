@@ -11,25 +11,47 @@ const useStyles = makeStyles(() => ({
 }));
 
 // reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
-export const TestItemDropGridList = observer(function ({example, keepPlace}: {
-  example: BasicExampleModel, reference?: boolean, keepPlace?: boolean
+export const TestItemDropGridList = observer(function ({example, type = 'image'}: {
+  example: BasicExampleModel, type?: 'image' | 'video'
 }) {
   const classes = useStyles();
   const {handleDragStart, handleDragOver, handleDropSwapFiles, handleDelete, handleAdd} = useFileBoxesFunc(example.medias);
 
-  return <GridList cols={3}>
+  const switchPreviewBaseType = (props: any) => {
+    switch (type) {
+      case "image":
+        return <img alt="uploaded" {...props}/>
+      case "video":
+        return <video muted autoPlay width="100%" {...props}/>
+      default:
+        return null;
+    }
+  }
+  let uploadText = null;
+  switch (type) {
+    case "image":
+      uploadText = <Typography>Image File</Typography>;
+      break;
+    case "video":
+      uploadText = <Typography>Video File</Typography>;
+      break;
+  }
+
+  return <GridList cols={3} cellHeight="auto">
     {example.medias.map((a, i) =>
       <GridListTile key={i}>
-        <img src={a.src} alt="uploaded" onDrop={() => handleDropSwapFiles(i)} onDragOver={handleDragOver}
-             onDragStart={() => handleDragStart(i)} draggable={true}/>
+        {switchPreviewBaseType({
+          src: a.src, draggable: true, onDrop: () => handleDropSwapFiles(i),
+          onDragOver: handleDragOver, onDragStart: () => handleDragStart(i)
+        })}
         <GridListTileBar subtitle={a.filename} actionIcon={
           <IconButton className={classes.withe} onClick={() => handleDelete(i)}><Icon>delete_outline</Icon></IconButton>
         }/>
       </GridListTile>
     )}
     <GridListTile>
-      <FileUploadDropBox onChange={handleAdd} fileType="image">
-        <Typography>Image File</Typography>
+      <FileUploadDropBox onChange={handleAdd} fileType={type}>
+        {uploadText}
         <Icon>attachment</Icon>
       </FileUploadDropBox>
       <GridListTileBar subtitle="Click to choose or Drop a file"/>
