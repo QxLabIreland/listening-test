@@ -13,12 +13,13 @@ const useStyles = makeStyles((_: Theme) => createStyles({
     borderRadius: 4,
     cursor: 'pointer',
     textAlign: 'center',
-    height: '100%'
+    height: '100%',
+    minHeight: 160
   }
 }));
 
 export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
-  onChange: (fm: BasicFileModel) => void, disabled?: boolean, fileType: 'image' | 'audio'
+  onChange: (fm: BasicFileModel) => void, disabled?: boolean, fileType: 'image' | 'audio' | 'video'
 }>) { // fileType will not be used directly
   const {onChange, disabled, fileType} = props;
   const classes = useStyles();

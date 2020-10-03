@@ -13,8 +13,8 @@ import {RemovableSurveyControl} from "../../shared/components/RemovableSurveyCon
 import {useMatStyles} from "../SharedStyles";
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 
-export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
-  const {example, title, action, collapsed} = props;
+export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps & {type?: 'video' | 'image'}>) => {
+  const {example, title, action, collapsed, type = 'image'} = props;
   const classes = useMatStyles();
 
   const addAdditionalQuestion = (question: SurveyControlModel) => example.fields.push(question);
@@ -34,7 +34,7 @@ export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren
           </Grid>}
           {/*File drop grid with type*/}
           <Grid item xs={12}>
-            <TestItemDropGridList example={example}/>
+            <TestItemDropGridList example={example} type={type}/>
           </Grid>
           {/*Question fields*/}
           {example.fields && !(example.fields.length > 1) ? <Grid item xs={12} className={classes.flexEnd}>

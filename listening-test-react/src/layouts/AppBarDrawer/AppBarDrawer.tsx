@@ -140,6 +140,11 @@ export function AppBarDrawer(props: any) {
           </AppBarLayout>
         </Route>
         {/*Video*/}
+        <Route exact path={`${path}/video-labeling`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListPage testUrl="video-labeling"/>
+          </AppBarLayout>
+        </Route>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
         </Route>
@@ -176,6 +181,11 @@ export function AppBarDrawer(props: any) {
           </AppBarLayout>
         </Route>
         {/*Video*/}
+        <Route exact path={`${path}/video-labeling/:id`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
+            <TestTabPage testName="Video Labeling Task" testUrl="video-labeling"/>
+          </AppBarLayout>
+        </Route>
         {/*Context make this not working*/}
         {!isDevMode() && <Redirect to="/not-found"/>}
       </Switch>
