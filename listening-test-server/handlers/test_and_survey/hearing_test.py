@@ -1,5 +1,4 @@
-from handlers.test_and_survey.acr_survey import AcrSurveyHandler
-from handlers.test_and_survey.acr_test import AcrTestHandler
+from handlers.test_and_survey.audio_acr_test import AcrTestHandler, AcrSurveyHandler
 
 
 class HearingTestHandler(AcrTestHandler):
