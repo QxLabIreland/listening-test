@@ -8,6 +8,9 @@ from handlers.download_csv.acr_test_csv_download import check_is_timed, build_ta
 
 
 class MushraTestCsvDownload(BaseHandler):
+    """
+    Write blank columns for header. Try to group all medias files together below a header.
+    """
     async def prepare(self):
         self.user_id = await self.auth_current_user()
 

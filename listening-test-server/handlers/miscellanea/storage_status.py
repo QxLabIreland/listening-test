@@ -11,6 +11,7 @@ class StorageStatusHandler(BaseHandler):
 
     async def get(self):
         medias_checklist = get_medias_in_using(self.db)
+        # TODO try to categorize video, audio and image
         target_path = 'static2/audio_files'
         # Get size of static folder
         total_size = 0
