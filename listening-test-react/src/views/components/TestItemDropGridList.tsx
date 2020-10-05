@@ -37,7 +37,7 @@ export const TestItemDropGridList = observer(function ({example, type = 'image'}
       break;
   }
 
-  return <GridList cols={3} cellHeight="auto">
+  return <GridList cols={3}>
     {example.medias.map((a, i) =>
       <GridListTile key={i}>
         {switchPreviewBaseType({

@@ -3,7 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {PropsWithChildren, useState} from "react";
 import {Container} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-export default function AppBarLayout(props: any) {
+export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any, fixedTitle?: boolean }>) {
   const {handleDrawerToggle, fixedTitle} = props;
   const history = useHistory();
   const [title, setTitle] = useState<string>();
