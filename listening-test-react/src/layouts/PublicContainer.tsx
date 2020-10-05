@@ -10,6 +10,7 @@ import Loading from "./components/Loading";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import FindPassword from "../views/PublicPages/FindPassword";
 import ConfirmEmail from "../views/PublicPages/ConfirmEmail";
+import NotFoundView from "./components/NotFoundView";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -36,7 +37,9 @@ export default function PublicContainer() {
         <Route exact path="/sign-up" component={SignUp}/>
         <Route exact path="/find-password" component={FindPassword}/>
         <Route exact path="/confirm-email" component={ConfirmEmail}/>
-        <Redirect to="/not-found" />
+        {/*Not found page*/}
+        <Route exact path="/not-found"><NotFoundView/></Route>
+        <Redirect to="/not-found"/>
       </Switch>
     </Suspense>
   );

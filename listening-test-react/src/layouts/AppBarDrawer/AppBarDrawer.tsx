@@ -13,13 +13,13 @@ import {ListItemNavLink} from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import Axios from "axios";
 import TestListPage from "../../views/shared-views/TestListPage";
-import {isDevMode} from "../../shared/ReactTools";
 import TestTabPage from "../../views/shared-views/TestTabPage";
 import ManageUsers from "../../views/ManageUsers";
 import AuthRoute from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
 import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
+import NotFoundView from "../components/NotFoundView";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -46,7 +46,7 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/people`} icon='account_box' permission="User">Manage Users</ListItemNavLink>
     <ListItemNavLink to={`${path}/template`} icon='note_add' permission="Template">Manage Templates</ListItemNavLink>
     <Divider/>
-    <ListSubheader>Audio Tasks</ListSubheader>
+    <ListSubheader style={{background: 'white'}}>Audio Tasks</ListSubheader>
     <ListItemNavLink to={`${path}/ab-test`} icon='headset'>Audio AB</ListItemNavLink>
     <ListItemNavLink to={`${path}/acr-test`} icon='music_note'>Audio ACR</ListItemNavLink>
     <ListItemNavLink to={`${path}/mushra-test`} icon='linear_scale'>Audio MUSHRA</ListItemNavLink>
@@ -54,14 +54,14 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/hearing-test`} icon='hearing'>Hearing Test (Beta)</ListItemNavLink>
     <Divider/>
     <ListSubheader>Image Tasks</ListSubheader>
-    {/*<ListItemNavLink to={`${path}/image-ab`} icon='image_search'>Image AB</ListItemNavLink>*/}
-    {/*<ListItemNavLink to={`${path}/image-acr`} icon='image_search'>Image ACR</ListItemNavLink>*/}
     <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labelling</ListItemNavLink>
+    <ListItemNavLink to={`${path}/image-ab`} icon='brightness_6'>Image AB</ListItemNavLink>
+    {/*<ListItemNavLink to={`${path}/image-acr`} icon='wallpaper'>Image ACR</ListItemNavLink>*/}
     <Divider/>
     <ListSubheader>Video Tasks</ListSubheader>
-    {/*<ListItemNavLink to={`${path}/video-ab`} icon='video_label'>Video AB</ListItemNavLink>*/}
-    {/*<ListItemNavLink to={`${path}/video-acr`} icon='video_label'>Video ACR</ListItemNavLink>*/}
-    <ListItemNavLink to={`${path}/video-labeling`} icon='video_label'>Video Labelling</ListItemNavLink>
+    <ListItemNavLink to={`${path}/video-labeling`} icon='movie'>Video Labelling</ListItemNavLink>
+    {/*<ListItemNavLink to={`${path}/video-ab`} icon='video_library'>Video AB</ListItemNavLink>*/}
+    {/*<ListItemNavLink to={`${path}/video-acr`} icon='ondemand_video'>Video ACR</ListItemNavLink>*/}
     <Divider/>
     <ListSubheader>Others</ListSubheader>
     <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
@@ -187,7 +187,10 @@ export function AppBarDrawer(props: any) {
           </AppBarLayout>
         </Route>
         {/*Context make this not working*/}
-        {!isDevMode() && <Redirect to="/not-found"/>}
+        <Route exact path={`${path}/not-found`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><NotFoundView/></AppBarLayout>
+        </Route>
+        <Redirect to={`${path}/not-found`}/>
       </Switch>
     </Suspense>
   </div>;

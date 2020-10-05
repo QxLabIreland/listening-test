@@ -3,7 +3,6 @@ import Loading from "./layouts/components/Loading";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SurveyContainer from "./layouts/SurveyContainer";
 import {AppBarDrawer} from "./layouts/AppBarDrawer/AppBarDrawer";
-import NotFoundView from "./layouts/components/NotFoundView";
 import PublicContainer from "./layouts/PublicContainer";
 import XsrfAuthUserProvider from "./shared/providers/XsrfAuthUserProvider";
 import GlobalDialogProvider from "./shared/providers/GlobalDialogProvider";
@@ -23,7 +22,6 @@ export default function App() {
                 {/*Dashboard administration pages*/}
                 <AuthRoute path="/user"><AppBarDrawer/></AuthRoute>
                 {/*Outside pages*/}
-                <Route path="/not-found" component={NotFoundView}/>
                 <Route path="/" component={PublicContainer}/>
               </Switch>
             </Suspense>

@@ -11,6 +11,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import {Button} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import NotFoundView from "./components/NotFoundView";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -43,7 +44,9 @@ export default function SurveyContainer() {
             <Route exact path={`${path}/audio-labeling/:id`}><SurveyPage testUrl="audio-labeling"/></Route>
             <Route exact path={`${path}/image-labeling/:id`}><SurveyPage testUrl="image-labeling"/></Route>
             <Route exact path={`${path}/video-labeling/:id`}><SurveyPage testUrl="video-labeling"/></Route>
-            {!isDevMode() && <Redirect to="/not-found"/>}
+            {/*Not found page*/}
+            <Route exact path={`${path}/not-found`}><NotFoundView/></Route>
+            <Redirect to={`${path}/not-found`}/>
           </Switch>
         </Suspense>
       </Container>

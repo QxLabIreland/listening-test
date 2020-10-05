@@ -13,8 +13,7 @@ const useStyles = makeStyles((_: Theme) => createStyles({
     borderRadius: 4,
     cursor: 'pointer',
     textAlign: 'center',
-    height: '100%',
-    minHeight: 160
+    height: '100%'
   }
 }));
 
