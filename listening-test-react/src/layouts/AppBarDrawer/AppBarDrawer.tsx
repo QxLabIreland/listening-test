@@ -20,6 +20,7 @@ import TemplatesPage from "../../views/TemplatesPage";
 import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
 import NotFoundView from "../components/NotFoundView";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -34,12 +35,8 @@ export function AppBarDrawer(props: any) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
   const handleSignOut = () => Axios.delete('/api/login').then();
-
   const DrawerList = () => <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <ListItemNavLink to={`${path}/storage`} icon='storage' permission="Storage">Storage Status</ListItemNavLink>
@@ -69,6 +66,12 @@ export function AppBarDrawer(props: any) {
   </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
+  const testUrls = ['ab-test', 'acr-test', 'mushra-test', 'hearing-test', 'audio-labeling', 'image-labeling', 'image-ab', 'video-labeling'] as TestUrl[];
+  const testUrlsWithTitle = [
+    ['ab-test', 'AB Test'], ['acr-test', 'ACR Test'], ['mushra-test', 'MUSHRA Test'],
+    ['hearing-test', 'Hearing Sensitivity Test'], ['audio-labeling', 'Audio Labeling Task'],
+    ['image-labeling', 'Image Labeling Task'], ['image-ab', 'Image AB Task'], ['video-labeling', 'Video Labeling Task']
+  ] as [TestUrl, string][];
 
   return <div className={classes.root}>
     <CssBaseline/>
@@ -107,85 +110,23 @@ export function AppBarDrawer(props: any) {
             <TemplatesPage/>
           </AppBarLayout>
         </AuthRoute>
-        {/*Listening Test routes*/}
-        <Route exact path={`${path}/ab-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="ab-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/acr-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="acr-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/mushra-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="mushra-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/hearing-test`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="hearing-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/audio-labeling`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="audio-labeling"/>
-          </AppBarLayout>
-        </Route>
-        {/*Image*/}
-        <Route exact path={`${path}/image-labeling`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="image-labeling"/>
-          </AppBarLayout>
-        </Route>
-        {/*Video*/}
-        <Route exact path={`${path}/video-labeling`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TestListPage testUrl="video-labeling"/>
-          </AppBarLayout>
-        </Route>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
         </Route>
+
+        {/*Listening Task routes*/}
+        {testUrls.map(testUrl => <Route exact path={`${path}/${testUrl}`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
+            <TestListPage testUrl={testUrl}/>
+          </AppBarLayout>
+        </Route>)}
         {/*Detail with back arrow button. Aka: no navigation page*/}
-        <Route exact path={`${path}/ab-test/:id`}>
+        {testUrlsWithTitle.map(urlTitle => <Route exact path={`${path}/${urlTitle[0]}/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="AB Test" testUrl="ab-test"/>
+            <TestTabPage testName={urlTitle[1]} testUrl={urlTitle[0]}/>
           </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/acr-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="ACR Test" testUrl="acr-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/mushra-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="MUSHRA Test" testUrl="mushra-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/hearing-test/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="Hearing Sensitivity Test" testUrl="hearing-test"/>
-          </AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/audio-labeling/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="Audio Labeling Task" testUrl="audio-labeling"/>
-          </AppBarLayout>
-        </Route>
-        {/*Image*/}
-        <Route exact path={`${path}/image-labeling/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="Image Labeling Task" testUrl="image-labeling"/>
-          </AppBarLayout>
-        </Route>
-        {/*Video*/}
-        <Route exact path={`${path}/video-labeling/:id`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
-            <TestTabPage testName="Video Labeling Task" testUrl="video-labeling"/>
-          </AppBarLayout>
-        </Route>
+        </Route>)}
+
         {/*Context make this not working*/}
         <Route exact path={`${path}/not-found`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><NotFoundView/></AppBarLayout>

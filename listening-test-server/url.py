@@ -3,6 +3,7 @@ from handlers.auth.users import UsersHandler
 from handlers.dashboard import DashboardHandler
 from handlers.download_csv.audio_labeling_csv_download import AudioLabelingCsvDownload
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
+from handlers.download_csv.image_ab_csv_download import ImageAbCsvDownload
 from handlers.download_csv.image_labeling_csv_download import ImageLabelingCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
 from handlers.download_csv.video_labeling_csv_download import VideoLabelingCsvDownload
@@ -15,6 +16,7 @@ from handlers.test_and_survey.audio_ab_test import AbTestHandler, AbTestSurveyHa
 from handlers.download_csv.acr_test_csv_download import AcrTestCsvDownload
 from handlers.test_and_survey.audio_labeling_task import AudioLabelingHandler, AudioLabelingSurveyHandler
 from handlers.test_and_survey.hearing_test import HearingTestHandler, HearingSurveyHandler
+from handlers.test_and_survey.image_ab_task import ImageAbHandler, ImageAbSurveyHandler
 from handlers.test_and_survey.image_labeling_task import ImageLabelingHandler, ImageLabelingSurveyHandler
 from handlers.test_and_survey.audio_mushra_test import MushraTestHandler, MushraSurveyHandler
 from handlers.miscellanea.responses_count import ResponsesCountHandler
@@ -60,6 +62,10 @@ path = [
     ("/api/image-labeling", ImageLabelingHandler),
     ("/api/task/image-labeling", ImageLabelingSurveyHandler),
     ("/api/csv-download/image-labeling", ImageLabelingCsvDownload),
+
+    ("/api/image-ab", ImageAbHandler),
+    ("/api/task/image-ab", ImageAbSurveyHandler),
+    ("/api/csv-download/image-ab", ImageAbCsvDownload),
     # Video
     ("/api/video-labeling", VideoLabelingHandler),
     ("/api/task/video-labeling", VideoLabelingSurveyHandler),

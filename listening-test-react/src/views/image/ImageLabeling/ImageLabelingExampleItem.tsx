@@ -1,17 +1,17 @@
 import {observer} from "mobx-react";
 import React from "react";
-import {TestItemExampleCardProps} from "../components/TypesAndItemOverrides";
+import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import {TagsGroup} from "../../shared/components/TagsGroup";
-import {SurveyControl} from "../../shared/components/SurveyControl";
-import {TestItemDropGridList} from "../components/TestItemDropGridList";
-import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
-import {RemovableSurveyControl} from "../../shared/components/RemovableSurveyControl";
-import {useMatStyles} from "../SharedStyles";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
+import {TagsGroup} from "../../../shared/components/TagsGroup";
+import {SurveyControl} from "../../../shared/components/SurveyControl";
+import {TestItemDropGridList} from "../../components/TestItemDropGridList";
+import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
+import {RemovableSurveyControl} from "../../../shared/components/RemovableSurveyControl";
+import {useMatStyles} from "../../SharedStyles";
+import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 
 export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps & {type?: 'video' | 'image'}>) => {
   const {example, title, action, collapsed, type = 'image'} = props;

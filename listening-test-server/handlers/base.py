@@ -6,16 +6,16 @@ from bson import ObjectId
 from bson.json_util import dumps, loads
 from mongodbconnection import MongoDBConnection
 
-conn = MongoDBConnection()
-
 
 class BaseHandler(tornado.web.RequestHandler, ABC):
+    conn = MongoDBConnection()
+
     def __init__(self, application, request, **kwargs):
         super().__init__(application, request, **kwargs)
         self.user_id: Optional[ObjectId] = None
         # Current db means the db which a handler is currently using
-        self.mongo_client = conn.client
-        self.db = conn.db
+        self.mongo_client = BaseHandler.conn.client
+        self.db = BaseHandler.conn.db
         # Additional fields for simplicity
         self.taskCollectionName = self.surveyCollectionName = None
 

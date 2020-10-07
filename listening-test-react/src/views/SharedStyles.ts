@@ -30,6 +30,12 @@ export const useMatStyles = makeStyles((theme: Theme) => {
   });
 });
 
+export const useSharedStyles = makeStyles((_: Theme) => ({
+  cursorPointer: {cursor: 'pointer'},
+  flexCenter: {height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'},
+  fullWidth: {width: '100%'}
+}));
+
 export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     backgroundColor: theme.palette.background.default,
