@@ -53,6 +53,8 @@ def switch_test_collection(self: BaseHandler, test_type: str) -> Optional[Collec
         return self.db['audioLabelingTasks']
     elif test_type == 'image-labeling':
         return self.db['imageLabelingTasks']
+    elif test_type == 'image-ab':
+        return self.db['imageAbTasks']
     elif test_type == 'video-labeling':
         return self.db['videoLabelingTasks']
     else:

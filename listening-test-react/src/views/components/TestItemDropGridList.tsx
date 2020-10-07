@@ -11,13 +11,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 // reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
-export const TestItemDropGridList = observer(function ({example, type = 'image'}: {
-  example: BasicExampleModel, type?: 'image' | 'video'
+export const TestItemDropGridList = observer(function ({example, type = 'image', disableUpload}: {
+  example: BasicExampleModel, type?: 'image' | 'video', disableUpload?: boolean
 }) {
   const classes = useStyles();
   const {handleDragStart, handleDragOver, handleDropSwapFiles, handleDelete, handleAdd} = useFileBoxesFunc(example.medias);
 
   const switchPreviewBaseType = (props: any) => {
+    if (!props?.src) return null;
     switch (type) {
       case "image":
         return <img alt="uploaded" {...props}/>
@@ -41,21 +42,22 @@ export const TestItemDropGridList = observer(function ({example, type = 'image'}
     {example.medias.map((a, i) =>
       <GridListTile key={i}>
         {switchPreviewBaseType({
-          src: a.src, draggable: true, onDrop: () => handleDropSwapFiles(i),
+          src: a?.src, draggable: true, onDrop: () => handleDropSwapFiles(i),
           onDragOver: handleDragOver, onDragStart: () => handleDragStart(i)
         })}
-        <GridListTileBar subtitle={a.filename} actionIcon={
+        <GridListTileBar subtitle={a?.filename} actionIcon={
           <IconButton className={classes.withe} onClick={() => handleDelete(i)}><Icon>delete_outline</Icon></IconButton>
         }/>
       </GridListTile>
     )}
-    <GridListTile>
+    {/*A condition to remove the upload box*/}
+    {!disableUpload && <GridListTile>
       <FileUploadDropBox onChange={handleAdd} fileType={type}>
         {uploadText}
         <Icon>attachment</Icon>
       </FileUploadDropBox>
       <GridListTileBar subtitle="Click to choose or Drop a file"/>
-    </GridListTile>
+    </GridListTile>}
   </GridList>
 })
 

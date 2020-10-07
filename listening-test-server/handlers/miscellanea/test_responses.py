@@ -62,6 +62,8 @@ def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Co
         return self.db['audioLabelingSurveys']
     elif test_type == 'image-labeling':
         return self.db['imageLabelingSurveys']
+    elif test_type == 'image-ab':
+        return self.db['imageAbSurveys']
     elif test_type == 'video-labeling':
         return self.db['videoLabelingSurveys']
     else:

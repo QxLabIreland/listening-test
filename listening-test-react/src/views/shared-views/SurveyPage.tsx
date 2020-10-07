@@ -25,7 +25,7 @@ import {
   sliderItemValidateError,
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
-import {ImageLabelingRenderItem} from "../image/ImageLabelingRenderItem";
+import {ImageLabelingRenderItem} from "../image/ImageLabeling/ImageLabelingRenderItem";
 import {VideoLabelingRenderItem} from "../video/VideoLabelingRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
@@ -166,6 +166,8 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
         return HearingSurveyRenderItem
       case "image-labeling":
         return ImageLabelingRenderItem
+      case "image-ab":
+        return ImageLabelingRenderItem
       case "video-labeling":
         return VideoLabelingRenderItem
       default:
@@ -178,6 +180,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
       case "ab-test":
       case "audio-labeling": // Only use fields validation
       case "image-labeling":
+      case "image-ab":
       case "video-labeling":
         return questionedExValidateError;
       case "acr-test":

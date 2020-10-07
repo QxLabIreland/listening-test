@@ -1,19 +1,17 @@
 import {observer} from "mobx-react";
 import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
-import {SurveyControlType, TestItemType, TestUrl} from "../../../shared/models/EnumsAndTypes";
+import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
-import {SurveyControlModel} from "../../../shared/models/SurveyControlModel";
 import {useMatStyles} from "../../SharedStyles";
 
-export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void, testUrl?: TestUrl }) {
-  const {onAdd, testUrl} = props;
+export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void}) {
+  const {onAdd} = props;
   const classes = useMatStyles();
-  const disableTraining: boolean = testUrl === 'ab-test' || testUrl === 'hearing-test';
 
   const handleAdd = (type: TestItemType) => {
     let newItem: AudioTestItemModel;
@@ -50,9 +48,9 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.example)}>
       <Icon>add</Icon>Add Example
     </Button>
-    {!disableTraining && <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
+    <Button variant="outlined" color="primary" onClick={() => handleAdd(TestItemType.training)}>
       <Icon>add</Icon>Add Training Example
-    </Button>}
+    </Button>
     <AddQuestionButton onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}/>
   </Box>
 });

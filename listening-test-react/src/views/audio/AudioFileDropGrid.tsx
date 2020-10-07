@@ -37,8 +37,7 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
 })
 
 const useStyles = makeStyles((_: Theme) => createStyles({
-  fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'},
-  uploadBox: {textAlign: 'center', border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4, cursor: 'pointer'}
+  fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}
 }));
 
 const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, onDrop, disabled}: {

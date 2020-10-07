@@ -4,7 +4,6 @@ import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {Redirect} from "react-router-dom";
-import {isDevMode} from "../shared/ReactTools";
 import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
 import {SurveyPage} from "../views/shared-views/SurveyPage";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -43,6 +42,7 @@ export default function SurveyContainer() {
             <Route exact path={`${path}/hearing-test/:id`}><SurveyPage testUrl="hearing-test"/></Route>
             <Route exact path={`${path}/audio-labeling/:id`}><SurveyPage testUrl="audio-labeling"/></Route>
             <Route exact path={`${path}/image-labeling/:id`}><SurveyPage testUrl="image-labeling"/></Route>
+            <Route exact path={`${path}/image-ab/:id`}><SurveyPage testUrl="image-ab"/></Route>
             <Route exact path={`${path}/video-labeling/:id`}><SurveyPage testUrl="video-labeling"/></Route>
             {/*Not found page*/}
             <Route exact path={`${path}/not-found`}><NotFoundView/></Route>
