@@ -27,6 +27,7 @@ import {
 } from "../../shared/ErrorValidators";
 import {ImageLabelingRenderItem} from "../image/ImageLabeling/ImageLabelingRenderItem";
 import {VideoLabelingRenderItem} from "../video/VideoLabelingRenderItem";
+import {ImageAbRenderItem} from "../image/ImageAb/ImageAbRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>(value ? value : null);
@@ -167,7 +168,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
       case "image-labeling":
         return ImageLabelingRenderItem
       case "image-ab":
-        return ImageLabelingRenderItem
+        return ImageAbRenderItem
       case "video-labeling":
         return VideoLabelingRenderItem
       default:

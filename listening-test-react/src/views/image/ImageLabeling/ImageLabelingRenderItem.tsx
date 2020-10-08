@@ -61,7 +61,7 @@ function PreviewDialog({openedImg, setOpenedImg}: { openedImg: string, setOpened
   return <Dialog fullScreen open={openedImg !== undefined} onClose={() => setOpenedImg(undefined)}
                  TransitionComponent={Transition}>
     <div className={classes.flexCenter}>
-      <img src={openedImg} ref={openedImgRef} alt="Grid List" onLoad={handleLoad}
+      <img src={openedImg} ref={openedImgRef} alt="Grid List" onLoad={handleLoad} className={classes.cursorPointer}
            onClick={() => setOpenedImg(undefined)} style={openedImgStyle}/>
     </div>
   </Dialog>
