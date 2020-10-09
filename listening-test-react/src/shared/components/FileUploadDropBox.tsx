@@ -100,7 +100,12 @@ export function useFileBoxesFunc(medias: BasicFileModel[], keepPlace?: boolean) 
     event.preventDefault();
     event.stopPropagation();
   }
-  const handleAdd = (newAudio: AudioFileModel) => medias.push(newAudio);
+  const handleAdd = (newFile: BasicFileModel) => {
+    const i = medias.indexOf(null);
+    // Fill the blank
+    if (i > -1) medias[i] = newFile;
+    else medias.push(newFile);
+  }
   const handleDelete = (index: number) => {
     if (keepPlace) medias[index] = null;
     else medias.splice(index, 1);

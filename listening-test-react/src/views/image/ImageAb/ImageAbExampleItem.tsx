@@ -28,7 +28,7 @@ export const ImageAbExampleItem = observer((props: React.PropsWithChildren<TestI
             <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
           </Grid>
           <Grid item xs={12}>
-            <TestItemDropGridList example={example} type="image" disableUpload={example.medias?.length > 1}/>
+            <TestItemDropGridList example={example} type="image" disableUpload keepSlot/>
           </Grid>
           {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
