@@ -1,16 +1,21 @@
 import {observer} from "mobx-react";
 import {TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
-import React, {useEffect, useRef, useState} from "react";
+import React, {MouseEvent, useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {Slider, Theme} from "@material-ui/core";
+import {Theme} from "@material-ui/core";
 import {useSharedStyles} from "../../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((_: Theme) => ({
-  sliderStickWrapper: {position: 'absolute', top: -16, bottom: 0},
-  sliderStick: {position: 'absolute', top:0, bottom:0, left: -3, borderLeft: '2px solid black', borderRight:'2px solid black', background: 'white', width: 6},
+  canvasContainer: {position: 'relative', width: '100%'},
+  sliderStickWrapper: {position: 'absolute', top: 0, bottom: 5},
+  sliderStick: {
+    position: 'absolute', top: 0, bottom: 0, left: -3,
+    borderLeft: '2px solid black', borderRight:'2px solid black',
+    background: 'white', width: 6, cursor: 'move'
+  },
 }));
 
 export const ImageAbRenderItem = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
@@ -18,9 +23,8 @@ export const ImageAbRenderItem = observer(function (props: { item: ImageTestItem
   const classes = {...useSharedStyles(), ...useStyles()};
   const canvasRef = useRef<HTMLCanvasElement>();
   const canvasContainerRef = useRef<HTMLDivElement>();
-  const [maskWidth, setMaskWidth] = useState(0);
+  const [maskWidth, setMaskWidth] = useState(5);
   const images = useRef<HTMLImageElement[]>([]);
-  console.log('rereder' + maskWidth)
 
   useEffect(() => {
     // Resize the canvas when window is resizing and reset width of canvas first
@@ -47,26 +51,36 @@ export const ImageAbRenderItem = observer(function (props: { item: ImageTestItem
     if (!images.current || images.current.length < 2) return;
     // Draw on canvas based on mask width
     const cxt = canvasRef.current.getContext('2d');
-    const imageWidth = images.current[1].width * (maskWidth / 100);
-    const drawWidth = canvasRef.current.width * (maskWidth / 100);
-    // console.log(maskWidth)
+    const ratio = maskWidth / 100;
+    const drawWidth = canvasRef.current.width * ratio;
 
-    cxt.drawImage(images.current[0], 0,0, imageWidth, images.current[0].height,0, 0, drawWidth, canvasRef.current.height);
-    cxt.drawImage(images.current[1], imageWidth, 0, images.current[1].width, images.current[1].height,  drawWidth, 0, canvasRef.current.width, canvasRef.current.height);
+    cxt.drawImage(images.current[0], 0,0, images.current[0].width * ratio, images.current[0].height,0, 0, drawWidth, canvasRef.current.height);
+    cxt.drawImage(images.current[1], images.current[1].width * ratio, 0, images.current[1].width, images.current[1].height,  drawWidth, 0, canvasRef.current.width, canvasRef.current.height);
   }
+  // Update canvas
   useEffect(drawOnCanvas, [maskWidth]);
 
   const handleOnResize = () => {
-    // Reset canvas height based on image ratio
+    // Reset canvas height based on image ratio and draw
     const canvasHeight = canvasContainerRef.current.clientWidth / images.current[0].width * images.current[0].height;
     canvasRef.current.width = canvasContainerRef.current.clientWidth;
     canvasRef.current.height = canvasHeight;
-    console.log(maskWidth)
     drawOnCanvas();
   }
-  const handleSliderOnChange = (_: any, value: number | number[]) => {
-    if (!images.current || images.current.length < 2) return;
-    setMaskWidth(Number(value));
+  const handleMouseDown = (_: MouseEvent<HTMLSpanElement>) => {
+    // Remove listeners
+    const handleMouseUp = () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    }
+    const handleMouseMove = (event: any) => {
+      // Get new value, skip if new value is not in the range
+      const newValue = (event.clientX - canvasContainerRef.current.getBoundingClientRect().left) / canvasContainerRef.current.clientWidth * 100
+      if (newValue < 5 || newValue > 95) return;
+      setMaskWidth(newValue);
+    }
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
   }
 
   switch (item.type) {
@@ -74,20 +88,15 @@ export const ImageAbRenderItem = observer(function (props: { item: ImageTestItem
       return <RenderSurveyControl control={item.questionControl}/>
     case TestItemType.example:
       return <Grid container spacing={3}>
-        {/*Description for the example*/}
-        {item.example.fields[0] && <Grid item xs={12}>
-          <RenderSurveyControl control={item.example.fields[0]}/>
-        </Grid>}
         {/*Images grids*/}
-        <div style={{position: 'relative', width: '100%'}} ref={canvasContainerRef}>
-          <canvas ref={canvasRef} width="400" height="400"/>
+        <div className={classes.canvasContainer} ref={canvasContainerRef}>
+          <canvas ref={canvasRef} width="320" height="320"/>
           <span style={{left: maskWidth + '%'}} className={classes.sliderStickWrapper}>
-            <span className={classes.sliderStick}/>
+            <span className={classes.sliderStick} onMouseDown={handleMouseDown}/>
           </span>
-          <Slider value={maskWidth} max={100} onChange={handleSliderOnChange}/>
         </div>
         {/*Questions*/}
-        {item.example.fields.slice(1)?.map((value, i) => <Grid item xs={12} key={i}>
+        {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
           <RenderSurveyControl control={value}/>
         </Grid>)}
       </Grid>

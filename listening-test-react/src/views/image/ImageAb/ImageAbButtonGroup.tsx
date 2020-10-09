@@ -25,7 +25,7 @@ export const ImageAbButtonGroup = observer(function (props: { onAdd: (type: Audi
         value: null,
         required: true
       }],
-      medias: []
+      medias: [null, null]
     }
   });
 
