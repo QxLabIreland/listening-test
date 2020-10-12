@@ -6,6 +6,7 @@ from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownlo
 from handlers.download_csv.image_ab_csv_download import ImageAbCsvDownload
 from handlers.download_csv.image_labeling_csv_download import ImageLabelingCsvDownload
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
+from handlers.download_csv.video_ab_csv_download import VideoAbCsvDownload
 from handlers.download_csv.video_labeling_csv_download import VideoLabelingCsvDownload
 from handlers.miscellanea.storage_status import StorageStatusHandler
 from handlers.test_and_survey.audio_acr_test import AcrTestHandler, AcrSurveyHandler
@@ -24,6 +25,7 @@ from handlers.download_csv.ab_test_responses_download import AbTestResponsesDown
 from handlers.miscellanea.test_responses import TestResponsesHandler
 from handlers.file_handler import FileHandler
 from handlers.miscellanea.template_handler import TemplateHandler
+from handlers.test_and_survey.video_ab_task import VideoAbHandler, VideoAbSurveyHandler
 from handlers.test_and_survey.video_labeling_task import VideoLabelingHandler, VideoLabelingSurveyHandler
 
 path = [
@@ -70,6 +72,10 @@ path = [
     ("/api/video-labeling", VideoLabelingHandler),
     ("/api/task/video-labeling", VideoLabelingSurveyHandler),
     ("/api/csv-download/video-labeling", VideoLabelingCsvDownload),
+
+    ("/api/video-ab", VideoAbHandler),
+    ("/api/task/video-ab", VideoAbSurveyHandler),
+    ("/api/csv-download/video-ab", VideoAbCsvDownload),
     # Response and Misc
     ("/api/response", TestResponsesHandler),
     ("/api/response-count", ResponsesCountHandler),
