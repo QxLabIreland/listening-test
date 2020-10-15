@@ -44,6 +44,9 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
     else {
       const data = {name: '', description: '', items: [] as BasicTaskItemModel[]};
       const observable = addAnObserveForChanges(data);
+      // Default individual question page
+      if (testUrl.includes('image') || testUrl.includes('video'))
+        observable.settings = {...observable.settings, isIndividual: true}
       setTestModel(observable);
     }
   }, [id, testUrl, location.state]);

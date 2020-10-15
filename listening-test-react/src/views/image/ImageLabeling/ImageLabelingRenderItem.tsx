@@ -24,7 +24,7 @@ export const ImageLabelingRenderItem = observer(function (props: { item: ImageTe
           <RenderSurveyControl control={item.example.fields[0]}/>
         </Grid>}
         {/*Images grids*/}
-        <GridList cols={colsNum} className={classes.fullWidth}>
+        <GridList cols={colsNum} className={classes.fullWidth} cellHeight={'auto'}>
           {item.example.medias.map((v, i) => <GridListTile key={i} onClick={() => setOpenedImg(v.src)}>
             <img src={v.src} alt={v.filename} className={classes.cursorPointer}/>
           </GridListTile>)}

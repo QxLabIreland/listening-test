@@ -44,6 +44,7 @@ export default function SurveyContainer() {
             <Route exact path={`${path}/image-labeling/:id`}><SurveyPage testUrl="image-labeling"/></Route>
             <Route exact path={`${path}/image-ab/:id`}><SurveyPage testUrl="image-ab"/></Route>
             <Route exact path={`${path}/video-labeling/:id`}><SurveyPage testUrl="video-labeling"/></Route>
+            <Route exact path={`${path}/video-ab/:id`}><SurveyPage testUrl="video-ab"/></Route>
             {/*Not found page*/}
             <Route exact path={`${path}/not-found`}><NotFoundView/></Route>
             <Redirect to={`${path}/not-found`}/>

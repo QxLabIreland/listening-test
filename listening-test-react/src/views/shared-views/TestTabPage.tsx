@@ -69,6 +69,8 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
       return <TestDetailView testUrl={testUrl} ButtonGroup={ImageAbButtonGroup}/>
     case "video-labeling":
       return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup}/>
+    case "video-ab":
+      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup}/>
     default:
       return null;
   }
