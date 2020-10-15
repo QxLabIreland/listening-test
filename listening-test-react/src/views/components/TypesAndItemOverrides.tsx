@@ -30,6 +30,8 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
       return ImageAbExampleItem
     case "video-labeling":
       return (props) => <ImageLabelingExampleItem {...props} type="video"/>
+    case "video-ab":
+      return (props) => <ImageLabelingExampleItem {...props} type="video"/>
     default:
       return null;
   }

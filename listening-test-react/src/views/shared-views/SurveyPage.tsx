@@ -171,6 +171,8 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
         return ImageAbRenderItem
       case "video-labeling":
         return VideoLabelingRenderItem
+      case "video-ab":
+        return VideoLabelingRenderItem
       default:
         return null;
     }
@@ -183,6 +185,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
       case "image-labeling":
       case "image-ab":
       case "video-labeling":
+      case "video-ab":
         return questionedExValidateError;
       case "acr-test":
       case "mushra-test":

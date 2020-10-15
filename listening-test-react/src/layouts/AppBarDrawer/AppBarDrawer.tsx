@@ -57,7 +57,7 @@ export function AppBarDrawer(props: any) {
     <Divider/>
     <ListSubheader>Video Tasks</ListSubheader>
     <ListItemNavLink to={`${path}/video-labeling`} icon='movie'>Video Labelling</ListItemNavLink>
-    {/*<ListItemNavLink to={`${path}/video-ab`} icon='video_library'>Video AB</ListItemNavLink>*/}
+    <ListItemNavLink to={`${path}/video-ab`} icon='video_library'>Video AB</ListItemNavLink>
     {/*<ListItemNavLink to={`${path}/video-acr`} icon='ondemand_video'>Video ACR</ListItemNavLink>*/}
     <Divider/>
     <ListSubheader>Others</ListSubheader>
@@ -66,11 +66,12 @@ export function AppBarDrawer(props: any) {
   </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
-  const testUrls = ['ab-test', 'acr-test', 'mushra-test', 'hearing-test', 'audio-labeling', 'image-labeling', 'image-ab', 'video-labeling'] as TestUrl[];
+  const testUrls = ['ab-test', 'acr-test', 'mushra-test', 'hearing-test', 'audio-labeling', 'image-labeling', 'image-ab', 'video-labeling', 'video-ab'] as TestUrl[];
   const testUrlsWithTitle = [
     ['ab-test', 'AB Test'], ['acr-test', 'ACR Test'], ['mushra-test', 'MUSHRA Test'],
     ['hearing-test', 'Hearing Sensitivity Test'], ['audio-labeling', 'Audio Labeling Task'],
-    ['image-labeling', 'Image Labeling Task'], ['image-ab', 'Image AB Task'], ['video-labeling', 'Video Labeling Task']
+    ['image-labeling', 'Image Labeling Task'], ['image-ab', 'Image AB Task'], ['video-labeling', 'Video Labeling Task'],
+    ['video-ab', 'Video AB Task']
   ] as [TestUrl, string][];
 
   return <div className={classes.root}>
