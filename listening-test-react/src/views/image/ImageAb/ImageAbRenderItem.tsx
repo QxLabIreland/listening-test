@@ -19,7 +19,7 @@ const useStyles = makeStyles((_: Theme) => ({
 }));
 
 export const ImageAbRenderItem = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
-  const {item} = props;
+  const {item, active} = props;
   const classes = {...useSharedStyles(), ...useStyles()};
   const canvasRef = useRef<HTMLCanvasElement>();
   const canvasContainerRef = useRef<HTMLDivElement>();
@@ -45,7 +45,7 @@ export const ImageAbRenderItem = observer(function (props: { item: ImageTestItem
       images.current[i] = imgEle;
     });
     return () => window.removeEventListener('resize', handleOnResize);
-  }, [item.example.medias]);
+  }, [item.example.medias, active]);
 
   const drawOnCanvas = () => {
     if (!images.current || images.current.length < 2) return;

@@ -48,10 +48,10 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
+  const values: string[] = control.value ? control.value.split(',') : [];
 
   function handleCheckbox(event: any) {
     // To array for manipulation
-    const values: string[] = control.value ? control.value.split(',') : [];
     if (event.target.checked) values.push(event.target.name)
     else values.splice(values.indexOf(event.target.name), 1);
     // To string for storing value
@@ -63,7 +63,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
     <FormGroup>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} label={o} control={
-          <Checkbox name={o} onChange={handleCheckbox}/>
+          <Checkbox name={o} onChange={handleCheckbox} checked={values.includes(o)}/>
         }/>
       )}
     </FormGroup>
