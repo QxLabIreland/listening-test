@@ -57,7 +57,7 @@ def get_medias_in_using(db: Database) -> set:
     medias_checklist = set()
     # Get all collections and map data
     for col in db.list_collection_names():
-        data = db[col].aggregate([
+        data_list = db[col].aggregate([
             {"$addFields": {"listSrc": {'$reduce': {
                 'input': "$items.example.medias",
                 'initialValue': [],
@@ -66,9 +66,11 @@ def get_medias_in_using(db: Database) -> set:
             {'$project': {'listSrc': 1}},
             {'$match': {'listSrc.0': {'$exists': True}}}
         ])
-        for d in data:
+        for d in data_list:
             for src in d['listSrc']:
-                medias_checklist.add(os.path.split(src)[-1])
+                if src:
+                    medias_checklist.add(os.path.split(src)[-1])
+
     return medias_checklist
 
 
