@@ -4,10 +4,10 @@ import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../shared/components/AddQuestionButton";
-import {useMatStyles} from "../SharedStyles";
-import {ImageTestItemModel} from "../../shared/models/ImageTaskModel";
-import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
+import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
+import {useMatStyles} from "../../SharedStyles";
+import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
+import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 
 export const VideoLabelingButtonGroup = observer(function (props: { onAdd: (_: ImageTestItemModel) => void }) {
   const {onAdd} = props;

@@ -10,8 +10,9 @@ import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
 import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
 import {AudioLabelingButtonGroup} from "../audio/AudioLabeling/AudioLabelingButtonGroup";
 import {ImageLabelingButtonGroup} from "../image/ImageLabeling/ImageLabelingButtonGroup";
-import {VideoLabelingButtonGroup} from "../video/VideoLabelingButtonGroup";
+import {VideoLabelingButtonGroup} from "../video/VideoLabeling/VideoLabelingButtonGroup";
 import {ImageAbButtonGroup} from "../image/ImageAb/ImageAbButtonGroup";
+import {VideoAbButtonGroup} from "../video/VideoAb/VideoAbButtonGroup";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -70,7 +71,7 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
     case "video-labeling":
       return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup}/>
     case "video-ab":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup}/>
+      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoAbButtonGroup}/>
     default:
       return null;
   }

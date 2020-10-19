@@ -1,8 +1,8 @@
 import {observer} from "mobx-react";
-import {TestItemType} from "../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
+import {TestItemType} from "../../../shared/models/EnumsAndTypes";
+import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import React, {useEffect, useState} from "react";
-import {ImageTestItemModel} from "../../shared/models/ImageTaskModel";
+import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
 import {GridList, GridListTile} from "@material-ui/core";
 
@@ -12,6 +12,7 @@ export const VideoLabelingRenderItem = observer(function (props: { item: ImageTe
 
   useEffect(() => {
     if (active === false) handlePause();
+    else refs[0].play().then();
   }, [active]);
 
   const handlePause = () => {
@@ -27,7 +28,7 @@ export const VideoLabelingRenderItem = observer(function (props: { item: ImageTe
         {item.example.fields[0] && <Grid item xs={12}>
           <RenderSurveyControl control={item.example.fields[0]}/>
         </Grid>}
-        {/*Images grids*/}
+        {/*Video grids*/}
         <GridList cellHeight="auto" cols={1}>
           {item.example.medias.map((v, i) => <GridListTile key={i}>
             <video src={v.src} controls ref={r => refs[i] = r} width="100%"/>

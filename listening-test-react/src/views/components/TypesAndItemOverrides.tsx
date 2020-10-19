@@ -31,7 +31,7 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
     case "video-labeling":
       return (props) => <ImageLabelingExampleItem {...props} type="video"/>
     case "video-ab":
-      return (props) => <ImageLabelingExampleItem {...props} type="video"/>
+      return (props) => <ImageAbExampleItem {...props} mediaType="video"/>
     default:
       return null;
   }
@@ -43,7 +43,7 @@ export function overrideTrainingItem(testUrl: TestUrl): TestItemExampleCardType 
     case "acr-test":
     case "mushra-test":
     case "hearing-test":
-    case "audio-labeling":
+    case "audio-labeling": // Special task type, using training as example
       return AudioTestItemTrainingCard
     default:
       return null;
