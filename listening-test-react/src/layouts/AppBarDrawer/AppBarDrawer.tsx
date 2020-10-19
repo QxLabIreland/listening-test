@@ -116,13 +116,13 @@ export function AppBarDrawer(props: any) {
         </Route>
 
         {/*Listening Task routes*/}
-        {testUrls.map(testUrl => <Route exact path={`${path}/${testUrl}`}>
+        {testUrls.map((testUrl, i) => <Route key={i} exact path={`${path}/${testUrl}`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
             <TestListPage testUrl={testUrl}/>
           </AppBarLayout>
         </Route>)}
         {/*Detail with back arrow button. Aka: no navigation page*/}
-        {testUrlsWithTitle.map(urlTitle => <Route exact path={`${path}/${urlTitle[0]}/:id`}>
+        {testUrlsWithTitle.map((urlTitle, i) => <Route key={i} exact path={`${path}/${urlTitle[0]}/:id`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
             <TestTabPage testName={urlTitle[1]} testUrl={urlTitle[0]}/>
           </AppBarLayout>

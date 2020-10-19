@@ -26,8 +26,9 @@ import {
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
 import {ImageLabelingRenderItem} from "../image/ImageLabeling/ImageLabelingRenderItem";
-import {VideoLabelingRenderItem} from "../video/VideoLabelingRenderItem";
+import {VideoLabelingRenderItem} from "../video/VideoLabeling/VideoLabelingRenderItem";
 import {ImageAbRenderItem} from "../image/ImageAb/ImageAbRenderItem";
+import {VideoAbRenderItem} from "../video/VideoAb/VideoAbRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>(value ? value : null);
@@ -172,7 +173,7 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
       case "video-labeling":
         return VideoLabelingRenderItem
       case "video-ab":
-        return VideoLabelingRenderItem
+        return VideoAbRenderItem
       default:
         return null;
     }

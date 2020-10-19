@@ -11,8 +11,8 @@ import {RemovableSurveyControl} from "../../../shared/components/RemovableSurvey
 import {TestItemDropGridList} from "../../components/TestItemDropGridList";
 import {useMatStyles} from "../../SharedStyles";
 
-export const ImageAbExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
-  const {example, action, title, collapsed} = props;
+export const ImageAbExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps> & {mediaType?: 'image' | 'video'}) => {
+  const {example, action, title, collapsed, mediaType = 'image'} = props;
   const classes = useMatStyles();
   // Methods for audios changed
   const handleDeletedQuestionAdd = () => example.fields.push({
@@ -28,7 +28,7 @@ export const ImageAbExampleItem = observer((props: React.PropsWithChildren<TestI
             <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
           </Grid>
           <Grid item xs={12}>
-            <TestItemDropGridList example={example} type="image" disableUpload keepSlot/>
+            <TestItemDropGridList example={example} type={mediaType} disableUpload keepSlot/>
           </Grid>
           {/*Special survey questions for ab test*/}
           {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
