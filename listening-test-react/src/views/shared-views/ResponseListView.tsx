@@ -26,13 +26,13 @@ import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
 import {red} from "@material-ui/core/colors";
 
-const useStyles = makeStyles((theme) => (createStyles({
+const useStyles = makeStyles((_) => (createStyles({
   content: {padding: 0},
   actions: {display: 'flex', justifyContent: 'space-between', paddingLeft: 0},
   button: {marginLeft: 8,}
 })));
 
-const DangerCheckbox = withStyles((theme) => ({
+const DangerCheckbox = withStyles((_) => ({
   root: {'&$checked': {color: red[500]}},
   checked: null
 }))(Checkbox);
@@ -108,9 +108,11 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
               <TableCell>{r.name}</TableCell>
               <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
               <TableCell>
-                <ResponsePreviewDialog>
-                  <SurveyPage testUrl={testUrl} value={r}/>
-                </ResponsePreviewDialog>
+                <Tooltip title="Preview response">
+                  <ResponsePreviewDialog size="small">
+                    <SurveyPage testUrl={testUrl} value={r}/>
+                  </ResponsePreviewDialog>
+                </Tooltip>
               </TableCell>
             </TableRow>) : <TableRow>
               <TableCell colSpan={4}>There is no response here for this page.</TableCell>

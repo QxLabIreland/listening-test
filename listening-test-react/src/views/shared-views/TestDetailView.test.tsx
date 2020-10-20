@@ -9,11 +9,12 @@ import Axios, {AxiosResponse} from "axios";
 import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {jestTestContainer as container} from "../../setupTests";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
+import {AudioTestItemTrainingCard} from "../audio/AudioTestItemTrainingCard";
 
 it("render loading animation", () => {
   act(() => {
     render(<MemoryRouter initialEntries={["/user/ab-test/0"]}>
-      <TestDetailView testUrl="ab-test" TestItemExampleCard={AbTestItemExampleCard} ButtonGroup={AbAddItemButtonGroup}/>
+      <TestDetailView testUrl="ab-test" ButtonGroup={AbAddItemButtonGroup}/>
     </MemoryRouter>, container);
   });
   expect(container.textContent).toBe("Loading...");
@@ -32,7 +33,7 @@ it("renders detail data of a test", async () => {
   // Use the asynchronous version of act to apply resolved promises
   await act(async () => {
     render(<MemoryRouter initialEntries={["/user/ab-test/1"]}>
-      <TestDetailView testUrl="ab-test" TestItemExampleCard={AbTestItemExampleCard} ButtonGroup={AbAddItemButtonGroup}/>
+      <TestDetailView testUrl="ab-test" ButtonGroup={AbAddItemButtonGroup}/>
   </MemoryRouter>, container);
   });
 
@@ -43,7 +44,7 @@ it("renders detail data of a test", async () => {
 it("reorder test item card in the list", () => {
   const items = [] as BasicTaskItemModel[];
   act(() => {
-    render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} />, container);
+    render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} TestItemTrainingCard={AudioTestItemTrainingCard} />, container);
   });
   expect(container.textContent).toBe("");
 });

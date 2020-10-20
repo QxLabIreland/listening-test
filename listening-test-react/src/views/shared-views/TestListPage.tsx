@@ -26,13 +26,12 @@ import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
 import TableBody from "@material-ui/core/TableBody";
 import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
-import {getCurrentHost} from "../../shared/ReactTools";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
-import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
 import {useUserAuthResult} from "../../layouts/components/AuthRoute";
+import {ShareLinkDialog} from "./ShareLinkDialog";
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
@@ -109,19 +108,19 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {data.length ? getFilterData().map(test => <TableRow hover key={test._id.$oid}>
-          <TableCell>{test.name}</TableCell>
+        {data.length ? getFilterData().map(taskModel => <TableRow hover key={taskModel._id.$oid}>
+          <TableCell>{taskModel.name}</TableCell>
           <TableCell><Tooltip title="Check responses">
-            <Button to={{pathname: `${path}/${test._id.$oid}`, hash: "#responses"}} component={Link}
-                    color="primary">{test.responseNum}</Button>
+            <Button to={{pathname: `${path}/${taskModel._id.$oid}`, hash: "#responses"}} component={Link}
+                    color="primary">{taskModel.responseNum}</Button>
           </Tooltip></TableCell>
-          <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
+          <TableCell>{new Date(taskModel.createdAt?.$date).toLocaleString()}</TableCell>
           {userAuth && <TableCell>
-            <Checkbox color="primary" checked={!!test.isTemplate}
-                      onChange={() => handleIsTemplateChange(test)}/>
+            <Checkbox color="primary" checked={!!taskModel.isTemplate}
+                      onChange={() => handleIsTemplateChange(taskModel)}/>
           </TableCell>}
           <TableCell className={classes.elementGroup}>
-            <ActionsGroup testUrl={testUrl} path={path} test={test} onDelete={handleDelete}
+            <ActionsGroup testUrl={testUrl} path={path} taskModel={taskModel} onDelete={handleDelete}
                           onCopy={handleCopyTest} handleEdit={handleTemplateEdit}/>
           </TableCell>
         </TableRow>) : <TableRow><TableCell colSpan={4}>
@@ -152,72 +151,64 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTaskMode
 }
 
 /** When width is less than md, the button will be put into a menu*/
-function ActionsGroup({testUrl, path, test, onDelete, onCopy, handleEdit}: {
+function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: {
   testUrl: TestUrl, path: string, handleEdit: (_: BasicTaskModel) => void,
-  test: BasicTaskModel, onDelete: (_: BasicTaskModel) => void, onCopy: (_: BasicTaskModel) => void
+  taskModel: BasicTaskModel, onDelete: (_: BasicTaskModel) => void, onCopy: (_: BasicTaskModel) => void
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
   // Snackbar hooks
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const openDialog = useContext(GlobalDialog);
-  const url = `/task/${testUrl}/${test._id.$oid}`;
+  const shareDialogState = React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleShareClick = () => {
-    handleClose();
-    // Give a dialog alert that ask if user want to continue. The survey may confuse people.
-    const error = testItemsValidateIncomplete(test);
-    if (error) openDialog(error, 'Required');
-    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => {
-      setSnackbarOpen(true);
-      window.open(getCurrentHost() + url);
-    });
-  }
   const handleShareClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') return;
     setSnackbarOpen(false);
   }
   const handleDelete = () => {
     handleClose();
-    onDelete(test);
+    onDelete(taskModel);
   }
   const handleCopy = () => {
     handleClose();
-    onCopy(test);
+    onCopy(taskModel);
   }
 
   return <>
+    <ShareLinkDialog taskUrl={testUrl} task={taskModel} shareDialogState={shareDialogState}/>
     <Hidden mdDown>
-      <Tooltip title="Edit">{test.isTemplate
-        ? <IconButton size="small" color="primary" onClick={() => handleEdit(test)}><Icon>edit</Icon></IconButton>
-        : <IconButton size="small" color="primary" component={Link}
-                      to={`${path}/${test._id.$oid}`}><Icon>edit</Icon></IconButton>
-      }</Tooltip>
-      <Tooltip title="Open and share this test">
-        <IconButton size="small" color="primary" onClick={handleShareClick}><Icon>share</Icon></IconButton>
+      <Tooltip title="Share this test">
+        <IconButton color="primary" size="small" onClick={() => shareDialogState[1](true)}>
+          <Icon>share</Icon>
+        </IconButton>
       </Tooltip>
-      <Tooltip title="Duplicate test"><IconButton size="small" color="primary" onClick={() => onCopy(test)}>
+      <Tooltip title="Edit">{taskModel.isTemplate
+        ? <IconButton size="small" color="primary" onClick={() => handleEdit(taskModel)}><Icon>edit</Icon></IconButton>
+        : <IconButton size="small" color="primary" component={Link}
+                      to={`${path}/${taskModel._id.$oid}`}><Icon>edit</Icon></IconButton>
+      }</Tooltip>
+      <Tooltip title="Duplicate test"><IconButton size="small" color="primary" onClick={() => onCopy(taskModel)}>
         <Icon>content_copy</Icon>
       </IconButton></Tooltip>
-      <Tooltip title="Delete"><IconButton size="small" color="default" onClick={() => onDelete(test)}>
+      <Tooltip title="Delete"><IconButton size="small" color="default" onClick={() => onDelete(taskModel)}>
         <Icon>delete</Icon>
       </IconButton></Tooltip>
     </Hidden>
     <Hidden lgUp>
       <IconButton size="small" color="primary" onClick={handleClick}><Icon>menu</Icon></IconButton>
       <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {test.isTemplate ? <MenuItem onClick={() => handleEdit(test)}>
+        <MenuItem onClick={() => shareDialogState[1](true)}>
+          <ListItemIcon color="primary"><Icon>share</Icon></ListItemIcon>
+          <ListItemText primary="Share task URL"/>
+        </MenuItem>
+        {taskModel.isTemplate ? <MenuItem onClick={() => handleEdit(taskModel)}>
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
-        </MenuItem> : <MenuItem component={Link} to={`${path}/${test._id.$oid}`}>
+        </MenuItem> : <MenuItem component={Link} to={`${path}/${taskModel._id.$oid}`}>
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
         </MenuItem>}
-        <MenuItem onClick={handleShareClick}>
-          <ListItemIcon color="primary"><Icon>share</Icon></ListItemIcon>
-          <ListItemText primary="Copy test URL"/>
-        </MenuItem>
         <MenuItem onClick={handleCopy}>
           <ListItemIcon color="primary"><Icon>content_copy</Icon></ListItemIcon>
           <ListItemText primary="Duplicate"/>

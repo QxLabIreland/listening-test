@@ -4,19 +4,20 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Checkbox, FormControlLabel, Icon, IconButton, TextField} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Hidden, Icon, IconButton, TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {TestSettingsDialog} from "./TestSettingsDialog";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
-import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
-import {getCurrentHost} from "../../shared/ReactTools";
 import {overrideExampleItem, overrideTrainingItem} from "../components/TypesAndItemOverrides";
+import {SurveyPage} from "./SurveyPage";
+import ResponsePreviewDialog from "./ResponsePreviewDialog";
+import {ShareLinkDialog} from "./ShareLinkDialog";
 
 export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   testUrl: TestUrl,
@@ -61,6 +62,16 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
     });
     return anObservable;
   }
+  const requestServer = (isNew: boolean) => {
+    setIsTestChanged(false);
+    // Request server based on is New or not.
+    Axios.request({
+      method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: testModel
+    }).then(() => {
+      history.push('./');
+      openSnackbar('Save successfully', undefined, 'success');
+    }, reason => openDialog(reason.response.data, 'Something wrong'));
+  }
   const handleSubmit = () => {
     // Create a new text or modify current test
     if (+id === 0) requestServer(true);
@@ -72,47 +83,13 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
       else requestServer(false);
     });
   }
-  const requestServer = (isNew: boolean) => {
-    setIsTestChanged(false);
-    // Request server based on is New or not.
-    Axios.request({
-      method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: testModel
-    }).then(() => {
-      history.push('./');
-      openSnackbar('Save successfully', undefined, 'success');
-    }, reason => openDialog(reason.response.data, 'Something wrong'));
-  }
   // Local methods
-  const addItem = (newItem: BasicTaskItemModel) => testModel.items.push(newItem)
-  const handleShareClick = () => {
-    const url = `/task/${testUrl}/${testModel._id.$oid}`;
-    const error = testItemsValidateIncomplete(testModel);
-    if (error) openDialog(error, 'Required');
-    else navigator.clipboard.writeText(getCurrentHost() + url).then(() => {
-      window.open(getCurrentHost() + url);
-    });
-  }
+  const addItem = (newItem: BasicTaskItemModel) => testModel.items.push(newItem);
 
-  const actions = !!testModel && <Grid item xs={12} container alignItems="center" spacing={1}>
-    <Grid item style={{flexGrow: 1}}/>
-    <Grid item><FormControlLabel label="Collapse All" control={
-      <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
-                indeterminate={testModel.items.some(v => v.collapsed) && !testModel.items.every(v => v.collapsed)}
-                onChange={e => testModel.items.forEach(v => v.collapsed = e.target.checked)}/>
-    }/></Grid>
-    <Grid item><TestSettingsDialog settings={testModel.settings}
-                                   onConfirm={settings => testModel.settings = settings}/></Grid>
-    <Grid item><Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}><span>
-      <IconButton onClick={handleShareClick} disabled={isTestChanged}><Icon>share</Icon></IconButton>
-    </span></Tooltip></Grid>
-    <Grid item><Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>
-      Save{!isTestChanged && 'd'}
-    </Button></Grid>
-  </Grid>
   return <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
     <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
     {testModel ? <React.Fragment>
-      {actions}
+      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged} handleSubmit={handleSubmit}/>
       <Grid item xs={12}>
         <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
                    onChange={e => testModel.name = e.target.value}/>
@@ -127,10 +104,47 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
       <Grid item container justify="center" xs={12}>
         <ButtonGroup onAdd={addItem}/>
       </Grid>
-      {actions}
+      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged} handleSubmit={handleSubmit}/>
     </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
   </Grid>
 })
+
+function DetailViewActions(props: {testModel: BasicTaskModel, testUrl: TestUrl, isTestChanged: boolean, handleSubmit: () => void}) {
+  const {testModel, testUrl, isTestChanged, handleSubmit} = props
+  // Share Dialog state
+  const shareDialogState = React.useState(false);
+
+  return <Grid item xs={12} container alignItems="center" spacing={1}>
+    <Grid item style={{flexGrow: 1}}/>
+    <Grid item><FormControlLabel label="Collapse All" control={
+      <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
+                indeterminate={testModel.items.some(v => v.collapsed) && !testModel.items.every(v => v.collapsed)}
+                onChange={e => testModel.items.forEach(v => v.collapsed = e.target.checked)}/>
+    }/></Grid>
+    <Grid item><TestSettingsDialog settings={testModel.settings}
+                                   onConfirm={settings => testModel.settings = settings}/></Grid>
+    <Grid item>
+      <Tooltip title="Preview task">
+        <ResponsePreviewDialog>
+          <SurveyPage testUrl={testUrl} value={testModel}/>
+        </ResponsePreviewDialog>
+      </Tooltip>
+    </Grid>
+    <Grid item>
+      <Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}>
+        <IconButton onClick={() => shareDialogState[1](true)}>
+          <Icon>share</Icon>
+        </IconButton>
+      </Tooltip>
+      <ShareLinkDialog taskUrl={testUrl} task={testModel} shareDialogState={shareDialogState}/>
+    </Grid>
+    <Grid item>
+      <Button color="primary" variant="contained" onClick={handleSubmit} disabled={!isTestChanged}>
+        Save{!isTestChanged && 'd'}
+      </Button>
+    </Grid>
+  </Grid>
+}
 
 function templateProcess(tem: BasicTaskModel, testUrl: TestUrl) {
   // Prevent it from becoming a template and some process

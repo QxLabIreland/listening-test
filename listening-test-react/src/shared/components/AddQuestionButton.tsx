@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlModel} from "../models/SurveyControlModel";
-import React, {useState} from "react";
+import React, {forwardRef, PropsWithChildren, PropsWithRef, useImperativeHandle, useState} from "react";
 import {SurveyControlType, TestItemType} from "../models/EnumsAndTypes";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
@@ -21,10 +21,19 @@ export const handleSurveyQuestionItemAdd = (question: SurveyControlModel, onAdd:
   });
 };
 
-export const AddQuestionButton = observer(function (props: { onQuestionAdd: (question: SurveyControlModel) => void, onlyCore?: boolean }) {
+export type AddQuestionButtonType = { closeMenu: () => void }
+
+export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, PropsWithChildren<{
+  onQuestionAdd: (question: SurveyControlModel) => void, onlyCore?: boolean
+}>>(function (props, forwardedRef) {
+  // If props doesn't have anchorEl and setAnchorEl, we are gonna use copied one
   const {onQuestionAdd, onlyCore} = props;
+  const [anchorEl, setAnchorEl] = useState<HTMLElement>();
+  useImperativeHandle(forwardedRef, () => ({
+    closeMenu: () => setAnchorEl(null)
+  }));
+
   // When menu clicked
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -78,11 +87,16 @@ export const AddQuestionButton = observer(function (props: { onQuestionAdd: (que
     </Menu>
   </>
   else return <>
-    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}><Icon>more_vert</Icon>Add Survey
-      Question</Button>
+    <Button variant="outlined" color="primary" onClick={handleAddMenuClick}>
+      <Icon>more_vert</Icon>Add Question
+    </Button>
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
+      {/*<MenuItem disabled>
+        <Typography variant="body1"><strong>Test Item Type</strong></Typography>
+      </MenuItem>*/}
+      {props.children}
       <MenuItem disabled>
-        <Typography variant="body1"><strong>Answer Input Type</strong></Typography>
+        <Typography variant="body1"><strong>Question Type</strong></Typography>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
         <ListItemIcon>
@@ -110,4 +124,4 @@ export const AddQuestionButton = observer(function (props: { onQuestionAdd: (que
       </MenuItem>
     </Menu>
   </>;
-});
+}));
