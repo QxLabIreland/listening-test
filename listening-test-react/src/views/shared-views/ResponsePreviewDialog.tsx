@@ -1,8 +1,8 @@
-import React, {PropsWithChildren} from "react";
+import React, {forwardRef} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
-import IconButton from "@material-ui/core/IconButton";
-import {AppBar, Container, createStyles, Icon} from "@material-ui/core";
+import IconButton, {IconButtonProps} from "@material-ui/core/IconButton";
+import {AppBar, Container, Icon} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -16,11 +16,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme) => createStyles({
-  paperFullScreen: {backgroundColor: theme.palette.background.default}
-}))
+const useStyles = makeStyles((theme) => ({
+  paperFullScreen: {backgroundColor: theme.palette.background.default},
+  rootAppBar: {backgroundColor: theme.palette.warning.dark},
+}));
 
-export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
+function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
+  const {...rest} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
 
@@ -32,25 +34,26 @@ export default function ResponsePreviewDialog(props: PropsWithChildren<any>) {
   };
 
   return <React.Fragment>
-    <IconButton size="small" onClick={handleClickOpen}>
+    <IconButton ref={ref} {...rest} onClick={handleClickOpen}>
       <Icon>pageview</Icon>
     </IconButton>
     <CssBaseline/>
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}
-            classes={classes}>
-      <AppBar position="static">
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <AppBar position="sticky" className={classes.rootAppBar}>
         <Toolbar style={{display: 'flex'}}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
             <Icon>close</Icon>
           </IconButton>
           <Typography variant="h6">
-            Response view (changed won't be saved)
+            Preview mode (changed won't be saved)
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="md">
+      <Container component="main" maxWidth="md" className={classes.paperFullScreen}>
         {props.children}
       </Container>
     </Dialog>
   </React.Fragment>;
 }
+
+export default forwardRef(ResponsePreviewDialog)
