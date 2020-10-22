@@ -24,9 +24,9 @@ export const LinkedDescriptionRender = function ({content}: {content: string}) {
   // Get text except links
   const nonLinkTexts = content.split(/\[(?:[^\]]*)]\((?:[^)]*)\)/g);
   // Build final style
-  return <Typography>{nonLinkTexts.map((value, index) => <>
+  return <Typography>{nonLinkTexts.map((value, index) => <React.Fragment key={index}>
     {value}{index < links.length && <Link href={links[index][2]} target="_blank">{links[index][1]}</Link>}
-  </>)}</Typography>;
+  </React.Fragment>)}</Typography>;
 }
 
 export const RenderSurveyControl = observer(function ({control}: { control: SurveyControlModel }) {

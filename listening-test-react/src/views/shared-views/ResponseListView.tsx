@@ -109,9 +109,7 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
               <TableCell>{new Date(r.createdAt?.$date).toLocaleString()}</TableCell>
               <TableCell>
                 <Tooltip title="Preview response">
-                  <ResponsePreviewDialog size="small">
-                    <SurveyPage testUrl={testUrl} value={r}/>
-                  </ResponsePreviewDialog>
+                  <ResponsePreviewDialog size="small" testUrl={testUrl} taskModel={r}/>
                 </Tooltip>
               </TableCell>
             </TableRow>) : <TableRow>

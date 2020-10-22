@@ -8,6 +8,7 @@ import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-
 import {RenderTraining} from "../../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
+import {observable, toJS} from "mobx";
 
 const alphabetList = Array.apply(undefined, Array(26)).map(function(x,y) { return String.fromCharCode(y + 65); }).join('');
 
@@ -35,6 +36,18 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
 
   useEffect(() => {
     if (active === false) handlePause();
+    else {
+      // TODO use randomAudios to display audio items
+      const randomAudios = observable(Array(value.medias.length));
+      value.medias.forEach(audio => {
+        let randomIndex = Math.floor(Math.random() * randomAudios.length);
+        while (randomAudios[randomIndex] != null)
+          randomIndex = Math.floor(Math.random() * randomAudios.length);
+        randomAudios[randomIndex] = audio;
+      });
+      console.log(toJS(randomAudios))
+      console.log(toJS(value.medias))
+    }
   }, [active]);
 
   return <> <AudioLoading showing={loading}/>

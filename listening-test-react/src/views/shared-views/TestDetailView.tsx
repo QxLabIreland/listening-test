@@ -4,7 +4,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {Checkbox, FormControlLabel, Hidden, Icon, IconButton, TextField} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Icon, IconButton, TextField} from "@material-ui/core";
 import Loading from "../../layouts/components/Loading";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
@@ -15,7 +15,6 @@ import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
 import {overrideExampleItem, overrideTrainingItem} from "../components/TypesAndItemOverrides";
-import {SurveyPage} from "./SurveyPage";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {ShareLinkDialog} from "./ShareLinkDialog";
 
@@ -125,9 +124,7 @@ function DetailViewActions(props: {testModel: BasicTaskModel, testUrl: TestUrl, 
                                    onConfirm={settings => testModel.settings = settings}/></Grid>
     <Grid item>
       <Tooltip title="Preview task">
-        <ResponsePreviewDialog>
-          <SurveyPage testUrl={testUrl} value={testModel}/>
-        </ResponsePreviewDialog>
+        <ResponsePreviewDialog testUrl={testUrl} taskModel={testModel}/>
       </Tooltip>
     </Grid>
     <Grid item>
