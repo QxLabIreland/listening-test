@@ -18,6 +18,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
   const addQuestionMenu = useRef<AddQuestionButtonType>();
 
   const handleAddExample = () => {
+    addQuestionMenu.current?.closeMenu();
     onAdd({
       id: uuid(),
       type: TestItemType.example,
@@ -33,10 +34,10 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
         medias: [null, null]
       }
     });
-    addQuestionMenu.current?.closeMenu();
   }
 
   const handleAddTraining = () => {
+    addQuestionMenu.current?.closeMenu();
     onAdd({
       id: uuid(), type: TestItemType.training, title: 'Training (click to edit)', example: {
         fields: [
@@ -44,10 +45,12 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
         ], medias: []
       }
     });
-    addQuestionMenu.current?.closeMenu();
   }
 
   return <Box className={classes.elementGroup}>
+    {/*<Button variant="outlined" color="primary">
+      <Icon>add</Icon>Add Section
+    </Button>*/}
     <AddQuestionButton ref={addQuestionMenu} onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}>
       <MenuItem onClick={handleAddExample}>
         <ListItemIcon>

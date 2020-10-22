@@ -131,11 +131,11 @@ function DetailViewActions(props: {testModel: BasicTaskModel, testUrl: TestUrl, 
       </Tooltip>
     </Grid>
     <Grid item>
-      <Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}>
-        <IconButton onClick={() => shareDialogState[1](true)}>
+      <Tooltip title={isTestChanged ? 'You must SAVE first' : "Open and share this test"}><span>
+        <IconButton onClick={() => shareDialogState[1](true)} disabled={isTestChanged || !testModel._id}>
           <Icon>share</Icon>
         </IconButton>
-      </Tooltip>
+      </span></Tooltip>
       <ShareLinkDialog taskUrl={testUrl} task={testModel} shareDialogState={shareDialogState}/>
     </Grid>
     <Grid item>

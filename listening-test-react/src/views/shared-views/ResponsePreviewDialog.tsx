@@ -17,14 +17,17 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const useStyles = makeStyles((theme) => ({
-  paperFullScreen: {backgroundColor: theme.palette.background.default},
   rootAppBar: {backgroundColor: theme.palette.warning.dark},
+}));
+const useMatBackground = makeStyles((theme) => ({
+  paperFullScreen: {backgroundColor: theme.palette.background.default}
 }));
 
 function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
   const {...rest} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
+  const backgroundClasses = useMatBackground();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,7 +41,7 @@ function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
       <Icon>pageview</Icon>
     </IconButton>
     <CssBaseline/>
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={backgroundClasses}>
       <AppBar position="sticky" className={classes.rootAppBar}>
         <Toolbar style={{display: 'flex'}}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -49,7 +52,7 @@ function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="md" className={classes.paperFullScreen}>
+      <Container component="main" maxWidth="md">
         {props.children}
       </Container>
     </Dialog>
