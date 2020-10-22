@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlModel} from "../models/SurveyControlModel";
-import React, {forwardRef, PropsWithChildren, PropsWithRef, useImperativeHandle, useState} from "react";
+import React, {forwardRef, PropsWithChildren, useImperativeHandle, useState} from "react";
 import {SurveyControlType, TestItemType} from "../models/EnumsAndTypes";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";

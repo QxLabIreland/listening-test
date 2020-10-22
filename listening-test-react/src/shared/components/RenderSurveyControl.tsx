@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  FormLabel,
+  FormLabel, Link,
   Radio,
   RadioGroup,
   TextField,
@@ -14,6 +14,20 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";
+
+export const LinkedDescriptionRender = function ({content}: {content: string}) {
+  const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
+  // Get all links in the description
+  const links: RegExpExecArray[] = []
+  let array1;
+  while ((array1 = linkRegex.exec(content)) !== null) links.push(array1);
+  // Get text except links
+  const nonLinkTexts = content.split(/\[(?:[^\]]*)]\((?:[^)]*)\)/g);
+  // Build final style
+  return <Typography>{nonLinkTexts.map((value, index) => <>
+    {value}{index < links.length && <Link href={links[index][2]} target="_blank">{links[index][1]}</Link>}
+  </>)}</Typography>;
+}
 
 export const RenderSurveyControl = observer(function ({control}: { control: SurveyControlModel }) {
   if (control.disabled) return null;
@@ -27,7 +41,7 @@ export const RenderSurveyControl = observer(function ({control}: { control: Surv
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
     case SurveyControlType.description:
-      return <Typography>{control.question}</Typography>
+      return <LinkedDescriptionRender content={control.question}/>
     default:
       return null;
   }
