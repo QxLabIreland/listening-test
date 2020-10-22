@@ -8,6 +8,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {makeStyles} from "@material-ui/core/styles";
+import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {SurveyPage} from "./SurveyPage";
+import {observable, toJS} from "mobx";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -23,11 +27,14 @@ const useMatBackground = makeStyles((theme) => ({
   paperFullScreen: {backgroundColor: theme.palette.background.default}
 }));
 
-function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
-  const {...rest} = props;
+function ResponsePreviewDialog(props: IconButtonProps & { taskModel: BasicTaskModel, testUrl: TestUrl }, ref: any) {
+  // Deconstruct taskModel, but we don't need its value
+  const {taskModel: _, testUrl, ...rest} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const backgroundClasses = useMatBackground();
+  // Unwrap the observable, it will return a copy
+  const taskModel = toJS(props.taskModel);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,7 +60,7 @@ function ResponsePreviewDialog(props: IconButtonProps, ref: any) {
         </Toolbar>
       </AppBar>
       <Container component="main" maxWidth="md">
-        {props.children}
+        <SurveyPage testUrl={testUrl} value={taskModel}/>
       </Container>
     </Dialog>
   </React.Fragment>;
