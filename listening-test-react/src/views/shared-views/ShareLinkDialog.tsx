@@ -15,6 +15,7 @@ export const ShareLinkDialog = forwardRef<HTMLElement & { openShareLinkDialog: (
   const [open, setOpen] = shareDialogState;
   const openGlobalDialog = useContext(GlobalDialog);
   // Create a url for shared link
+  if (!task?._id?.$oid) return null;
   const url = getCurrentHost() + `/task/${taskUrl}/${task._id.$oid}`;
 
   useImperativeHandle(forwardedRef, () => ({

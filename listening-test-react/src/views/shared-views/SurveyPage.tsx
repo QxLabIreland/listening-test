@@ -31,8 +31,8 @@ import {ImageAbRenderItem} from "../image/ImageAb/ImageAbRenderItem";
 import {VideoAbRenderItem} from "../video/VideoAb/VideoAbRenderItem";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
-  const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>(value ? value : null);
-  const [error, setError] = useState(undefined);
+  const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>();
+  const [error, setError] = useState<string>();
   const [openedPanel, setOpenedPanel] = useState(0);
   const {id} = useParams();
   const history = useHistory();
@@ -41,10 +41,13 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
   const {RenderedItem, validateError} = useSurveyRenderItem(testUrl);
-  // To get data from the server
+  // To get data from the server or load data
   useEffect(() => {
-    if (value) return;
-    Axios.get<BasicTaskModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
+    if (value) {
+      const validateError = testItemsValidateIncomplete(value);
+      if (validateError) setError('The task is incomplete: ' + validateError);
+      else setQuestionnaire(observable(value));
+    } else Axios.get<BasicTaskModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
       const validateError = testItemsValidateIncomplete(res.data);
       if (validateError) setError('The survey is incomplete. If you are creator: ' + validateError);
       else setQuestionnaire(observable(res.data));
