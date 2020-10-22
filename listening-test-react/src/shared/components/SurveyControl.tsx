@@ -17,6 +17,7 @@ import {GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControl
 import {SurveyControlType} from "../models/EnumsAndTypes";
 import {observer} from "mobx-react";
 import {makeStyles} from "@material-ui/core/styles";
+import {LinkedDescriptionRender} from "./RenderSurveyControl";
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
@@ -37,7 +38,7 @@ export const SurveyControl = observer(function (props: {
       case SurveyControlType.checkbox:
         return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
       case SurveyControlType.description:
-        return <Typography>{control.question}</Typography>
+        return <LinkedDescriptionRender content={control.question}/>
       default:
         return null;
     }
@@ -113,7 +114,7 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
                      onChange={(e) => handleChange(e.target.value, i)}/>
         </Grid>
         {/*Goto question selection*/}
-        {gotoQuestionItems && <Grid item>
+        {(control.type === SurveyControlType.radio && gotoQuestionItems) && <Grid item>
           <Tooltip title={disableGoto ? 'You must enable "Show each question individually" in Global settings. Click to open the settings to check the option' : ''}>
             <FormControl className={classes.selectWidth}>
               <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto} onClick={openGlobalSetting}
