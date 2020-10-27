@@ -5,7 +5,7 @@ import {SurveyControl} from "../../../shared/components/SurveyControl";
 import React from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import AudioExampleSettingsDialog from "../AudioExampleSettingsDialog";
+import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";

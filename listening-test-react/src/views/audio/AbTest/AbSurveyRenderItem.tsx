@@ -8,9 +8,12 @@ import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-
 import {RenderTraining} from "../../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
-import {observable, toJS} from "mobx";
+import {observable} from "mobx";
+import {useRandomizedAudio} from "../../../shared/CustomHooks";
 
-const alphabetList = Array.apply(undefined, Array(26)).map(function(x,y) { return String.fromCharCode(y + 65); }).join('');
+const alphabetList = Array.apply(undefined, Array(26)).map(function (x, y) {
+  return String.fromCharCode(y + 65);
+}).join('');
 
 export const AbSurveyRenderItem = observer(function (props: { item: AudioTestItemModel, active?: boolean }) {
   const {item, ...rest} = props;
@@ -33,28 +36,19 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
   const loading = useAllAudioReady(value.mediaRef ? [...refs, sampleRef] : refs);
   const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
+  // Create empty slots for randomized audios
+  const randomAudios = useRandomizedAudio(value.settings, value.medias, active);
 
   useEffect(() => {
     if (active === false) handlePause();
-    else {
-      // TODO use randomAudios to display audio items
-      const randomAudios = observable(Array(value.medias.length));
-      value.medias.forEach(audio => {
-        let randomIndex = Math.floor(Math.random() * randomAudios.length);
-        while (randomAudios[randomIndex] != null)
-          randomIndex = Math.floor(Math.random() * randomAudios.length);
-        randomAudios[randomIndex] = audio;
-      });
-      console.log(toJS(randomAudios))
-      console.log(toJS(value.medias))
-    }
   }, [active]);
 
   return <> <AudioLoading showing={loading}/>
     <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
 
-      {value.medias.map((v, i) => <Grid item key={i}>
-        <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} onEnded={i === 0 ? handleEnded : undefined}
+      {randomAudios.map((v, i) => v && <Grid item key={i}>
+        <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
+                     onEnded={i === 0 ? handleEnded : undefined}
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>
           {value.fields[0]?.options[i] || alphabetList[i]}
         </AudioButton>
@@ -72,8 +66,11 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
       </Grid>)}
 
       <Grid item xs={12}>
-        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime} disabled={value.settings?.disablePlayerSlider}/>
-        {value.settings?.sectionLooping && <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs} currentTime={currentTime}/>}
+        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}
+                         disabled={value.settings?.disablePlayerSlider}/>
+        {value.settings?.sectionLooping &&
+        <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs}
+                                       currentTime={currentTime}/>}
       </Grid>
     </Grid>
   </>
