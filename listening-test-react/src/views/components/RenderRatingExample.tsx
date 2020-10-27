@@ -7,6 +7,7 @@ import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ratingAreaStyle} from "../SharedStyles";
 import {AudioExampleModel, AudioFileModel} from "../../shared/models/AudioTestModel";
 import {AudioSectionLoopingController} from "../../shared/web-audio/AudioSectionLoopingController";
+import {useRandomizedAudio} from "../../shared/CustomHooks";
 
 export const RenderRatingExample = observer(function (props: { value: AudioExampleModel, RatingBar: (props: { audio: AudioFileModel }) => JSX.Element, active?: boolean }) {
   const {value, RatingBar, active} = props;
@@ -16,6 +17,9 @@ export const RenderRatingExample = observer(function (props: { value: AudioExamp
   const loading = useAllAudioReady(allRefs);
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
+  // Create empty slots for randomized audios
+  const randomAudios = useRandomizedAudio(value.settings, value.medias, active);
+
   useEffect(() => {
     if (active === false) handlePause();
   }, [active]);
@@ -26,7 +30,7 @@ export const RenderRatingExample = observer(function (props: { value: AudioExamp
         <RenderSurveyControl control={value}/>
       </Grid>)}
 
-      {value.medias.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
+      {randomAudios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
         <RatingBar audio={v}/>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause} onEnded={i === 0 ? handleEnded : undefined}
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>{i + 1}</AudioButton>

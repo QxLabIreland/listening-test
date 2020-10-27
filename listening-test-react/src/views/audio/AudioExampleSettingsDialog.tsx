@@ -11,10 +11,10 @@ import {useFormik} from "formik";
 import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
 
 const initialValues: AudioExampleSettingsModel = {
-  loopTimes: null, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false, randomAudio: false
+  loopTimes: 0, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false, randomMedia: false
 };
 
-export default function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean, disableRandomAudio?: boolean }) {
+export function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean, disableRandomAudio?: boolean }) {
   // Add disable prop that allow to disable some settings
   const {settings, onConfirm, disableSectionLoop, disableRandomAudio} = props;
   const [open, setOpen] = useState(false);
@@ -63,8 +63,8 @@ export default function AudioExampleSettingsDialog(props: { settings: AudioExamp
             label="Show section looping slider bar"
           />}
           {!disableRandomAudio && <FormControlLabel
-            control={<Checkbox checked={formik.values.randomAudio} {...formik.getFieldProps('randomAudio')}/>}
-            label="Show section looping slider bar"
+            control={<Checkbox checked={formik.values.randomMedia} {...formik.getFieldProps('randomMedia')}/>}
+            label="Randomize media files"
           />}
         </DialogContent>
         <DialogActions>

@@ -4,7 +4,7 @@ import {Button, CardContent, Collapse, Icon} from "@material-ui/core";
 import React from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
-import AudioExampleSettingsDialog from "../AudioExampleSettingsDialog";
+import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
 import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
@@ -17,12 +17,10 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
   const handleDeletedQuestionAdd = () => example.fields.push({
     type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false
   });
-  const SettingsDialog = () =>
-    <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings}/>
 
   return <Card>
     <CardHeader title={title} action={<>
-      <SettingsDialog/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings}/>
       {action} </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>

@@ -24,7 +24,7 @@ export interface AudioExampleSettingsModel {
   requireClipEnded?: boolean;
   sectionLooping?: boolean;
   disablePlayerSlider?: boolean;
-  randomAudio?: boolean;
+  randomMedia?: boolean;
 }
 
 export interface AudioFileModel extends BasicFileModel{

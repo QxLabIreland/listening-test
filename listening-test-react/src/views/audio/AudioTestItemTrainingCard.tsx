@@ -5,7 +5,7 @@ import {AudioExampleSettingsModel, AudioFileModel} from "../../shared/models/Aud
 import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import AudioExampleSettingsDialog from "./AudioExampleSettingsDialog";
+import {AudioExampleSettingsDialog} from "./AudioExampleSettingsDialog";
 import {CardContent, Collapse, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import {AudioFileDropGrid} from "./AudioFileDropGrid";
