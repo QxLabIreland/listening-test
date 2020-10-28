@@ -112,6 +112,9 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
   // Get filtered and mapped items
   const gotoQuestionItems = (index: number) =>
     items.filter((_, i1) => i1 > index + 1).map(item => ({id: item.id, title: item.title}));
+  const copyItem = (item: BasicTaskItemModel, index: number) => {
+    items.splice(index, 0, JSON.parse(JSON.stringify(item)));
+  }
 
   return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
     // ref?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
@@ -133,7 +136,7 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
     </>}</Box>
     <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
                   gotoQuestionItems={gotoQuestionItems(i)} TestItemTrainingCard={TestItemTrainingCard}
-                  disableGoto={!testSettings?.isIndividual}
+                  disableGoto={!testSettings?.isIndividual} onCopy={item => copyItem(item, i)}
     />
   </Grid>)}
   </>

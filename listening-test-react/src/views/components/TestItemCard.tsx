@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme: Theme) => {
 /** To render item into different card based on type */
 export const TestItemCard = observer(function (props: {
   value: BasicTaskItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType,
-  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, TestItemTrainingCard: TestItemExampleCardType
+  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, TestItemTrainingCard: TestItemExampleCardType,
+  onCopy: (_: BasicTaskItemModel) => void
 }) {
   const {value, TestItemExampleCard, TestItemTrainingCard} = props;
   // Label methods
@@ -46,7 +47,7 @@ export const TestItemCard = observer(function (props: {
   else return null;
 })
 // Buttons group for common operations
-const HeaderIconButtons = observer(function ({onDelete, value}: { value: BasicTaskItemModel, onDelete: () => void }) {
+const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
   const classes = useStyles();
   return <>
     <Tooltip title={`${value.collapsed ? 'Expand' : 'Collapse'} Question`}>
@@ -54,6 +55,9 @@ const HeaderIconButtons = observer(function ({onDelete, value}: { value: BasicTa
                   onClick={() => value.collapsed = !value.collapsed}>
         <Icon>{value.collapsed ? 'unfold_more' : 'unfold_less'}</Icon>
       </IconButton>
+    </Tooltip>
+    <Tooltip title="Copy This Question">
+      <IconButton onClick={() => onCopy(value)}><Icon>content_copy</Icon></IconButton>
     </Tooltip>
     <Tooltip title="Delete Question">
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>

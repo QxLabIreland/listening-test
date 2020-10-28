@@ -1,3 +1,5 @@
+import {MessageModel} from "./MessageModel";
+
 export class UserModel {
   _id: { $oid: string };
   name: string;
@@ -7,4 +9,5 @@ export class UserModel {
   policy?: boolean;
   isAdmin?: boolean;
   permissions?: string[];
+  messages?: MessageModel[];
 }
