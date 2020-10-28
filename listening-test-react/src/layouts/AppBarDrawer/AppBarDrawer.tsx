@@ -32,7 +32,6 @@ export function AppBarDrawer(props: any) {
   const {path} = useRouteMatch();
   const {window} = props;
   const classes = useStyles();
-  const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
@@ -79,7 +78,7 @@ export function AppBarDrawer(props: any) {
     <nav className={classes.drawer} aria-label="mailbox folders">
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <Hidden smUp implementation="css">
-        <Drawer container={container} variant="temporary" anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+        <Drawer container={container} variant="temporary" anchor="left"
                 open={mobileOpen} onClose={handleDrawerToggle} classes={{paper: classes.drawerPaper}}
                 ModalProps={{keepMounted: true}}>
           <DrawerList/>

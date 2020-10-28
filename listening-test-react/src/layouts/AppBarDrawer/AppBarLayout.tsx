@@ -4,10 +4,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import React, {PropsWithChildren, useState} from "react";
-import {Container} from "@material-ui/core";
+import {Badge, Container} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AppBarTitle} from "../../shared/ReactContexts";
+import {NotificationDrawer} from "./NotificationDrawer";
 
 export const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -29,10 +30,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexGrow: 1,
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(2)
-  }
+  },
+  grow: {flexGrow: 1},
+  toolBar: {display: 'flex'}
 }));
 
-export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any, fixedTitle?: boolean }>) {
+export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any, fixedTitle?: boolean}>) {
   const {handleDrawerToggle, fixedTitle} = props;
   const history = useHistory();
   const [title, setTitle] = useState<string>();
@@ -55,6 +58,8 @@ export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerTogg
           <Typography variant="h6" noWrap>
             {fixedTitle ? 'Go Listen Dashboard' : title}
           </Typography>
+          <div className={classes.grow}/>
+          <NotificationDrawer/>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>

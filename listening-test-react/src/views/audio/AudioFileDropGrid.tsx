@@ -10,7 +10,7 @@ import {FileUploadDropBox, useFileBoxesFunc} from "../../shared/components/FileU
 export const AudioFileDropGrid = observer(function ({example, reference, keepPlace}: {
   example: BasicExampleModel, reference?: boolean, keepPlace?: boolean
 }) {
-  const {handleDropSwapFiles, handleDragStart, draggingIndex} = useFileBoxesFunc(example.medias, keepPlace);
+  const {handleDropSwapFiles, handleDragStart, draggingIndex, handleDragOver} = useFileBoxesFunc(example.medias, keepPlace);
 
   const handleChange = (newAudio: BasicFileModel, index: number) => {
     if (newAudio == null) {
@@ -31,7 +31,7 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
     {/*File drop area*/}
     {example.medias.map((a, i) => <Grid item xs={12} md={4} key={i}>
       <AudioFileUploadBox fileModel={a} onChange={fm => handleChange(fm, i)} disabled={draggingIndex !== undefined}
-                    onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)}/>
+                    onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)} onDragOver={handleDragOver}/>
     </Grid>)}
   </>
 })
@@ -40,9 +40,9 @@ const useStyles = makeStyles((_: Theme) => createStyles({
   fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}
 }));
 
-const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, onDrop, disabled}: {
+const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, onDrop, disabled, onDragOver}: {
   onChange: (fm: BasicFileModel) => void, fileModel?: BasicFileModel, label?: string, isTag?: boolean,
-  onDragStart?: () => void, onDrop?: () => void, disabled?: boolean
+  onDragStart?: () => void, onDrop?: () => void, disabled?: boolean, onDragOver?: (event: any) => void
 }) => {
   const classes = useStyles();
 
@@ -50,7 +50,7 @@ const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, o
     event.stopPropagation();
     onChange(null);
   }
-  return <div onDrop={onDrop} onDragStart={onDragStart} draggable={!!onDragStart}>
+  return <div onDrop={onDrop} onDragStart={onDragStart} draggable={!!onDragStart} onDragOver={onDragOver}>
     <FileUploadDropBox onChange={onChange} fileType="audio" disabled={disabled}>
       {fileModel?.filename ? <>
         <Tooltip title={fileModel.filename} enterDelay={1000} placement="top">
