@@ -16,16 +16,18 @@ import React from "react";
 import {observer} from "mobx-react";
 
 export const LinkedDescriptionRender = function ({content}: {content: string}) {
-  const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
+  // const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
+  // https://google.com/ dfwr dafgqgf daf
+  const linkRegex = /https?:\/\/(?:[^ ]+)/g;
   // Get all links in the description
   const links: RegExpExecArray[] = []
   let array1;
   while ((array1 = linkRegex.exec(content)) !== null) links.push(array1);
   // Get text except links
-  const nonLinkTexts = content.split(/\[(?:[^\]]*)]\((?:[^)]*)\)/g);
+  const nonLinkTexts = content.split(linkRegex);
   // Build final style
   return <Typography>{nonLinkTexts.map((value, index) => <React.Fragment key={index}>
-    {value}{index < links.length && <Link href={links[index][2]} target="_blank">{links[index][1]}</Link>}
+    {value}{index < links.length && <Link href={links[index][0]} target="_blank">{links[index][0]}</Link>}
   </React.Fragment>)}</Typography>;
 }
 

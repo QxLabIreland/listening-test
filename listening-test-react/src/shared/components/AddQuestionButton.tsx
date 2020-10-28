@@ -4,7 +4,7 @@ import React, {forwardRef, PropsWithChildren, useImperativeHandle, useState} fro
 import {SurveyControlType, TestItemType} from "../models/EnumsAndTypes";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
-import {ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
+import {Divider, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import {uuid} from "uuidv4";
 import {BasicTaskItemModel} from "../models/BasicTaskModel";
 
@@ -94,10 +94,11 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
       {/*<MenuItem disabled>
         <Typography variant="body1"><strong>Test Item Type</strong></Typography>
       </MenuItem>*/}
-      {props.children}
       <MenuItem disabled>
         <Typography variant="body1"><strong>Question Type</strong></Typography>
       </MenuItem>
+      {props.children}
+      <Divider/>
       <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
         <ListItemIcon>
           <Icon fontSize="small">text_fields</Icon>
