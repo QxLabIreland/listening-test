@@ -37,7 +37,7 @@ export function NotificationDrawer() {
       },
       {
         _id: {$oid: '2'},
-        unRead: true,
+        unRead: false,
         content: 'A respondent has removed their response from **Test Name**. You should download the updated test data again.',
         createdAt: {$date: new Date('2020/10/28')}
       }

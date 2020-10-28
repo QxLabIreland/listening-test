@@ -20,7 +20,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<Te
 
   return <Card>
     <CardHeader title={title} action={<>
-      <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings}/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings} disableRandomAudio/>
       {action} </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>

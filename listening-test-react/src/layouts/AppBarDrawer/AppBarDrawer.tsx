@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
-import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {Redirect, Route, Switch, useRouteMatch} from "react-router";
 import Loading from "../components/Loading";
 import DashboardPage from "../../views/DashboardPage";
