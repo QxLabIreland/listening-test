@@ -26,9 +26,9 @@ export const LinkedDescriptionRender = function ({content}: {content: string}) {
   // Get text except links
   const nonLinkTexts = content.split(linkRegex);
   // Build final style
-  return <Typography>{nonLinkTexts.map((value, index) => <React.Fragment key={index}>
+  return <>{nonLinkTexts.map((value, index) => <React.Fragment key={index}>
     {value}{index < links.length && <Link href={links[index][0]} target="_blank">{links[index][0]}</Link>}
-  </React.Fragment>)}</Typography>;
+  </React.Fragment>)}</>;
 }
 
 export const RenderSurveyControl = observer(function ({control}: { control: SurveyControlModel }) {
@@ -43,7 +43,7 @@ export const RenderSurveyControl = observer(function ({control}: { control: Surv
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
     case SurveyControlType.description:
-      return <LinkedDescriptionRender content={control.question}/>
+      return <Typography><LinkedDescriptionRender content={control.question}/></Typography>
     default:
       return null;
   }
@@ -53,7 +53,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend">{control.question}</FormLabel>
+    <FormLabel component="legend"><LinkedDescriptionRender content={control.question}/></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
@@ -75,7 +75,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   }
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend">{control.question}</FormLabel>
+    <FormLabel component="legend"><LinkedDescriptionRender content={control.question}/></FormLabel>
     <FormGroup>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} label={o} control={
