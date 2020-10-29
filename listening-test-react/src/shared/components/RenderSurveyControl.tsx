@@ -15,7 +15,7 @@ import {
 import React from "react";
 import {observer} from "mobx-react";
 
-export const LinkedDescriptionRender = function ({content}: {content: string}) {
+export const LinkedTextRender = function ({content}: {content: string}) {
   // const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
   // https://google.com/ dfwr dafgqgf daf
   const linkRegex = /https?:\/\/(?:[^ ]+)/g;
@@ -43,7 +43,7 @@ export const RenderSurveyControl = observer(function ({control}: { control: Surv
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
     case SurveyControlType.description:
-      return <Typography><LinkedDescriptionRender content={control.question}/></Typography>
+      return <Typography><LinkedTextRender content={control.question}/></Typography>
     default:
       return null;
   }
@@ -53,7 +53,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend"><LinkedDescriptionRender content={control.question}/></FormLabel>
+    <FormLabel component="legend"><LinkedTextRender content={control.question}/></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
@@ -64,18 +64,18 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
-  const values: string[] = control.value ? control.value.split(',') : [];
+  const values: string[] = control.value ? JSON.parse(control.value): [];
 
   function handleCheckbox(event: any) {
     // To array for manipulation
     if (event.target.checked) values.push(event.target.name)
     else values.splice(values.indexOf(event.target.name), 1);
     // To string for storing value
-    control.value = values.toString();
+    control.value = JSON.stringify(values);
   }
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend"><LinkedDescriptionRender content={control.question}/></FormLabel>
+    <FormLabel component="legend"><LinkedTextRender content={control.question}/></FormLabel>
     <FormGroup>
       {control.options && control.options.map(o =>
         <FormControlLabel key={o} label={o} control={

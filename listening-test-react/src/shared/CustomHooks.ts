@@ -14,7 +14,7 @@ export function useRandomizedAudio(settings: {randomMedia?: boolean}, medias: Ba
       randomAudios[randomIndex] = audio;
     });
     // Normally set all audio to the state
-    else medias.forEach((v, i) => medias[i] = v);
+    else medias.forEach((v, i) => randomAudios[i] = v);
     console.log(toJS(medias))
     console.log(toJS(randomAudios))
   }, [active])
