@@ -1,8 +1,10 @@
 from datetime import datetime
+from uuid import uuid4
 
 from bson import ObjectId
 
 from handlers.base import BaseHandler
+from handlers.miscellanea.task_name_mapping import get_task_url_by_collection
 
 
 class AcrTestHandler(BaseHandler):
@@ -74,8 +76,9 @@ class AcrSurveyHandler(BaseHandler):
 
     async def get(self):
         _id = self.get_argument('_id')
-        data = self.db[self.taskCollectionName].find_one({'_id': ObjectId(_id)},
-                                                          {'_id': 0, 'createdAt': 0, 'modifiedAt': 0})
+        data = self.db[self.taskCollectionName].find_one(
+            {'_id': ObjectId(_id)}, {'_id': 0, 'createdAt': 0, 'modifiedAt': 0}
+        )
         # Add testId field, it will appear in response after user's submission
         data['testId'] = ObjectId(_id)
         self.dumps_write(data)
@@ -86,8 +89,21 @@ class AcrSurveyHandler(BaseHandler):
         result = self.db[self.surveyCollectionName].insert_one(body)
         self.dumps_write(result.inserted_id)
 
+    # The method that subject delete their own response
     async def delete(self):
         _id = self.get_argument('_id')
-
+        # For message
+        response = self.db[self.surveyCollectionName].find_one({'_id': ObjectId(_id)})
         result = self.db[self.surveyCollectionName].delete_one({'_id': ObjectId(_id)})
+        # Insert a message for user
+        if response:
+            message = {
+                'id': str(uuid4()), 'unRead': True, 'createdAt': datetime.now(),
+                'content': f'A respondent has removed their response from {response["name"]}. '
+                           f'You should download the updated test data again. https://golisten.ucd.ie/user'
+                           f'/{get_task_url_by_collection(self.taskCollectionName)}/{response["testId"]}#responses'
+            }
+            # Use push operator to push a message
+            self.db['users'].update_one({'_id': self.get_current_user()},
+                                        {'$push': {'messages': {'$each': [message], '$sort': {'createdAt': -1}}}})
         self.dumps_write(result.raw_result)

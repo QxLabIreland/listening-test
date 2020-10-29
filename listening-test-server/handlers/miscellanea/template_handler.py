@@ -1,15 +1,11 @@
-from typing import Optional
-
-import tornado.web
-from pymongo.collection import Collection
-
 from handlers.base import BaseHandler
+from handlers.miscellanea.task_name_mapping import switch_task_collection
 
 
 class TemplateHandler(BaseHandler):
     async def get(self):
         test_type = self.get_argument('testType')
-        collection = switch_test_collection(self, test_type)
+        collection = switch_task_collection(self, test_type)
         data = collection.aggregate([
             {'$match': {'isTemplate': True}},
             {'$lookup': {'from': 'users', 'localField': 'userId', 'foreignField': '_id', 'as': 'creator'}},
@@ -27,7 +23,7 @@ class TemplateHandler(BaseHandler):
 
         # Get collection and request data
         body = self.loads_body()
-        collection = switch_test_collection(self, test_type)
+        collection = switch_task_collection(self, test_type)
         # Find the test and update
         data = collection.find_one({'_id': body['_id']})
         if 'isTemplate' not in data:
@@ -39,26 +35,3 @@ class TemplateHandler(BaseHandler):
         self.dumps_write(data['isTemplate'])
 
 
-def switch_test_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
-    # Get right collection
-    if test_type == 'ab-test':
-        return self.db['abTests']
-    elif test_type == 'acr-test':
-        return self.db['acrTests']
-    elif test_type == 'mushra-test':
-        return self.db['mushraTests']
-    elif test_type == 'hearing-test':
-        return self.db['hearingTests']
-    elif test_type == 'audio-labeling':
-        return self.db['audioLabelingTasks']
-    elif test_type == 'image-labeling':
-        return self.db['imageLabelingTasks']
-    elif test_type == 'image-ab':
-        return self.db['imageAbTasks']
-    elif test_type == 'video-labeling':
-        return self.db['videoLabelingTasks']
-    elif test_type == 'video-ab':
-        return self.db['videoAbTasks']
-    else:
-        self.set_error(400, 'Invalid task url')
-        raise tornado.web.Finish

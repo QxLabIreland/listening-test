@@ -1,10 +1,8 @@
 from datetime import datetime
-from typing import Optional
 import pymongo
-import tornado.web
 from bson import ObjectId
-from pymongo.collection import Collection
 from handlers.base import BaseHandler
+from handlers.miscellanea.task_name_mapping import switch_response_collection
 
 
 class TestResponsesHandler(BaseHandler):
@@ -48,26 +46,3 @@ class TestResponsesHandler(BaseHandler):
         self.dumps_write(result.raw_result)
 
 
-def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
-    # Get right collection
-    if test_type == 'ab-test':
-        return self.db['abSurveys']
-    elif test_type == 'acr-test':
-        return self.db['acrSurveys']
-    elif test_type == 'mushra-test':
-        return self.db['mushraSurveys']
-    elif test_type == 'hearing-test':
-        return self.db['hearingSurveys']
-    elif test_type == 'audio-labeling':
-        return self.db['audioLabelingSurveys']
-    elif test_type == 'image-labeling':
-        return self.db['imageLabelingSurveys']
-    elif test_type == 'image-ab':
-        return self.db['imageAbSurveys']
-    elif test_type == 'video-labeling':
-        return self.db['videoLabelingSurveys']
-    elif test_type == 'video-ab':
-        return self.db['videoAbSurveys']
-    else:
-        self.set_error(400, 'Invalid task url')
-        raise tornado.web.Finish

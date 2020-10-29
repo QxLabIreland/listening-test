@@ -1,6 +1,7 @@
 from handlers.auth.find_password import FindPasswordHandler
 from handlers.auth.users import UsersHandler
-from handlers.dashboard import DashboardHandler
+from handlers.dashboard.dashboard import DashboardHandler
+from handlers.dashboard.message_handler import MessageHandler
 from handlers.download_csv.audio_labeling_csv_download import AudioLabelingCsvDownload
 from handlers.download_csv.hearing_test_csv_download import HearingTestCsvDownload
 from handlers.download_csv.image_ab_csv_download import ImageAbCsvDownload
@@ -39,6 +40,7 @@ path = [
     ("/api/find-password", FindPasswordHandler),
     ("/api/dashboard", DashboardHandler),
     ("/api/users", UsersHandler),
+    ("/api/messages", MessageHandler),
 
     # Listening tests and Survey
     ("/api/ab-test", AbTestHandler),

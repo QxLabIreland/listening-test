@@ -62,7 +62,7 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         except Exception as e:
             oid = None
             print(e)
-        return oid if oid else None
+        return oid
 
     # if no login send 403, else return id with ObjectId
     async def auth_current_user(self, permission: str = None, check_activated=True) -> ObjectId:

@@ -9,9 +9,13 @@ import {MessageModel} from "../../shared/models/MessageModel";
 import {observable} from "mobx";
 import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
+import Axios from "axios";
+import {UserModel} from "../../shared/models/UserModel";
+import {LinkedTextRender} from "../../shared/components/RenderSurveyControl";
 
 const useStyles = makeStyles((_: Theme) => ({
   drawerPaper: {width: 300},
+  messageContent: {wordWrap: 'break-word'}
 }));
 const container = window !== undefined ? () => document.body : undefined;
 
@@ -23,25 +27,15 @@ export function NotificationDrawer() {
   useEffect(getMessage, []);
 
   const handleNotificationToggle = () => setNotificationOpen((prev) => {
-    if (prev) messages.forEach(v => v.unRead = false);
-    else getMessage();
+    if (prev) {
+      messages.forEach(v => v.unRead = false);
+      Axios.patch('/api/messages').then();
+    } else getMessage();
     return !prev;
   });
+
   function getMessage() {
-    setMessages(observable([
-      {
-        _id: {$oid: '1'},
-        unRead: false,
-        content: 'A respondent has removed their response from **Test Name**. You should download the updated test data again.',
-        createdAt: {$date: new Date('2020/10/28')}
-      },
-      {
-        _id: {$oid: '2'},
-        unRead: false,
-        content: 'A respondent has removed their response from **Test Name**. You should download the updated test data again.',
-        createdAt: {$date: new Date('2020/10/28')}
-      }
-    ] as MessageModel[]));
+    Axios.get<UserModel>('/api/messages').then(res => setMessages(observable(res.data.messages)));
   }
 
   return <>
@@ -54,11 +48,13 @@ export function NotificationDrawer() {
             anchor="right"
             ModalProps={{keepMounted: true}} classes={{paper: classes.drawerPaper}}>
       {/*subheader={<ListSubheader>Notifications</ListSubheader>}*/}
-      <List>
-        {messages?.map(v => <React.Fragment key={v._id.$oid}>
-          <ListItem>
-            <ListItemText primary={v.unRead ? <strong>{v.content}</strong> : <span>{v.content}</span>}
-                          secondary={<span style={{float: 'right'}}>{v.createdAt.$date.toDateString()}</span>}/>
+      <List data-testid="messageList">
+        {messages?.map(v => <React.Fragment key={v.id}>
+          <ListItem className={classes.messageContent}>
+            <ListItemText primary={
+              v.unRead ? <strong><LinkedTextRender content={v.content}/></strong> :
+                <span><LinkedTextRender content={v.content}/></span>
+            } secondary={<span style={{float: 'right'}}>{new Date(v.createdAt?.$date).toLocaleString()}</span>}/>
           </ListItem>
           <Divider/>
         </React.Fragment>)}
