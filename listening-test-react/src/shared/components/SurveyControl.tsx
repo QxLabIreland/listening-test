@@ -38,7 +38,7 @@ export const SurveyControl = observer(function (props: {
       case SurveyControlType.checkbox:
         return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
       case SurveyControlType.description:
-        return <LinkedDescriptionRender content={control.question}/>
+        return <Typography><LinkedDescriptionRender content={control.question}/></Typography>
       default:
         return null;
     }
