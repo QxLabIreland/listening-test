@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {BasicFileModel} from "./models/BasicTaskModel";
-import {observable, toJS} from "mobx";
+import {toJS} from "mobx";
 
-export function useRandomizedAudio(settings: {randomMedia?: boolean}, medias: BasicFileModel[], active: boolean) {
-  const [randomAudios] = useState(observable(Array(medias.length)));
+export function useRandomizedAudio(settings: { randomMedia?: boolean }, medias: BasicFileModel[], active: boolean) {
+  const [randomAudios] = useState(Array(medias.length));
 
   useEffect(() => {
     // If there is random audio settings
@@ -16,8 +16,8 @@ export function useRandomizedAudio(settings: {randomMedia?: boolean}, medias: Ba
     // Normally set all audio to the state
     else medias.forEach((v, i) => randomAudios[i] = v);
     console.log(toJS(medias))
-    console.log(toJS(randomAudios))
-  }, [active])
+    console.log(randomAudios)
+  }, [active]);
 
   return randomAudios;
 }
