@@ -28,14 +28,16 @@ export function NotificationDrawer() {
 
   const handleNotificationToggle = () => setNotificationOpen((prev) => {
     if (prev) {
-      messages.forEach(v => v.unRead = false);
-      Axios.patch('/api/messages').then();
+      if (messages && messages.length > 0) {
+        messages.forEach(v => v.unRead = false);
+        Axios.patch('/api/messages').then();
+      }
     } else getMessage();
     return !prev;
   });
 
   function getMessage() {
-    Axios.get<UserModel>('/api/messages').then(res => setMessages(observable(res.data.messages)));
+    Axios.get<UserModel>('/api/messages').then(res => setMessages(observable(res.data.messages ?? [])));
   }
 
   return <>
