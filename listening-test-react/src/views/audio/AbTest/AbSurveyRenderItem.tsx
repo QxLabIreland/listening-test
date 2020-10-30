@@ -37,7 +37,6 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
   const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
   // Create empty slots for randomized audios
-  const randomAudios = useRandomizedAudio(value.settings, value.medias, active);
 
   useEffect(() => {
     if (active === false) handlePause();
@@ -46,7 +45,7 @@ const RenderQuestionedExample = observer(function (props: { value: AudioExampleM
   return <> <AudioLoading showing={loading}/>
     <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
 
-      {randomAudios.map((v, i) => v && <Grid item key={i}>
+      {value.medias.map((v, i) => v && <Grid item key={i}>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
                      onEnded={i === 0 ? handleEnded : undefined}
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>
