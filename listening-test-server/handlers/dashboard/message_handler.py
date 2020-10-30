@@ -3,7 +3,7 @@ from handlers.base import BaseHandler
 
 class MessageHandler(BaseHandler):
     async def prepare(self):
-        self.user_id = await self.auth_current_user('User')
+        self.user_id = await self.auth_current_user()
 
     async def get(self):
         user = self.db['users'].find_one({'_id': self.user_id}, {'messages': 1})
