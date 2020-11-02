@@ -45,7 +45,7 @@ function ResponsePreviewDialog(props: IconButtonProps & { taskModel: BasicTaskMo
 
   return <React.Fragment>
     <IconButton ref={ref} {...rest} onClick={handleClickOpen}>
-      <Icon>pageview</Icon>
+      <Icon>visibility</Icon>
     </IconButton>
     <CssBaseline/>
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={backgroundClasses}>

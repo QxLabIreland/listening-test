@@ -39,7 +39,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     const {allAudio, allRefs} = includeAll();
     allRefs.forEach((_, i: number) => {
       allAudio[i].isActive = false;
-      allRefs[i].current.pause();
+      allRefs[i].current?.pause();
       // State that if it is ready
       // console.log(allRefs[i].current.readyState)
     });

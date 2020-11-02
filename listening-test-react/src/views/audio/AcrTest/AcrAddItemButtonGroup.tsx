@@ -40,13 +40,14 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
         break;
       case TestItemType.sectionHeader:
         newItem = {
-          id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title', // titleDes: {title: 'New Title', description: 'Optional Description'}
+          id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title (Click to edit this)', // titleDes: {title: 'New Title', description: 'Optional Description'}
         };
         break;
     }
     addQuestionMenu.current.closeMenu();
     onAdd(newItem);
   }
+
 
 
   return <Box className={classes.elementGroup}>
@@ -65,6 +66,12 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
           <Icon fontSize="small">fitness_center</Icon>
         </ListItemIcon>
         <ListItemText>Audio Training Example</ListItemText>
+      </MenuItem>
+      <MenuItem onClick={() => handleAdd(TestItemType.sectionHeader)}>
+        <ListItemIcon>
+          <Icon fontSize="small">title</Icon>
+        </ListItemIcon>
+        <ListItemText>Section Header</ListItemText>
       </MenuItem>
     </AddQuestionButton>
   </Box>;
