@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
-import React, {ChangeEvent, ReactElement, ReactNode} from "react";
+import React, {ChangeEvent, ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {
@@ -8,7 +8,8 @@ import {
   Checkbox,
   Collapse,
   createStyles,
-  FormControlLabel, FormGroup,
+  FormControlLabel,
+  FormGroup,
   Switch,
   Theme,
   Tooltip
@@ -20,9 +21,8 @@ import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {TestItemExampleCardType} from "./TypesAndItemOverrides";
-import {BasicTaskItemModel, TestSettingsModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
-import {useFormik} from "formik";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});

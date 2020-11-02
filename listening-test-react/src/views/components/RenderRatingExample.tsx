@@ -7,7 +7,7 @@ import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
 import {ratingAreaStyle} from "../SharedStyles";
 import {AudioExampleModel, AudioFileModel} from "../../shared/models/AudioTestModel";
 import {AudioSectionLoopingController} from "../../shared/web-audio/AudioSectionLoopingController";
-import {useRandomizedAudio} from "../../shared/CustomHooks";
+import {useRandomization} from "../../shared/CustomHooks";
 
 export const RenderRatingExample = observer(function (props: { value: AudioExampleModel, RatingBar: (props: { audio: AudioFileModel }) => JSX.Element, active?: boolean }) {
   const {value, RatingBar, active} = props;
@@ -18,7 +18,7 @@ export const RenderRatingExample = observer(function (props: { value: AudioExamp
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
   // Create empty slots for randomized audios
-  const randomAudios = useRandomizedAudio(value.settings, value.medias, active);
+  const randomAudios = useRandomization(value.medias, active && value.settings?.randomMedia);
 
   useEffect(() => {
     if (active === false) handlePause();
