@@ -1,9 +1,18 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
-import React, {ReactNode} from "react";
+import React, {ChangeEvent, ReactElement, ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse, createStyles, FormControlLabel, Switch, Theme, Tooltip} from "@material-ui/core";
+import {
+  CardContent,
+  Checkbox,
+  Collapse,
+  createStyles,
+  FormControlLabel, FormGroup,
+  Switch,
+  Theme,
+  Tooltip
+} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
@@ -11,8 +20,9 @@ import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {TestItemExampleCardType} from "./TypesAndItemOverrides";
-import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel, TestSettingsModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
+import {useFormik} from "formik";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
@@ -29,6 +39,7 @@ export const TestItemCard = observer(function (props: {
   onCopy: (_: BasicTaskItemModel) => void
 }) {
   const {value, TestItemExampleCard, TestItemTrainingCard} = props;
+  const classes = sectionUseStyles();
   // Label methods
   const handleLabelChange = (event: any) => {
     value.title = event.target.value;
@@ -44,7 +55,11 @@ export const TestItemCard = observer(function (props: {
   else if (value.type === TestItemType.question) return <TestItemQuestionCard
     {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}
   />
-  else return <Typography style={{display: 'flex'}} variant="h4">{labelInput}<SectionHeaderSettings/></Typography>;
+  else return <div><Typography variant="h4" className={classes.header}>
+      {labelInput} <HeaderIconButtons {...props}/>
+    </Typography>
+      <SectionHeaderSettings {...props}/>
+  </div>;
 })
 // Buttons group for common operations
 const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
@@ -90,8 +105,22 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQ
   </Card>
 });
 
-const SectionHeaderSettings = observer(function () {
-  return <Tooltip title="Section settings">
-    <IconButton><Icon>settings</Icon></IconButton>
-  </Tooltip>
+const sectionUseStyles = makeStyles((_theme) => ({
+  header: {display: 'flex'}
+}));
+
+const SectionHeaderSettings = observer(function ({value}: { value: BasicTaskItemModel}) {
+  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    if (!value.sectionSettings) value.sectionSettings = {};
+    value.sectionSettings.randomQuestions = checked;
+  }
+
+  return <Collapse in={!value.collapsed} timeout="auto" unmountOnExit>
+    <FormGroup>
+      <FormControlLabel
+        control={<Checkbox checked={value.sectionSettings?.randomQuestions} onChange={handleChange}/> }
+        label="Randomize question for this section"
+      />
+    </FormGroup>
+  </Collapse>
 });
