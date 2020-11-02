@@ -102,6 +102,9 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
     </Grid>
+    <Grid item xs={12}>
+      <Typography variant="h4" gutterBottom>{questionnaire.name}</Typography>
+    </Grid>
     {/*When the title and description doesn't show*/}
     {(!isIndividual || openedPanel === -1) && <Grid item xs={12}>
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>

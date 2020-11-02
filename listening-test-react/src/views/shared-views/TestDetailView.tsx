@@ -108,7 +108,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   </Grid>
 })
 
-function DetailViewActions(props: {testModel: BasicTaskModel, testUrl: TestUrl, isTestChanged: boolean, handleSubmit: () => void}) {
+const DetailViewActions = observer(function (props: {testModel: BasicTaskModel, testUrl: TestUrl, isTestChanged: boolean, handleSubmit: () => void}) {
   const {testModel, testUrl, isTestChanged, handleSubmit} = props
   // Share Dialog state
   const shareDialogState = React.useState(false);
@@ -141,7 +141,7 @@ function DetailViewActions(props: {testModel: BasicTaskModel, testUrl: TestUrl, 
       </Button>
     </Grid>
   </Grid>
-}
+});
 
 function templateProcess(tem: BasicTaskModel, testUrl: TestUrl) {
   // Prevent it from becoming a template and some process

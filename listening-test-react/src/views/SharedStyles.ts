@@ -16,7 +16,8 @@ export const labelInputStyle = {
   fontWeight: 'inherit',
   outline: 'none',
   border: 'none',
-  width: '100%'
+  width: '100%',
+  background: 'inherit'
 } as CSSProperties;
 
 export const useMatStyles = makeStyles((theme: Theme) => {

@@ -35,6 +35,8 @@ export interface BasicTaskItemModel {
   time?: number;
   // If the card expanded or not
   collapsed?: boolean;
+  // TODO Section header settings
+  // sectionSettings?: {randomQuestions?: boolean};
 }
 
 export interface BasicExampleModel {

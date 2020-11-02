@@ -12,6 +12,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {TestItemExampleCardType} from "./TypesAndItemOverrides";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
@@ -33,18 +34,17 @@ export const TestItemCard = observer(function (props: {
     value.title = event.target.value;
   }
 
+  const labelInput = <input style={labelInputStyle} onFocus={event => event.target.select()}
+                            value={value.title} onChange={handleLabelChange}/>;
   // Switch to correct card
   const ExampleCard: TestItemExampleCardType = value.type === TestItemType.example ? TestItemExampleCard : TestItemTrainingCard;
   if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard
-    title={<input style={labelInputStyle} onFocus={event => event.target.select()}
-                  value={value.title} onChange={handleLabelChange}/>}
-    example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}
+    title={labelInput} example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}
   />
-
-  else if (value.type === TestItemType.question)
-    return <TestItemQuestionCard {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}/>
-
-  else return null;
+  else if (value.type === TestItemType.question) return <TestItemQuestionCard
+    {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}
+  />
+  else return <Typography style={{display: 'flex'}} variant="h4">{labelInput}<SectionHeaderSettings/></Typography>;
 })
 // Buttons group for common operations
 const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
@@ -73,14 +73,13 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQ
   const gotoQuestionItemsFiltered = gotoQuestionItems.findIndex(cur => cur.id === value.id) >= gotoQuestionItems.length - 1
     ? undefined : gotoQuestionItems.filter(cur => cur.id !== value.id);
   return <Card>
-    <CardHeader action={<>
+    <CardHeader title={<input style={labelInputStyle} value={value.title} onChange={e => value.title = e.target.value}
+                              onFocus={event => event.target.select()}/>} action={<>
       {value.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
         <Switch checked={value.questionControl.required}
-                onChange={e => value.questionControl.required = e.target.checked}/>}
-      />} {action}
-    </>} title={<input style={labelInputStyle} value={value.title} onChange={e => value.title = e.target.value}
-                       onFocus={event => event.target.select()}/>}>
-    </CardHeader>
+                onChange={e => value.questionControl.required = e.target.checked}/>
+      }/>} {action}
+    </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
         <SurveyControl control={value.questionControl} disableGoto={disableGoto}
@@ -89,4 +88,10 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQ
       </CardContent>
     </Collapse>
   </Card>
-})
+});
+
+const SectionHeaderSettings = observer(function () {
+  return <Tooltip title="Section settings">
+    <IconButton><Icon>settings</Icon></IconButton>
+  </Tooltip>
+});
