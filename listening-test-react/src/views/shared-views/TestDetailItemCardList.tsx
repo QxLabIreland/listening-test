@@ -7,6 +7,7 @@ import {TestItemCard} from "../components/TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
 import {TestItemExampleCardType} from "../components/TypesAndItemOverrides";
 import {TestSettingsModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {uuid} from "uuidv4";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -113,7 +114,10 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
   const gotoQuestionItems = (index: number) =>
     items.filter((_, i1) => i1 > index + 1).map(item => ({id: item.id, title: item.title}));
   const copyItem = (item: BasicTaskItemModel, index: number) => {
-    items.splice(index, 0, JSON.parse(JSON.stringify(item)));
+    const copied = JSON.parse(JSON.stringify(item)) as BasicTaskItemModel;
+    copied.id = uuid();
+    // Use splice to insert an item
+    items.splice(index, 0, copied);
   }
 
   return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {

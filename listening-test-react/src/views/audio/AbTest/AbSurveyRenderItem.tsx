@@ -8,8 +8,6 @@ import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-
 import {RenderTraining} from "../../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
-import {observable} from "mobx";
-import {useRandomizedAudio} from "../../../shared/CustomHooks";
 
 const alphabetList = Array.apply(undefined, Array(26)).map(function (x, y) {
   return String.fromCharCode(y + 65);
