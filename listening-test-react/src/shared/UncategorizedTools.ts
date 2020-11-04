@@ -17,3 +17,4 @@ export function downloadFileTool(config?: AxiosRequestConfig) {
 export function getCurrentHost() {
   return isDevMode() ? DEV_HOST : PRODUCTION_HOST;
 }
+

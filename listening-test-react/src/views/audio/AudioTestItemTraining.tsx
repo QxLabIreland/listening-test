@@ -17,7 +17,7 @@ import Icon from "@material-ui/core/Icon";
 import {FileUploadDropBox} from "../../shared/components/FileUploadDropBox";
 
 /** Training Test Item: Audios will play synchronously*/
-export const AudioTestItemTrainingCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const AudioTestItemTraining = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
   const {example, title, action, collapsed} = props;
   const classes = useMatStyles();
   // Methods for audios changed

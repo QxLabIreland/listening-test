@@ -5,7 +5,7 @@ import {GlobalDialog} from "../../shared/ReactContexts";
 import Axios from "axios";
 import {useSimpleAlert} from "../../shared/components/UseSimpleAlert";
 import {useLocation} from "react-router";
-import {getCurrentHost} from "../../shared/ReactTools";
+import {getCurrentHost} from "../../shared/UncategorizedTools";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paragraphCenter: {marginBottom: theme.spacing(4), textAlign: 'center'},

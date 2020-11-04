@@ -31,7 +31,7 @@ export const LinkedTextRender = function ({content}: {content: string}) {
   </React.Fragment>)}</>;
 }
 
-export const RenderSurveyControl = observer(function ({control}: { control: SurveyControlModel }) {
+export const SurveyControlRender = observer(function ({control}: { control: SurveyControlModel }) {
   if (control.disabled) return null;
 
   switch (control.type) {

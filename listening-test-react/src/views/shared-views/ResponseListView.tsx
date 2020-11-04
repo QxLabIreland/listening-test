@@ -7,23 +7,24 @@ import {
   Checkbox,
   createStyles,
   Grid,
-  Icon, IconButton,
+  Icon,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip, withStyles,
+  Tooltip,
+  withStyles,
 } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
 import Axios from "axios";
 import Loading from "../../layouts/components/Loading";
-import {downloadFileTool} from "../../shared/ReactTools";
+import {downloadFileTool} from "../../shared/UncategorizedTools";
 import ResponsePreviewDialog from "./ResponsePreviewDialog";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {SurveyPage} from "./SurveyPage";
 import {red} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((_) => (createStyles({
