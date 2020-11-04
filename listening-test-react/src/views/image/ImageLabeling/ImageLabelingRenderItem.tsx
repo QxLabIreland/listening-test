@@ -1,5 +1,4 @@
 import {observer} from "mobx-react";
-import {TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import React, {CSSProperties, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
@@ -8,36 +7,29 @@ import {Dialog, GridList, GridListTile, Slide} from "@material-ui/core";
 import {TransitionProps} from "@material-ui/core/transitions";
 import {useSharedStyles} from "../../SharedStyles";
 
-export const ImageLabelingRenderItem = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
+export const ImageLabelingExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
   const {item} = props;
   const [openedImg, setOpenedImg] = useState<string>();
   const classes = useSharedStyles();
   const colsNum = item.example.medias.length < 3 ? item.example.medias.length : 3;
 
-  switch (item.type) {
-    case TestItemType.question:
-      return <RenderSurveyControl control={item.questionControl}/>
-    case TestItemType.example:
-      return <Grid container spacing={3}>
-        {/*Description for the example*/}
-        {item.example.fields[0] && <Grid item xs={12}>
-          <RenderSurveyControl control={item.example.fields[0]}/>
-        </Grid>}
-        {/*Images grids*/}
-        <GridList cols={colsNum} className={classes.fullWidth} cellHeight={'auto'}>
-          {item.example.medias.map((v, i) => <GridListTile key={i} onClick={() => setOpenedImg(v.src)}>
-            <img src={v.src} alt={v.filename} className={classes.cursorPointer}/>
-          </GridListTile>)}
-        </GridList>
-        {/*Questions*/}
-        {item.example.fields.slice(1)?.map((value, i) => <Grid item xs={12} key={i}>
-          <RenderSurveyControl control={value}/>
-        </Grid>)}
-        <PreviewDialog openedImg={openedImg} setOpenedImg={setOpenedImg}/>
-      </Grid>
-    default:
-      return null;
-  }
+  return <Grid container spacing={3}>
+    {/*Description for the example*/}
+    {item.example.fields[0] && <Grid item xs={12}>
+      <RenderSurveyControl control={item.example.fields[0]}/>
+    </Grid>}
+    {/*Images grids*/}
+    <GridList cols={colsNum} className={classes.fullWidth} cellHeight={'auto'}>
+      {item.example.medias.map((v, i) => <GridListTile key={i} onClick={() => setOpenedImg(v.src)}>
+        <img src={v.src} alt={v.filename} className={classes.cursorPointer}/>
+      </GridListTile>)}
+    </GridList>
+    {/*Questions*/}
+    {item.example.fields.slice(1)?.map((value, i) => <Grid item xs={12} key={i}>
+      <RenderSurveyControl control={value}/>
+    </Grid>)}
+    <PreviewDialog openedImg={openedImg} setOpenedImg={setOpenedImg}/>
+  </Grid>;
 })
 
 const Transition = React.forwardRef(function Transition(

@@ -13,22 +13,15 @@ import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
 import {Box, MobileStepper} from "@material-ui/core";
-import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import {AbSurveyRenderItem} from "../audio/AbTest/AbSurveyRenderItem";
-import {AcrSurveyRenderItem} from "../audio/AcrTest/AcrSurveyRenderItem";
-import {MushraSurveyRenderItem} from "../audio/Mushra/MushraSurveyRenderItem";
-import {HearingSurveyRenderItem} from "../audio/HearingTest/HearingSurveyRenderItem";
 import {
   questionedExValidateError,
   sliderItemValidateError,
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
-import {ImageLabelingRenderItem} from "../image/ImageLabeling/ImageLabelingRenderItem";
-import {VideoLabelingRenderItem} from "../video/VideoLabeling/VideoLabelingRenderItem";
-import {ImageAbRenderItem} from "../image/ImageAb/ImageAbRenderItem";
-import {VideoAbRenderItem} from "../video/VideoAb/VideoAbRenderItem";
+import {TestItemCardRender} from "../components/TestItemCard.render";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>();
@@ -40,7 +33,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   const [startTime] = useState<{ [key: number]: number }>({});
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
-  const {RenderedItem, validateError} = useSurveyRenderItem(testUrl);
+  const {validateError} = useSurveyRenderItem(testUrl);
   // To get data from the server or load data
   useEffect(() => {
     if (value) {
@@ -78,6 +71,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     // If the survey setting is individual question, DO NOTHING
     else if (!questionnaire.settings?.isIndividual) setOpenedPanel(null);
   }
+
   function handleSubmit() {
     // Check all items' validation before submission. Only if the questionnaire is not individual
     if (!questionnaire.settings?.isIndividual) for (const item of questionnaire.items) {
@@ -102,9 +96,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
     </Grid>
-    <Grid item xs={12}>
-      <Typography variant="h4" gutterBottom>{questionnaire.name}</Typography>
-    </Grid>
     {/*When the title and description doesn't show*/}
     {(!isIndividual || openedPanel === -1) && <Grid item xs={12}>
       <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
@@ -113,21 +104,22 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       </div>}
     </Grid>}
     {questionnaire.items.map((v, i) =>
-      <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>
+      <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>{v.type !== TestItemType.sectionHeader ?
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
                                  aria-controls="panel1a-content">
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <RenderedItem item={v} active={openedPanel === i}/>
+            <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             {i < questionnaire.items.length - 1
               ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
               : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>}
           </ExpansionPanelActions>
-        </ExpansionPanel>
+        </ExpansionPanel> :
+        <Typography variant="h4">{questionnaire.name}</Typography>}
       </Grid>
     )}
     <Grid item xs={12}>
@@ -159,32 +151,7 @@ function gotoQuestionChecking(item: BasicTaskItemModel, questionnaire: BasicTask
 }
 
 // An hook to switch different views of card
-function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: BasicTaskItemModel, active?: boolean }) => JSX.Element, validateError: (item: BasicTaskItemModel) => string } {
-  // Switch to right rendering item
-  const renderItemByTestUrl = () => {
-    switch (testUrl) {
-      case "ab-test":
-        return AbSurveyRenderItem
-      case "audio-labeling": // Only use training render of acr
-      case "acr-test":
-        return AcrSurveyRenderItem
-      case "mushra-test":
-        return MushraSurveyRenderItem
-      case "hearing-test":
-        return HearingSurveyRenderItem
-      case "image-labeling":
-        return ImageLabelingRenderItem
-      case "image-ab":
-        return ImageAbRenderItem
-      case "video-labeling":
-        return VideoLabelingRenderItem
-      case "video-ab":
-        return VideoAbRenderItem
-      default:
-        return null;
-    }
-  }
-
+function useSurveyRenderItem(testUrl: TestUrl): { validateError: (item: BasicTaskItemModel) => string } {
   const validateError = () => {
     switch (testUrl) {
       case "ab-test":
@@ -202,6 +169,6 @@ function useSurveyRenderItem(testUrl: TestUrl): { RenderedItem: (props: { item: 
         return null;
     }
   }
-  return {RenderedItem: renderItemByTestUrl(), validateError: validateError()}
+  return {validateError: validateError()}
 }
 
