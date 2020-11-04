@@ -22,6 +22,7 @@ import {
   testItemsValidateIncomplete
 } from "../../shared/ErrorValidators";
 import {TestItemCardRender} from "../components/TestItemCard.render";
+import {useDivideIntoSections} from "../../shared/RandomizationTools";
 
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>();
@@ -34,6 +35,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   // Expose isIndividual setting to reduce code
   const isIndividual = questionnaire?.settings?.isIndividual;
   const {validateError} = useSurveyRenderItem(testUrl);
+  // An shadow list that controls display of question
+  const randomItems = useDivideIntoSections(questionnaire?.items);
   // To get data from the server or load data
   useEffect(() => {
     // If there is a value, it means we are in preview mode
@@ -50,22 +53,22 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   // If isIndividual, goto description
   useEffect(() => {
     if (questionnaire?.settings?.isIndividual) setOpenedPanel(-1);
-  }, [questionnaire])
+  }, [questionnaire]);
 
   function handlePanelChange(v: boolean, newIndex: number) {
-    const validationError = validateError(questionnaire.items[openedPanel]);
+    const validationError = validateError(randomItems[openedPanel]);
     if (validationError) openDialog(validationError, 'Answer Required');
     // Set which panel will open, if validation pass.
     else if (v) {
       // Timing process
       if (questionnaire.settings?.isTimed) {
         // Record start time for next one.
-        if (questionnaire.items[newIndex]) startTime[newIndex] = new Date().getTime();
+        if (randomItems[newIndex]) startTime[newIndex] = new Date().getTime();
         // Add duration for current item
-        if (questionnaire.items[openedPanel])
-          questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+        if (randomItems[openedPanel])
+          randomItems[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
       }
-      const indexOverride = gotoQuestionChecking(questionnaire.items[openedPanel], questionnaire);
+      const indexOverride = gotoQuestionChecking(randomItems[openedPanel], questionnaire);
       // useState is async method, so put it at the end
       setOpenedPanel(indexOverride !== null ? indexOverride : newIndex);
     }
@@ -75,7 +78,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
 
   function handleSubmit() {
     // Check all items' validation before submission. Only if the questionnaire is not individual
-    if (!questionnaire.settings?.isIndividual) for (const item of questionnaire.items) {
+    if (!questionnaire.settings?.isIndividual) for (const item of randomItems) {
       const validationError = validateError(item);
       // If there is no error, check the next item
       if (!validationError) continue;
@@ -84,7 +87,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     }
     // Record the last item time
     if (questionnaire.settings?.isTimed)
-      questionnaire.items[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
+      randomItems[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
     // Set opened to make sure an active variable of the audio is false
     setOpenedPanel(null);
     // Start request
@@ -95,12 +98,12 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   // Show panel actions based on various parameters
   const panelActions = (index: number, isSectionHeader: boolean = false) => {
     if ((questionnaire.settings.isIndividual && isSectionHeader) || !isSectionHeader)
-      if (index < questionnaire.items.length - 1)
+      if (index < randomItems.length - 1)
         return <Button color="primary" onClick={() => handlePanelChange(true, index + 1)}>Next</Button>
       else return <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
     else return null;
   }
-  return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
+  return <Box pt={6}>{questionnaire && randomItems ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
     </Grid>
@@ -111,7 +114,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
         <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>
       </div>}
     </Grid>}
-    {questionnaire.items.map((v, i) =>
+    {randomItems.map((v, i) =>
       <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>{v.type !== TestItemType.sectionHeader ?
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
@@ -129,7 +132,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       </Grid>
     )}
     <Grid item xs={12}>
-      <MobileStepper variant="text" position="static" steps={questionnaire.items.length} activeStep={openedPanel}
+      <MobileStepper variant="text" position="static" steps={randomItems.length} activeStep={openedPanel}
                      nextButton={null} backButton={null}
       />
     </Grid>
