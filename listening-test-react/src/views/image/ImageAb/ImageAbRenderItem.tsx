@@ -1,5 +1,4 @@
 import {observer} from "mobx-react";
-import {TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import React, {MouseEvent, useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
@@ -18,7 +17,7 @@ const useStyles = makeStyles((_: Theme) => ({
   },
 }));
 
-export const ImageAbRenderItem = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
+export const ImageAbExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
   const {item, active} = props;
   const classes = {...useSharedStyles(), ...useStyles()};
   const canvasRef = useRef<HTMLCanvasElement>();
@@ -83,24 +82,17 @@ export const ImageAbRenderItem = observer(function (props: { item: ImageTestItem
     window.addEventListener('mouseup', handleMouseUp);
   }
 
-  switch (item.type) {
-    case TestItemType.question:
-      return <RenderSurveyControl control={item.questionControl}/>
-    case TestItemType.example:
-      return <Grid container spacing={3}>
-        {/*Images grids*/}
-        <div className={classes.canvasContainer} ref={canvasContainerRef}>
-          <canvas ref={canvasRef} width="320" height="320"/>
-          <span style={{left: maskWidth + '%'}} className={classes.sliderStickWrapper}>
+  return <Grid container spacing={3}>
+    {/*Images grids*/}
+    <div className={classes.canvasContainer} ref={canvasContainerRef}>
+      <canvas ref={canvasRef} width="320" height="320"/>
+      <span style={{left: maskWidth + '%'}} className={classes.sliderStickWrapper}>
             <span className={classes.sliderStick} onMouseDown={handleMouseDown}/>
           </span>
-        </div>
-        {/*Questions*/}
-        {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
-          <RenderSurveyControl control={value}/>
-        </Grid>)}
-      </Grid>
-    default:
-      return null;
-  }
+    </div>
+    {/*Questions*/}
+    {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
+      <RenderSurveyControl control={value}/>
+    </Grid>)}
+  </Grid>
 })

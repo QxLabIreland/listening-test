@@ -21,21 +21,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   volumeBar: {height: theme.spacing(16)}
 }));
 
-export const HearingSurveyRenderItem = observer(function (props: { item: AudioTestItemModel, active?: boolean }) {
-  const {item, ...rest} = props;
-  switch (item.type) {
-    case TestItemType.question:
-      return <RenderSurveyControl control={item.questionControl} {...rest}/>
-    case TestItemType.example:
-      return <RenderVolumeExample value={item.example} {...rest}/>;
-    case TestItemType.training:
-      return <RenderTraining value={item.example} {...rest}/>;
-    default:
-      return null;
-  }
-})
-
-const RenderVolumeExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
+export const RenderVolumeExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
   const [gos] = useState<OscillatorAngGain[]>(Array(value.medias.length));
 

@@ -39,7 +39,6 @@ export const TestItemCard = observer(function (props: {
   onCopy: (_: BasicTaskItemModel) => void
 }) {
   const {value, TestItemExampleCard, TestItemTrainingCard} = props;
-  const classes = sectionUseStyles();
   // Label methods
   const handleLabelChange = (event: any) => {
     value.title = event.target.value;
@@ -55,11 +54,7 @@ export const TestItemCard = observer(function (props: {
   else if (value.type === TestItemType.question) return <TestItemQuestionCard
     {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}
   />
-  else return <div><Typography variant="h4" className={classes.header}>
-      {labelInput} <HeaderIconButtons {...props}/>
-    </Typography>
-      <SectionHeaderSettings {...props}/>
-  </div>;
+  else return <SectionHeaderSettings labelInput={labelInput} {...props}/>;
 })
 // Buttons group for common operations
 const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
@@ -106,21 +101,29 @@ const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQ
 });
 
 const sectionUseStyles = makeStyles((_theme) => ({
-  header: {display: 'flex'}
+  header: {display: 'flex', marginRight: 8}
 }));
 
-const SectionHeaderSettings = observer(function ({value}: { value: BasicTaskItemModel}) {
+const SectionHeaderSettings = observer(function (props: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void, labelInput: ReactNode  }) {
+  const {value, labelInput} = props;
+  const classes = sectionUseStyles();
+
   const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
     if (!value.sectionSettings) value.sectionSettings = {};
     value.sectionSettings.randomQuestions = checked;
   }
 
-  return <Collapse in={!value.collapsed} timeout="auto" unmountOnExit>
+  return <div>
+    <Typography variant="h4" className={classes.header}>
+      {labelInput} <HeaderIconButtons {...props}/>
+    </Typography>
+    <Collapse in={!value.collapsed} timeout="auto" unmountOnExit>
     <FormGroup>
       <FormControlLabel
-        control={<Checkbox checked={value.sectionSettings?.randomQuestions} onChange={handleChange}/> }
+        control={<Checkbox checked={value.sectionSettings?.randomQuestions} onChange={handleChange}/>}
         label="Randomize question for this section"
       />
     </FormGroup>
   </Collapse>
+  </div>
 });

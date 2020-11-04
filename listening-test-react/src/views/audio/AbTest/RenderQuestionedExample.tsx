@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {observer} from "mobx-react";
-import {AudioExampleModel, AudioTestItemModel} from "../../../shared/models/AudioTestModel";
-import {TestItemType} from "../../../shared/models/EnumsAndTypes";
+import {AudioExampleModel} from "../../../shared/models/AudioTestModel";
 import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
-import {RenderTraining} from "../../components/RenderTraining";
 import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
 
@@ -13,21 +11,8 @@ const alphabetList = Array.apply(undefined, Array(26)).map(function (x, y) {
   return String.fromCharCode(y + 65);
 }).join('');
 
-export const AbSurveyRenderItem = observer(function (props: { item: AudioTestItemModel, active?: boolean }) {
-  const {item, ...rest} = props;
-  switch (item.type) {
-    case TestItemType.question:
-      return <RenderSurveyControl control={item.questionControl} {...rest}/>
-    case TestItemType.example:
-      return <RenderQuestionedExample value={item.example} {...rest}/>;
-    case TestItemType.training:
-      return <RenderTraining value={item.example} {...rest}/>;
-    default:
-      return null;
-  }
-})
 
-const RenderQuestionedExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
+export const RenderQuestionedExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
