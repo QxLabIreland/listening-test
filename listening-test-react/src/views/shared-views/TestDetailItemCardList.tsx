@@ -5,9 +5,9 @@ import {action, observable} from "mobx";
 import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
 import {TestItemCard} from "../components/TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
-import {TestItemExampleCardType} from "../components/TypesAndItemOverrides";
-import {TestSettingsModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel, TestSettingsModel} from "../../shared/models/BasicTaskModel";
 import {uuid} from "uuidv4";
+import {TestUrl} from "../../shared/models/EnumsAndTypes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -25,9 +25,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
  * The list of items for Detail page. It converts testUrl into different Cards
  * This component is for reordering purpose
  */
-export const TestDetailItemCardList = observer(function ({items, TestItemExampleCard, testSettings, TestItemTrainingCard}: {
-  items: BasicTaskItemModel[], TestItemExampleCard: TestItemExampleCardType, testSettings?: TestSettingsModel,
-  TestItemTrainingCard: TestItemExampleCardType
+export const TestDetailItemCardList = observer(function ({items, testSettings, testUrl}: {
+  items: BasicTaskItemModel[], testSettings?: TestSettingsModel, testUrl: TestUrl
 }) {
   if (!items) items = observable([]);
   const [state] = useState(observable({index: null}));
@@ -138,8 +137,7 @@ export const TestDetailItemCardList = observer(function ({items, TestItemExample
         </IconButton>
       </span></Tooltip>
     </>}</Box>
-    <TestItemCard value={v} onDelete={() => deleteItem(i)} TestItemExampleCard={TestItemExampleCard}
-                  gotoQuestionItems={gotoQuestionItems(i)} TestItemTrainingCard={TestItemTrainingCard}
+    <TestItemCard value={v} onDelete={() => deleteItem(i)} gotoQuestionItems={gotoQuestionItems(i)} testUrl={testUrl}
                   disableGoto={!testSettings?.isIndividual} onCopy={item => copyItem(item, i)}
     />
   </Grid>)}

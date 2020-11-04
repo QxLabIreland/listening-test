@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {TestItemType} from "../../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
+import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import React, {MouseEvent, useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
@@ -46,7 +46,7 @@ export const VideoAbExampleRender = observer(function (props: { item: ImageTestI
 
     {/*Questions*/}
     {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
+      <SurveyControlRender control={value}/>
     </Grid>)}
   </Grid>;
 })

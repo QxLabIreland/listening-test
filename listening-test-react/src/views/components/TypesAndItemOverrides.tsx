@@ -2,7 +2,7 @@ import React, {FunctionComponent, ReactNode} from "react";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
 import {HearingTestItemExampleCard} from "../audio/HearingTest/HearingTestItemExampleCard";
-import {AudioTestItemTrainingCard} from "../audio/AudioTestItemTrainingCard";
+import {AudioTestItemTraining} from "../audio/AudioTestItemTraining";
 import {BasicExampleModel} from "../../shared/models/BasicTaskModel";
 import {AcrTestItemExampleCard} from "../audio/AcrTest/AcrTestItemExampleCard";
 import {ImageLabelingExampleItem} from "../image/ImageLabeling/ImageLabelingExampleItem";
@@ -44,7 +44,7 @@ export function overrideTrainingItem(testUrl: TestUrl): TestItemExampleCardType 
     case "mushra-test":
     case "hearing-test":
     case "audio-labeling": // Special task type, using training as example
-      return AudioTestItemTrainingCard
+      return AudioTestItemTraining
     default:
       return null;
   }

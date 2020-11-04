@@ -11,7 +11,7 @@ import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
 import Axios from "axios";
 import {UserModel} from "../../shared/models/UserModel";
-import {LinkedTextRender} from "../../shared/components/RenderSurveyControl";
+import {LinkedTextRender} from "../../shared/components/SurveyControl.render";
 
 const useStyles = makeStyles((_: Theme) => ({
   drawerPaper: {width: 300},

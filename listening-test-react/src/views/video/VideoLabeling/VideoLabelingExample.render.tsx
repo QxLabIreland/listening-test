@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
+import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import React, {useEffect, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
@@ -21,7 +21,7 @@ export const VideoLabelingExampleRender = observer(function (props: { item: Imag
   return <Grid container spacing={3}>
     {/*Description for the example*/}
     {item.example.fields[0] && <Grid item xs={12}>
-      <RenderSurveyControl control={item.example.fields[0]}/>
+      <SurveyControlRender control={item.example.fields[0]}/>
     </Grid>}
     {/*Video grids*/}
     <GridList cellHeight="auto" cols={1}>
@@ -31,7 +31,7 @@ export const VideoLabelingExampleRender = observer(function (props: { item: Imag
     </GridList>
     {/*Questions*/}
     {item.example.fields.slice(1)?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
+      <SurveyControlRender control={value}/>
     </Grid>)}
   </Grid>;
 })

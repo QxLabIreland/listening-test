@@ -1,12 +1,12 @@
 import {observer} from "mobx-react";
-import {AudioButton} from "../../shared/web-audio/AudiosPlayer";
+import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
-import {RenderSurveyControl} from "../../shared/components/RenderSurveyControl";
+import {SurveyControlRender} from "../../shared/components/SurveyControl.render";
+import {AudioButton} from "../../shared/web-audio/AudiosPlayer";
 import Slider from "@material-ui/core/Slider";
-import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 
-export const RenderTraining = observer(function (props: { value: AudioExampleModel, active?: boolean}) {
+export const AudioTestItemTraining = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   useEffect(() => {
@@ -48,7 +48,7 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
   return <Grid container spacing={3}>
     {/*Description for the example*/}
     {value.fields && value.fields[0] && <Grid item xs={12}>
-      <RenderSurveyControl control={value.fields[0]}/>
+      <SurveyControlRender control={value.fields[0]}/>
     </Grid>}
     {value.medias.map((v, i) => <Grid item key={i}>
       <AudioButton ref={ref => refs[i] = ref} audio={v} onPlay={() => handlePlay(i)} onPause={handlePause}
@@ -64,7 +64,7 @@ export const RenderTraining = observer(function (props: { value: AudioExampleMod
     </Grid>
     {/*Ask a question for training*/}
     {value.fields?.slice(1).map((v, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={v}/>
+      <SurveyControlRender control={v}/>
     </Grid>)}
   </Grid>
 })

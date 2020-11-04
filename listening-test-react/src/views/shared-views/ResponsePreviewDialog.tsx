@@ -11,7 +11,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
-import {observable, toJS} from "mobx";
+import {toJS} from "mobx";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },

@@ -9,7 +9,7 @@ import Axios, {AxiosResponse} from "axios";
 import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {jestTestContainer as container} from "../../setupTests";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
-import {AudioTestItemTrainingCard} from "../audio/AudioTestItemTrainingCard";
+import {AudioTestItemTraining} from "../audio/AudioTestItemTraining";
 
 it("render loading animation", () => {
   act(() => {
@@ -44,7 +44,7 @@ it("renders detail data of a test", async () => {
 it("reorder test item card in the list", () => {
   const items = [] as BasicTaskItemModel[];
   act(() => {
-    render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} TestItemTrainingCard={AudioTestItemTrainingCard} />, container);
+    render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} TestItemTrainingCard={AudioTestItemTraining} />, container);
   });
   expect(container.textContent).toBe("");
 });

@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {SurveyControlType, TestItemType} from "../../shared/models/EnumsAndTypes";
+import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import React, {ChangeEvent, ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -20,7 +20,7 @@ import {SurveyControl} from "../../shared/components/SurveyControl";
 import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
-import {TestItemExampleCardType} from "./TypesAndItemOverrides";
+import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from "./TypesAndItemOverrides";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
 
@@ -34,11 +34,10 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 /** To render item into different card based on type */
 export const TestItemCard = observer(function (props: {
-  value: BasicTaskItemModel, onDelete: () => void, TestItemExampleCard: TestItemExampleCardType,
-  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, TestItemTrainingCard: TestItemExampleCardType,
-  onCopy: (_: BasicTaskItemModel) => void
+  value: BasicTaskItemModel, testUrl: TestUrl, onDelete: () => void,
+  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, onCopy: (_: BasicTaskItemModel) => void
 }) {
-  const {value, TestItemExampleCard, TestItemTrainingCard} = props;
+  const {value, testUrl} = props;
   // Label methods
   const handleLabelChange = (event: any) => {
     value.title = event.target.value;
@@ -47,7 +46,7 @@ export const TestItemCard = observer(function (props: {
   const labelInput = <input style={labelInputStyle} onFocus={event => event.target.select()}
                             value={value.title} onChange={handleLabelChange}/>;
   // Switch to correct card
-  const ExampleCard: TestItemExampleCardType = value.type === TestItemType.example ? TestItemExampleCard : TestItemTrainingCard;
+  const ExampleCard: TestItemExampleCardType = value.type === TestItemType.example ? overrideExampleItem(testUrl) : overrideTrainingItem(testUrl);
   if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard
     title={labelInput} example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}
   />

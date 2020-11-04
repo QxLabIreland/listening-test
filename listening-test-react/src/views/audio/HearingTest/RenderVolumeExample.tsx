@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {observer} from "mobx-react";
-import {AudioExampleModel, AudioFileModel, AudioTestItemModel} from "../../../shared/models/AudioTestModel";
-import {TestItemType} from "../../../shared/models/EnumsAndTypes";
-import {RenderSurveyControl} from "../../../shared/components/RenderSurveyControl";
+import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
+import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import Grid from "@material-ui/core/Grid";
 import {createStyles, Slider, Theme} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
-import {RenderTraining} from "../../components/RenderTraining";
 import {
   createOscillatorAndGain,
   disposeOscillatorAndGain,
@@ -51,7 +49,7 @@ export const RenderVolumeExample = observer(function (props: { value: AudioExamp
 
   return <Grid container spacing={3}>
     {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
-      <RenderSurveyControl control={value}/>
+      <SurveyControlRender control={value}/>
     </Grid>)}
 
     {value.medias.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>

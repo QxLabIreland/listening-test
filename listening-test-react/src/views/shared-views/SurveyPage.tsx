@@ -36,6 +36,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   const {validateError} = useSurveyRenderItem(testUrl);
   // To get data from the server or load data
   useEffect(() => {
+    // If there is a value, it means we are in preview mode
     if (value) {
       const validateError = testItemsValidateIncomplete(value);
       if (validateError) setError('The task is incomplete: ' + validateError);
@@ -91,7 +92,14 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       history.replace(`/task/finish?${res.data?.$oid}&${testUrl}`, true);
     });
   }
-
+  // Show panel actions based on various parameters
+  const panelActions = (index: number, isSectionHeader: boolean = false) => {
+    if ((questionnaire.settings.isIndividual && isSectionHeader) || !isSectionHeader)
+      if (index < questionnaire.items.length - 1)
+        return <Button color="primary" onClick={() => handlePanelChange(true, index + 1)}>Next</Button>
+      else return <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+    else return null;
+  }
   return <Box pt={6}>{questionnaire ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
@@ -113,23 +121,16 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
           <ExpansionPanelDetails>
             <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
-          <ExpansionPanelActions>
-            {i < questionnaire.items.length - 1
-              ? <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button>
-              : <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>}
-          </ExpansionPanelActions>
-        </ExpansionPanel> :
-        <Typography variant="h4">{questionnaire.name}</Typography>}
+          <ExpansionPanelActions>{panelActions(i)}</ExpansionPanelActions>
+        </ExpansionPanel> : <div>
+          <Typography variant="h4">{questionnaire.name}</Typography>
+          <ExpansionPanelActions>{panelActions(i, true)}</ExpansionPanelActions>
+        </div>}
       </Grid>
     )}
     <Grid item xs={12}>
-      <MobileStepper
-        variant="text"
-        steps={questionnaire.items.length}
-        position="static"
-        activeStep={openedPanel}
-        nextButton={null}
-        backButton={null}
+      <MobileStepper variant="text" position="static" steps={questionnaire.items.length} activeStep={openedPanel}
+                     nextButton={null} backButton={null}
       />
     </Grid>
   </Grid> : <Loading error={error}/>}</Box>
