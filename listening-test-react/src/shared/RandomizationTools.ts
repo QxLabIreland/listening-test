@@ -30,39 +30,48 @@ export function useRandomization<T>(items: T[], activated: boolean): T[] {
   return randomItems;
 }
 
-export function divideIntoSections<T extends BasicTaskItemModel>(items: T[]): T[][] {
-  // Divide items into sections first
-  const sections: T[][] = [];
-  let questions: T[] = [];
-  items.forEach(item => {
-    // If there is a section header, it means that the questions below to the section are belond to this section
-    if (item.type === TestItemType.sectionHeader) {
-      // We also need empty array
-      if (questions) sections.push(questions);
-      questions = [item];
-    } else questions.push(item);
-  });
-  // Push questions of the end of section
-  sections.push(questions);
+export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]): T[] {
+  const [newItems] = useState<T[]>([]);
 
-  // Try to randomize questions for sections
-  sections.forEach(section => {
-    if (section.length && section[0].type === TestItemType.sectionHeader && section[0].sectionSettings?.randomQuestions) {
-      // This will ignore the first element of an array
-      let currentIndex = section.length - 1;
+  useEffect(() => {
+    if (!items) return;
+    // Divide items into sections first
+    const sections: T[][] = [];
+    let questions: T[] = [];
+    items.forEach(item => {
+      // If there is a section header, it means that the questions below to the section are belond to this section
+      if (item.type === TestItemType.sectionHeader) {
+        // We also need empty array
+        if (questions) sections.push(questions);
+        questions = [item];
+      } else questions.push(item);
+    });
+    // Push questions of the end of section
+    sections.push(questions);
+    console.log(sections)
 
-      // While there remain elements to shuffle...
-      while (currentIndex > 0) {
-        // Pick a remaining element...
-        const randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+    // Try to randomize questions for sections
+    sections.forEach(section => {
+      if (section.length && section[0].type === TestItemType.sectionHeader && section[0].sectionSettings?.randomQuestions) {
+        // This will ignore the first element of an array
+        let currentIndex = section.length;
 
-        // And swap it with the current element.
-        const temporaryValue = section[currentIndex];
-        section[section.length - currentIndex] = section[randomIndex];
-        section[randomIndex] = temporaryValue;
+        // While there remain elements to shuffle...
+        while (currentIndex > 0) {
+          // Pick a remaining element...
+          const randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          // And swap it with the current element.
+          const temporaryValue = section[currentIndex];
+          section[currentIndex] = section[randomIndex];
+          section[randomIndex] = temporaryValue;
+        }
       }
-    }
-  });
-  return sections;
+      // Push random items back to new items list
+      newItems.push(...section);
+    });
+  }, [items]);
+
+  return items ? newItems : null;
 }
