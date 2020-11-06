@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 import pymongo
 from bson import ObjectId
@@ -100,8 +101,13 @@ def build_row(item, value_source='medias'):
         if 'questionControl' in item and 'value' in item['questionControl']:
             # Checkbox is json type, so we need to un stringify
             if 'type' in item['questionControl'] and item['questionControl']['type'] == 2:
-                value = json.loads(item["questionControl"]["value"])
-                return f'"{",".join(value)}"'
+                try:
+                    value = json.loads(item["questionControl"]["value"])
+                    return f'"{",".join(value)}"'
+                # To be compatible with old version of checkbox value
+                except JSONDecodeError as e:
+                    print(e)
+                    pass
             return f'"{item["questionControl"]["value"] or ""}"'
         else:
             return ''
