@@ -14,7 +14,7 @@ import {TestSettingsDialog} from "./TestSettingsDialog";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
-import ResponsePreviewDialog from "./ResponsePreviewDialog";
+import {ResponsePreviewDialog} from "./ResponsePreviewDialog";
 import {ShareLinkDialog} from "./ShareLinkDialog";
 
 export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {

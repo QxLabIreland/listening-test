@@ -137,7 +137,7 @@ export const TestDetailItemCardList = observer(function ({items, testSettings, t
         </IconButton>
       </span></Tooltip>
     </>}</Box>
-    <TestItemCard value={v} onDelete={() => deleteItem(i)} gotoQuestionItems={gotoQuestionItems(i)} testUrl={testUrl}
+    <TestItemCard item={v} onDelete={() => deleteItem(i)} gotoQuestionItems={gotoQuestionItems(i)} testUrl={testUrl}
                   disableGoto={!testSettings?.isIndividual} onCopy={item => copyItem(item, i)}
     />
   </Grid>)}

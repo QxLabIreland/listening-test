@@ -31,7 +31,7 @@ export function useRandomization<T>(items: T[], activated: boolean): T[] {
 }
 
 export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]): T[] {
-  const [newItems] = useState<T[]>([]);
+  const [newItems, setNewItems] = useState<T[]>();
 
   useEffect(() => {
     if (!items) return;
@@ -50,17 +50,18 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
     sections.push(questions);
     console.log(sections)
 
+    const newItems: T[] = []
     // Try to randomize questions for sections
     sections.forEach(section => {
       if (section.length && section[0].type === TestItemType.sectionHeader && section[0].sectionSettings?.randomQuestions) {
         // This will ignore the first element of an array
-        let currentIndex = section.length;
+        let currentIndex = 0;
 
         // While there remain elements to shuffle...
-        while (currentIndex > 0) {
+        while (currentIndex < section.length - 1) {
           // Pick a remaining element...
-          const randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex -= 1;
+          const randomIndex = Math.floor(Math.random() * (section.length - currentIndex - 1)) + 1;
+          currentIndex += 1;
 
           // And swap it with the current element.
           const temporaryValue = section[currentIndex];
@@ -71,6 +72,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
       // Push random items back to new items list
       newItems.push(...section);
     });
+    setNewItems(newItems);
   }, [items]);
 
   return items ? newItems : null;
