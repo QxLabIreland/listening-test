@@ -64,7 +64,14 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
-  const values: string[] = control.value ? JSON.parse(control.value): [];
+  // Make sure it is compatible with old version of commas value
+  let values: string[];
+  try {
+    values = control.value ? JSON.parse(control.value): [];
+  }
+  catch (err) {
+    values = control.value ? control.value.split(',') : [];
+  }
 
   function handleCheckbox(event: any) {
     // To array for manipulation

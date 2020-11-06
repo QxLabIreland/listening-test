@@ -97,7 +97,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
   }
   // Show panel actions based on various parameters
   const panelActions = (index: number, isSectionHeader: boolean = false) => {
-    if ((questionnaire.settings.isIndividual && isSectionHeader) || !isSectionHeader)
+    if ((questionnaire.settings?.isIndividual && isSectionHeader) || !isSectionHeader)
       if (index < randomItems.length - 1)
         return <Button color="primary" onClick={() => handlePanelChange(true, index + 1)}>Next</Button>
       else return <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
