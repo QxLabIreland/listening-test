@@ -9,7 +9,7 @@ import {useRandomization} from "../../shared/RandomizationTools";
 import {ratingAreaStyle} from "../SharedStyles";
 import {AudioSectionLoopingController} from "../../shared/web-audio/AudioSectionLoopingController";
 
-export const AudioRatingExampleRender = observer(function (props: { value: AudioExampleModel, RatingBar: (props: { audio: AudioFileModel }) => JSX.Element, active?: boolean }) {
+export const AudioRatingExampleRender = observer(function (props: { value: AudioExampleModel, RatingBar: React.FunctionComponent<{ audio: AudioFileModel }>, active?: boolean }) {
   const {value, RatingBar, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);

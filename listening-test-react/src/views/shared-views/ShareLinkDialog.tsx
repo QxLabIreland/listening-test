@@ -10,7 +10,10 @@ import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
-export const ShareLinkDialog = forwardRef<HTMLElement & { openShareLinkDialog: () => void }, IconButtonProps & { taskUrl: TestUrl, task: BasicTaskModel, shareDialogState: [boolean, React.Dispatch<React.SetStateAction<boolean>>] }>(function (props, forwardedRef): any {
+export const ShareLinkDialog = forwardRef<
+  HTMLElement & { openShareLinkDialog: () => void },
+  IconButtonProps & { taskUrl: TestUrl, task: BasicTaskModel, shareDialogState: [boolean, React.Dispatch<React.SetStateAction<boolean>>] }
+>(function (props, forwardedRef) {
   const {taskUrl, task, shareDialogState} = props;
   const [open, setOpen] = shareDialogState;
   const openGlobalDialog = useContext(GlobalDialog);

@@ -11,7 +11,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyPage} from "./SurveyPage";
-import {toJS} from "mobx";
+import {observer} from "mobx-react";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -27,14 +27,14 @@ const useMatBackground = makeStyles((theme) => ({
   paperFullScreen: {backgroundColor: theme.palette.background.default}
 }));
 
-function ResponsePreviewDialog(props: IconButtonProps & { taskModel: BasicTaskModel, testUrl: TestUrl }, ref: any) {
+export const ResponsePreviewDialog = observer(forwardRef(function (props: IconButtonProps & { taskModel: BasicTaskModel, testUrl: TestUrl }, ref: any) {
   // Deconstruct taskModel, but we don't need its value
-  const {taskModel: _, testUrl, ...rest} = props;
+  const {taskModel, testUrl, ...rest} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const backgroundClasses = useMatBackground();
   // Unwrap the observable, it will return a copy
-  const taskModel = toJS(props.taskModel);
+  // const taskModelJs = toJS(props.taskModel);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,6 +64,4 @@ function ResponsePreviewDialog(props: IconButtonProps & { taskModel: BasicTaskMo
       </Container>
     </Dialog>
   </React.Fragment>;
-}
-
-export default forwardRef(ResponsePreviewDialog)
+}));

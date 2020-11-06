@@ -9,8 +9,9 @@ import {Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip} from "@mater
 import Icon from "@material-ui/core/Icon";
 import {useFormik} from "formik";
 import {TestSettingsModel} from "../../shared/models/BasicTaskModel";
+import {observer} from "mobx-react";
 
-export function TestSettingsDialog(props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {
+export const TestSettingsDialog = observer(function (props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {
   const [open, setOpen] = React.useState(false);
   const formik = useFormik<TestSettingsModel>({
     initialValues: {isIndividual: false, isTimed: false},
@@ -55,4 +56,4 @@ export function TestSettingsDialog(props: { settings: TestSettingsModel, onConfi
       </form>
     </Dialog>
   </>
-}
+})

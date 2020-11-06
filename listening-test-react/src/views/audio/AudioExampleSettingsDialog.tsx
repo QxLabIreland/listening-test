@@ -9,12 +9,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@material-ui/core";
 import {useFormik} from "formik";
 import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
+import {observer} from "mobx-react";
 
 const initialValues: AudioExampleSettingsModel = {
   loopTimes: 0, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false, randomMedia: false
 };
 
-export function AudioExampleSettingsDialog(props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean, disableRandomAudio?: boolean }) {
+export const AudioExampleSettingsDialog = observer(function (props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean, disableRandomAudio?: boolean }) {
   // Add disable prop that allow to disable some settings
   const {settings, onConfirm, disableSectionLoop, disableRandomAudio} = props;
   const [open, setOpen] = useState(false);
@@ -62,6 +63,7 @@ export function AudioExampleSettingsDialog(props: { settings: AudioExampleSettin
             control={<Checkbox checked={formik.values.sectionLooping} {...formik.getFieldProps('sectionLooping')}/>}
             label="Show section looping slider bar"
           />}
+          <br/>
           {!disableRandomAudio && <FormControlLabel
             control={<Checkbox checked={formik.values.randomMedia} {...formik.getFieldProps('randomMedia')}/>}
             label="Randomize media files"
@@ -78,4 +80,4 @@ export function AudioExampleSettingsDialog(props: { settings: AudioExampleSettin
       </form>
     </Dialog>
   </>;
-}
+});

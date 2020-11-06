@@ -32,41 +32,45 @@ const useStyles = makeStyles((theme: Theme) => {
     innerQuestionContainer: {display: 'flex', justifyContent: 'flex-end'}
   });
 });
-/** To render item into different card based on type */
+/** To display item in different card based on type */
 export const TestItemCard = observer(function (props: {
-  value: BasicTaskItemModel, testUrl: TestUrl, onDelete: () => void,
+  item: BasicTaskItemModel, testUrl: TestUrl, onDelete: () => void,
   gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, onCopy: (_: BasicTaskItemModel) => void
 }) {
-  const {value, testUrl} = props;
-  // Label methods
-  const handleLabelChange = (event: any) => {
-    value.title = event.target.value;
-  }
+  const {item, testUrl} = props;
 
-  const labelInput = <input style={labelInputStyle} onFocus={event => event.target.select()}
-                            value={value.title} onChange={handleLabelChange}/>;
   // Switch to correct card
-  const ExampleCard: TestItemExampleCardType = value.type === TestItemType.example ? overrideExampleItem(testUrl) : overrideTrainingItem(testUrl);
-  if (value.type === TestItemType.example || value.type === TestItemType.training) return <ExampleCard
-    title={labelInput} example={value.example} collapsed={value.collapsed} action={<HeaderIconButtons {...props}/>}
+  const ExampleCard: TestItemExampleCardType = item.type === TestItemType.example ? overrideExampleItem(testUrl) : overrideTrainingItem(testUrl);
+  if (item.type === TestItemType.example || item.type === TestItemType.training) return <ExampleCard
+    title={<TitleInput item={item}/>} example={item.example} collapsed={item.collapsed}
+    action={<HeaderIconButtons {...props}/>}
   />
-  else if (value.type === TestItemType.question) return <TestItemQuestionCard
-    {...props} action={<HeaderIconButtons {...props}/>} collapsed={value.collapsed}
+  else if (item.type === TestItemType.question) return <TestItemQuestionCard
+    {...props} action={<HeaderIconButtons {...props}/>} collapsed={item.collapsed}
   />
-  else return <SectionHeaderSettings labelInput={labelInput} {...props}/>;
-})
+  else return <SectionHeaderSettings {...props}/>;
+});
+
+/** This an input that can be edited with transparent background */
+const TitleInput = observer(function ({item}: {item: BasicTaskItemModel}) {
+  const handleLabelChange = (event: any) => item.title = event.target.value;
+
+  return <input style={labelInputStyle} onFocus={event => event.target.select()}
+                value={item.title} onChange={handleLabelChange}/>
+});
+
 // Buttons group for common operations
-const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
+const HeaderIconButtons = observer(function ({onDelete, item, onCopy}: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
   const classes = useStyles();
   return <>
-    <Tooltip title={`${value.collapsed ? 'Expand' : 'Collapse'} Question`}>
-      <IconButton className={value.collapsed ? classes.expand : classes.expandOpen}
-                  onClick={() => value.collapsed = !value.collapsed}>
-        <Icon>{value.collapsed ? 'unfold_more' : 'unfold_less'}</Icon>
+    <Tooltip title={`${item.collapsed ? 'Expand' : 'Collapse'} Question`}>
+      <IconButton className={item.collapsed ? classes.expand : classes.expandOpen}
+                  onClick={() => item.collapsed = !item.collapsed}>
+        <Icon>{item.collapsed ? 'unfold_more' : 'unfold_less'}</Icon>
       </IconButton>
     </Tooltip>
     <Tooltip title="Copy This Question">
-      <IconButton onClick={() => onCopy(value)}><Icon>content_copy</Icon></IconButton>
+      <IconButton onClick={() => onCopy(item)}><Icon>content_copy</Icon></IconButton>
     </Tooltip>
     <Tooltip title="Delete Question">
       <IconButton onClick={onDelete}><Icon>delete</Icon></IconButton>
@@ -74,24 +78,24 @@ const HeaderIconButtons = observer(function ({onDelete, value, onCopy}: { value:
   </>
 })
 /** Question Card for survey questions*/
-const TestItemQuestionCard = observer(function ({value, action, collapsed, gotoQuestionItems, disableGoto}: {
-  value: BasicTaskItemModel, action: ReactNode, collapsed?: boolean,
+const TestItemQuestionCard = observer(function ({item, action, collapsed, gotoQuestionItems, disableGoto}: {
+  item: BasicTaskItemModel, action: ReactNode, collapsed?: boolean,
   gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean
 }) {
   // If the index is at end of list, the goto feature will be delete
-  const gotoQuestionItemsFiltered = gotoQuestionItems.findIndex(cur => cur.id === value.id) >= gotoQuestionItems.length - 1
-    ? undefined : gotoQuestionItems.filter(cur => cur.id !== value.id);
+  const gotoQuestionItemsFiltered = gotoQuestionItems.findIndex(cur => cur.id === item.id) >= gotoQuestionItems.length - 1
+    ? undefined : gotoQuestionItems.filter(cur => cur.id !== item.id);
   return <Card>
-    <CardHeader title={<input style={labelInputStyle} value={value.title} onChange={e => value.title = e.target.value}
+    <CardHeader title={<input style={labelInputStyle} value={item.title} onChange={e => item.title = e.target.value}
                               onFocus={event => event.target.select()}/>} action={<>
-      {value.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
-        <Switch checked={value.questionControl.required}
-                onChange={e => value.questionControl.required = e.target.checked}/>
+      {item.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={
+        <Switch checked={item.questionControl.required}
+                onChange={e => item.questionControl.required = e.target.checked}/>
       }/>} {action}
     </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
-        <SurveyControl control={value.questionControl} disableGoto={disableGoto}
+        <SurveyControl control={item.questionControl} disableGoto={disableGoto}
           // Filter current item out of list
                        gotoQuestionItems={gotoQuestionItemsFiltered}/>
       </CardContent>
@@ -103,23 +107,25 @@ const sectionUseStyles = makeStyles((_theme) => ({
   header: {display: 'flex', marginRight: 8}
 }));
 
-const SectionHeaderSettings = observer(function (props: { value: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void, labelInput: ReactNode  }) {
-  const {value, labelInput} = props;
+/** Section header to group questions together */
+const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void}) {
+  const {item} = props;
   const classes = sectionUseStyles();
 
   const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    if (!value.sectionSettings) value.sectionSettings = {};
-    value.sectionSettings.randomQuestions = checked;
+    if (!item.sectionSettings) item.sectionSettings = {};
+    item.sectionSettings.randomQuestions = checked;
   }
 
   return <div>
     <Typography variant="h4" className={classes.header}>
-      {labelInput} <HeaderIconButtons {...props}/>
+      <TitleInput item={item}/>
+      <HeaderIconButtons {...props}/>
     </Typography>
-    <Collapse in={!value.collapsed} timeout="auto" unmountOnExit>
+    <Collapse in={!item.collapsed} timeout="auto" unmountOnExit>
     <FormGroup>
       <FormControlLabel
-        control={<Checkbox checked={value.sectionSettings?.randomQuestions} onChange={handleChange}/>}
+        control={<Checkbox checked={item.sectionSettings?.randomQuestions} onChange={handleChange}/>}
         label="Randomize question for this section"
       />
     </FormGroup>
