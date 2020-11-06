@@ -25,5 +25,5 @@ export const AcrRatingBar = observer(function ({audio}: { audio: AudioFileModel 
             value={Number(audio.value)}
             onChange={(_, value) => audio.value = value.toString()}/>
   </Box>
-})
+});
 

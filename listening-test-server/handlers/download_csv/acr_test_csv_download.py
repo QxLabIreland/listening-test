@@ -1,3 +1,5 @@
+import json
+
 import pymongo
 from bson import ObjectId
 from handlers.base import BaseHandler
@@ -96,7 +98,10 @@ def build_header(item, suffix='rating'):
 def build_row(item, value_source='medias'):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
-            # Checkbox has comma, so we need quotation marks
+            # Checkbox is json type, so we need to un stringify
+            if 'type' in item['questionControl'] and item['questionControl']['type'] == 2:
+                value = json.loads(item["questionControl"]["value"])
+                return f'"{",".join(value)}"'
             return f'"{item["questionControl"]["value"] or ""}"'
         else:
             return ''
