@@ -1,6 +1,6 @@
 import {createContext} from "react";
 import {UserModel} from "./models/UserModel";
-import {BasicTaskItemModel} from "./models/BasicTaskModel";
+import {BasicTaskModel} from "./models/BasicTaskModel";
 
 /** This context can set the title of the app bar drawer*/
 interface IAppBarTitleContext {
@@ -26,5 +26,5 @@ type SnackbarCallback = (message: string, time?: number, severity?: 'success' | 
 export const GlobalSnackbar = createContext<SnackbarCallback>(null);
 
 // Data contexts
-/** Task items for cross components use, only read only purpose */
-export const TaskItems = createContext<BasicTaskItemModel[]>(null);
+/** Task model for cross components use, only read only purpose */
+export const DetailTaskModel = createContext<BasicTaskModel>(null);

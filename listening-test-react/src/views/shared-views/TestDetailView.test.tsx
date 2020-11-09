@@ -2,14 +2,12 @@ import React from "react";
 import {render} from "react-dom";
 import {act} from "react-dom/test-utils";
 import {TestDetailView} from "./TestDetailView";
-import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
 import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
 import {MemoryRouter} from "react-router";
 import Axios, {AxiosResponse} from "axios";
 import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {jestTestContainer as container} from "../../setupTests";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
-import {AudioTestItemTraining} from "../audio/AudioTestItemTraining";
 
 it("render loading animation", () => {
   act(() => {
@@ -44,7 +42,7 @@ it("renders detail data of a test", async () => {
 it("reorder test item card in the list", () => {
   const items = [] as BasicTaskItemModel[];
   act(() => {
-    render(<TestDetailItemCardList items={items} TestItemExampleCard={AbTestItemExampleCard} TestItemTrainingCard={AudioTestItemTraining} />, container);
+    render(<TestDetailItemCardList items={items} testUrl="ab-test"/>, container);
   });
   expect(container.textContent).toBe("");
 });
