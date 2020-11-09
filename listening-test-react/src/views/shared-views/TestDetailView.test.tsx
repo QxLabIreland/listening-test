@@ -6,7 +6,7 @@ import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
 import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
 import {MemoryRouter} from "react-router";
 import Axios, {AxiosResponse} from "axios";
-import {BasicTaskModel, BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {jestTestContainer as container} from "../../setupTests";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {AudioTestItemTraining} from "../audio/AudioTestItemTraining";

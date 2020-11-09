@@ -6,7 +6,7 @@ import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
+import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
 import {useMatStyles} from "../../SharedStyles";
 
 export const VideoAbButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
@@ -32,6 +32,6 @@ export const VideoAbButtonGroup = observer(function (props: { onAdd: (type: Audi
     <Button variant="outlined" color="primary" onClick={handleAddExample} data-testid='buttonAddEx'>
       <Icon>add</Icon>Add Video Example
     </Button>
-    <AddQuestionButton onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}/>
+    <AddQuestionButton onAdd={onAdd}/>
   </Box>
 });

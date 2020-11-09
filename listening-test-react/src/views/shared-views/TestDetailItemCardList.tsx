@@ -8,6 +8,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {BasicTaskItemModel, TestSettingsModel} from "../../shared/models/BasicTaskModel";
 import {uuid} from "uuidv4";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {TaskItems} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -119,7 +120,7 @@ export const TestDetailItemCardList = observer(function ({items, testSettings, t
     items.splice(index, 0, copied);
   }
 
-  return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
+  return <TaskItems.Provider value={items}>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
     // ref?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
     refs[i] = ref;
   }} className={state.index === i ? classes.gridHidden : classes.grid}>
@@ -141,5 +142,5 @@ export const TestDetailItemCardList = observer(function ({items, testSettings, t
                   disableGoto={!testSettings?.isIndividual} onCopy={item => copyItem(item, i)}
     />
   </Grid>)}
-  </>
+  </TaskItems.Provider>
 })

@@ -6,7 +6,7 @@ import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import React from "react";
-import {AddQuestionButton, handleSurveyQuestionItemAdd} from "../../../shared/components/AddQuestionButton";
+import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
 import {useMatStyles} from "../../SharedStyles";
 
 export const AudioLabelingButtonGroup = observer(function (props: { onAdd: (_: AudioTestItemModel) => void }) {
@@ -27,6 +27,6 @@ export const AudioLabelingButtonGroup = observer(function (props: { onAdd: (_: A
     <Button variant="outlined" color="primary" onClick={handleAddTraining}>
       <Icon>add</Icon>Add Labeling Item
     </Button>
-    <AddQuestionButton onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}/>
+    <AddQuestionButton onAdd={onAdd}/>
   </Box>
 });

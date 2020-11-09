@@ -1,43 +1,42 @@
 import {observer} from "mobx-react";
 import {SurveyControlModel} from "../models/SurveyControlModel";
-import React, {forwardRef, PropsWithChildren, useImperativeHandle, useState} from "react";
+import React, {forwardRef, PropsWithChildren, useContext, useImperativeHandle, useState} from "react";
 import {SurveyControlType, TestItemType} from "../models/EnumsAndTypes";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import {Divider, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import {uuid} from "uuidv4";
-import {BasicTaskItemModel} from "../models/BasicTaskModel";
-
-export const handleSurveyQuestionItemAdd = (question: SurveyControlModel, onAdd: (_: BasicTaskItemModel) => void) => {
-  // Bad solution for scrolling
-  const timer = setTimeout(() => {
-    onAdd({
-      id: uuid(),
-      type: TestItemType.question,
-      title: 'Survey Question (click to edit)',
-      questionControl: question
-    });
-    clearTimeout(timer);
-  });
-};
-
+import {TaskItems} from "../ReactContexts";
+import {AudioTestItemModel} from "../models/AudioTestModel";
 export type AddQuestionButtonType = { closeMenu: () => void }
 
 export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, PropsWithChildren<{
-  onQuestionAdd: (question: SurveyControlModel) => void, onlyCore?: boolean
+  onAdd: (type: AudioTestItemModel) => void, onlyCore?: boolean
 }>>(function (props, forwardedRef) {
   // If props doesn't have anchorEl and setAnchorEl, we are gonna use copied one
-  const {onQuestionAdd, onlyCore} = props;
+  const {onAdd, onlyCore} = props;
   const [anchorEl, setAnchorEl] = useState<HTMLElement>();
   useImperativeHandle(forwardedRef, () => ({
     closeMenu: () => setAnchorEl(null)
   }));
+  const lastItem = useContext(TaskItems)[0];
 
   // When menu clicked
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
+  const handleSurveyQuestionItemAdd = (question: SurveyControlModel) => {
+    // Bad solution for scrolling
+    const timer = setTimeout(() => {
+      onAdd({
+        id: uuid(),
+        type: TestItemType.question,
+        title: 'Survey Question (click to edit)',
+        questionControl: question
+      });
+      clearTimeout(timer);
+    });
+  };
   const handleAdd = (type: SurveyControlType) => {
     // Close the adding menu
     setAnchorEl(null);
@@ -45,7 +44,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
     switch (type) {
       case SurveyControlType.radio:
       case SurveyControlType.checkbox:
-        onQuestionAdd({
+        handleSurveyQuestionItemAdd({
           type: type,
           question: 'Untitled question',
           options: ['Add your options!'],
@@ -54,12 +53,14 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
         });
         break;
       case SurveyControlType.text:
-        onQuestionAdd({type: type, question: 'Untitled question', value: null, required: true});
+        handleSurveyQuestionItemAdd({type: type, question: 'Untitled question', value: null, required: true});
         break;
       case SurveyControlType.description:
-        onQuestionAdd({type: type, question: 'Type you description here', value: null});
+        handleSurveyQuestionItemAdd({type: type, question: 'Type you description here', value: null});
         break;
     }
+  }
+  const handleCopyLastItem = () => {
   }
 
   // Get rid of other types of question
@@ -122,6 +123,13 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
           <Icon fontSize="small">label</Icon>
         </ListItemIcon>
         <ListItemText primary="A Text Label"/>
+      </MenuItem>
+      <Divider/>
+      <MenuItem onClick={handleCopyLastItem} disabled={!lastItem}>
+        <ListItemIcon>
+          <Icon fontSize="small">content_copy</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Copy Previous Question"/>
       </MenuItem>
     </Menu>
   </>;

@@ -5,11 +5,7 @@ import {uuid} from "uuidv4";
 import {Box, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import React, {useRef} from "react";
-import {
-  AddQuestionButton,
-  AddQuestionButtonType,
-  handleSurveyQuestionItemAdd
-} from "../../../shared/components/AddQuestionButton";
+import {AddQuestionButton, AddQuestionButtonType} from "../../../shared/components/AddQuestionButton";
 import {useMatStyles} from "../../SharedStyles";
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
@@ -51,7 +47,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
     {/*<Button variant="outlined" color="primary">
       <Icon>add</Icon>Add Section
     </Button>*/}
-    <AddQuestionButton ref={addQuestionMenu} onQuestionAdd={question => handleSurveyQuestionItemAdd(question, onAdd)}>
+    <AddQuestionButton ref={addQuestionMenu} onAdd={onAdd}>
       <MenuItem onClick={handleAddExample}>
         <ListItemIcon>
           <Icon fontSize="small">add_task</Icon>
