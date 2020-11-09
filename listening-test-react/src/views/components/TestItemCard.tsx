@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import React, {ChangeEvent, ReactNode} from "react";
+import React, {ChangeEvent, ReactNode, useContext} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {
@@ -19,10 +19,10 @@ import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
-import {GotoQuestionItemModel} from "../../shared/models/SurveyControlModel";
 import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from "./TypesAndItemOverrides";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
+import {DetailTaskModel} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
@@ -34,8 +34,7 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 /** To display item in different card based on type */
 export const TestItemCard = observer(function (props: {
-  item: BasicTaskItemModel, testUrl: TestUrl, onDelete: () => void,
-  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean, onCopy: (_: BasicTaskItemModel) => void
+  item: BasicTaskItemModel, testUrl: TestUrl, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void
 }) {
   const {item, testUrl} = props;
 
@@ -78,13 +77,16 @@ const HeaderIconButtons = observer(function ({onDelete, item, onCopy}: { item: B
   </>
 })
 /** Question Card for survey questions*/
-const TestItemQuestionCard = observer(function ({item, action, collapsed, gotoQuestionItems, disableGoto}: {
-  item: BasicTaskItemModel, action: ReactNode, collapsed?: boolean,
-  gotoQuestionItems?: GotoQuestionItemModel[], disableGoto?: boolean
+const TestItemQuestionCard = observer(function ({item, action, collapsed}: {
+  item: BasicTaskItemModel, action: ReactNode, collapsed?: boolean, disableGoto?: boolean
 }) {
+  const taskModel = useContext(DetailTaskModel);
+  // Find the index of current item
+  const curIndex = taskModel.items.findIndex(value => value.id === item.id);
   // If the index is at end of list, the goto feature will be delete
-  const gotoQuestionItemsFiltered = gotoQuestionItems.findIndex(cur => cur.id === item.id) >= gotoQuestionItems.length - 1
-    ? undefined : gotoQuestionItems.filter(cur => cur.id !== item.id);
+  const gotoQuestionItems = curIndex >= taskModel.items.length - 1 ? undefined :
+    taskModel.items.slice(curIndex + 2).map(item => ({id: item.id, title: item.title}));
+
   return <Card>
     <CardHeader title={<input style={labelInputStyle} value={item.title} onChange={e => item.title = e.target.value}
                               onFocus={event => event.target.select()}/>} action={<>
@@ -95,9 +97,9 @@ const TestItemQuestionCard = observer(function ({item, action, collapsed, gotoQu
     </>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
-        <SurveyControl control={item.questionControl} disableGoto={disableGoto}
+        <SurveyControl control={item.questionControl} disableGoto={!taskModel.settings?.isIndividual}
           // Filter current item out of list
-                       gotoQuestionItems={gotoQuestionItemsFiltered}/>
+                       gotoQuestionItems={gotoQuestionItems}/>
       </CardContent>
     </Collapse>
   </Card>

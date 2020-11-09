@@ -5,10 +5,9 @@ import {action, observable} from "mobx";
 import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
 import {TestItemCard} from "../components/TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
-import {BasicTaskItemModel, TestSettingsModel} from "../../shared/models/BasicTaskModel";
+import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import {uuid} from "uuidv4";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {TaskItems} from "../../shared/ReactContexts";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},
@@ -26,8 +25,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
  * The list of items for Detail page. It converts testUrl into different Cards
  * This component is for reordering purpose
  */
-export const TestDetailItemCardList = observer(function ({items, testSettings, testUrl}: {
-  items: BasicTaskItemModel[], testSettings?: TestSettingsModel, testUrl: TestUrl
+export const TestDetailItemCardList = observer(function ({items, testUrl}: {
+  items: BasicTaskItemModel[], testUrl: TestUrl
 }) {
   if (!items) items = observable([]);
   const [state] = useState(observable({index: null}));
@@ -110,9 +109,6 @@ export const TestDetailItemCardList = observer(function ({items, testSettings, t
     items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
     state.index = resetIndex ? null : newIndex;
   });
-  // Get filtered and mapped items
-  const gotoQuestionItems = (index: number) =>
-    items.filter((_, i1) => i1 > index + 1).map(item => ({id: item.id, title: item.title}));
   const copyItem = (item: BasicTaskItemModel, index: number) => {
     const copied = JSON.parse(JSON.stringify(item)) as BasicTaskItemModel;
     copied.id = uuid();
@@ -120,27 +116,27 @@ export const TestDetailItemCardList = observer(function ({items, testSettings, t
     items.splice(index, 0, copied);
   }
 
-  return <TaskItems.Provider value={items}>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => {
-    // ref?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
-    refs[i] = ref;
-  }} className={state.index === i ? classes.gridHidden : classes.grid}>
-    <Box className={classes.container}>{v.collapsed ? <Tooltip title="Hold and drag to reorder">
-      <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
-    </Tooltip> : <>
-      <Tooltip title="Move this card up"><span>
-        <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
-          <Icon className={classes.upDown}>arrow_upward</Icon>
-        </IconButton>
-      </span></Tooltip>
-      <Tooltip title="Move this card down"><span>
-        <IconButton size="small" disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
-          <Icon className={classes.upDown}>arrow_downward</Icon>
-        </IconButton>
-      </span></Tooltip>
-    </>}</Box>
-    <TestItemCard item={v} onDelete={() => deleteItem(i)} gotoQuestionItems={gotoQuestionItems(i)} testUrl={testUrl}
-                  disableGoto={!testSettings?.isIndividual} onCopy={item => copyItem(item, i)}
+  return <>{items.map((v, i) => <Grid item xs={12} key={v.id} ref={ref => refs[i] = ref}
+                                      className={state.index === i ? classes.gridHidden : classes.grid}>
+    <Box className={classes.container}>{v.collapsed ?
+      <Tooltip title="Hold and drag to reorder">
+        <Icon className={classes.reorder} onMouseDown={e => handleMouseDown(e, i)}>reorder</Icon>
+      </Tooltip> :
+      <>
+        <Tooltip title="Move this card up"><span>
+          <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
+            <Icon className={classes.upDown}>arrow_upward</Icon>
+          </IconButton>
+        </span></Tooltip>
+        <Tooltip title="Move this card down"><span>
+          <IconButton size="small" disabled={i === items.length - 1} onClick={() => handleReorder(i, i + 1, true)}>
+            <Icon className={classes.upDown}>arrow_downward</Icon>
+          </IconButton>
+        </span></Tooltip>
+      </>
+    }</Box>
+    <TestItemCard item={v} onDelete={() => deleteItem(i)} testUrl={testUrl}
+                  onCopy={item => copyItem(item, i)}
     />
-  </Grid>)}
-  </TaskItems.Provider>
+  </Grid>)}</>
 })

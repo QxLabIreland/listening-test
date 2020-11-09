@@ -6,8 +6,9 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import {Divider, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import {uuid} from "uuidv4";
-import {TaskItems} from "../ReactContexts";
 import {AudioTestItemModel} from "../models/AudioTestModel";
+import {BasicTaskItemModel} from "../models/BasicTaskModel";
+import {DetailTaskModel} from "../ReactContexts";
 export type AddQuestionButtonType = { closeMenu: () => void }
 
 export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, PropsWithChildren<{
@@ -19,7 +20,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   useImperativeHandle(forwardedRef, () => ({
     closeMenu: () => setAnchorEl(null)
   }));
-  const lastItem = useContext(TaskItems)[0];
+  const taskModel = useContext(DetailTaskModel);
 
   // When menu clicked
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,6 +62,10 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
     }
   }
   const handleCopyLastItem = () => {
+    setAnchorEl(null);
+    const newItem: BasicTaskItemModel = JSON.parse(JSON.stringify(taskModel.items[0]));
+    newItem.id = uuid();
+    onAdd(newItem);
   }
 
   // Get rid of other types of question
@@ -125,7 +130,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
         <ListItemText primary="A Text Label"/>
       </MenuItem>
       <Divider/>
-      <MenuItem onClick={handleCopyLastItem} disabled={!lastItem}>
+      <MenuItem onClick={handleCopyLastItem} disabled={!taskModel.items[0]}>
         <ListItemIcon>
           <Icon fontSize="small">content_copy</Icon>
         </ListItemIcon>
