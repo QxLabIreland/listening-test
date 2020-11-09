@@ -1,12 +1,9 @@
 import {observer} from "mobx-react";
-import {TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
-import React, {MouseEvent, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {Button, GridList, GridListTile, Theme} from "@material-ui/core";
-import {useSharedStyles} from "../../SharedStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import {Button} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 
 
