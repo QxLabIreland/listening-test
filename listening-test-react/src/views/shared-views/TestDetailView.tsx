@@ -16,6 +16,7 @@ import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
 import {ResponsePreviewDialog} from "./ResponsePreviewDialog";
 import {ShareLinkDialog} from "./ShareLinkDialog";
+import {DetailTaskModel} from "../../shared/ReactContexts";
 
 export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   testUrl: TestUrl,
@@ -97,10 +98,12 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
                    defaultValue={testModel.description} name="description"
                    onChange={(e) => testModel.description = e.target.value}/>
       </Grid>
-      <TestDetailItemCardList items={testModel.items} testUrl={testUrl} testSettings={testModel.settings}/>
-      <Grid item container justify="center" xs={12}>
-        <ButtonGroup onAdd={addItem}/>
-      </Grid>
+      <DetailTaskModel.Provider value={testModel}>
+        <TestDetailItemCardList items={testModel.items} testUrl={testUrl}/>
+        <Grid item container justify="center" xs={12}>
+          <ButtonGroup onAdd={addItem}/>
+        </Grid>
+      </DetailTaskModel.Provider>
       <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged} handleSubmit={handleSubmit}/>
     </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
   </Grid>

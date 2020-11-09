@@ -2,7 +2,6 @@ import {observer} from "mobx-react";
 import React from "react";
 import {TestItemExampleCardProps} from "../components/TypesAndItemOverrides";
 import {AudioExampleSettingsModel, AudioFileModel} from "../../shared/models/AudioTestModel";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {AudioExampleSettingsDialog} from "./AudioExampleSettingsDialog";
@@ -15,6 +14,7 @@ import {useMatStyles} from "../SharedStyles";
 import {AddQuestionButton} from "../../shared/components/AddQuestionButton";
 import Icon from "@material-ui/core/Icon";
 import {FileUploadDropBox} from "../../shared/components/FileUploadDropBox";
+import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 
 /** Training Test Item: Audios will play synchronously*/
 export const AudioTestItemTraining = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
@@ -24,7 +24,7 @@ export const AudioTestItemTraining = observer((props: React.PropsWithChildren<Te
   const handleAdd = (newAudio: AudioFileModel) => example.medias.push(newAudio);
   // Setting submitted
   const handleSettingChange = (settings: AudioExampleSettingsModel) => example.settings = settings;
-  const addAdditionalQuestion = (question: SurveyControlModel) => example.fields.push(question);
+  const addAdditionalQuestion = (item: BasicTaskItemModel) => example.fields.push(item.questionControl);
   const deleteAdditionalQuestion = () => example.fields.pop();
 
   return <Card>
@@ -49,7 +49,7 @@ export const AudioTestItemTraining = observer((props: React.PropsWithChildren<Te
           </Grid>
           {/*Additional question add*/}
           {example.fields && !(example.fields.length > 1) ? <Grid item xs={12} className={classes.flexEnd}>
-            <AddQuestionButton onQuestionAdd={addAdditionalQuestion} onlyCore/>
+            <AddQuestionButton onAdd={addAdditionalQuestion} onlyCore/>
           </Grid> : <Grid item xs={12}>
             <RemovableSurveyControl question={example.fields[1]} onRemove={deleteAdditionalQuestion}/>
           </Grid>}
