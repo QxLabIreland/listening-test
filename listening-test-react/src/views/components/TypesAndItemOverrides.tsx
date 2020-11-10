@@ -4,7 +4,7 @@ import {AbTestItemExampleCard} from "../audio/AbTest/AbTestItemExampleCard";
 import {HearingTestItemExampleCard} from "../audio/HearingTest/HearingTestItemExampleCard";
 import {AudioTestItemTraining} from "../audio/AudioTestItemTraining";
 import {BasicExampleModel} from "../../shared/models/BasicTaskModel";
-import {AcrTestItemExampleCard} from "../audio/AcrTest/AcrTestItemExampleCard";
+import {MushraTestItemExampleCard} from "../audio/Mushra/MushraTestItemExampleCard";
 import {ImageLabelingExampleItem} from "../image/ImageLabeling/ImageLabelingExampleItem";
 import {ImageAbExampleItem} from "../image/ImageAb/ImageAbExampleItem";
 
@@ -21,7 +21,7 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
       return AbTestItemExampleCard
     case "acr-test":
     case "mushra-test":
-      return AcrTestItemExampleCard
+      return MushraTestItemExampleCard
     case "hearing-test":
       return HearingTestItemExampleCard
     case "image-labeling":

@@ -1,14 +1,14 @@
 import {observer} from "mobx-react";
 import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
-import {useMatStyles} from "../../SharedStyles";
-import React, {useRef} from "react";
-import {AddQuestionButton, AddQuestionButtonType} from "../../../shared/components/AddQuestionButton";
 import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
+import React, {useRef} from "react";
+import {AddQuestionButton, AddQuestionButtonType} from "../../../shared/components/AddQuestionButton";
+import {useMatStyles} from "../../SharedStyles";
 
-export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void}) {
+export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void}) {
   const {onAdd} = props;
   const classes = useMatStyles();
   const addQuestionMenu = useRef<AddQuestionButtonType>();
@@ -18,9 +18,9 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     switch (type) {
       case TestItemType.example:
         newItem = {
-          id: uuid(), type: TestItemType.example, title: 'Acr Test (Click to edit this)', example: {
+          id: uuid(), type: TestItemType.example, title: 'Mushra Test (Click to edit this)', example: {
             medias: [], fields: [
-              {type: SurveyControlType.description, question: 'Rate the quality of these sounds.', value: null}
+              {type: SurveyControlType.description, question: 'Compare the quality of these sounds.', value: null}
             ]
           }
         };
@@ -52,7 +52,7 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
         <ListItemIcon>
           <Icon fontSize="small">add_task</Icon>
         </ListItemIcon>
-        <ListItemText>Acr Test with more questions</ListItemText>
+        <ListItemText>Audio Test</ListItemText>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(TestItemType.training)}>
         <ListItemIcon>
