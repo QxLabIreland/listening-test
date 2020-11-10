@@ -69,8 +69,8 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
           section[randomIndex] = temporaryValue;
         }
       }
-      // Push random items back to new items list
-      newItems.push(...section);
+      // Push random items back to new items list and ignore section header
+      newItems.push(...section.slice(1));
     });
     setNewItems(newItems);
   }, [items]);

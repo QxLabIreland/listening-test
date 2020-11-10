@@ -63,7 +63,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   }
   const handleCopyLastItem = () => {
     setAnchorEl(null);
-    const newItem: BasicTaskItemModel = JSON.parse(JSON.stringify(taskModel.items[0]));
+    const newItem: BasicTaskItemModel = JSON.parse(JSON.stringify(taskModel.items[taskModel.items.length - 1]));
     newItem.id = uuid();
     onAdd(newItem);
   }
@@ -130,7 +130,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
         <ListItemText primary="A Text Label"/>
       </MenuItem>
       <Divider/>
-      <MenuItem onClick={handleCopyLastItem} disabled={!taskModel.items[0]}>
+      <MenuItem onClick={handleCopyLastItem} disabled={!taskModel.items[taskModel.items.length - 1]}>
         <ListItemIcon>
           <Icon fontSize="small">content_copy</Icon>
         </ListItemIcon>

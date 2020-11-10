@@ -4,7 +4,7 @@ import tarfile
 import subprocess
 
 
-# subprocess.run('npm run build --prefix listening-test-react', shell=True)
+subprocess.run('npm run build --prefix listening-test-react', shell=True)
 
 try:
     print('Start cleaning build folder and archive file...')
