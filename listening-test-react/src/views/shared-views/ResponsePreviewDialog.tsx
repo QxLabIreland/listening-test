@@ -1,4 +1,4 @@
-import React, {forwardRef} from "react";
+import React, {forwardRef, useState} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 import IconButton, {IconButtonProps} from "@material-ui/core/IconButton";
@@ -29,10 +29,11 @@ const useMatBackground = makeStyles((theme) => ({
 
 export const ResponsePreviewDialog = observer(forwardRef(function (props: IconButtonProps & { taskModel: BasicTaskModel, testUrl: TestUrl }, ref: any) {
   // Deconstruct taskModel, but we don't need its value
-  const {taskModel, testUrl, ...rest} = props;
+  const {taskModel: original, testUrl, ...rest} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const backgroundClasses = useMatBackground();
+  const [taskModel] = useState<BasicTaskModel>(JSON.parse(JSON.stringify(original)));
   // Unwrap the observable, it will return a copy
   // const taskModelJs = toJS(props.taskModel);
 
