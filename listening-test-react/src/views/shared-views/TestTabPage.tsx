@@ -6,7 +6,7 @@ import ResponseListView from "./ResponseListView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {TestDetailView} from "./TestDetailView";
 import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
-import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
+import {MushraAddItemButtonGroup} from "../audio/Mushra/MushraAddItemButtonGroup";
 import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
 import {AudioLabelingButtonGroup} from "../audio/AudioLabeling/AudioLabelingButtonGroup";
 import {ImageLabelingButtonGroup} from "../image/ImageLabeling/ImageLabelingButtonGroup";
@@ -59,7 +59,7 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
       return <TestDetailView testUrl={testUrl} ButtonGroup={AbAddItemButtonGroup}/>
     case "acr-test":
     case "mushra-test":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup}/>
+      return <TestDetailView testUrl={testUrl} ButtonGroup={MushraAddItemButtonGroup}/>
     case "hearing-test":
       return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons}/>
     case "audio-labeling":
