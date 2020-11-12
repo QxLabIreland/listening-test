@@ -7,8 +7,8 @@ import Icon from "@material-ui/core/Icon";
 import {makeStyles} from "@material-ui/core/styles";
 import {FileUploadDropBox, useFileBoxesFunc} from "../../shared/components/FileUploadDropBox";
 // reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
-export const AudioFileDropGrid = observer(function ({example, reference, keepPlace}: {
-  example: BasicExampleModel, reference?: boolean, keepPlace?: boolean
+export const AudioFileDropGrid = observer(function ({example, reference, keepPlace, onRemove}: {
+  example: BasicExampleModel, reference?: boolean, keepPlace?: boolean, onRemove?: (index: number) => void
 }) {
   const {handleDropSwapFiles, handleDragStart, draggingIndex, handleDragOver} = useFileBoxesFunc(example.medias, keepPlace);
 
@@ -16,6 +16,8 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
     if (newAudio == null) {
       if (keepPlace) example.medias[index] = null;
       else example.medias.splice(index, 1);
+      // Trigger remove event
+      if (onRemove) onRemove(index);
       return;
     }
     // If is Reference the audioRef will be added or deleted
