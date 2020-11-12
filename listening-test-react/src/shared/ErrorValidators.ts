@@ -42,6 +42,11 @@ export function sliderItemValidateError(item: AudioTestItemModel): string {
       delete a.isActive;
       if (!a.value) return 'You must complete this example to continue'
     }
+    // Make sure internal questions have been answered
+    for (const a of item.example.fields) {
+      const error = surveyControlValidateError(a);
+      if (error) return error;
+    }
     return validatePlayedOnceError(item.example);
   } else if (item.type === TestItemType.training) return questionedExValidateError(item);
   else return null;

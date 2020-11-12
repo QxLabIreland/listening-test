@@ -95,14 +95,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       history.replace(`/task/finish?${res.data?.$oid}&${testUrl}`, true);
     });
   }
-  // Show panel actions based on various parameters
-  const panelActions = (index: number, isSectionHeader: boolean = false) => {
-    if ((questionnaire.settings?.isIndividual && isSectionHeader) || !isSectionHeader)
-      if (index < randomItems.length - 1)
-        return <Button color="primary" onClick={() => handlePanelChange(true, index + 1)}>Next</Button>
-      else return <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-    else return null;
-  }
+
   return <Box pt={6}>{questionnaire && randomItems ? <Grid container spacing={3} direction="column">
     <Grid item xs={12}>
       <Typography variant="h3" gutterBottom>{questionnaire.name}</Typography>
@@ -114,8 +107,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
         <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>
       </div>}
     </Grid>}
-    {randomItems.map((v, i) =>
-      <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>{v.type !== TestItemType.sectionHeader ?
+    {randomItems?.map((v, i) =>
+      <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>
         <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
           <ExpansionPanelSummary expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
                                  aria-controls="panel1a-content">
@@ -124,11 +117,11 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
           <ExpansionPanelDetails>
             <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
-          <ExpansionPanelActions>{panelActions(i)}</ExpansionPanelActions>
-        </ExpansionPanel> : <div>
-          <Typography variant="h4">{questionnaire.name}</Typography>
-          <ExpansionPanelActions>{panelActions(i, true)}</ExpansionPanelActions>
-        </div>}
+          <ExpansionPanelActions>{i < randomItems.length - 1 ?
+            <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next</Button> :
+            <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+          }</ExpansionPanelActions>
+        </ExpansionPanel>
       </Grid>
     )}
     <Grid item xs={12}>

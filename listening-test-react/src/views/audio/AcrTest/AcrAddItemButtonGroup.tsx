@@ -8,42 +8,37 @@ import {uuid} from "uuidv4";
 import {Box, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 
-export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void}) {
+export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
   const {onAdd} = props;
   const classes = useMatStyles();
   const addQuestionMenu = useRef<AddQuestionButtonType>();
 
   const handleAdd = (type: TestItemType) => {
-    let newItem: AudioTestItemModel;
+    addQuestionMenu.current.closeMenu();
     switch (type) {
       case TestItemType.example:
-        newItem = {
+        onAdd({
           id: uuid(), type: TestItemType.example, title: 'Acr Test (Click to edit this)', example: {
-            medias: [], fields: [
-              {type: SurveyControlType.description, question: 'Rate the quality of these sounds.', value: null}
-            ]
+            medias: [], fields: []
           }
-        };
+        });
         break;
       case TestItemType.training:
-        newItem = {
+        onAdd({
           id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
             medias: [], fields: [
               {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
             ]
           }
-        };
+        });
         break;
       case TestItemType.sectionHeader:
-        newItem = {
+        onAdd({
           id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title (Click to edit this)', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        };
+        });
         break;
     }
-    addQuestionMenu.current.closeMenu();
-    onAdd(newItem);
-  }
-
+  };
 
 
   return <Box className={classes.elementGroup}>
@@ -52,7 +47,7 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
         <ListItemIcon>
           <Icon fontSize="small">add_task</Icon>
         </ListItemIcon>
-        <ListItemText>Acr Test with more questions</ListItemText>
+        <ListItemText>Acr Test</ListItemText>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(TestItemType.training)}>
         <ListItemIcon>

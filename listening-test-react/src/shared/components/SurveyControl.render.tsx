@@ -32,7 +32,7 @@ export const LinkedTextRender = function ({content}: {content: string}) {
 }
 
 export const SurveyControlRender = observer(function ({control}: { control: SurveyControlModel }) {
-  if (control.disabled) return null;
+  if (!control || control.disabled) return null;
 
   switch (control.type) {
     case SurveyControlType.text:

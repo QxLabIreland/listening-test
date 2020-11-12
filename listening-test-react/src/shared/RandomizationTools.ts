@@ -3,31 +3,35 @@ import {toJS} from "mobx";
 import {BasicTaskItemModel} from "./models/BasicTaskModel";
 import {TestItemType} from "./models/EnumsAndTypes";
 
-export function useRandomization<T>(items: T[], activated: boolean): T[] {
-  const [randomItems, setRandomItems] = useState<T[]>(items);
+export function useRandomization<T>(items: T[], activated: boolean): [T[], number[]] {
+  const [randoms, setRandoms] = useState<[T[], number[]]>([items, Array.from(items.keys())]);
 
   useEffect(() => {
     // If there is random audio settings
     if (activated) {
-      // Create placeholders
       const indexesLeft = Array.from(items, (_, i) => i);
+      // Create placeholders
       const newRandomItems = Array(items.length);
+      const newRandomPattern: number[] = [];
       // Go through all items
       items.forEach(item => {
         // Get an index of indexes
         const index = Math.floor(Math.random() * indexesLeft.length);
         newRandomItems[indexesLeft[index]] = item;
+        // Save random pattern for other fields
+        newRandomPattern.push(indexesLeft[index]);
         // Then delete it from indexes at the end
         indexesLeft.splice(index, 1);
       });
-      setRandomItems(newRandomItems);
+      setRandoms([newRandomItems, newRandomPattern]);
       // Testing logging
       console.log(toJS(items))
       console.log(newRandomItems.map(value => toJS(value)))
+      console.log(newRandomPattern)
     }
   }, [activated]);
 
-  return randomItems;
+  return randoms;
 }
 
 export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]): T[] {
@@ -53,24 +57,29 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
     const newItems: T[] = []
     // Try to randomize questions for sections
     sections.forEach(section => {
-      if (section.length && section[0].type === TestItemType.sectionHeader && section[0].sectionSettings?.randomQuestions) {
-        // This will ignore the first element of an array
-        let currentIndex = 0;
+      if (section.length && section[0].type === TestItemType.sectionHeader) {
+        // Only randomize if there is the setting
+        if (section[0].sectionSettings?.randomQuestions) {
+          // This will ignore the first element of an array
+          let currentIndex = 0;
 
-        // While there remain elements to shuffle...
-        while (currentIndex < section.length - 1) {
-          // Pick a remaining element...
-          const randomIndex = Math.floor(Math.random() * (section.length - currentIndex - 1)) + 1;
-          currentIndex += 1;
+          // While there remain elements to shuffle...
+          while (currentIndex < section.length - 1) {
+            // Pick a remaining element...
+            const randomIndex = Math.floor(Math.random() * (section.length - currentIndex - 1)) + 1;
+            currentIndex += 1;
 
-          // And swap it with the current element.
-          const temporaryValue = section[currentIndex];
-          section[currentIndex] = section[randomIndex];
-          section[randomIndex] = temporaryValue;
+            // And swap it with the current element.
+            const temporaryValue = section[currentIndex];
+            section[currentIndex] = section[randomIndex];
+            section[randomIndex] = temporaryValue;
+          }
         }
+        // Delete section hedaer in display
+        section.splice(0, 1);
       }
       // Push random items back to new items list and ignore section header
-      newItems.push(...section.slice(1));
+      newItems.push(...section);
     });
     setNewItems(newItems);
   }, [items]);

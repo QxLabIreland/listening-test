@@ -4,15 +4,14 @@ import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyControlRender} from "../../shared/components/SurveyControl.render";
 import React from "react";
 import {RenderQuestionedExample} from "../audio/AbTest/RenderQuestionedExample";
-import {AcrRatingBar} from "../audio/AcrTest/AcrRatingBar";
-import {MusharaRatingBar} from "../audio/Mushra/MusharaRatingBar";
 import {RenderVolumeExample} from "../audio/HearingTest/RenderVolumeExample";
 import {ImageLabelingExampleRender} from "../image/ImageLabeling/ImageLabelingExample.render";
 import {ImageAbExampleRender} from "../image/ImageAb/ImageAbExample.render";
 import {VideoLabelingExampleRender} from "../video/VideoLabeling/VideoLabelingExample.render";
 import {VideoAbExampleRender} from "../video/VideoAb/VideoAbExample.render";
-import {AudioRatingExampleRender} from "../audio/AudioRatingExample.render";
+import {MushraTestItemExampleRender} from "../audio/Mushra/MushraTestItemExample.render";
 import {AudioTestItemTraining} from "../audio/AudioTestItemTraining.render";
+import {AcrTestItemExampleRender} from "../audio/AcrTest/AcrTestItemExample.render";
 
 export const TestItemCardRender = observer(function (props: { item: AudioTestItemModel, testUrl: TestUrl, active?: boolean }) {
   const {item, testUrl, ...rest} = props;
@@ -22,11 +21,11 @@ export const TestItemCardRender = observer(function (props: { item: AudioTestIte
     switch (testUrl) {
       case "ab-test":
         return <RenderQuestionedExample value={item.example} {...rest}/>;
-      case "audio-labeling": // Only use training render of acr
       case "acr-test":
-        return <AudioRatingExampleRender value={item.example} RatingBar={AcrRatingBar} {...rest}/>
+        return <AcrTestItemExampleRender example={item.example} {...rest}/>
+      case "audio-labeling": // Only use training render of acr
       case "mushra-test":
-        return <AudioRatingExampleRender value={item.example} RatingBar={MusharaRatingBar} {...rest}/>;
+        return <MushraTestItemExampleRender value={item.example} {...rest}/>;
       case "hearing-test":
         return <RenderVolumeExample value={item.example} {...rest}/>;
       case "image-labeling":

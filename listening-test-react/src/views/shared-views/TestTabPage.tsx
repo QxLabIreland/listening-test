@@ -13,6 +13,7 @@ import {ImageLabelingButtonGroup} from "../image/ImageLabeling/ImageLabelingButt
 import {VideoLabelingButtonGroup} from "../video/VideoLabeling/VideoLabelingButtonGroup";
 import {ImageAbButtonGroup} from "../image/ImageAb/ImageAbButtonGroup";
 import {VideoAbButtonGroup} from "../video/VideoAb/VideoAbButtonGroup";
+import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -58,6 +59,7 @@ function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
     case "ab-test":
       return <TestDetailView testUrl={testUrl} ButtonGroup={AbAddItemButtonGroup}/>
     case "acr-test":
+      return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup}/>
     case "mushra-test":
       return <TestDetailView testUrl={testUrl} ButtonGroup={MushraAddItemButtonGroup}/>
     case "hearing-test":

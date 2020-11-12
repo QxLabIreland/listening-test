@@ -7,6 +7,7 @@ import {BasicExampleModel} from "../../shared/models/BasicTaskModel";
 import {MushraTestItemExampleCard} from "../audio/Mushra/MushraTestItemExampleCard";
 import {ImageLabelingExampleItem} from "../image/ImageLabeling/ImageLabelingExampleItem";
 import {ImageAbExampleItem} from "../image/ImageAb/ImageAbExampleItem";
+import {AcrTestItemExampleCard} from "../audio/AcrTest/AcrTestItemExampleCard";
 
 /** The purpose of this file is to simplify the code, because there are lots of places using this type and props */
 export type TestItemExampleCardProps = {
@@ -18,20 +19,21 @@ export type TestItemExampleCardType = FunctionComponent<TestItemExampleCardProps
 export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
   switch (testUrl) {
     case "ab-test":
-      return AbTestItemExampleCard
+      return AbTestItemExampleCard;
     case "acr-test":
+      return AcrTestItemExampleCard;
     case "mushra-test":
-      return MushraTestItemExampleCard
+      return MushraTestItemExampleCard;
     case "hearing-test":
-      return HearingTestItemExampleCard
+      return HearingTestItemExampleCard;
     case "image-labeling":
-      return ImageLabelingExampleItem
+      return ImageLabelingExampleItem;
     case "image-ab":
-      return ImageAbExampleItem
+      return ImageAbExampleItem;
     case "video-labeling":
-      return (props) => <ImageLabelingExampleItem {...props} type="video"/>
+      return (props) => <ImageLabelingExampleItem {...props} type="video"/>;
     case "video-ab":
-      return (props) => <ImageAbExampleItem {...props} mediaType="video"/>
+      return (props) => <ImageAbExampleItem {...props} mediaType="video"/>;
     default:
       return null;
   }

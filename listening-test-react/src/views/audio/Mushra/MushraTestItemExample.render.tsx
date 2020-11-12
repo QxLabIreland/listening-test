@@ -1,16 +1,17 @@
 import {observer} from "mobx-react";
-import {AudioExampleModel, AudioFileModel} from "../../shared/models/AudioTestModel";
+import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
-import {SurveyControlRender} from "../../shared/components/SurveyControl.render";
-import {AudioButton, AudioController, useAudioPlayer} from "../../shared/web-audio/AudiosPlayer";
-import {AudioLoading, useAllAudioReady} from "../../shared/web-audio/AudiosLoading";
-import {useRandomization} from "../../shared/RandomizationTools";
-import {ratingAreaStyle} from "../SharedStyles";
-import {AudioSectionLoopingController} from "../../shared/web-audio/AudioSectionLoopingController";
+import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
+import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
+import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
+import {useRandomization} from "../../../shared/RandomizationTools";
+import {ratingAreaStyle} from "../../SharedStyles";
+import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
+import {Box, Slider} from "@material-ui/core";
 
-export const AudioRatingExampleRender = observer(function (props: { value: AudioExampleModel, RatingBar: React.FunctionComponent<{ audio: AudioFileModel }>, active?: boolean }) {
-  const {value, RatingBar, active} = props;
+export const MushraTestItemExampleRender = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
+  const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
   const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
@@ -18,7 +19,7 @@ export const AudioRatingExampleRender = observer(function (props: { value: Audio
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
   // Create empty slots for randomized audios
-  const randomAudios = useRandomization(value.medias, active && value.settings?.randomMedia);
+  const [randomAudios] = useRandomization(value.medias, active && value.settings?.randomMedia);
 
   useEffect(() => {
     if (active === false) handlePause();
@@ -31,7 +32,7 @@ export const AudioRatingExampleRender = observer(function (props: { value: Audio
       </Grid>)}
 
       {randomAudios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
-        <RatingBar audio={v}/>
+        <MusharaRatingBar audio={v}/>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
                      onEnded={i === 0 ? handleEnded : undefined}
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>{i + 1}</AudioButton>
@@ -54,3 +55,26 @@ export const AudioRatingExampleRender = observer(function (props: { value: Audio
     </Grid>
   </>
 });
+
+const marks = [
+  {value: 0, label: '0'},
+  {value: 20, label: '20'},
+  {value: 40, label: '40'},
+  {value: 60, label: '60'},
+  {value: 80, label: '80'},
+  {value: 100, label: '100'},
+];
+
+export const MusharaRatingBar = observer(function (props: { audio: AudioFileModel }) {
+  useEffect(() => {
+    // Set a default value
+    const num = parseInt(props.audio.value);
+    if (!num) props.audio.value = '0';
+  });
+
+  return <Box ml={2.5} mb={2} mt={2} style={{height: 200}}>
+    <Slider orientation="vertical" aria-labelledby="vertical-slider" min={0} max={100} step={1} marks={marks}
+            valueLabelDisplay="auto" value={Number(props.audio.value)}
+            onChange={(_, value) => props.audio.value = value.toString()}/>
+  </Box>
+})
