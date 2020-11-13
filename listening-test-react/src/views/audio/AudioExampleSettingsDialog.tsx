@@ -12,12 +12,16 @@ import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
 import {observer} from "mobx-react";
 
 const initialValues: AudioExampleSettingsModel = {
-  loopTimes: 0, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false, randomMedia: false
+  loopTimes: 0, requireClipEnded: false, sectionLooping: false, disablePlayerSlider: false, randomMedia: false,
+  fixLastInternalQuestion: false
 };
 
-export const AudioExampleSettingsDialog = observer(function (props: { settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void, disableSectionLoop?: boolean, disableRandomAudio?: boolean }) {
+export const AudioExampleSettingsDialog = observer(function (props: {
+  settings: AudioExampleSettingsModel, onConfirm: (settings: AudioExampleSettingsModel) => void,
+  disableSectionLoop?: boolean, disableRandomAudio?: boolean, enableFixLastInternalQuestion?: boolean
+}) {
   // Add disable prop that allow to disable some settings
-  const {settings, onConfirm, disableSectionLoop, disableRandomAudio} = props;
+  const {settings, onConfirm, disableSectionLoop, disableRandomAudio, enableFixLastInternalQuestion} = props;
   const [open, setOpen] = useState(false);
   const formik = useFormik<AudioExampleSettingsModel>({
     initialValues: {...initialValues},
@@ -67,6 +71,11 @@ export const AudioExampleSettingsDialog = observer(function (props: { settings: 
           {!disableRandomAudio && <FormControlLabel
             control={<Checkbox checked={formik.values.randomMedia} {...formik.getFieldProps('randomMedia')}/>}
             label="Randomize media files"
+          />}
+          <br/>
+          {enableFixLastInternalQuestion && <FormControlLabel
+            control={<Checkbox checked={formik.values.fixLastInternalQuestion} {...formik.getFieldProps('fixLastInternalQuestion')}/>}
+            label="Keep final question fixed"
           />}
         </DialogContent>
         <DialogActions>

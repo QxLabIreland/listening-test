@@ -3,18 +3,26 @@ import {toJS} from "mobx";
 import {BasicTaskItemModel} from "./models/BasicTaskModel";
 import {TestItemType} from "./models/EnumsAndTypes";
 
-export function useRandomization<T>(items: T[], activated: boolean): [T[], number[]] {
+export function useRandomization<T>(items: T[], activated: boolean, fixLast?: boolean): [T[], number[]] {
   const [randoms, setRandoms] = useState<[T[], number[]]>([items, Array.from(items.keys())]);
 
   useEffect(() => {
     // If there is random audio settings
     if (activated) {
       const indexesLeft = Array.from(items, (_, i) => i);
+      // Pop the last index if fixLast has been set
+      const lastIndex = fixLast ? indexesLeft.pop() : null;
       // Create placeholders
-      const newRandomItems = Array(items.length);
+      const newRandomItems: T[] = Array(items.length);
       const newRandomPattern: number[] = [];
       // Go through all items
       items.forEach(item => {
+        // If there is no indexes left and lastIndex is not null
+        if (indexesLeft.length < 1 && lastIndex) {
+          newRandomItems[lastIndex] = item;
+          newRandomPattern.push(lastIndex);
+          return;
+        }
         // Get an index of indexes
         const index = Math.floor(Math.random() * indexesLeft.length);
         newRandomItems[indexesLeft[index]] = item;
@@ -25,9 +33,9 @@ export function useRandomization<T>(items: T[], activated: boolean): [T[], numbe
       });
       setRandoms([newRandomItems, newRandomPattern]);
       // Testing logging
-      console.log(toJS(items))
-      console.log(newRandomItems.map(value => toJS(value)))
-      console.log(newRandomPattern)
+      console.log('Original', toJS(items))
+      console.log('Random', newRandomItems.map(value => toJS(value)))
+      console.log('Pattern', newRandomPattern)
     }
   }, [activated]);
 
@@ -52,7 +60,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
     });
     // Push questions of the end of section
     sections.push(questions);
-    console.log(sections)
+    console.log('Grouped', sections.map(v => v.map(v1 => toJS(v1))))
 
     const newItems: T[] = []
     // Try to randomize questions for sections
@@ -81,6 +89,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
       // Push random items back to new items list and ignore section header
       newItems.push(...section);
     });
+    console.log('Random', newItems.map(v => toJS(v)))
     setNewItems(newItems);
   }, [items]);
 
