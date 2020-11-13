@@ -32,10 +32,15 @@ import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
 import {useUserAuthResult} from "../../layouts/components/AuthRoute";
 import {ShareLinkDialog} from "./ShareLinkDialog";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+  actionTd: {whiteSpace: 'nowrap'}
+}))
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
   const {path} = useRouteMatch();
-  const classes = useMatStyles();
+  const classes = {...useMatStyles(), ...useStyles()};
   const [data, setData] = useState<BasicTaskModel[]>(null);
   const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState();
@@ -119,7 +124,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
             <Checkbox color="primary" checked={!!taskModel.isTemplate}
                       onChange={() => handleIsTemplateChange(taskModel)}/>
           </TableCell>}
-          <TableCell className={classes.elementGroup}>
+          <TableCell className={classes.elementGroup + ' ' + classes.actionTd}>
             <ActionsGroup testUrl={testUrl} path={path} taskModel={taskModel} onDelete={handleDelete}
                           onCopy={handleCopyTest} handleEdit={handleTemplateEdit}/>
           </TableCell>
