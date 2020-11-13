@@ -60,6 +60,9 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     else handlePause();
     setPlayedTimes(playedTimes + 1);
   }
+  // Reset current time of all the audios
+  const resetCurrentTime = () => includeAll().allRefs.forEach(a => a.current.currentTime = 0);
+
 
   // // Reference audio
   // const sampleNode = <AudioButton audio={sample} ref={sampleRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
@@ -70,7 +73,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
   // );
   // const controllerNode = <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}/>
 
-  return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate, handleEnded};
+  return {refs, sampleRef, currentTime, handlePlay, handlePause, handleTimeUpdate, handleEnded, resetCurrentTime};
 }
 
 /** This component exposes the audio to outside. Control audio with ref attribute. */

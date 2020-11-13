@@ -26,7 +26,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<T
 
   return <Card>
     <CardHeader title={title} action={<>
-      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange} enableFixLastInternalQuestion/>
       {action}</>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>

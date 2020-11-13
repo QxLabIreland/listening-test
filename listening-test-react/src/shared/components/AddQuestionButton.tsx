@@ -26,19 +26,20 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleSurveyQuestionItemAdd = (question: SurveyControlModel) => {
-    // Bad solution for scrolling
-    const timer = setTimeout(() => {
-      onAdd({
-        id: uuid(),
-        type: TestItemType.question,
-        title: 'Survey Question (click to edit)',
-        questionControl: question
-      });
-      clearTimeout(timer);
-    });
-  };
+
   const handleAdd = (type: SurveyControlType) => {
+    const handleSurveyQuestionItemAdd = (question: SurveyControlModel) => {
+      // Bad solution for scrolling
+      const timer = setTimeout(() => {
+        onAdd({
+          id: uuid(),
+          type: TestItemType.question,
+          title: 'Survey Question (click to edit)',
+          questionControl: question
+        });
+        clearTimeout(timer);
+      });
+    };
     // Close the adding menu
     setAnchorEl(null);
     // Check controls types
@@ -67,6 +68,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
     newItem.id = uuid();
     onAdd(newItem);
   }
+  // TODO add section header function
 
   // Get rid of other types of question
   if (onlyCore) return <>
@@ -92,6 +94,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
       </MenuItem>
     </Menu>
   </>
+  // Full feature add question menu
   else return <>
     <Button variant="outlined" color="primary" onClick={handleAddMenuClick}>
       <Icon>more_vert</Icon>Add Question

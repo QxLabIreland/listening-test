@@ -1,5 +1,5 @@
-import {AudioTestItemModel, AudioExampleModel} from "./models/AudioTestModel";
-import {SurveyControlType, TestItemType} from "./models/EnumsAndTypes";
+import {AudioExampleModel, AudioTestItemModel} from "./models/AudioTestModel";
+import {TestItemType} from "./models/EnumsAndTypes";
 import {SurveyControlModel} from "./models/SurveyControlModel";
 import {BasicTaskModel} from "./models/BasicTaskModel";
 
@@ -11,7 +11,7 @@ function validatePlayedOnceError(example: AudioExampleModel): string {
 
 export function surveyControlValidateError(control: SurveyControlModel): string {
   // Pass description type
-  if (control.type === SurveyControlType.description) return null;
+  // if (control.type === SurveyControlType.description) return null;
   // Required checking
   if (control.required) return control.value ? null : `${control.question} is required. You must answer this question to continue`;
   else return null;
