@@ -4,16 +4,7 @@ import {useHistory, useLocation, useParams} from "react-router";
 import {AppBarTitle} from "../../shared/ReactContexts";
 import ResponseListView from "./ResponseListView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {TestDetailView} from "./TestDetailView";
-import {AbAddItemButtonGroup} from "../audio/AbTest/AbAddItemButtonGroup";
-import {MushraAddItemButtonGroup} from "../audio/Mushra/MushraAddItemButtonGroup";
-import {HearingAddItemButtons} from "../audio/HearingTest/HearingAddItemButtons";
-import {AudioLabelingButtonGroup} from "../audio/AudioLabeling/AudioLabelingButtonGroup";
-import {ImageLabelingButtonGroup} from "../image/ImageLabeling/ImageLabelingButtonGroup";
-import {VideoLabelingButtonGroup} from "../video/VideoLabeling/VideoLabelingButtonGroup";
-import {ImageAbButtonGroup} from "../image/ImageAb/ImageAbButtonGroup";
-import {VideoAbButtonGroup} from "../video/VideoAb/VideoAbButtonGroup";
-import {AcrAddItemButtonGroup} from "../audio/AcrTest/AcrAddItemButtonGroup";
+import {TestDetailViewWrapper} from "../components/ComponentsOverrider";
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -53,28 +44,3 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
   )
 }
 
-// Switch different card and button group through 'testType'
-function TestDetailViewWrapper({testUrl}: {testUrl: TestUrl}) {
-  switch (testUrl) {
-    case "ab-test":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AbAddItemButtonGroup}/>
-    case "acr-test":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup}/>
-    case "mushra-test":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={MushraAddItemButtonGroup}/>
-    case "hearing-test":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons}/>
-    case "audio-labeling":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AudioLabelingButtonGroup}/>
-    case "image-labeling":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={ImageLabelingButtonGroup}/>
-    case "image-ab":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={ImageAbButtonGroup}/>
-    case "video-labeling":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup}/>
-    case "video-ab":
-      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoAbButtonGroup}/>
-    default:
-      return null;
-  }
-}
