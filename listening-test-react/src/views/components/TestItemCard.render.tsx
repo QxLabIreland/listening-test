@@ -2,8 +2,8 @@ import {observer} from "mobx-react";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyControlRender} from "../../shared/components/SurveyControl.render";
 import React from "react";
-import {RenderQuestionedExample} from "../audio/AbTest/RenderQuestionedExample";
-import {RenderVolumeExample} from "../audio/HearingTest/RenderVolumeExample";
+import {AbTestItemExampleRender} from "../audio/AbTest/AbTestItemExample.render";
+import {HearingTestItemExampleRender} from "../audio/HearingTest/HearingTestItemExample.render";
 import {ImageLabelingExampleRender} from "../image/ImageLabeling/ImageLabelingExample.render";
 import {ImageAbExampleRender} from "../image/ImageAb/ImageAbExample.render";
 import {VideoLabelingExampleRender} from "../video/VideoLabeling/VideoLabelingExample.render";
@@ -20,14 +20,14 @@ export const TestItemCardRender = observer(function (props: { item: BasicTaskIte
   const renderItemByTestUrl = () => {
     switch (testUrl) {
       case "ab-test":
-        return <RenderQuestionedExample value={item.example} {...rest}/>;
+        return <AbTestItemExampleRender value={item.example} {...rest}/>;
       case "acr-test":
         return <AcrTestItemExampleRender example={item.example} {...rest}/>
       case "audio-labeling": // Only use training render of acr
       case "mushra-test":
         return <MushraTestItemExampleRender value={item.example} {...rest}/>;
       case "hearing-test":
-        return <RenderVolumeExample value={item.example} {...rest}/>;
+        return <HearingTestItemExampleRender value={item.example} {...rest}/>;
       case "image-labeling":
         return <ImageLabelingExampleRender {...props}/>
       case "image-ab":

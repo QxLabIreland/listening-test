@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   volumeBar: {height: theme.spacing(16)}
 }));
 
-export const RenderVolumeExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
+export const HearingTestItemExampleRender = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
   const [gos] = useState<OscillatorAngGain[]>(Array(value.medias.length));
 

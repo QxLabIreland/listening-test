@@ -12,7 +12,7 @@ const alphabetList = Array.apply(undefined, Array(26)).map(function (x, y) {
 }).join('');
 
 
-export const RenderQuestionedExample = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
+export const AbTestItemExampleRender = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);

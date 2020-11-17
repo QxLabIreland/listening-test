@@ -19,7 +19,7 @@ import Icon from "@material-ui/core/Icon";
 import {SurveyControl} from "../../shared/components/SurveyControl";
 import {labelInputStyle} from "../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
-import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from "./TypesAndItemOverrides";
+import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from "./ComponentsOverrider";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
 import {DetailTaskModel} from "../../shared/ReactContexts";
