@@ -1,6 +1,5 @@
 import {observer} from "mobx-react";
-import React from "react";
-import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
+import React, {ReactNode} from "react";
 import {Card, CardContent, Collapse, Typography} from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
@@ -10,10 +9,12 @@ import {SurveyControl} from "../../../shared/components/SurveyControl";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
 import {FileUploadDropBox} from "../../../shared/components/FileUploadDropBox";
 import Icon from "@material-ui/core/Icon";
-import {AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
+import {AudioExampleModel, AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
 
-export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
+  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+}>) => {
   const {example, title, action, collapsed} = props;
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => {

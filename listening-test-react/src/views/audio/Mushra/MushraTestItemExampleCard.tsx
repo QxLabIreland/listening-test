@@ -2,18 +2,19 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse, Typography} from "@material-ui/core";
 import {SurveyControl} from "../../../shared/components/SurveyControl";
-import React from "react";
+import React, {ReactNode} from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
-import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
-import {AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
+import {AudioExampleModel, AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import Icon from "@material-ui/core/Icon";
 import {FileUploadDropBox} from "../../../shared/components/FileUploadDropBox";
 
-export const MushraTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const MushraTestItemExampleCard = observer((props: React.PropsWithChildren<{
+  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+}>) => {
   const {example, title, action, collapsed} = props;
 
   // Methods for audios changed

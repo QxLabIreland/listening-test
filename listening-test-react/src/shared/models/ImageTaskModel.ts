@@ -12,6 +12,11 @@ export interface ImageExampleModel extends BasicExampleModel {
   medias: ImageFileModel[];
   // The answer is the value of audio
   mediaRef?: ImageFileModel;
+  settings?: ImageExampleSettingsModel
+}
+
+export interface ImageExampleSettingsModel {
+  isHorizontalDisplay?: boolean
 }
 
 export interface ImageFileModel extends BasicFileModel{

@@ -6,13 +6,12 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import {Divider, ListItemIcon, ListItemText, Menu, MenuItem, Typography} from "@material-ui/core";
 import {uuid} from "uuidv4";
-import {AudioTestItemModel} from "../models/AudioTestModel";
 import {BasicTaskItemModel} from "../models/BasicTaskModel";
 import {DetailTaskModel} from "../ReactContexts";
 export type AddQuestionButtonType = { closeMenu: () => void }
 
 export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, PropsWithChildren<{
-  onAdd: (type: AudioTestItemModel) => void, onlyCore?: boolean
+  onAdd: (type: BasicTaskItemModel) => void, onlyCore?: boolean
 }>>(function (props, forwardedRef) {
   // If props doesn't have anchorEl and setAnchorEl, we are gonna use copied one
   const {onAdd, onlyCore} = props;

@@ -4,15 +4,16 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse, Slider, TextField, Tooltip} from "@material-ui/core";
 import {SurveyControl} from "../../../shared/components/SurveyControl";
-import React, {useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
 import {createOscillatorAndGain, disposeOscillatorAndGain} from "../../../shared/web-audio/OscillatorAngGain";
-import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
-import {AudioFileModel} from "../../../shared/models/AudioTestModel";
+import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 
-export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{
+  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+}>) => {
   const {example, title, action, collapsed} = props;
 
   return <Card>

@@ -56,7 +56,7 @@ export const ResponsePreviewDialog = observer(forwardRef(function (props: IconBu
             <Icon>close</Icon>
           </IconButton>
           <Typography variant="h6">
-            Preview mode (changed won't be saved)
+            Preview mode (changed won't be saved and validation will be skipped)
           </Typography>
         </Toolbar>
       </AppBar>

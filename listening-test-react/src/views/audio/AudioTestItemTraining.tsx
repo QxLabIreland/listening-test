@@ -1,7 +1,6 @@
 import {observer} from "mobx-react";
-import React from "react";
-import {TestItemExampleCardProps} from "../components/TypesAndItemOverrides";
-import {AudioExampleSettingsModel, AudioFileModel} from "../../shared/models/AudioTestModel";
+import React, {ReactNode} from "react";
+import {AudioExampleModel, AudioExampleSettingsModel, AudioFileModel} from "../../shared/models/AudioTestModel";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {AudioExampleSettingsDialog} from "./AudioExampleSettingsDialog";
@@ -17,7 +16,9 @@ import {FileUploadDropBox} from "../../shared/components/FileUploadDropBox";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 
 /** Training Test Item: Audios will play synchronously*/
-export const AudioTestItemTraining = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const AudioTestItemTraining = observer((props: React.PropsWithChildren<{
+  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+}>) => {
   const {example, title, action, collapsed} = props;
   const classes = useMatStyles();
   // Methods for audios changed

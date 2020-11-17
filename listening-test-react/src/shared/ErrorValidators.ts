@@ -1,8 +1,9 @@
-import {AudioExampleModel, AudioTestItemModel} from "./models/AudioTestModel";
+import {AudioExampleModel} from "./models/AudioTestModel";
 import {TestItemType} from "./models/EnumsAndTypes";
 import {SurveyControlModel} from "./models/SurveyControlModel";
-import {BasicTaskModel} from "./models/BasicTaskModel";
+import {BasicTaskItemModel, BasicTaskModel} from "./models/BasicTaskModel";
 
+/** Audio setting playback setting validation */
 function validatePlayedOnceError(example: AudioExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
   if (!example.playedOnce) return 'Please fully listen to these clips'
@@ -18,7 +19,7 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
 }
 
 /** A validation method for an example item with questions. Normally for AB test */
-export function questionedExValidateError(item: AudioTestItemModel): string {
+export function questionedExValidateError(item: BasicTaskItemModel): string {
   if (!item) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if ((item.type === TestItemType.example || item.type === TestItemType.training) && item.example.fields) {
@@ -33,7 +34,7 @@ export function questionedExValidateError(item: AudioTestItemModel): string {
   else return null;
 }
 /** For an example item with a slider or a value field */
-export function sliderItemValidateError(item: AudioTestItemModel): string {
+export function sliderItemValidateError(item: BasicTaskItemModel): string {
   if (item == null) return null;
   else if (item.type === TestItemType.question) return surveyControlValidateError(item.questionControl);
   else if (item.type === TestItemType.example) {
