@@ -42,9 +42,9 @@ try:
     shutil.copyfile("golisten.nginx80.conf", os.path.join(base_dir, 'html', "golisten.nginx80.conf"))
     shutil.copyfile("docker-compose.yml", os.path.join(base_dir, "docker-compose.yml"))
 
-    print('Create tar file...')
-    with tarfile.open(base_dir_tgz, "w:gz") as tar:
-            tar.add(base_dir, arcname=os.path.basename(base_dir))
+    # print('Create tar file...')
+    # with tarfile.open(base_dir_tgz, "w:gz") as tar:
+    #         tar.add(base_dir, arcname=os.path.basename(base_dir))
 
     # You may need to delete this
     print('Transfer the files to server...')

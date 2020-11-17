@@ -1,17 +1,19 @@
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {Button, CardContent, Collapse, Icon} from "@material-ui/core";
-import React from "react";
+import React, {ReactNode} from "react";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
 import Grid from "@material-ui/core/Grid";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
-import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
 import {RemovableSurveyControl} from "../../../shared/components/RemovableSurveyControl";
+import {AudioExampleModel} from "../../../shared/models/AudioTestModel";
 
-export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<TestItemExampleCardProps>) => {
+export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
+  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
+}>) => {
   const {example, action, title, collapsed} = props;
   // Methods for audios changed
   const handleDeletedQuestionAdd = () => example.fields.push({

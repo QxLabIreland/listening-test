@@ -1,6 +1,5 @@
 import {observer} from "mobx-react";
-import React from "react";
-import {TestItemExampleCardProps} from "../../components/TypesAndItemOverrides";
+import React, {ReactNode} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {CardContent, Collapse} from "@material-ui/core";
@@ -11,13 +10,15 @@ import {TestItemDropGridList} from "../../components/TestItemDropGridList";
 import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
 import {RemovableSurveyControl} from "../../../shared/components/RemovableSurveyControl";
 import {useMatStyles} from "../../SharedStyles";
-import {BasicTaskItemModel} from "../../../shared/models/BasicTaskModel";
+import {ImageExampleModel, ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 
-export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren<TestItemExampleCardProps & {type?: 'video' | 'image'}>) => {
+export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren<{
+  example: ImageExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean, type?: 'video' | 'image'
+}>) => {
   const {example, title, action, collapsed, type = 'image'} = props;
   const classes = useMatStyles();
 
-  const addAdditionalQuestion = (item: BasicTaskItemModel) => example.fields.push(item.questionControl);
+  const addAdditionalQuestion = (item: ImageTestItemModel) => example.fields.push(item.questionControl);
   const deleteAdditionalQuestion = () => example.fields.pop();
 
   return <Card>

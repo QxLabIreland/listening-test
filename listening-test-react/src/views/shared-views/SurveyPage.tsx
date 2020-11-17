@@ -24,6 +24,7 @@ import {
 import {TestItemCardRender} from "../components/TestItemCard.render";
 import {useDivideIntoSections} from "../../shared/RandomizationTools";
 
+/** If there is no value, it means survey page is on preview mode*/
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
   const [questionnaire, setQuestionnaire] = useState<BasicTaskModel>();
   const [error, setError] = useState<string>();
@@ -57,7 +58,8 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
 
   function handlePanelChange(v: boolean, newIndex: number) {
     const validationError = validateError(randomItems[openedPanel]);
-    if (validationError) openDialog(validationError, 'Answer Required');
+    // Value means this is in preview mode
+    if (validationError && !value) openDialog(validationError, 'Answer Required');
     // Set which panel will open, if validation pass.
     else if (v) {
       // Timing process

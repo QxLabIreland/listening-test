@@ -1,5 +1,4 @@
 import {observer} from "mobx-react";
-import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
 import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
 import {uuid} from "uuidv4";
 import {Box} from "@material-ui/core";
@@ -8,8 +7,9 @@ import Icon from "@material-ui/core/Icon";
 import React from "react";
 import {AddQuestionButton} from "../../../shared/components/AddQuestionButton";
 import {useMatStyles} from "../../SharedStyles";
+import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 
-export const ImageAbButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
+export const ImageAbButtonGroup = observer(function (props: { onAdd: (type: ImageTestItemModel) => void }) {
   const {onAdd} = props;
   const classes = useMatStyles();
 

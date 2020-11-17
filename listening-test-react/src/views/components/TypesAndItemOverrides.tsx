@@ -10,10 +10,9 @@ import {ImageAbExampleItem} from "../image/ImageAb/ImageAbExampleItem";
 import {AcrTestItemExampleCard} from "../audio/AcrTest/AcrTestItemExampleCard";
 
 /** The purpose of this file is to simplify the code, because there are lots of places using this type and props */
-export type TestItemExampleCardProps = {
+export type TestItemExampleCardType = FunctionComponent<{
   example: BasicExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
-}
-export type TestItemExampleCardType = FunctionComponent<TestItemExampleCardProps>
+}>
 
 // Switch different card through 'testType'
 export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {

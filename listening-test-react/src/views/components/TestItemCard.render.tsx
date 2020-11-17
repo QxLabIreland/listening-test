@@ -1,5 +1,4 @@
 import {observer} from "mobx-react";
-import {AudioTestItemModel} from "../../shared/models/AudioTestModel";
 import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {SurveyControlRender} from "../../shared/components/SurveyControl.render";
 import React from "react";
@@ -12,8 +11,9 @@ import {VideoAbExampleRender} from "../video/VideoAb/VideoAbExample.render";
 import {MushraTestItemExampleRender} from "../audio/Mushra/MushraTestItemExample.render";
 import {AudioTestItemTraining} from "../audio/AudioTestItemTraining.render";
 import {AcrTestItemExampleRender} from "../audio/AcrTest/AcrTestItemExample.render";
+import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 
-export const TestItemCardRender = observer(function (props: { item: AudioTestItemModel, testUrl: TestUrl, active?: boolean }) {
+export const TestItemCardRender = observer(function (props: { item: BasicTaskItemModel, testUrl: TestUrl, active?: boolean }) {
   const {item, testUrl, ...rest} = props;
 
   // Switch to right rendering item
