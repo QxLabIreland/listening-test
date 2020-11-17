@@ -1,9 +1,9 @@
 import {observer} from "mobx-react";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
-import React, {MouseEvent, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {Theme} from "@material-ui/core";
+import {GridList, GridListTile, Theme} from "@material-ui/core";
 import {useSharedStyles} from "../../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
@@ -13,7 +13,8 @@ const useStyles = makeStyles((_: Theme) => ({
   sliderStick: {
     position: 'absolute', top: 0, bottom: 0, left: -3,
     borderLeft: '2px solid black', borderRight:'2px solid black',
-    background: 'white', width: 6, cursor: 'move'
+    background: 'white', width: 6, cursor: 'move',
+    touchAction: 'none', // Disable default touch action
   },
 }));
 
@@ -25,7 +26,9 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
   const [maskWidth, setMaskWidth] = useState(5);
   const images = useRef<HTMLImageElement[]>([]);
 
+  /** Initialization or media and active changed*/
   useEffect(() => {
+    if (item.example?.settings?.isHorizontalDisplay) return () => null;
     // Resize the canvas when window is resizing and reset width of canvas first
     canvasRef.current.setAttribute('width', canvasContainerRef.current.clientWidth.toString());
     window.addEventListener('resize', handleOnResize);
@@ -34,12 +37,7 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
       // Build image element and draw it
       const imgEle = new Image();
       imgEle.src = imgModel.src;
-      imgEle.onload = () => {
-        // canvasRef.current.setAttribute('width', imgEle.width.toString());
-        // canvasRef.current.setAttribute('height', imgEle.height.toString());
-        // cxt.drawImage(imgEle,0, 0);
-        handleOnResize();
-      }
+      imgEle.onload = handleOnResize;
       // Store image element
       images.current[i] = imgEle;
     });
@@ -66,30 +64,41 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
     canvasRef.current.height = canvasHeight;
     drawOnCanvas();
   }
-  const handleMouseDown = (_: MouseEvent<HTMLSpanElement>) => {
+  const handleMouseDown = (ev: any) => {
+    ev.preventDefault();
     // Remove listeners
     const handleMouseUp = () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseOrTouchMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleMouseOrTouchMove);
+      window.removeEventListener('touchend', handleMouseUp);
     }
-    const handleMouseMove = (event: any) => {
+    const handleMouseOrTouchMove = (event: MouseEvent | TouchEvent) => {
+      event.preventDefault();
+      // Get clientX based on mouse or touch (because there are more than 1 touches, so we need choose the first)
+      const clientX = event instanceof MouseEvent ? event.clientX : event.changedTouches[0].clientX;
       // Get new value, skip if new value is not in the range
-      const newValue = (event.clientX - canvasContainerRef.current.getBoundingClientRect().left) / canvasContainerRef.current.clientWidth * 100
+      const newValue = (clientX - canvasContainerRef.current.getBoundingClientRect().left) / canvasContainerRef.current.clientWidth * 100
       if (newValue < 5 || newValue > 95) return;
       setMaskWidth(newValue);
     }
-    window.addEventListener('mousemove', handleMouseMove);
+
+    window.addEventListener('mousemove', handleMouseOrTouchMove);
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchmove', handleMouseOrTouchMove);
+    window.addEventListener('touchend', handleMouseUp);
   }
 
   return <Grid container spacing={3}>
-    {/*Images grids*/}
-    <div className={classes.canvasContainer} ref={canvasContainerRef}>
+    {/*Images grids. Horizontally or draggable bar*/}
+    {item.example?.settings?.isHorizontalDisplay ? <div>
+      {item.example.medias.map((v, i) => <img src={v.src} alt={v.filename} width="50%"/>)}
+    </div> : <div className={classes.canvasContainer} ref={canvasContainerRef}>
       <canvas ref={canvasRef} width="320" height="320"/>
       <span style={{left: maskWidth + '%'}} className={classes.sliderStickWrapper}>
-            <span className={classes.sliderStick} onMouseDown={handleMouseDown}/>
-          </span>
-    </div>
+        <span className={classes.sliderStick} onMouseDown={handleMouseDown} onTouchStart={handleMouseDown}/>
+      </span>
+    </div>}
     {/*Questions*/}
     {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
       <SurveyControlRender control={value}/>
