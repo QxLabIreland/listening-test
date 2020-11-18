@@ -37,29 +37,29 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
     if (location.state || +id !== 0) Axios.get<BasicTaskModel>('/api/' + testUrl, {params: {_id: location.state || id}})
       .then((res) => {
         if (location.state) templateProcess(res.data, testUrl);
-        const observableTest = addAnObserveForChanges(res.data);
-        setTestModel(observableTest);
+        const testModelObservable = addAnObserveForChanges(res.data);
+        setTestModel(testModelObservable);
       }, res => setLoadingError(res.response.data));
     // If in creation page
     else {
       const data = {name: '', description: '', items: [] as BasicTaskItemModel[]};
-      const observable = addAnObserveForChanges(data);
+      const testModelObs = addAnObserveForChanges(data);
       // Default individual question page
       if (testUrl.includes('image') || testUrl.includes('video'))
-        observable.settings = {...observable.settings, isIndividual: true}
-      setTestModel(observable);
+        testModelObs.settings = {...testModelObs.settings, isIndividual: true}
+      setTestModel(testModelObs);
     }
   }, [id, testUrl, location.state]);
 
   const addAnObserveForChanges = (data: BasicTaskModel) => {
     /** Stringify the data for unsaved modification detection */
     const theTestStr = JSON.stringify(data);
-    const anObservable = observable(data);
+    const dataObservable = observable(data);
     // Add an observe to set if is data changed
-    deepObserve(anObservable, (newValue) => {
+    deepObserve(dataObservable, (newValue) => {
       setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
     });
-    return anObservable;
+    return dataObservable;
   }
   const requestServer = (isNew: boolean) => {
     setIsTestChanged(false);
