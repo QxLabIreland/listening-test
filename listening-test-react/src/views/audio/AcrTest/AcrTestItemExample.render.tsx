@@ -53,7 +53,7 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
         <AcrRatingBar audio={v}/>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
                      onEnded={i === 0 ? handleEnded : undefined}
-                     onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>{i + 1}</AudioButton>
+                     onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}/>
       </Grid>)}
 
       {/*Reference*/}

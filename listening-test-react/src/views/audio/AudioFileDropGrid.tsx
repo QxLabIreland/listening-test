@@ -7,8 +7,8 @@ import Icon from "@material-ui/core/Icon";
 import {makeStyles} from "@material-ui/core/styles";
 import {FileUploadDropBox, useFileBoxesFunc} from "../../shared/components/FileUploadDropBox";
 // reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
-export const AudioFileDropGrid = observer(function ({example, reference, keepPlace, onRemove}: {
-  example: BasicExampleModel, reference?: boolean, keepPlace?: boolean, onRemove?: (index: number) => void
+export const AudioFileDropGrid = observer(function ({example, reference, keepPlace, allSame, hidDeleteButton}: {
+  example: BasicExampleModel, reference?: boolean, keepPlace?: boolean, allSame?: boolean, hidDeleteButton?: boolean
 }) {
   const {handleDropSwapFiles, handleDragStart, draggingIndex, handleDragOver} = useFileBoxesFunc(example.medias, keepPlace);
 
@@ -16,8 +16,6 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
     if (newAudio == null) {
       if (keepPlace) example.medias[index] = null;
       else example.medias.splice(index, 1);
-      // Trigger remove event
-      if (onRemove) onRemove(index);
       return;
     }
     // If is Reference the audioRef will be added or deleted
@@ -31,9 +29,10 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
                     label="Reference Labeled (Optional)"/>
     </Grid>}
     {/*File drop area*/}
-    {example.medias.map((a, i) => <Grid item xs={12} md={4} key={i}>
+    {example.medias.slice(allSame ? example.medias.length - 1 : 0).map((a, i) => <Grid item xs={12} md={4} key={i}>
       <AudioFileUploadBox fileModel={a} onChange={fm => handleChange(fm, i)} disabled={draggingIndex !== undefined}
-                    onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)} onDragOver={handleDragOver}/>
+                    onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)} onDragOver={handleDragOver}
+                    hidDeleteButton={hidDeleteButton}/>
     </Grid>)}
   </>
 })
@@ -42,9 +41,10 @@ const useStyles = makeStyles((_: Theme) => createStyles({
   fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}
 }));
 
-const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, onDrop, disabled, onDragOver}: {
+const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, onDrop, disabled, onDragOver, hidDeleteButton}: {
   onChange: (fm: BasicFileModel) => void, fileModel?: BasicFileModel, label?: string, isTag?: boolean,
-  onDragStart?: () => void, onDrop?: () => void, disabled?: boolean, onDragOver?: (event: any) => void
+  onDragStart?: () => void, onDrop?: () => void, disabled?: boolean, onDragOver?: (event: any) => void,
+  hidDeleteButton?: boolean
 }) => {
   const classes = useStyles();
 
@@ -60,9 +60,9 @@ const AudioFileUploadBox = observer(({onChange, fileModel, label, onDragStart, o
         </Tooltip>
         <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <small>{label?.slice(0, 3)}</small>
-          <Tooltip title="Click to delete this one">
+          {!hidDeleteButton ? <Tooltip title="Click to delete this one">
             <IconButton size="small" onClick={handleDelete}><Icon>delete_outline</Icon></IconButton>
-          </Tooltip>
+          </Tooltip> : <Icon>music_note</Icon>}
         </Box>
       </> : <>
         <Typography className={classes.fileNameEllipsis}>{label ? label : 'Click to choose or Drop a file'}</Typography>
