@@ -3,7 +3,7 @@ import {SurveyControlRender} from "../../../shared/components/SurveyControl.rend
 import React, {useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {GridList, GridListTile, Theme} from "@material-ui/core";
+import {Theme} from "@material-ui/core";
 import {useSharedStyles} from "../../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
