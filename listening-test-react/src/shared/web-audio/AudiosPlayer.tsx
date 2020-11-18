@@ -83,6 +83,7 @@ export const AudioButton = observer(forwardRef<HTMLAudioElement, {
   const {audio, onTimeUpdate, onPlay, onPause, onEnded} = props;
 
   // An AudioButton contains an audio element and a button. Use loop attribute, onEnded Event will not trigger.
+  const icon = <Icon>{audio.isActive ? 'pause' : 'play_arrow'}</Icon>;
   return <>
     <audio preload="auto" src={audio.src} controls ref={ref} style={{display: 'none'}}
            onTimeUpdate={onTimeUpdate} onEnded={onEnded}/>
@@ -90,9 +91,9 @@ export const AudioButton = observer(forwardRef<HTMLAudioElement, {
     <Button variant={audio.isActive ? 'contained' : 'outlined'} color="primary" size="large"
             style={{transition: 'none'}}
       // disabled={playedTimes >= settings?.loopTimes}
-            startIcon={<Icon>{audio.isActive ? 'pause' : 'play_arrow'}</Icon>}
+            startIcon={props.children && icon}
             onClick={() => audio.isActive ? onPause() : onPlay(audio)}>
-      {props.children}
+      {props.children ? props.children : icon}
     </Button>
   </>
 }))
