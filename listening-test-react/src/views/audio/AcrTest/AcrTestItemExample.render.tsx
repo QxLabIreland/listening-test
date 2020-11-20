@@ -8,7 +8,7 @@ import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLo
 import {useRandomization} from "../../../shared/RandomizationTools";
 import {ratingAreaStyle, useMatStyles} from "../../SharedStyles";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
-import {Box, Slider, Typography} from "@material-ui/core";
+import {Box, Slider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
 export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean }) {
@@ -25,22 +25,26 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
   const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(() => {
     if (active === false) handlePause();
+    // If there are more 1 internal question, block next question
+    else if (example.medias.length > 1) example.blockNext = true;
   }, [active]);
 
   const handleClickNext = () => {
     if (currentIndex < randomAudios.length) {
-      setCurrentIndex( currentIndex + 1);
-      // Save the value of rating bar to fields
-      if (example.fields[randomPattern[currentIndex]])
-        example.fields[randomPattern[currentIndex]].value = example.medias[currentIndex].value;
       handlePause();
       resetCurrentTime();
+      console.log(currentIndex);
+      // If new state is at end of internal question, the next question button will be un block
+      setCurrentIndex(prevState => {
+        if (prevState + 1 >= randomAudios.length - 1) delete example.blockNext;
+        return prevState + 1;
+      });
     }
   }
 
   return <>
     <AudioLoading showing={loading}/>
-    {currentIndex < randomAudios.length ? <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
+    <Grid container spacing={2} style={{display: loading ? 'none' : 'flex'}}>
       {example.fields?.length === randomPattern.length && randomPattern?.map((ri, i) =>
         <Grid item xs={12} key={i} hidden={currentIndex !== i}>
           <SurveyControlRender control={example.fields[ri]}/>
@@ -69,13 +73,10 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
         <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs}
                                        currentTime={currentTime}/>}
       </Grid>
-      <Grid item xs={12} className={classes.flexEnd}>
-        <Button color="primary" onClick={handleClickNext} disabled={currentIndex >= randomAudios.length}>Next</Button>
-      </Grid>
-    </Grid>: <Grid container spacing={3}><Grid item>
-      <Typography>You have finished this question</Typography>
-    </Grid></Grid>}
-
+      {example.blockNext && <Grid item xs={12} className={classes.flexEnd}>
+        <Button color="primary" onClick={handleClickNext}>Next</Button>
+      </Grid>}
+    </Grid>
   </>
 });
 

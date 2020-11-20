@@ -119,10 +119,10 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
           <ExpansionPanelDetails>
             <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i}/>
           </ExpansionPanelDetails>
-          <ExpansionPanelActions>{i < randomItems.length - 1 ?
+          {!v.example?.blockNext && <ExpansionPanelActions>{i < randomItems.length - 1 ?
             <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next Question</Button> :
             <Button disabled={!!value} variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-          }</ExpansionPanelActions>
+          }</ExpansionPanelActions>}
         </ExpansionPanel>
       </Grid>
     )}

@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import React, {ReactNode} from "react";
+import React, {ReactNode, useEffect} from "react";
 import {Button, Card, CardContent, Collapse, Typography} from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
@@ -18,10 +18,16 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
 }>) => {
   const {example, title, action, collapsed} = props;
   const classes = useMatStyles();
+  // Set all field require to false if it is true
+  useEffect(() => {
+    example.fields?.forEach(value => {
+      if (value?.required) delete value.required;
+    });
+  }, []);
   // Methods for audios changed
   const handleAdd = (newAudio: AudioFileModel) => {
     example.medias.push(newAudio);
-    example.fields.push({type: SurveyControlType.description, question: 'Compare the quality of these sounds.', required: true, value: null});
+    example.fields.push({type: SurveyControlType.description, question: 'Compare the quality of these sounds.', value: null});
   }
   // Setting submitted
   const handleSettingChange = (settings: AudioExampleSettingsModel) => example.settings = settings;
@@ -45,7 +51,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
           {!example.fields || example.fields.length < 1 ? <Grid item xs={12}>
             <Typography variant="body1">Upload audio files to start!</Typography>
           </Grid> : example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-            <RemovableSurveyControl question={q} onRemove={() => handleQuestionRemove(qi)}/>
+            <RemovableSurveyControl question={q} onRemove={() => handleQuestionRemove(qi)} hideRequire compactStyle/>
           </Grid>)}
 
           <AudioFileDropGrid example={example} reference hidDeleteButton allSame/>
