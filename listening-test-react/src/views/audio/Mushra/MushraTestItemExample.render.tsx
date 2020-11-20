@@ -10,16 +10,16 @@ import {ratingAreaStyle} from "../../SharedStyles";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
 import {Box, Slider} from "@material-ui/core";
 
-export const MushraTestItemExampleRender = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
-  const {value, active} = props;
+export const MushraTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean }) {
+  const {example, active} = props;
+  // Randomize first to make sure random audio match the dom tree
+  const [randomAudios] = useRandomization(example.medias, active && example.settings?.randomMedia, example.settings?.fixLastInternalQuestion);
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
-  const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
+  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(randomAudios, example.mediaRef, example);
+  const allRefs = example.mediaRef ? [...refs, sampleRef] : refs;
   const loading = useAllAudioReady(allRefs);
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
-  // Create empty slots for randomized audios
-  const [randomAudios] = useRandomization(value.medias, active && value.settings?.randomMedia);
 
   useEffect(() => {
     if (active === false) handlePause();
@@ -27,7 +27,7 @@ export const MushraTestItemExampleRender = observer(function (props: { value: Au
 
   return <> <AudioLoading showing={loading}/>
     <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
-      {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
+      {example.fields?.map((value, i) => <Grid item xs={12} key={i}>
         <SurveyControlRender control={value}/>
       </Grid>)}
 
@@ -40,15 +40,15 @@ export const MushraTestItemExampleRender = observer(function (props: { value: Au
       </Grid>)}
 
       {/*Reference*/}
-      {value.mediaRef && <Grid item style={ratingAreaStyle}>
-        <AudioButton ref={sampleRef} audio={value.mediaRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
+      {example.mediaRef && <Grid item style={ratingAreaStyle}>
+        <AudioButton ref={sampleRef} audio={example.mediaRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
         {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
       </Grid>}
 
       <Grid item xs={12}>
         <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}
-                         disabled={value.settings?.disablePlayerSlider}/>
-        {value.settings?.sectionLooping &&
+                         disabled={example.settings?.disablePlayerSlider}/>
+        {example.settings?.sectionLooping &&
         <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs}
                                        currentTime={currentTime}/>}
       </Grid>

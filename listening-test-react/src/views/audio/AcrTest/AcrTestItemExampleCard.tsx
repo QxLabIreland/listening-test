@@ -5,7 +5,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import Grid from "@material-ui/core/Grid";
 import {TagsGroup} from "../../../shared/components/TagsGroup";
-import {SurveyControl} from "../../../shared/components/SurveyControl";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
 import {FileUploadDropBox} from "../../../shared/components/FileUploadDropBox";
 import Icon from "@material-ui/core/Icon";
@@ -26,7 +25,6 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
   }
   // Setting submitted
   const handleSettingChange = (settings: AudioExampleSettingsModel) => example.settings = settings;
-  const handleAudioRemove = (index: number) => example.fields.splice(index, 1);
   const handleDuplicate = () => handleAdd(JSON.parse(JSON.stringify(example.medias[0])));
   const handleQuestionRemove = (index: number) => {
     example.fields.splice(index, 1);

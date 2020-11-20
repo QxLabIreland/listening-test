@@ -16,6 +16,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   // If props doesn't have anchorEl and setAnchorEl, we are gonna use copied one
   const {onAdd, onlyCore} = props;
   const [anchorEl, setAnchorEl] = useState<HTMLElement>();
+  // Close menu from parent components
   useImperativeHandle(forwardedRef, () => ({
     closeMenu: () => setAnchorEl(null)
   }));
@@ -25,7 +26,6 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleAdd = (type: SurveyControlType) => {
     const handleSurveyQuestionItemAdd = (question: SurveyControlModel) => {
       // Bad solution for scrolling
@@ -67,8 +67,13 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
     newItem.id = uuid();
     onAdd(newItem);
   }
-  // TODO add section header function
-
+  // Add section header
+  const handleAddSectionHeader = () => {
+    setAnchorEl(null);
+    onAdd({
+      id: uuid(), type: TestItemType.sectionHeader, title: 'Group Divider (Click to edit this name)',
+    });
+  }
   // Get rid of other types of question
   if (onlyCore) return <>
     <Button color="primary" onClick={handleAddMenuClick}><Icon>add</Icon> Ask a question</Button>
@@ -106,6 +111,12 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
         <Typography variant="body1"><strong>Question Type</strong></Typography>
       </MenuItem>
       {props.children}
+      <MenuItem onClick={handleAddSectionHeader}>
+        <ListItemIcon>
+          <Icon fontSize="small">view_agenda</Icon>
+        </ListItemIcon>
+        <ListItemText>Group Divider</ListItemText>
+      </MenuItem>
       <Divider/>
       <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
         <ListItemIcon>
