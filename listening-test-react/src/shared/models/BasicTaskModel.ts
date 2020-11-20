@@ -48,6 +48,8 @@ export interface BasicExampleModel {
   mediaRef?: BasicFileModel;
   // Settings make example play specific times
   settings?: any;
+  // Is it able to go next
+  blockNext?: boolean;
 }
 
 export interface BasicFileModel {
@@ -55,7 +57,7 @@ export interface BasicFileModel {
   src: string | null;
   tags?: string;
   value: string;
+  settings?: any;
   // Additional attributes to identify which one is active for subject
   isActive?: boolean;
-  settings?: any;
 }
