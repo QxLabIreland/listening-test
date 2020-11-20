@@ -32,11 +32,6 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
           }
         });
         break;
-      case TestItemType.sectionHeader:
-        onAdd({
-          id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title (Click to edit this)', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        });
-        break;
     }
   };
 
@@ -54,12 +49,6 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
           <Icon fontSize="small">fitness_center</Icon>
         </ListItemIcon>
         <ListItemText>Audio Training Example</ListItemText>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(TestItemType.sectionHeader)}>
-        <ListItemIcon>
-          <Icon fontSize="small">title</Icon>
-        </ListItemIcon>
-        <ListItemText>Section Header</ListItemText>
       </MenuItem>
     </AddQuestionButton>
   </Box>;

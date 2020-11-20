@@ -25,7 +25,7 @@ export const TestItemCardRender = observer(function (props: { item: BasicTaskIte
         return <AcrTestItemExampleRender example={item.example} {...rest}/>
       case "audio-labeling": // Only use training render of acr
       case "mushra-test":
-        return <MushraTestItemExampleRender value={item.example} {...rest}/>;
+        return <MushraTestItemExampleRender example={item.example} {...rest}/>;
       case "hearing-test":
         return <HearingTestItemExampleRender value={item.example} {...rest}/>;
       case "image-labeling":

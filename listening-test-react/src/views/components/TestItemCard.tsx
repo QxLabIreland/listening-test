@@ -122,6 +122,9 @@ const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemMod
   return <div>
     <Typography variant="h4" className={classes.header}>
       <TitleInput item={item}/>
+      <Tooltip title="This divider will not appear in the test but you can use it to create groups of questions which can be randomised within in a group. You need to start and end each group with a group divider">
+        <IconButton><Icon>help_outline</Icon></IconButton>
+      </Tooltip>
       <HeaderIconButtons {...props}/>
     </Typography>
     <Collapse in={!item.collapsed} timeout="auto" unmountOnExit>

@@ -34,11 +34,6 @@ export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type
           }
         };
         break;
-      case TestItemType.sectionHeader:
-        newItem = {
-          id: uuid(), type: TestItemType.sectionHeader, title: 'This is section title (Click to edit this)', // titleDes: {title: 'New Title', description: 'Optional Description'}
-        };
-        break;
     }
     addQuestionMenu.current.closeMenu();
     onAdd(newItem);
@@ -59,12 +54,6 @@ export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type
           <Icon fontSize="small">fitness_center</Icon>
         </ListItemIcon>
         <ListItemText>Audio Training Example</ListItemText>
-      </MenuItem>
-      <MenuItem onClick={() => handleAdd(TestItemType.sectionHeader)}>
-        <ListItemIcon>
-          <Icon fontSize="small">title</Icon>
-        </ListItemIcon>
-        <ListItemText>Section Header</ListItemText>
       </MenuItem>
     </AddQuestionButton>
   </Box>;
