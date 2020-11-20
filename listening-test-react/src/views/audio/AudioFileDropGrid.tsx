@@ -20,6 +20,8 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
     }
     // If is Reference the audioRef will be added or deleted
     if (index === -1 && reference) example.mediaRef = newAudio;
+    // either replace all audios or just one
+    else if (allSame) example.medias.forEach((_, i) => example.medias[i] = newAudio);
     else example.medias[index] = newAudio;
   }
   return <>
@@ -28,12 +30,14 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
       <AudioFileUploadBox fileModel={example.mediaRef} onChange={fm => handleChange(fm, -1)}
                     label="Reference Labeled (Optional)"/>
     </Grid>}
-    {/*File drop area*/}
-    {example.medias.slice(allSame ? example.medias.length - 1 : 0).map((a, i) => <Grid item xs={12} md={4} key={i}>
-      <AudioFileUploadBox fileModel={a} onChange={fm => handleChange(fm, i)} disabled={draggingIndex !== undefined}
-                    onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)} onDragOver={handleDragOver}
-                    hidDeleteButton={hidDeleteButton}/>
-    </Grid>)}
+    {/*File drop area. Use all same to slice into 1 or all*/}
+    {example.medias.slice(0, allSame ? 1 : example.medias.length).map((a, i) =>
+      <Grid item xs={12} md={4} key={i}>
+        <AudioFileUploadBox fileModel={a} onChange={fm => handleChange(fm, i)} disabled={draggingIndex !== undefined}
+                      onDrop={() => handleDropSwapFiles(i)} onDragStart={() => handleDragStart(i)} onDragOver={handleDragOver}
+                      hidDeleteButton={hidDeleteButton}/>
+      </Grid>
+    )}
   </>
 })
 
