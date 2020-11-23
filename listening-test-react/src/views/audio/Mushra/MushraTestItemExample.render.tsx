@@ -26,7 +26,7 @@ export const MushraTestItemExampleRender = observer(function (props: { example: 
   }, [active]);
 
   return <> <AudioLoading showing={loading}/>
-    <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
+    <Grid container spacing={2} style={{display: loading ? 'none' : 'flex'}}>
       {example.fields?.map((value, i) => <Grid item xs={12} key={i}>
         <SurveyControlRender control={value}/>
       </Grid>)}

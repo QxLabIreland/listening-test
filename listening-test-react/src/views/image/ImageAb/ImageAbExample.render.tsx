@@ -89,7 +89,7 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
     window.addEventListener('touchend', handleMouseUp);
   }
 
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {/*Images grids. Horizontally or draggable bar*/}
     {item.example?.settings?.isHorizontalDisplay ? <div>
       {item.example.medias.map((v, i) => <img src={v.src} alt={v.filename} width="50%"/>)}
