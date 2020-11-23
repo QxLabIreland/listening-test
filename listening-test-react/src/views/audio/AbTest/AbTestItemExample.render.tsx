@@ -26,7 +26,7 @@ export const AbTestItemExampleRender = observer(function (props: { value: AudioE
   }, [active]);
 
   return <> <AudioLoading showing={loading}/>
-    <Grid container spacing={3} style={{display: loading ? 'none' : 'flex'}}>
+    <Grid container spacing={2} style={{display: loading ? 'none' : 'flex'}}>
 
       {value.medias.map((v, i) => v && <Grid item key={i}>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}

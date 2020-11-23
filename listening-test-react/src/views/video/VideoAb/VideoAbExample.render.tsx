@@ -30,7 +30,7 @@ export const VideoAbExampleRender = observer(function (props: { item: ImageTestI
     setPlaying(true);
   }
 
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {/*Videos*/}
     {item.example.medias.map((v, i) =>
       <video width="50%" src={v.src} ref={r => refs[i] = r}/>

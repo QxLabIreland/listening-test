@@ -13,7 +13,7 @@ export const ImageLabelingExampleRender = observer(function (props: { item: Imag
   const classes = useSharedStyles();
   const colsNum = item.example.medias.length < 3 ? item.example.medias.length : 3;
 
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {/*Description for the example*/}
     {item.example.fields[0] && <Grid item xs={12}>
       <SurveyControlRender control={item.example.fields[0]}/>

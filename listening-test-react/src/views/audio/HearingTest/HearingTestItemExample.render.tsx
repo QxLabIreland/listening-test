@@ -47,7 +47,7 @@ export const HearingTestItemExampleRender = observer(function (props: { value: A
     }
   }
 
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {value.fields?.map((value, i) => <Grid item xs={12} key={i}>
       <SurveyControlRender control={value}/>
     </Grid>)}

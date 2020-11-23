@@ -45,7 +45,7 @@ export const AudioTestItemTraining = observer(function (props: { value: AudioExa
   const dragSlider = (event: any, newValue: number | number[]) =>
     refs[currentAudioIndex].currentTime = newValue ? Number(newValue) : 0;
 
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {/*Description for the example*/}
     {value.fields && value.fields[0] && <Grid item xs={12}>
       <SurveyControlRender control={value.fields[0]}/>
