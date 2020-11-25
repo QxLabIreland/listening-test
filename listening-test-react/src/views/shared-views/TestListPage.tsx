@@ -6,7 +6,7 @@ import {
   Icon,
   IconButton,
   ListItemIcon,
-  ListItemText,
+  ListItemText, ListSubheader,
   Menu,
   MenuItem,
   Snackbar
@@ -150,7 +150,7 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTaskMode
       {templates && templates.length ? templates.map(temp =>
           <MenuItem key={temp._id.$oid} component={Link}
                     to={{pathname: `${path}/0`, state: temp._id.$oid}}>{temp.name}</MenuItem>)
-        : <MenuItem disabled>No template</MenuItem>}
+        : <ListSubheader>No template</ListSubheader>}
     </Menu>
   </>
 }

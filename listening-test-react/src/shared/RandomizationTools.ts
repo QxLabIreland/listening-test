@@ -68,19 +68,30 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
       if (section.length && section[0].type === TestItemType.sectionHeader) {
         // Only randomize if there is the setting
         if (section[0].sectionSettings?.randomQuestions) {
+          const fixedItems = section[0].sectionSettings?.fixedItems;
+          const indexesLeft: number[] = [];
+          // Leave first and fixed out
+          section.forEach((value, index) => {
+            if (value.type !== TestItemType.sectionHeader && (!fixedItems || fixedItems.indexOf(value.id) < 0)) {
+              indexesLeft.push(index);
+            }
+          });
+          console.log('Indexes have been left', indexesLeft)
           // This will ignore the first element of an array
           let currentIndex = 0;
-
           // While there remain elements to shuffle...
           while (currentIndex < section.length - 1) {
             // Pick a remaining element...
-            const randomIndex = Math.floor(Math.random() * (section.length - currentIndex - 1)) + 1;
+            const randomIndex = Math.floor(Math.random() * indexesLeft.length);
             currentIndex += 1;
+            // Continue if it is fixed
+            console.log('Current override index: ', currentIndex)
+            if (fixedItems?.indexOf(section[currentIndex].id) > -1) continue;
 
             // And swap it with the current element.
             const temporaryValue = section[currentIndex];
-            section[currentIndex] = section[randomIndex];
-            section[randomIndex] = temporaryValue;
+            section[currentIndex] = section[indexesLeft[randomIndex]];
+            section[indexesLeft[randomIndex]] = temporaryValue;
           }
         }
         // Delete section hedaer in display

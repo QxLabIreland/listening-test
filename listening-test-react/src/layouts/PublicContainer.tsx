@@ -31,6 +31,7 @@ export default function PublicContainer() {
           <Button component={Link} to='sign-in' color="inherit" variant="outlined" className={classes.button}>Login</Button>
         </Toolbar>
       </AppBar>
+      {/*TODO cookies for subjects*/}
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route exact path="/sign-in" component={SignIn}/>

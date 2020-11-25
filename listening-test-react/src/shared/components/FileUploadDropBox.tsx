@@ -66,6 +66,7 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
     event.preventDefault();
     event.stopPropagation();
   }
+  // TODO drag enter and exit to add border styles
 
   return <>
     <input type="file" ref={fileRef} onChange={handleFileUploadDrop} hidden={true} accept={fileType + '/*'}/>

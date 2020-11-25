@@ -33,7 +33,6 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
     if (currentIndex < randomAudios.length) {
       handlePause();
       resetCurrentTime();
-      console.log(currentIndex);
       // If new state is at end of internal question, the next question button will be un block
       setCurrentIndex(prevState => {
         if (prevState + 1 >= randomAudios.length - 1) delete example.blockNext;
