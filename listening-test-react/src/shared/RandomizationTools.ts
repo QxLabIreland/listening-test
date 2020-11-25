@@ -11,14 +11,14 @@ export function useRandomization<T>(items: T[], activated: boolean, fixLast?: bo
     if (activated) {
       const indexesLeft = Array.from(items, (_, i) => i);
       // Pop the last index if fixLast has been set
-      const lastIndex = fixLast ? indexesLeft.pop() : null;
+      const lastIndex = fixLast ? indexesLeft.pop() : undefined;
       // Create placeholders
       const newRandomItems: T[] = Array(items.length);
       const newRandomPattern: number[] = [];
       // Go through all items
       items.forEach(item => {
         // If there is no indexes left and lastIndex is not null
-        if (indexesLeft.length < 1 && lastIndex) {
+        if (indexesLeft.length < 1 && !isNaN(lastIndex)) {
           newRandomItems[lastIndex] = item;
           newRandomPattern.push(lastIndex);
           return;

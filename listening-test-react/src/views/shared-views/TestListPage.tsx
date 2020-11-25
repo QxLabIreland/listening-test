@@ -33,6 +33,7 @@ import {useTemplateList} from "../TemplatesPage";
 import {useUserAuthResult} from "../../layouts/components/AuthRoute";
 import {ShareLinkDialog} from "./ShareLinkDialog";
 import {makeStyles} from "@material-ui/core/styles";
+import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 
 const useStyles = makeStyles(() => ({
   actionTd: {whiteSpace: 'nowrap'}
@@ -76,11 +77,16 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
       , 'Are you sure?', null, openRequest);
     else openRequest().catch();
   }
-  const handleCopyTest = (newTest: BasicTaskModel) => {
-    Axios.post<BasicTaskModel>('/api/' + testUrl, {...newTest, name: newTest.name + ' copy'}).then(res => {
+  const handleCopyTest = (oldTest: BasicTaskModel) => {
+    // Compatible fix for previous bug, delete the value that set in preview mode.
+    oldTest.items.forEach(value => {
+      if (value.questionControl?.value) value.questionControl.value = undefined;
+      if (value.example?.hasOwnProperty('playedOnce')) delete (value.example as AudioExampleModel).playedOnce;
+      if (value.example?.fields) value.example.fields.forEach(value1 => value1.value = undefined);
+    });
+    Axios.post<BasicTaskModel>('/api/' + testUrl, {...oldTest, name: oldTest.name + ' copy'}).then(res => {
       // Give a 0 responseNum and put at the top of the list
       res.data.responseNum = 0;
-      // res.data.isTemplate = false;
       data.unshift(res.data);
       setData([...data]);
       openSnackbar('Duplicate successfully', undefined, 'success');

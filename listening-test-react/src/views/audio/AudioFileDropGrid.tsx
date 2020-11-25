@@ -13,13 +13,12 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
   const {handleDropSwapFiles, handleDragStart, draggingIndex, handleDragOver} = useFileBoxesFunc(example.medias, keepPlace);
 
   const handleChange = (newAudio: BasicFileModel, index: number) => {
-    if (newAudio == null) {
+    if (newAudio == null && index > -1) {
       if (keepPlace) example.medias[index] = null;
       else example.medias.splice(index, 1);
-      return;
     }
     // If is Reference the audioRef will be added or deleted
-    if (index === -1 && reference) example.mediaRef = newAudio;
+    else if (index === -1 && reference) example.mediaRef = newAudio;
     // either replace all audios or just one
     else if (allSame) example.medias.forEach((_, i) => example.medias[i] = newAudio);
     else example.medias[index] = newAudio;
