@@ -18,14 +18,14 @@ export const AudioTestItemTraining = observer(function (props: { value: AudioExa
   // Audios loop and played once checking
   const [playedTimes] = useState(new Array(value.medias.length).fill(0));
 
-  const handlePlay = (index: number) => {
+  const handlePlay = (newIndex: number) => {
     // Pause others, and play the one we clicked
     handlePause();
-    refs[index].play().then();
-    setCurrentTime(refs[index].currentTime);
-    value.medias[index].isActive = true;
+    refs[newIndex].play().then();
+    setCurrentTime(refs[newIndex].currentTime);
+    value.medias[newIndex].isActive = true;
     // Set current index for slider bar
-    setCurrentAudioIndex(index);
+    setCurrentAudioIndex(newIndex);
   }
   const handlePause = () => {
     refs[currentAudioIndex].pause();
@@ -34,11 +34,11 @@ export const AudioTestItemTraining = observer(function (props: { value: AudioExa
   const handleTimeUpdate = () => setCurrentTime(refs[currentAudioIndex].currentTime);
   // When loop attribute is true, this won't be called
   const handleEnded = () => {
-    value.medias[currentAudioIndex].isActive = false;
     playedTimes[currentAudioIndex] += 1;
-    // If didn't specify loopTimes or playedTimes < loopTimes, it will play again
+    // If didn't specify loopTimes or playedTimes < loopTimes, it will play again.
     if (!value.settings?.loopTimes || playedTimes[currentAudioIndex] < value.settings?.loopTimes)
-      handlePlay(currentAudioIndex);
+      // Active makes sure it doesn't play in background. Only play and pause will change isActive
+      if (value.medias[currentAudioIndex].isActive) handlePlay(currentAudioIndex);
     // Check all clips have been played
     if (playedTimes.every(t => t > 0)) value.playedOnce = true;
   }

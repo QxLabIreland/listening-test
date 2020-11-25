@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import React, {ChangeEvent, ReactNode, useContext, useEffect} from "react";
+import React, {ChangeEvent, ReactNode, useContext, useEffect, useLayoutEffect} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {
@@ -29,6 +29,8 @@ import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
 import {DetailTaskModel} from "../../shared/ReactContexts";
+import {useFormik} from "formik";
+import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
@@ -120,25 +122,26 @@ const sectionUseStyles = makeStyles((_theme) => ({
 const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
   const {item} = props;
   const classes = sectionUseStyles();
-  const fullItems = useContext(DetailTaskModel).items;
+  // Create items to use for multi selection
   const items: {title: string, id: string}[] = [];
-  for (let i = fullItems.findIndex(value => value === item) + 1; i < fullItems.length; i ++) {
-    if (fullItems[i].type !== TestItemType.sectionHeader)
-      items.push({title: fullItems[i].title, id: fullItems[i].id});
-    else break;
-  }
+  (function() {
+    const fullItems = useContext(DetailTaskModel).items;
+    for (let i = fullItems.findIndex(value => value === item) + 1; i < fullItems.length; i++) {
+      if (fullItems[i].type !== TestItemType.sectionHeader)
+        items.push({title: fullItems[i].title, id: fullItems[i].id});
+      else break;
+    }
+  })();
+  // Set an object to make sure changes callbacks work
   useEffect(() => {
     if (!item.sectionSettings) item.sectionSettings = {};
-    if (!item.sectionSettings.fixedItems) item.sectionSettings.fixedItems = [];
   }, []);
 
   const handleRandomizationChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) =>
     item.sectionSettings.randomQuestions = checked;
 
-  const handleSelectedFixChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectedFixChange = (event: React.ChangeEvent<{ value: unknown }>) =>
     item.sectionSettings.fixedItems = event.target.value as string[];
-  }
-
 
   return <div>
     <Typography variant="h4" className={classes.header}>
@@ -152,21 +155,21 @@ const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemMod
     <Collapse in={!item.collapsed} timeout="auto" unmountOnExit>
       <FormGroup>
         <FormControlLabel
-          control={<Checkbox checked={item.sectionSettings?.randomQuestions} onChange={handleRandomizationChange}/>}
+          control={<Checkbox checked={item.sectionSettings?.randomQuestions ?? false} onChange={handleRandomizationChange}/>}
           label="Randomize question for this section"
         />
       </FormGroup>
       <FormControl className={classes.selection} disabled={!item.sectionSettings?.randomQuestions}>
         <InputLabel id="demo-mutiple-checkbox-label">Select your fixed items</InputLabel>
         <Select labelId="demo-mutiple-checkbox-label" id="demo-mutiple-checkbox" multiple className={classes.selection}
-          value={item?.sectionSettings?.fixedItems}
+          value={item.sectionSettings?.fixedItems ?? []}
           onChange={handleSelectedFixChange}
           input={<Input/>} MenuProps={{getContentAnchorEl: () => null}}
           renderValue={selected => (selected as string[]).map(id => items.find(value1 => value1.id === id).title).join(', ')}
         >
           {items.map((value) => (
             <MenuItem key={value.id} value={value.id}>
-              <Checkbox checked={item?.sectionSettings?.fixedItems?.indexOf(value.id) > -1}/>
+              <Checkbox checked={item.sectionSettings?.fixedItems?.indexOf(value.id) > -1}/>
               <ListItemText primary={value.title}/>
             </MenuItem>
           ))}
