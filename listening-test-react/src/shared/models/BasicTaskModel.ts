@@ -36,7 +36,10 @@ export interface BasicTaskItemModel {
   // If the card expanded or not
   collapsed?: boolean;
   // TODO Section header settings
-  sectionSettings?: {randomQuestions?: boolean};
+  sectionSettings?: {
+    randomQuestions?: boolean,
+    fixedItems?: string[] // use id of items
+  };
 }
 
 export interface BasicExampleModel {

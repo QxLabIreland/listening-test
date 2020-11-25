@@ -126,11 +126,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
         </ExpansionPanel>
       </Grid>
     )}
-    {value && <Grid item xs={12}>
-      <MobileStepper variant="text" position="static" steps={randomItems.length} activeStep={openedPanel}
-                     nextButton={null} backButton={null}
-      />
-    </Grid>}
   </Grid> : <Loading error={error}/>}</Box>
 })
 

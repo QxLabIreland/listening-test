@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import React, {ChangeEvent, ReactNode, useContext} from "react";
+import React, {ChangeEvent, ReactNode, useContext, useEffect} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {
@@ -8,8 +8,14 @@ import {
   Checkbox,
   Collapse,
   createStyles,
+  FormControl,
   FormControlLabel,
   FormGroup,
+  Input,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
   Switch,
   Theme,
   Tooltip
@@ -51,7 +57,7 @@ export const TestItemCard = observer(function (props: {
 });
 
 /** This an input that can be edited with transparent background */
-const TitleInput = observer(function ({item}: {item: BasicTaskItemModel}) {
+const TitleInput = observer(function ({item}: { item: BasicTaskItemModel }) {
   const handleLabelChange = (event: any) => item.title = event.target.value;
 
   return <input style={labelInputStyle} onFocus={event => event.target.select()}
@@ -106,34 +112,66 @@ const TestItemQuestionCard = observer(function ({item, action, collapsed}: {
 });
 
 const sectionUseStyles = makeStyles((_theme) => ({
-  header: {display: 'flex', marginRight: 8}
+  header: {display: 'flex', marginRight: 8},
+  selection: {width: 340}
 }));
 
-/** Section header to group questions together */
-const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void}) {
+/** Section header/Group divider to group questions together */
+const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
   const {item} = props;
   const classes = sectionUseStyles();
-
-  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    if (!item.sectionSettings) item.sectionSettings = {};
-    item.sectionSettings.randomQuestions = checked;
+  const fullItems = useContext(DetailTaskModel).items;
+  const items: {title: string, id: string}[] = [];
+  for (let i = fullItems.findIndex(value => value === item) + 1; i < fullItems.length; i ++) {
+    if (fullItems[i].type !== TestItemType.sectionHeader)
+      items.push({title: fullItems[i].title, id: fullItems[i].id});
+    else break;
   }
+  useEffect(() => {
+    if (!item.sectionSettings) item.sectionSettings = {};
+    if (!item.sectionSettings.fixedItems) item.sectionSettings.fixedItems = [];
+  }, []);
+
+  const handleRandomizationChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) =>
+    item.sectionSettings.randomQuestions = checked;
+
+  const handleSelectedFixChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    item.sectionSettings.fixedItems = event.target.value as string[];
+  }
+
 
   return <div>
     <Typography variant="h4" className={classes.header}>
       <TitleInput item={item}/>
-      <Tooltip title="This divider will not appear in the test but you can use it to create groups of questions which can be randomised within in a group. You need to start and end each group with a group divider">
+      <Tooltip
+        title="This divider will not appear in the test but you can use it to create groups of questions which can be randomised within in a group. You need to start and end each group with a group divider">
         <IconButton><Icon>help_outline</Icon></IconButton>
       </Tooltip>
       <HeaderIconButtons {...props}/>
     </Typography>
     <Collapse in={!item.collapsed} timeout="auto" unmountOnExit>
-    <FormGroup>
-      <FormControlLabel
-        control={<Checkbox checked={item.sectionSettings?.randomQuestions} onChange={handleChange}/>}
-        label="Randomize question for this section"
-      />
-    </FormGroup>
-  </Collapse>
+      <FormGroup>
+        <FormControlLabel
+          control={<Checkbox checked={item.sectionSettings?.randomQuestions} onChange={handleRandomizationChange}/>}
+          label="Randomize question for this section"
+        />
+      </FormGroup>
+      <FormControl className={classes.selection} disabled={!item.sectionSettings?.randomQuestions}>
+        <InputLabel id="demo-mutiple-checkbox-label">Select your fixed items</InputLabel>
+        <Select labelId="demo-mutiple-checkbox-label" id="demo-mutiple-checkbox" multiple className={classes.selection}
+          value={item?.sectionSettings?.fixedItems}
+          onChange={handleSelectedFixChange}
+          input={<Input/>} MenuProps={{getContentAnchorEl: () => null}}
+          renderValue={selected => (selected as string[]).map(id => items.find(value1 => value1.id === id).title).join(', ')}
+        >
+          {items.map((value) => (
+            <MenuItem key={value.id} value={value.id}>
+              <Checkbox checked={item?.sectionSettings?.fixedItems?.indexOf(value.id) > -1}/>
+              <ListItemText primary={value.title}/>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Collapse>
   </div>
 });
