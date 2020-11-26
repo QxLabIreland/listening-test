@@ -4,13 +4,14 @@ import Container from "@material-ui/core/Container";
 import Loading from "./components/Loading";
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {Redirect} from "react-router-dom";
-import SurveyFinishPage from "../views/PublicPages/SurveyFinishPage";
+import SurveyFinishPage from "../views/shared-views/SurveyFinishPage";
 import {SurveyPage} from "../views/shared-views/SurveyPage";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import NotFoundView from "./components/NotFoundView";
+import {CookiesPolicySnackbar} from "../views/PublicPages/PolicyTerms/CookiesPolicySnackbar";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -50,6 +51,7 @@ export default function SurveyContainer() {
             <Redirect to={`${path}/not-found`}/>
           </Switch>
         </Suspense>
+        <CookiesPolicySnackbar/>
       </Container>
     </React.Fragment>
   )

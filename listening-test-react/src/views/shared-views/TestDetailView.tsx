@@ -10,12 +10,12 @@ import {TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
 import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
-import {TestSettingsDialog} from "./TestSettingsDialog";
+import {TestSettingsDialog} from "./dialogs/TestSettingsDialog";
 import {TestDetailItemCardList} from "./TestDetailItemCardList";
 import {deepObserve} from "mobx-utils";
 import Tooltip from "@material-ui/core/Tooltip";
-import {ResponsePreviewDialog} from "./ResponsePreviewDialog";
-import {ShareLinkDialog} from "./ShareLinkDialog";
+import {ResponsePreviewDialog} from "./dialogs/ResponsePreviewDialog";
+import {ShareLinkDialog} from "./dialogs/ShareLinkDialog";
 import {DetailTaskModel} from "../../shared/ReactContexts";
 
 export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {

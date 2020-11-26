@@ -8,9 +8,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {makeStyles} from "@material-ui/core/styles";
-import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
-import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {SurveyPage} from "./SurveyPage";
+import {BasicTaskModel} from "../../../shared/models/BasicTaskModel";
+import {TestUrl} from "../../../shared/models/EnumsAndTypes";
+import {SurveyPage} from "../SurveyPage";
 import {observer} from "mobx-react";
 
 const Transition = React.forwardRef(function Transition(

@@ -8,12 +8,10 @@ import Axios from "axios";
 const useStyles = makeStyles((_: Theme) => createStyles({
   // fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'},
   uploadBox: {
-    border: '1px dashed rgba(0, 0, 0, 0.3)',
-    borderRadius: 4,
-    cursor: 'pointer',
-    textAlign: 'center',
-    height: '100%'
-  }
+    border: '1px dashed rgba(0, 0, 0, 0.3)', borderRadius: 4, cursor: 'pointer', textAlign: 'center', height: 88
+  },
+  hovering: {backgroundColor: 'papayawhip'},
+  children: {pointerEvents: 'none'}
 }));
 
 export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
@@ -27,6 +25,8 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
   const [isUploading, setIsUploading] = useState(false);
   // Program settings
   const [progress, setProgress] = useState(0);
+  // Mouse hovering
+  const [hovering, setHovering] = useState(false);
 
   // Config what to do when finished
   const onUploadingFinished = () => {
@@ -36,6 +36,7 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
     setProgress(0);
   }
   const handleFileUploadDrop = (event: DragEvent<HTMLElement> | ChangeEvent<HTMLInputElement>) => {
+    handleFileUploadLeave();
     if (disabled) return;
     event.preventDefault();
     event.stopPropagation();
@@ -66,7 +67,9 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
     event.preventDefault();
     event.stopPropagation();
   }
-  // TODO drag enter and exit to add border styles
+  // Drag enter and leave to add border styles
+  const handleFileUploadEnter = () => setHovering(true);
+  const handleFileUploadLeave = () => setHovering(false);
 
   return <>
     <input type="file" ref={fileRef} onChange={handleFileUploadDrop} hidden={true} accept={fileType + '/*'}/>
@@ -75,9 +78,11 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
       <LinearProgress variant="determinate" value={progress}/>
       <br/>
       <Typography variant="body2" color="textSecondary">Uploading {progress}%</Typography>
-    </Box> : <Box p={2} className={classes.uploadBox} onClick={() => fileRef.current.click()}
-                  onDragOver={handleFileUploadDragOver} onDrop={handleFileUploadDrop}>
-      {props.children}
+    </Box> : <Box p={2} className={classes.uploadBox + ' ' + (hovering && classes.hovering)}
+                  onClick={() => fileRef.current.click()}
+                  onDragOver={handleFileUploadDragOver} onDrop={handleFileUploadDrop}
+                  onDragEnter={handleFileUploadEnter} onDragLeave={handleFileUploadLeave}>
+      <div className={hovering && classes.children}>{props.children}</div>
     </Box>}
   </>
 })

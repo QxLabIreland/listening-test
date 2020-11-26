@@ -31,7 +31,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {useMatStyles} from "../SharedStyles";
 import {useTemplateList} from "../TemplatesPage";
 import {useUserAuthResult} from "../../layouts/components/AuthRoute";
-import {ShareLinkDialog} from "./ShareLinkDialog";
+import {ShareLinkDialog} from "./dialogs/ShareLinkDialog";
 import {makeStyles} from "@material-ui/core/styles";
 import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 

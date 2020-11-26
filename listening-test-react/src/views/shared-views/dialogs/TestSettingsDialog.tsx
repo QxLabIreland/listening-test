@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import {useFormik} from "formik";
-import {TestSettingsModel} from "../../shared/models/BasicTaskModel";
+import {TestSettingsModel} from "../../../shared/models/BasicTaskModel";
 import {observer} from "mobx-react";
 
 export const TestSettingsDialog = observer(function (props: { settings: TestSettingsModel, onConfirm: (settings: TestSettingsModel) => void }) {

@@ -8,6 +8,7 @@ import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5/dist/md5';
 import {useSignInUpStyles} from "../SharedStyles";
 import PublicFormLayout from "./PublicFormLayout";
+import {CookiesPolicySnackbar} from "./PolicyTerms/CookiesPolicySnackbar";
 
 export default function SignUp() {
   const classes = useSignInUpStyles();
@@ -57,8 +58,18 @@ export default function SignUp() {
                   color="primary" name="policy" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/terms-conditions" variant="h6" type="button">
+          <Link color="primary" component={RouterLink} to="/terms-of-services" variant="h6" type="button">
             Terms and Conditions
+          </Link>
+        </Typography>
+      </div>
+      <div className={classes.policy} style={{margin: 0}}>
+        <Checkbox checked={formik.values.policy} className={classes.policyCheckbox} color="primary" name="policy"
+                  onChange={formik.handleChange}/>
+        <Typography color="textSecondary" variant="body1">
+          I have read the{' '}
+          <Link color="primary" component={RouterLink} to="/data-processing-agreement" variant="h6" type="button">
+            Data Processing Agreement
           </Link>
         </Typography>
       </div>
@@ -74,5 +85,6 @@ export default function SignUp() {
         </Link>
       </Typography>
     </form>
+    <CookiesPolicySnackbar/>
   </PublicFormLayout>
 };
