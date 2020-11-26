@@ -2,11 +2,11 @@ import React, {forwardRef, useContext, useImperativeHandle} from "react";
 import {IconButtonProps} from "@material-ui/core/IconButton";
 import {Button, DialogActions, Link, TextField} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
-import {testItemsValidateIncomplete} from "../../shared/ErrorValidators";
-import {getCurrentHost} from "../../shared/UncategorizedTools";
-import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
-import {GlobalDialog} from "../../shared/ReactContexts";
-import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {testItemsValidateIncomplete} from "../../../shared/ErrorValidators";
+import {getCurrentHost} from "../../../shared/UncategorizedTools";
+import {BasicTaskModel} from "../../../shared/models/BasicTaskModel";
+import {GlobalDialog} from "../../../shared/ReactContexts";
+import {TestUrl} from "../../../shared/models/EnumsAndTypes";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 

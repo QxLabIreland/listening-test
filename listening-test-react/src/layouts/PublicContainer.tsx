@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react' // , lazy}
 import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
-import {Button} from "@material-ui/core";
+import {Button, Container} from "@material-ui/core";
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import Home from "../views/PublicPages/Home";
 import SignIn from "../views/PublicPages/SignIn";
@@ -11,6 +11,8 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import FindPassword from "../views/PublicPages/FindPassword";
 import ConfirmEmail from "../views/PublicPages/ConfirmEmail";
 import NotFoundView from "./components/NotFoundView";
+import {CookiesPolicy} from "../views/PublicPages/PolicyTerms/CookiesPolicy";
+import {TermsOfServices} from "../views/PublicPages/PolicyTerms/TermsOfSerivces";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -38,6 +40,11 @@ export default function PublicContainer() {
         <Route exact path="/sign-up" component={SignUp}/>
         <Route exact path="/find-password" component={FindPassword}/>
         <Route exact path="/confirm-email" component={ConfirmEmail}/>
+        <Route exact path="/cookies-policy"><Container maxWidth="md"><CookiesPolicy/></Container></Route>
+        <Route exact path="/terms-of-services"><Container maxWidth="md"><TermsOfServices/></Container></Route>
+        <Route exact path="/data-processing-agreement"><Container maxWidth="md">
+
+        </Container></Route>
         {/*Not found page*/}
         <Route exact path="/not-found"><NotFoundView/></Route>
         <Redirect to="/not-found"/>

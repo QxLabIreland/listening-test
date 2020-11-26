@@ -23,7 +23,7 @@ import {useParams} from "react-router-dom";
 import Axios from "axios";
 import Loading from "../../layouts/components/Loading";
 import {downloadFileTool} from "../../shared/UncategorizedTools";
-import {ResponsePreviewDialog} from "./ResponsePreviewDialog";
+import {ResponsePreviewDialog} from "./dialogs/ResponsePreviewDialog";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
 import {red} from "@material-ui/core/colors";
 
