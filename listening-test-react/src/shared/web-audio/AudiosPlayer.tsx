@@ -54,14 +54,18 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
     if (!example.settings?.loopTimes || playedTimes + 1 < example.settings?.loopTimes) {
       // Find the one is playing
       const current = includeAll().allAudio.find(a => a.isActive);
-      if (current) handlePlay(current);
-    }
-    // Make sure the button style looks right
-    else handlePause();
+      if (current) {
+        resetCurrentTime();
+        handlePlay(current);
+      }
+    } else handlePause(); // Make sure the button style looks right
     setPlayedTimes(playedTimes + 1);
   }
   // Reset current time of all the audios
-  const resetCurrentTime = () => includeAll().allRefs.forEach(a => a.current.currentTime = 0);
+  const resetCurrentTime = () => {
+    setCurrentTime(0);
+    includeAll().allRefs.forEach(a => a.current.currentTime = 0);
+  }
 
 
   // // Reference audio

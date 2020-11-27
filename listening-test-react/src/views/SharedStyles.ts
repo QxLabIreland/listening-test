@@ -27,14 +27,15 @@ export const useMatStyles = makeStyles((theme: Theme) => {
       '& > *': {margin: theme.spacing(0.5)}
     },
     animated: {transition: transitionAll},
-    flexEnd: {display: 'flex', justifyContent: 'flex-end'}
+    flexEnd: {display: 'flex', justifyContent: 'flex-end'},
   });
 });
 
 export const useSharedStyles = makeStyles((_: Theme) => ({
   cursorPointer: {cursor: 'pointer'},
   flexCenter: {height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'},
-  fullWidth: {width: '100%'}
+  fullWidth: {width: '100%'},
+  hidden: {display: 'none'}
 }));
 
 export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({

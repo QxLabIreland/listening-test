@@ -82,7 +82,7 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
                   onClick={() => fileRef.current.click()}
                   onDragOver={handleFileUploadDragOver} onDrop={handleFileUploadDrop}
                   onDragEnter={handleFileUploadEnter} onDragLeave={handleFileUploadLeave}>
-      <div className={hovering && classes.children}>{props.children}</div>
+      <div className={'' + (hovering && classes.children)}>{props.children}</div>
     </Box>}
   </>
 })

@@ -4,7 +4,7 @@ import {AudioExampleModel} from "../../../shared/models/AudioTestModel";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import Grid from "@material-ui/core/Grid";
 import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
-import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
+import {AudioLoading, useAllAudioRefsReady} from "../../../shared/web-audio/AudiosLoading";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
 
 const alphabetList = Array.apply(undefined, Array(26)).map(function (x, y) {
@@ -16,7 +16,7 @@ export const AbTestItemExampleRender = observer(function (props: { value: AudioE
   const {value, active} = props;
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(value.medias, value.mediaRef, value);
-  const loading = useAllAudioReady(value.mediaRef ? [...refs, sampleRef] : refs);
+  const loading = useAllAudioRefsReady(value.mediaRef ? [...refs, sampleRef] : refs);
   const allRefs = value.mediaRef ? [...refs, sampleRef] : refs;
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
   // Create empty slots for randomized audios

@@ -1,43 +1,56 @@
 import {observer} from "mobx-react";
 import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
-import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
+import {AudioLoading, useAllAudioRefsReady} from "../../../shared/web-audio/AudiosLoading";
 import {useRandomization} from "../../../shared/RandomizationTools";
 import {ratingAreaStyle, useMatStyles} from "../../SharedStyles";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
 import {Box, Slider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import {GlobalDialog} from "../../../shared/ReactContexts";
+import {validatePlayedOnceError} from "../../../shared/ErrorValidators";
 
-export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean }) {
-  const {example, active} = props;
+export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean, previewMode?:boolean }) {
+  const {example, active, previewMode} = props;
   const classes = useMatStyles();
   // Randomize first to make sure random audio match the dom tree
   const [randomAudios, randomPattern] = useRandomization(example.medias, active && example.settings?.randomMedia, example.settings?.fixLastInternalQuestion);
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded, resetCurrentTime} = useAudioPlayer(randomAudios, example.mediaRef, example);
   const allRefs = example.mediaRef ? [...refs, sampleRef] : refs;
-  const loading = useAllAudioReady(allRefs);
+  const loading = useAllAudioRefsReady(allRefs);
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
+  // Current activated internal questions
   const [currentIndex, setCurrentIndex] = useState(0);
+  const openDialog = useContext(GlobalDialog);
   useEffect(() => {
     if (active === false) handlePause();
     // If there are more 1 internal question, block next question
-    else if (example.medias.length > 1) example.blockNext = true;
-  }, [active]);
+    if (example.medias.length > 1) example.blockNext = true;
+  }, []);
+  // To fix a warning that update state during rendering
+  useEffect(() => {
+    if (currentIndex >= randomAudios.length - 1) example.blockNext = false;
+    // Delete placedOnce for next internal question
+    else delete example.playedOnce;
+  }, [currentIndex]);
 
   const handleClickNext = () => {
     if (currentIndex < randomAudios.length) {
+      // Validation for require full listening
+      const error = validatePlayedOnceError(example);
+      if (error && !previewMode) {
+        openDialog(error);
+        return;
+      }
       handlePause();
       resetCurrentTime();
       // If new state is at end of internal question, the next question button will be un block
-      setCurrentIndex(prevState => {
-        if (prevState + 1 >= randomAudios.length - 1) delete example.blockNext;
-        return prevState + 1;
-      });
+      setCurrentIndex(currentIndex + 1);
     }
   }
 

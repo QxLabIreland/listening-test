@@ -13,7 +13,7 @@ import {AudioTestItemTraining} from "../audio/AudioTestItemTraining.render";
 import {AcrTestItemExampleRender} from "../audio/AcrTest/AcrTestItemExample.render";
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 
-export const TestItemCardRender = observer(function (props: { item: BasicTaskItemModel, testUrl: TestUrl, active?: boolean }) {
+export const TestItemCardRender = observer(function (props: { item: BasicTaskItemModel, testUrl: TestUrl, active?: boolean, previewMode?:boolean }) {
   const {item, testUrl, ...rest} = props;
 
   // Switch to right rendering item
