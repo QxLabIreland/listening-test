@@ -30,8 +30,8 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
   useEffect(() => {
     if (active === false) handlePause();
     // If there are more 1 internal question, block next question
-    if (example.medias.length > 1) example.blockNext = true;
-  }, []);
+    else if (example.medias.length > 1) example.blockNext = true;
+  }, [active]);
   // To fix a warning that update state during rendering
   useEffect(() => {
     if (currentIndex >= randomAudios.length - 1) example.blockNext = false;
