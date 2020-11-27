@@ -117,7 +117,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
             <Typography variant="h6" style={{marginLeft: 8}}>{v.title}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i}/>
+            <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i} previewMode={!!value}/>
           </ExpansionPanelDetails>
           {!v.example?.blockNext && <ExpansionPanelActions>{i < randomItems.length - 1 ?
             <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>Next Question</Button> :

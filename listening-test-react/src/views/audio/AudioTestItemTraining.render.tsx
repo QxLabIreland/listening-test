@@ -36,9 +36,10 @@ export const AudioTestItemTraining = observer(function (props: { value: AudioExa
   const handleEnded = () => {
     playedTimes[currentAudioIndex] += 1;
     // If didn't specify loopTimes or playedTimes < loopTimes, it will play again.
-    if (!value.settings?.loopTimes || playedTimes[currentAudioIndex] < value.settings?.loopTimes)
+    if (!value.settings?.loopTimes || playedTimes[currentAudioIndex] < value.settings?.loopTimes) {
       // Active makes sure it doesn't play in background. Only play and pause will change isActive
       if (value.medias[currentAudioIndex].isActive) handlePlay(currentAudioIndex);
+    } else handlePause();
     // Check all clips have been played
     if (playedTimes.every(t => t > 0)) value.playedOnce = true;
   }

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../../shared/web-audio/AudiosPlayer";
-import {AudioLoading, useAllAudioReady} from "../../../shared/web-audio/AudiosLoading";
+import {AudioLoading, useAllAudioRefsReady} from "../../../shared/web-audio/AudiosLoading";
 import {useRandomization} from "../../../shared/RandomizationTools";
 import {ratingAreaStyle} from "../../SharedStyles";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
@@ -17,7 +17,7 @@ export const MushraTestItemExampleRender = observer(function (props: { example: 
   // This is a custom hook that expose some functions for AudioButton and Controller
   const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded} = useAudioPlayer(randomAudios, example.mediaRef, example);
   const allRefs = example.mediaRef ? [...refs, sampleRef] : refs;
-  const loading = useAllAudioReady(allRefs);
+  const loading = useAllAudioRefsReady(allRefs);
   // An event for setting Time update method
   const [onTimeUpdate, setOnTimeUpdate] = useState<() => void>();
 

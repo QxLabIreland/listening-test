@@ -4,7 +4,7 @@ import {SurveyControlModel} from "./models/SurveyControlModel";
 import {BasicTaskItemModel, BasicTaskModel} from "./models/BasicTaskModel";
 
 /** Audio setting playback setting validation */
-function validatePlayedOnceError(example: AudioExampleModel): string {
+export function validatePlayedOnceError(example: AudioExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
   if (!example.playedOnce) return 'Please fully listen to these clips'
   return null;
