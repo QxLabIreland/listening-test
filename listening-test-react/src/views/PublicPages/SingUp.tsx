@@ -53,22 +53,25 @@ export default function SignUp() {
       <TextField className={classes.textField} error={!!formik.errors.password} fullWidth
                  helperText={formik.errors.password} label="Password" name="password" autoComplete="new-password"
                  onChange={formik.handleChange} type="password" variant="outlined"/>
+      {/*Terms of services*/}
       <div className={classes.policy}>
         <Checkbox checked={formik.values.policy} className={classes.policyCheckbox}
                   color="primary" name="policy" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/terms-of-services" variant="h6" type="button">
+          <Link color="primary" component={RouterLink} to="/terms-of-services" variant="h6" type="button" target="_blank">
             Terms and Conditions
           </Link>
         </Typography>
       </div>
+      {!!formik.errors.policy && <FormHelperText error>{formik.errors.policy}</FormHelperText>}
+      {/*Data processing agreement*/}
       <div className={classes.policy} style={{margin: 0}}>
         <Checkbox checked={formik.values.policy} className={classes.policyCheckbox} color="primary" name="policy"
                   onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/data-processing-agreement" variant="h6" type="button">
+          <Link color="primary" component={RouterLink} to="/data-processing-agreement" variant="h6" type="button" target="_blank">
             Data Processing Agreement
           </Link>
         </Typography>
