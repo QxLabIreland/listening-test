@@ -14,6 +14,12 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";
+import {makeStyles, Theme} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) => ({
+  optionsQuestion: {marginBottom: theme.spacing(2)},
+  options: {marginBottom: theme.spacing(2)}
+}));
 
 export const LinkedTextRender = function ({content}: {content: string}) {
   // const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
@@ -51,12 +57,13 @@ export const SurveyControlRender = observer(function ({control}: { control: Surv
 
 const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
+  const classes = useStyles();
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend"><LinkedTextRender content={control.question}/></FormLabel>
+    <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options && control.options.map(o =>
-        <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
+        <FormControlLabel key={o} className={classes.options} value={o} control={<Radio/>} label={o}/>
       )}
     </RadioGroup>
   </FormControl>
@@ -64,6 +71,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
+  const classes = useStyles();
   // Make sure it is compatible with old version of commas value
   let values: string[];
   try {
@@ -82,10 +90,10 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   }
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend"><LinkedTextRender content={control.question}/></FormLabel>
+    <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
     <FormGroup>
       {control.options && control.options.map(o =>
-        <FormControlLabel key={o} label={o} control={
+        <FormControlLabel key={o} className={classes.options} label={o} control={
           <Checkbox name={o} onChange={handleCheckbox} checked={values.includes(o)}/>
         }/>
       )}

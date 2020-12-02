@@ -67,7 +67,11 @@ const TitleInput = observer(function ({item}: { item: BasicTaskItemModel }) {
 });
 
 // Buttons group for common operations
-const HeaderIconButtons = observer(function ({onDelete, item, onCopy}: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
+const HeaderIconButtons = observer(function ({
+                                               onDelete,
+                                               item,
+                                               onCopy
+                                             }: { item: BasicTaskItemModel, onDelete: () => void, onCopy: (_: BasicTaskItemModel) => void }) {
   const classes = useStyles();
   return <>
     <Tooltip title={`${item.collapsed ? 'Expand' : 'Collapse'} Question`}>
@@ -123,8 +127,8 @@ const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemMod
   const {item} = props;
   const classes = sectionUseStyles();
   // Create items to use for multi selection
-  const items: {title: string, id: string}[] = [];
-  (function() {
+  const items: { title: string, id: string }[] = [];
+  (function () {
     const fullItems = useContext(DetailTaskModel).items;
     for (let i = fullItems.findIndex(value => value === item) + 1; i < fullItems.length; i++) {
       if (fullItems[i].type !== TestItemType.sectionHeader)
@@ -141,7 +145,8 @@ const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemMod
     item.sectionSettings.randomQuestions = checked;
 
   const handleSelectedFixChange = (event: React.ChangeEvent<{ value: unknown }>) =>
-    item.sectionSettings.fixedItems = event.target.value as string[];
+    // This will clean fixedItems by filtering out those not in items
+    item.sectionSettings.fixedItems = (event.target.value as string[]).filter(id => items.findIndex(item => item.id === id) > -1);
 
   return <div>
     <Typography variant="h4" className={classes.header}>
@@ -155,20 +160,22 @@ const SectionHeaderSettings = observer(function (props: { item: BasicTaskItemMod
     <Collapse in={!item.collapsed} timeout="auto" unmountOnExit>
       <FormGroup>
         <FormControlLabel
-          control={<Checkbox checked={item.sectionSettings?.randomQuestions ?? false} onChange={handleRandomizationChange}/>}
+          control={<Checkbox checked={item.sectionSettings?.randomQuestions ?? false}
+                             onChange={handleRandomizationChange}/>}
           label="Randomize question for this section"
         />
       </FormGroup>
       <FormControl className={classes.selection} disabled={!item.sectionSettings?.randomQuestions}>
         <InputLabel id="demo-mutiple-checkbox-label">Select your fixed items</InputLabel>
         <Select labelId="demo-mutiple-checkbox-label" id="demo-mutiple-checkbox" multiple className={classes.selection}
-          value={item.sectionSettings?.fixedItems ?? []}
-          onChange={handleSelectedFixChange}
-          input={<Input/>} MenuProps={{getContentAnchorEl: () => null}}
-          renderValue={selected => (selected as string[]).map(id => items.find(value1 => value1.id === id).title).join(', ')}
+                value={item.sectionSettings?.fixedItems ?? [{id: '0', title: 'No items'}]}
+                onChange={handleSelectedFixChange}
+                input={<Input/>} MenuProps={{getContentAnchorEl: () => null}}
+                renderValue={selected => (selected as string[]).map(id => items.find(value1 => value1.id === id)?.title).join(', ')}
         >
           {items.map((value) => (
-            <MenuItem key={value.id} value={value.id}>
+            // Disable when id is '0' and show no items tip.
+            <MenuItem key={value.id} value={value.id} disabled={value.id === '0'}>
               <Checkbox checked={item.sectionSettings?.fixedItems?.indexOf(value.id) > -1}/>
               <ListItemText primary={value.title}/>
             </MenuItem>
