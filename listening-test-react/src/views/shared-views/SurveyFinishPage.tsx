@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   paragraphCenter: {marginBottom: theme.spacing(4), textAlign: 'center'},
   paragraph: {marginBottom: theme.spacing(4)},
   actions: {textAlign: 'center', marginTop: theme.spacing(4)},
+  signupPrompt: {marginTop: theme.spacing(16), marginBottom: theme.spacing(4)}
 }))
 
 export default function SurveyFinishPage() {
@@ -44,7 +45,7 @@ export default function SurveyFinishPage() {
           Your responses are anonymous but if you do wish delete your responses at a later time, please save and visit
           this link: <Link href={deletionLink} target="_blank">{deletionLink}</Link>
         </Typography>
-        <Typography variant="body1" className={classes.paragraphCenter}>
+        <Typography variant="body1" className={classes.signupPrompt}>
           If you would like to create and share your own tests.
         </Typography>
         <Button variant="contained" color="primary" component={RouterLink} to="/sign-up" target="_blank">Go sign up!</Button>
