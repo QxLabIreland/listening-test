@@ -1,4 +1,5 @@
 from handlers.auth.find_password import FindPasswordHandler
+from handlers.auth.sign_up_whitelist import SingUpWhitelistHandler
 from handlers.auth.users import UsersHandler
 from handlers.dashboard.dashboard import DashboardHandler
 from handlers.dashboard.message_handler import MessageHandler
@@ -41,6 +42,7 @@ path = [
     ("/api/dashboard", DashboardHandler),
     ("/api/users", UsersHandler),
     ("/api/messages", MessageHandler),
+    ("/api/whitelist", SingUpWhitelistHandler),
 
     # Listening tests and Survey
     ("/api/ab-test", AbTestHandler),

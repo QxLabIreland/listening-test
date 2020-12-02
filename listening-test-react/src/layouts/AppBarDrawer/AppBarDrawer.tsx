@@ -11,11 +11,10 @@ import DashboardPage from "../../views/DashboardPage";
 import SettingsPage from "../../views/SettingsPage";
 import {ListItemNavLink} from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
-import Axios from "axios";
 import TestListPage from "../../views/shared-views/TestListPage";
 import TestTabPage from "../../views/shared-views/TestTabPage";
 import ManageUsers from "../../views/ManageUsers";
-import AuthRoute from "../components/AuthRoute";
+import AuthRoute, {useUserAuthResult} from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
 import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
@@ -33,9 +32,9 @@ export function AppBarDrawer(props: any) {
   const {window} = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const videoPermission = useUserAuthResult('Video');
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-  const handleSignOut = () => Axios.delete('/api/login').then();
   const DrawerList = () => <List>
     <ListItemNavLink to={`${path}/dashboard`} icon='dashboard'>DASHBOARD</ListItemNavLink>
     <ListItemNavLink to={`${path}/storage`} icon='storage' permission="Storage">Storage Status</ListItemNavLink>
@@ -53,15 +52,13 @@ export function AppBarDrawer(props: any) {
     <ListItemNavLink to={`${path}/image-labeling`} icon='image_search'>Image Labelling</ListItemNavLink>
     <ListItemNavLink to={`${path}/image-ab`} icon='brightness_6'>Image AB</ListItemNavLink>
     {/*<ListItemNavLink to={`${path}/image-acr`} icon='wallpaper'>Image ACR</ListItemNavLink>*/}
-    <Divider/>
-    <ListSubheader>Video Tasks</ListSubheader>
-    <ListItemNavLink to={`${path}/video-labeling`} icon='movie'>Video Labelling</ListItemNavLink>
-    <ListItemNavLink to={`${path}/video-ab`} icon='video_library'>Video AB</ListItemNavLink>
+    {videoPermission && <>
+      <Divider/>
+      <ListSubheader>Video Tasks</ListSubheader>
+      <ListItemNavLink to={`${path}/video-labeling`} icon='movie'>Video Labelling</ListItemNavLink>
+      <ListItemNavLink to={`${path}/video-ab`} icon='video_library'>Video AB</ListItemNavLink>
+    </>}
     {/*<ListItemNavLink to={`${path}/video-acr`} icon='ondemand_video'>Video ACR</ListItemNavLink>*/}
-    <Divider/>
-    <ListSubheader>Others</ListSubheader>
-    <ListItemNavLink to={`${path}/settings`} icon='settings'>Settings</ListItemNavLink>
-    <ListItemNavLink to="/sign-in" icon='exit_to_app' onClick={handleSignOut}>Sign out</ListItemNavLink>
   </List>
 
   const container = window !== undefined ? () => window().document.body : undefined;
