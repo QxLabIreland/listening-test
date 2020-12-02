@@ -1,6 +1,7 @@
 from handlers.test_and_survey.audio_acr_test import AcrTestHandler, AcrSurveyHandler
 
 
+# TODO there is no permission verification for video part
 class VideoAbHandler(AcrTestHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user()

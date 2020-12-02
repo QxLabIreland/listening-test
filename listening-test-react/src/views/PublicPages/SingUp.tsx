@@ -25,7 +25,7 @@ export default function SignUp() {
         openSnackbar('The confirmation link has been sent. If you didn\'t receive anything please check your spam inbox', undefined, 'info');
         // Get state where user has been blocked by authentication
         history.push('/sign-in', {email: values.email});
-      }, (reason) => openDialog(reason.response.data)),
+      }, (reason) => openDialog(reason.response.data, 'Sign up failed')),
     validate: pipeValidator({
       name: [required(), maxLength(128)],
       email: [email(), required()],

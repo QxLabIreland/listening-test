@@ -4,11 +4,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import React, {PropsWithChildren, useState} from "react";
-import {Badge, Container} from "@material-ui/core";
+import {Container} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AppBarTitle} from "../../shared/ReactContexts";
 import {NotificationDrawer} from "./NotificationDrawer";
+import {AccountDropMenu} from "./AccountDropMenu";
 
 export const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -59,6 +60,7 @@ export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerTogg
             {fixedTitle ? 'Go Listen Dashboard' : title}
           </Typography>
           <div className={classes.grow}/>
+          <AccountDropMenu/>
           <NotificationDrawer/>
         </Toolbar>
       </AppBar>

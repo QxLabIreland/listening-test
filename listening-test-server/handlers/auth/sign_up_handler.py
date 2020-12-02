@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from handlers.auth.sign_up_whitelist import SignUpWhitelistTool
 from handlers.base import BaseHandler
 
 from tools.email_tool import send_confirmation_email
@@ -12,6 +13,9 @@ class SignUpHandler(BaseHandler):
         user = self.db['users'].find_one({'email': body["email"]})
         if user:
             self.set_error(403, 'This email has been used.')
+        # Check if email is in whitelist
+        elif not SignUpWhitelistTool(self.db).validate(body["email"]):
+            self.set_error(401, 'Your email address is not on whitelist, please contact the email on sign up page')
         else:
             del body['policy']
             # # To disable email confirmation, uncomment this line and comment email sending code
