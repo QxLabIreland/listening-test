@@ -18,7 +18,6 @@ import {makeStyles, Theme} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) => ({
   optionsQuestion: {marginBottom: theme.spacing(2)},
-  options: {marginBottom: theme.spacing(2)}
 }));
 
 export const LinkedTextRender = function ({content}: {content: string}) {
@@ -62,8 +61,8 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
-      {control.options && control.options.map(o =>
-        <FormControlLabel key={o} className={classes.options} value={o} control={<Radio/>} label={o}/>
+      {control.options?.map(o =>
+        <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
       )}
     </RadioGroup>
   </FormControl>
@@ -92,8 +91,8 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   return <FormControl variant="filled" fullWidth required={control.required}>
     <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
     <FormGroup>
-      {control.options && control.options.map(o =>
-        <FormControlLabel key={o} className={classes.options} label={o} control={
+      {control.options?.map(o =>
+        <FormControlLabel key={o} label={o} control={
           <Checkbox name={o} onChange={handleCheckbox} checked={values.includes(o)}/>
         }/>
       )}

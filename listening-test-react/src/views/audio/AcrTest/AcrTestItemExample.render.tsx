@@ -8,18 +8,20 @@ import {AudioLoading, useAllAudioRefsReady} from "../../../shared/web-audio/Audi
 import {useRandomization} from "../../../shared/RandomizationTools";
 import {ratingAreaStyle, useMatStyles} from "../../SharedStyles";
 import {AudioSectionLoopingController} from "../../../shared/web-audio/AudioSectionLoopingController";
-import {Box, Slider} from "@material-ui/core";
+import {Box, Collapse, Slider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {GlobalDialog} from "../../../shared/ReactContexts";
 import {validatePlayedOnceError} from "../../../shared/ErrorValidators";
 
-export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean, previewMode?:boolean }) {
+export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean, previewMode?: boolean }) {
   const {example, active, previewMode} = props;
   const classes = useMatStyles();
   // Randomize first to make sure random audio match the dom tree
   const [randomAudios, randomPattern] = useRandomization(example.medias, active && example.settings?.randomMedia, example.settings?.fixLastInternalQuestion);
   // This is a custom hook that expose some functions for AudioButton and Controller
-  const {refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded, resetCurrentTime} = useAudioPlayer(randomAudios, example.mediaRef, example);
+  const {
+    refs, sampleRef, currentTime, handleTimeUpdate, handlePlay, handlePause, handleEnded, resetCurrentTime
+  } = useAudioPlayer(randomAudios, example.mediaRef, example);
   const allRefs = example.mediaRef ? [...refs, sampleRef] : refs;
   const loading = useAllAudioRefsReady(allRefs);
   // An event for setting Time update method
@@ -57,36 +59,43 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
   return <>
     <AudioLoading showing={loading}/>
     <Grid container spacing={2} style={{display: loading ? 'none' : 'flex'}}>
-      {example.fields?.length === randomPattern.length && randomPattern?.map((ri, i) =>
-        <Grid item xs={12} key={i} hidden={currentIndex !== i}>
-          <SurveyControlRender control={example.fields[ri]}/>
+      {example.fields?.length === randomPattern.length ? randomPattern.map(
+        // Use collapse as transition to give subjects an illusion
+        (ri, i) => <Grid item key={i} xs={12} hidden={currentIndex !== i}>
+          <Collapse in={currentIndex === i} timeout={{enter: 250, exit: 0}}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <SurveyControlRender control={example.fields[ri]}/>
+              </Grid>
+              <Grid item>
+                <AcrRatingBar audio={randomAudios[i]}/>
+                <AudioButton ref={refs[i]} audio={randomAudios[i]} onPlay={handlePlay} onPause={handlePause}
+                             onEnded={i === 0 ? handleEnded : undefined}
+                             onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}/>
+              </Grid>
+              {/*Reference*/}
+              {example.mediaRef && <Grid item style={ratingAreaStyle}>
+                <AudioButton ref={sampleRef} audio={example.mediaRef} onPlay={handlePlay}
+                             onPause={handlePause}>Ref</AudioButton>
+              </Grid>}
+              {/*Audio tracking bar*/}
+              <Grid item xs={12}>
+                <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}
+                                 disabled={example.settings?.disablePlayerSlider}/>
+                {example.settings?.sectionLooping &&
+                <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs}
+                                               currentTime={currentTime}/>}
+              </Grid>
+            </Grid>
+          </Collapse>
         </Grid>
-      )}
+      ) : <Grid item xs={12}><Typography color="secondary">
+        Task configuration has an error. If you are creator please delete this question and create a new one.
+        This text only appears when the test is out of date.
+      </Typography></Grid>}
 
-      {randomAudios?.map((v, i) => <Grid item key={i} style={{
-        ...ratingAreaStyle, display: currentIndex === i ? 'flex' : 'none'
-      }}>
-        <AcrRatingBar audio={v}/>
-        <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
-                     onEnded={i === 0 ? handleEnded : undefined}
-                     onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}/>
-      </Grid>)}
-
-      {/*Reference*/}
-      {example.mediaRef && <Grid item style={ratingAreaStyle}>
-        <AudioButton ref={sampleRef} audio={example.mediaRef} onPlay={handlePlay}
-                     onPause={handlePause}>Ref</AudioButton>
-      </Grid>}
-      {/*Audio tracking bar*/}
-      <Grid item xs={12}>
-        <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}
-                         disabled={example.settings?.disablePlayerSlider}/>
-        {example.settings?.sectionLooping &&
-        <AudioSectionLoopingController setTimeUpdate={f => setOnTimeUpdate(f)} refs={allRefs}
-                                       currentTime={currentTime}/>}
-      </Grid>
       {example.blockNext && <Grid item xs={12} className={classes.flexEnd}>
-        <Button color="primary" onClick={handleClickNext}>Next</Button>
+        <Button color="primary" onClick={handleClickNext} disabled={example.fields?.length !== randomPattern.length}>Next</Button>
       </Grid>}
     </Grid>
   </>
