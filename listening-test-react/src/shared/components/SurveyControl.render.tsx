@@ -6,11 +6,10 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  FormLabel, Link,
+  FormLabel,
   Radio,
   RadioGroup,
-  TextField,
-  Typography
+  TextField
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";
@@ -20,22 +19,6 @@ import ReactMarkdown from 'react-markdown';
 const useStyles = makeStyles((theme: Theme) => ({
   optionsQuestion: {marginBottom: theme.spacing(2)},
 }));
-
-export const LinkedTextRender = function ({content}: {content: string}) {
-  // const linkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
-  // https://google.com/ dfwr dafgqgf daf
-  const linkRegex = /https?:\/\/(?:[^ ]+)/g;
-  // Get all links in the description
-  const links: RegExpExecArray[] = []
-  let array1;
-  while ((array1 = linkRegex.exec(content)) !== null) links.push(array1);
-  // Get text except links
-  const nonLinkTexts = content.split(linkRegex);
-  // Build final style
-  return <>{nonLinkTexts.map((value, index) => <React.Fragment key={index}>
-    {value}{index < links.length && <Link href={links[index][0]} target="_blank">{links[index][0]}</Link>}
-  </React.Fragment>)}</>;
-}
 
 export const SurveyControlRender = observer(function ({control}: { control: SurveyControlModel }) {
   if (!control || control.disabled) return null;
@@ -49,7 +32,7 @@ export const SurveyControlRender = observer(function ({control}: { control: Surv
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
     case SurveyControlType.description:
-      return <Typography><LinkedTextRender content={control.question}/></Typography>
+      return <ReactMarkdown>{control.question}</ReactMarkdown>
     default:
       return null;
   }
@@ -59,13 +42,14 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
   const classes = useStyles();
 
-  return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend" className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
+  return <FormControl variant="filled" fullWidth>
+    <FormLabel className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options?.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
       )}
     </RadioGroup>
+    {control.required && <FormHelperText>This question is required</FormHelperText>}
   </FormControl>
 })
 
@@ -89,8 +73,8 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
     control.value = JSON.stringify(values);
   }
 
-  return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend" className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
+  return <FormControl variant="filled" fullWidth>
+    <FormLabel className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
     <FormGroup>
       {control.options?.map(o =>
         <FormControlLabel key={o} label={o} control={
@@ -98,7 +82,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
         }/>
       )}
     </FormGroup>
-    <FormHelperText/>
+    {control.required && <FormHelperText>This question is required *</FormHelperText>}
   </FormControl>
 })
 

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, Link, Typography} from "@material-ui/core";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import Axios from "axios";
 import {CurrentUser} from "../shared/ReactContexts";
@@ -27,8 +27,12 @@ export default function DashboardPage() {
       <Card>
         <CardHeader title="Welcome back"/>
         <CardContent>
-          <Typography>
+          {/*<Typography>
             Welcome to Go Listen! This page is under construction but you can choose an option from the side menu to create a test
+          </Typography>*/}
+          <Typography>
+            The markdown syntax (Rich Text) has been added into our website. Now you can use rich text for description, radio buttons or checkbox questions.
+            Please check here for <Link href="https://remarkjs.github.io/react-markdown/">How to use Markdown</Link>
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>
