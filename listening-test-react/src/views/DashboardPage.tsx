@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const handleResend = () => Axios.put('/api/dashboard').then(() => setSent(true));
 
   return <Grid container spacing={3}>
-    <Grid item xs>
+    <Grid item xs={12}>
       <Card>
         <CardHeader title="Welcome back"/>
         <CardContent>
@@ -31,8 +31,10 @@ export default function DashboardPage() {
             Welcome to Go Listen! This page is under construction but you can choose an option from the side menu to create a test
           </Typography>*/}
           <Typography>
-            The markdown syntax (Rich Text) has been added into our website. Now you can use rich text for description, radio buttons or checkbox questions.
-            Please check here for <Link href="https://remarkjs.github.io/react-markdown/">How to use Markdown</Link>
+            The markdown syntax (Rich Text) has been added into our website. Now you can use rich text for description,
+            radio buttons or checkbox questions. You can also add image by providing img url.
+            <br/> For example: ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png).
+            <br/> Please check here for <Link href="https://remarkjs.github.io/react-markdown/">How to use Markdown</Link>
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>

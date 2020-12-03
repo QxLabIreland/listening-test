@@ -5,20 +5,15 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
-  FormLabel,
   Radio,
   RadioGroup,
-  TextField
+  TextField,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import {observer} from "mobx-react";
-import {makeStyles, Theme} from "@material-ui/core/styles";
 import ReactMarkdown from 'react-markdown';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  optionsQuestion: {marginBottom: theme.spacing(2)},
-}));
 
 export const SurveyControlRender = observer(function ({control}: { control: SurveyControlModel }) {
   if (!control || control.disabled) return null;
@@ -40,22 +35,20 @@ export const SurveyControlRender = observer(function ({control}: { control: Surv
 
 const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
-  const classes = useStyles();
 
   return <FormControl variant="filled" fullWidth>
-    <FormLabel className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
+    <ReactMarkdown>{control.question}</ReactMarkdown>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options?.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
       )}
     </RadioGroup>
-    {control.required && <FormHelperText>This question is required</FormHelperText>}
+    {control.required && <Typography variant="caption" color="textSecondary">This question is required *</Typography>}
   </FormControl>
 })
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
-  const classes = useStyles();
   // Make sure it is compatible with old version of commas value
   let values: string[];
   try {
@@ -74,7 +67,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   }
 
   return <FormControl variant="filled" fullWidth>
-    <FormLabel className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
+    <ReactMarkdown>{control.question}</ReactMarkdown>
     <FormGroup>
       {control.options?.map(o =>
         <FormControlLabel key={o} label={o} control={
@@ -82,7 +75,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
         }/>
       )}
     </FormGroup>
-    {control.required && <FormHelperText>This question is required *</FormHelperText>}
+    {control.required && <Typography variant="caption" color="textSecondary">This question is required *</Typography>}
   </FormControl>
 })
 
