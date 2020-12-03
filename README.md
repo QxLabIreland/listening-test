@@ -1,6 +1,7 @@
 # Listening test platform
 
 An open source platform for browser based speech and audio subjective quality tests. Version: `0.1.0`
+This repo gives you a fully functional end-to-end listening test platform which allows a user to create and share MUSHRA, ACR and A/B tests within minutes. Collected data can then be downloaded in CSV or JSON format. 
 
 ## Run with docker and docker compose or with aws
 
