@@ -1,16 +1,5 @@
 import React, {useState} from "react";
-import {
-  Box,
-  createStyles,
-  FormControl,
-  Grid,
-  MenuItem,
-  Select,
-  TextField,
-  Theme,
-  Tooltip,
-  Typography
-} from "@material-ui/core";
+import {Box, createStyles, FormControl, Grid, MenuItem, Select, TextField, Theme, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import {GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControlModel";
@@ -28,31 +17,39 @@ export const SurveyControl = observer(function (props: {
   const {control, gotoQuestionItems, disableGoto} = props;
   const {label = control.type === SurveyControlType.description ? 'Your description' : 'Your question'} = props;
 
-  // Render second field for the control
-  const switchControlType = () => {
-    switch (control.type) {
-      case SurveyControlType.text:
-        return <TextField fullWidth variant="outlined" label={control.question} required={control.required}
-                          value="Subject will answer the question here..." disabled/>
-      case SurveyControlType.radio:
-      case SurveyControlType.checkbox:
-        return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
-      case SurveyControlType.description:
-        return <ReactMarkdown>{control.question}</ReactMarkdown>
-      default:
-        return null;
-    }
-  }
-
-  return <>
+  const descriptionComponent = <>
     {/*Question input*/}
     <Box mb={2} style={{display: 'flex', justifyContent: 'space-between'}}>
-      <TextField fullWidth variant="filled" style={{flexGrow: 1}} label={label} value={control.question}
+      <TextField fullWidth variant="filled" style={{flexGrow: 1}} multiline label={label} value={control.question}
                  onChange={e => control.question = e.target.value}
                  onFocus={event => event.target.select()}/>
     </Box>
-    {switchControlType()}
-  </>
+    <ReactMarkdown>{control.question}</ReactMarkdown>
+  </>;
+
+  switch (control.type) {
+    case SurveyControlType.text:
+      return <>
+        {/*Question input*/}
+        <Box mb={2} style={{display: 'flex', justifyContent: 'space-between'}}>
+          <TextField fullWidth variant="filled" style={{flexGrow: 1}} label={label} value={control.question}
+                     onChange={e => control.question = e.target.value}
+                     onFocus={event => event.target.select()}/>
+        </Box>
+        <TextField fullWidth variant="outlined" label={control.question} required={control.required}
+                   value="Subject will answer the question here..." disabled/>
+      </>;
+    case SurveyControlType.radio:
+    case SurveyControlType.checkbox:
+      return <>
+        {descriptionComponent}
+        <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
+      </>;
+    case SurveyControlType.description:
+      return descriptionComponent;
+    default:
+      return null;
+  }
 });
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -73,6 +70,7 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
     // Null checking for mapping
     if (control.gotoQuestionMapping) delete control.gotoQuestionMapping[index];
   }
+
   const handleAdd = (event: any) => {
     setAutoFocus(true);
     event.preventDefault();
@@ -115,7 +113,8 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
         </Grid>
         {/*Goto question selection*/}
         {(control.type === SurveyControlType.radio && gotoQuestionItems) && <Grid item>
-          <Tooltip title={disableGoto ? 'You must enable "Show each question individually" in Global settings. Click to open the settings to check the option' : ''}>
+          <Tooltip
+            title={disableGoto ? 'You must enable "Show each question individually" in Global settings. Click to open the settings to check the option' : ''}>
             <FormControl className={classes.selectWidth}>
               <Select inputProps={{name: 'goto'}} displayEmpty disabled={disableGoto} onClick={openGlobalSetting}
                       onChange={event => handleGotoQuestionChange(event, i)}
