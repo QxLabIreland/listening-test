@@ -15,7 +15,9 @@ class SignUpHandler(BaseHandler):
             self.set_error(403, 'This email has been used.')
         # Check if email is in whitelist
         elif not SignUpWhitelistTool(self.db).validate(body["email"]):
-            self.set_error(401, 'Your email address is not on whitelist, please contact the email on sign up page')
+            self.set_error(401, 'Your organisation needs to be set up on our system before you can create an account. '
+                                'Please email dan.barry@ucd.ie with a brief outline of your project or organisation in '
+                                'order to request an account.')
         else:
             del body['policy']
             # # To disable email confirmation, uncomment this line and comment email sending code

@@ -26,7 +26,8 @@
     "react-scripts": "^3.4.3",
     "ts-md5": "^1.2.7",
     "typescript": "^3.9.5",
-    "uuidv4": "^6.1.1"
+    "uuidv4": "^6.1.1",
+    "react-markdown": "^5.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

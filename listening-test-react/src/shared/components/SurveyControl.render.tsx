@@ -15,6 +15,7 @@ import {
 import React from "react";
 import {observer} from "mobx-react";
 import {makeStyles, Theme} from "@material-ui/core/styles";
+import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles((theme: Theme) => ({
   optionsQuestion: {marginBottom: theme.spacing(2)},
@@ -59,7 +60,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const classes = useStyles();
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
+    <FormLabel component="legend" className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options?.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
@@ -89,7 +90,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   }
 
   return <FormControl variant="filled" fullWidth required={control.required}>
-    <FormLabel component="legend" className={classes.optionsQuestion}><LinkedTextRender content={control.question}/></FormLabel>
+    <FormLabel component="legend" className={classes.optionsQuestion}><ReactMarkdown>{control.question}</ReactMarkdown></FormLabel>
     <FormGroup>
       {control.options?.map(o =>
         <FormControlLabel key={o} label={o} control={
