@@ -1,4 +1,5 @@
 import React from "react";
+import {Divider, List, ListItem, ListItemText} from "@material-ui/core";
 
 export function CookiesPolicy() {
 
@@ -25,8 +26,8 @@ export function CookiesPolicy() {
       </ul>
       <p><strong>Types of Cookies We Use</strong></p>
       <ul>
-        <li><span><strong>Strictly Necessary Cookies</strong></span><span><br/></span><span>These cookies are essential for enabling user movement around the Go Listen website and providing access to features and systems we offer. They also secure areas of the Go Listen website.&nbsp; This category of cookies cannot be disabled as they are essential to the functioning of the system.&nbsp; Essential cookies do not require seeking user consent/permission.</span>
-        </li>
+        <li><span><strong>Strictly Necessary Cookies</strong></span><span><br/></span><span>These cookies are essential for enabling user movement around the Go Listen website and providing access to features and systems we offer. They also secure areas of the Go Listen website.&nbsp; This category of cookies cannot be disabled as they are essential to the functioning of the system.&nbsp; Essential cookies do not require seeking user consent/permission.</span></li>
+{/*
         <li><span><strong>Performance Cookies</strong></span><span><br/></span><span>We use cookies for analytics to collect information about how visitors use our website. These cookies give us insight into how our website is being used and will involve international data transfers outside the EEA.</span>
         </li>
         <li><span><strong>Functional Cookies</strong></span><span><br/></span><span>Functional cookies allow the website to remember choices and customisation you made. For instance, these cookies can be used to remember changes you have made to text size, fonts and other parts of web pages that you can customise. They may also be used to provide features you have selected like watching a video or commenting on a blog.&nbsp;</span>
@@ -36,7 +37,21 @@ export function CookiesPolicy() {
           <span><em>Social Plug-In Cookies:</em></span><span> When you interact with social media content, you trigger the placement of relevant cookies from these platforms. These cookies are set by third parties, including Facebook and Twitter, and allow you to share what you’ve been doing on our websites on social media. Such cookies will trigger international data transfers of your data outside the EEA.</span>
         </li>
         <li><span><strong>Unclassified Cookies</strong></span></li>
+*/}
       </ul>
     </main>
+    <h1>Cookie list</h1>
+    <p><strong>Strictly Necessary Cookies</strong></p>
+    <List>
+      <Divider/>
+      <ListItem alignItems="flex-start">
+        <ListItemText primary="_user" secondary="This is the identification if you logged in. Expire in 30 days"/>
+      </ListItem>
+      <Divider/>
+      <ListItem alignItems="flex-start">
+        <ListItemText primary="_xsrf" secondary="Cross-site request forgery cookie, you need it to access our website. Expire when a session ends"/>
+      </ListItem>
+      <Divider/>
+    </List>
   </div>
 }

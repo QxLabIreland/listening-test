@@ -17,7 +17,7 @@ import {GotoQuestionItemModel, SurveyControlModel} from "../models/SurveyControl
 import {SurveyControlType} from "../models/EnumsAndTypes";
 import {observer} from "mobx-react";
 import {makeStyles} from "@material-ui/core/styles";
-import {LinkedTextRender} from "./SurveyControl.render";
+import ReactMarkdown from "react-markdown";
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
@@ -38,7 +38,7 @@ export const SurveyControl = observer(function (props: {
       case SurveyControlType.checkbox:
         return <SurveyOptions control={control} gotoQuestionItems={gotoQuestionItems} disableGoto={disableGoto}/>
       case SurveyControlType.description:
-        return <Typography><LinkedTextRender content={control.question}/></Typography>
+        return <ReactMarkdown>{control.question}</ReactMarkdown>
       default:
         return null;
     }

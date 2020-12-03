@@ -1,13 +1,26 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import Axios from "axios";
 import {CurrentUser} from "../shared/ReactContexts";
+import {useUserAuthResult} from "../layouts/components/AuthRoute";
+
+interface StatisticModel {
+  userNumber: number;
+  responsesNumber: number;
+  testsNumber: number
+}
 
 export default function DashboardPage() {
   const [sent, setSent] = useState(false);
-  const handleResend = () => Axios.put('/api/dashboard').then(() => setSent(true));
   const {currentUser} = useContext(CurrentUser);
+  const [statistic, setStatistics] = useState<StatisticModel>();
+  useEffect(() => {
+    Axios.get<StatisticModel>('/api/dashboard').then(res => setStatistics(res.data));
+  }, []);
+  const userPermission = useUserAuthResult('User');
+
+  const handleResend = () => Axios.put('/api/dashboard').then(() => setSent(true));
 
   return <Grid container spacing={3}>
     <Grid item xs>
@@ -23,6 +36,16 @@ export default function DashboardPage() {
         </CardActions>
       </Card>
     </Grid>
+    {statistic && userPermission && <Grid item xs>
+      <Card>
+        <CardHeader title="Golisten statistics"/>
+        <CardContent>
+          <Typography>Total registered test creators: {statistic.userNumber}</Typography>
+          <Typography>Total number of subject responses: {statistic.responsesNumber}</Typography>
+          <Typography>Total number of Tests: {statistic.testsNumber}</Typography>
+        </CardContent>
+      </Card>
+    </Grid>}
     {!currentUser?.activated && <Grid item xs={12}>
       <Alert severity='info'
              action={<Button onClick={handleResend} disabled={sent}>{sent ? 'Sent' : 'Resend'}</Button>}>
