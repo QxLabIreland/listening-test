@@ -122,7 +122,7 @@ function ManagePermissionDialog({user}: { user: UserModel }) {
         {/*<TextField variant="standard" label="Storage space allowed"/>*/}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" autoFocus>Ok</Button>
+        <Button onClick={handleClose} autoFocus>Ok</Button>
       </DialogActions>
     </Dialog>
   </>);
@@ -152,7 +152,7 @@ function ManageWhitelist() {
 
   return (<>
     <Button color="primary" variant="contained" onClick={handleClickOpen}>Sign Up Whitelist</Button>
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth aria-labelledby="whitelist-dialog-title"
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth aria-labelledby="whitelist-dialog-title"
             aria-describedby="whitelist-dialog-description">
       <DialogTitle id="whitelist-dialog-title">Mange Sign Up Whitelist</DialogTitle>
       <DialogContent>
@@ -187,8 +187,9 @@ function ManageWhitelist() {
               </Tooltip>
             </Grid>
             <Grid item xs={12}>
-              <List dense={true}>
+              <List dense>
                 {getFilterData()?.map(value => <ListItem><ListItemText primary={value}/></ListItem>)}
+                {textValue && <ListItem><ListItemText secondary="(empty text box to see full list)"/></ListItem>}
               </List>
             </Grid>
           </Grid>
