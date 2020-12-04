@@ -34,7 +34,7 @@ export default function DashboardPage() {
             The markdown syntax (Rich Text) has been added into our website. Now you can use rich text for description,
             radio buttons or checkbox questions. You can also add image by providing img url.
             <br/> For example: ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png).
-            <br/> Please check here for <Link href="https://remarkjs.github.io/react-markdown/">How to use Markdown</Link>
+            <br/> Please check here for <Link href="https://commonmark.org/help/">How to use Markdown</Link>
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'flex-end'}}>
