@@ -124,7 +124,7 @@ const DetailViewActions = observer(function (props: {testModel: BasicTaskModel, 
     <Grid item><TestSettingsDialog settings={testModel.settings}
                                    onConfirm={settings => testModel.settings = settings}/></Grid>
     <Grid item>
-      <Tooltip title="Preview task">
+      <Tooltip title="Preview Test">
         <ResponsePreviewDialog testUrl={testUrl} taskModel={testModel}/>
       </Tooltip>
     </Grid>
