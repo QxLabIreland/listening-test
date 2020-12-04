@@ -14,7 +14,7 @@ export const ImageLabelingButtonGroup = observer(function (props: { onAdd: (_: I
   const classes = useMatStyles();
 
   const handleAddExample = () => onAdd({
-    id: uuid(), type: TestItemType.example, title: 'Image Labeling (click to edit)', example: {
+    id: uuid(), type: TestItemType.example, title: 'Title (click to edit)', example: {
       fields: [{
         type: SurveyControlType.description,
         question: 'Please write down what you see on the picture.',
