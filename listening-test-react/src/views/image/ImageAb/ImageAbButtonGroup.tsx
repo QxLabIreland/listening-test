@@ -16,7 +16,7 @@ export const ImageAbButtonGroup = observer(function (props: { onAdd: (type: Imag
   const handleAddExample = () => onAdd({
     id: uuid(),
     type: TestItemType.example,
-    title: 'Image Ab Example (click to edit)',
+    title: 'Title (click to edit)',
     example: {
       fields: [{
         type: SurveyControlType.radio,
