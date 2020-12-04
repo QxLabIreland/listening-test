@@ -14,7 +14,7 @@ export const VideoLabelingButtonGroup = observer(function (props: { onAdd: (_: I
   const classes = useMatStyles();
 
   const handleAddExample = () => onAdd({
-    id: uuid(), type: TestItemType.example, title: 'Video Labeling (click to edit)', example: {
+    id: uuid(), type: TestItemType.example, title: 'Title (click to edit)', example: {
       fields: [{
         type: SurveyControlType.description,
         question: 'Please describe these video.',
