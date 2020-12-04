@@ -77,7 +77,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
     else Axios.get('/api/response-count', {params: {testId: id, testType: testUrl}}).then(res => {
       // After checking with server, if there are responses, it will create a new test.
       if (res.data > 0) openDialog(
-        'This test already has some responses, save will create a new test. You can delete old one if you like.',
+        'This test has already accepted some responses. Tap Save to create a new duplicate of this test. You can delete old one if you require.',
         'Reminder', null, () => requestServer(true));
       else requestServer(false);
     });
