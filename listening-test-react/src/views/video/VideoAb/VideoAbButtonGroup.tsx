@@ -19,7 +19,7 @@ export const VideoAbButtonGroup = observer(function (props: { onAdd: (type: Basi
     example: {
       fields: [{
         type: SurveyControlType.radio,
-        question: 'Which one is your preference?',
+        question: 'Select your preference from the options below.',
         options: ['A', 'B'],
         value: null,
         required: true
