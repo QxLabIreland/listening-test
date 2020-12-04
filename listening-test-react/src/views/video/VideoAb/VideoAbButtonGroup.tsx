@@ -15,7 +15,7 @@ export const VideoAbButtonGroup = observer(function (props: { onAdd: (type: Basi
 
   const handleAddExample = () => onAdd({
     id: uuid(), type: TestItemType.example,
-    title: 'Video Ab Example (click to edit)',
+    title: 'Title (click to edit)',
     example: {
       fields: [{
         type: SurveyControlType.radio,
