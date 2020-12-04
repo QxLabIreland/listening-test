@@ -60,7 +60,7 @@ export const AudioExampleSettingsDialog = observer(function (props: {
 
           <FormControlLabel
             control={<Checkbox checked={formik.values.disablePlayerSlider} {...formik.getFieldProps('disablePlayerSlider')}/>}
-            label="Disable audio player slider bar (can't change position of thumb)"
+            label="Disable audio player seek bar (User cannot skip forward or back in time)"
           />
 
           {!disableSectionLoop && <FormControlLabel
@@ -75,7 +75,7 @@ export const AudioExampleSettingsDialog = observer(function (props: {
           <br/>
           {enableFixLastInternalQuestion && <FormControlLabel
             control={<Checkbox checked={formik.values.fixLastInternalQuestion} {...formik.getFieldProps('fixLastInternalQuestion')}/>}
-            label="Keep final question fixed"
+            label="Don't randomize final question"
           />}
         </DialogContent>
         <DialogActions>
