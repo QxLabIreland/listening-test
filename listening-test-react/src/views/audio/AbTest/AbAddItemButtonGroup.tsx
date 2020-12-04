@@ -22,7 +22,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
       example: {
         fields: [{
           type: SurveyControlType.radio,
-          question: 'Which one is your preference?',
+          question: 'Select your preference from the options below',
           options: ['A', 'B'],
           value: null,
           required: true
