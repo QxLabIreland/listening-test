@@ -24,7 +24,7 @@ export const SurveyControl = observer(function (props: {
                  onChange={e => control.question = e.target.value}
                  onFocus={event => event.target.select()}/>
     </Box>
-    <ReactMarkdown>{control.question}</ReactMarkdown>
+    <ReactMarkdown linkTarget="_blank">{control.question}</ReactMarkdown>
   </>;
 
   switch (control.type) {

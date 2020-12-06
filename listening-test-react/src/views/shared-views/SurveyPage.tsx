@@ -23,6 +23,7 @@ import {
 } from "../../shared/ErrorValidators";
 import {TestItemCardRender} from "../components/TestItemCard.render";
 import {useDivideIntoSections} from "../../shared/RandomizationTools";
+import ReactMarkdown from "react-markdown";
 
 /** If there is no value, it means survey page is on preview mode*/
 export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTaskModel, testUrl: TestUrl }) {
@@ -104,7 +105,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     </Grid>
     {/*When the title and description doesn't show*/}
     {(!isIndividual || openedPanel === -1) && <Grid item xs={12}>
-      <Typography variant="body1" gutterBottom>{questionnaire.description}</Typography>
+      <ReactMarkdown linkTarget="_blank">{questionnaire.description}</ReactMarkdown>
       {isIndividual && <div style={{textAlign: 'right'}}>
         <Button color="primary" onClick={() => handlePanelChange(true, 0)}>Next</Button>
       </div>}
