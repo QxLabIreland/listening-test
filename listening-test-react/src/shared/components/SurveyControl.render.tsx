@@ -27,7 +27,7 @@ export const SurveyControlRender = observer(function ({control}: { control: Surv
     case SurveyControlType.checkbox:
       return <SurveyCheckbox control={control}/>
     case SurveyControlType.description:
-      return <ReactMarkdown>{control.question}</ReactMarkdown>
+      return <div><ReactMarkdown linkTarget="_blank">{control.question}</ReactMarkdown></div>
     default:
       return null;
   }
@@ -37,7 +37,7 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   const {control} = props;
 
   return <FormControl variant="filled" fullWidth>
-    <ReactMarkdown>{control.question}</ReactMarkdown>
+    <ReactMarkdown linkTarget="_blank">{control.question}</ReactMarkdown>
     <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
       {control.options?.map(o =>
         <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
@@ -67,7 +67,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
   }
 
   return <FormControl variant="filled" fullWidth>
-    <ReactMarkdown>{control.question}</ReactMarkdown>
+    <ReactMarkdown linkTarget="_blank">{control.question}</ReactMarkdown>
     <FormGroup>
       {control.options?.map(o =>
         <FormControlLabel key={o} label={o} control={
