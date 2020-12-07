@@ -42,7 +42,7 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
         <ListItemIcon>
           <Icon fontSize="small">add_task</Icon>
         </ListItemIcon>
-        <ListItemText>Acr Test</ListItemText>
+        <ListItemText>ACR Test</ListItemText>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(TestItemType.training)}>
         <ListItemIcon>
