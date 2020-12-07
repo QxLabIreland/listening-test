@@ -7,7 +7,7 @@ export default class Loading extends React.Component<{ error?: string}> {
     const {error} = this.props;
 
     const errorNode = <Alert severity="error">
-      <AlertTitle>Something bad happened</AlertTitle>
+      <AlertTitle>Something went wrong</AlertTitle>
       {error ? error : 'Please try again later'}
     </Alert>
 
