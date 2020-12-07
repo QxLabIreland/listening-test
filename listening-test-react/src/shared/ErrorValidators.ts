@@ -6,7 +6,7 @@ import {BasicTaskItemModel, BasicTaskModel} from "./models/BasicTaskModel";
 /** Audio setting playback setting validation */
 function validatePlayedOnceError(example: AudioExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
-  if (!example.playedOnce) return 'Please fully listen to these clips'
+  if (!example.playedOnce) return 'Please listen to each audio clip in full'
   return null;
 }
 
@@ -41,7 +41,7 @@ export function sliderItemValidateError(item: BasicTaskItemModel): string {
     // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.medias) {
       delete a.isActive;
-      if (!a.value) return 'You must complete this example to continue'
+      if (!a.value) return 'You must complete this question to continue'
     }
     // Make sure internal questions have been answered
     for (const a of item.example.fields) {
@@ -58,7 +58,7 @@ export function testItemsValidateIncomplete(tests: BasicTaskModel) {
   for (const item of tests.items) {
     // Make sure audios array exists. When length is 0, some of them are null, there will be error
     if (item.example && item.example.medias && (item.example.medias.length < 1 || item.example.medias.some(value => value == null))) {
-      return "Your haven't added an audio or filled placeholders for every items. Please fill them and try again."
+      return "Please check that you have added audio files to all audio related questions"
     }
   }
   return null;
