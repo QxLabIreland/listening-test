@@ -47,7 +47,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       else setQuestionnaire(observable(value));
     } else Axios.get<BasicTaskModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
       const validateError = testItemsValidateIncomplete(res.data);
-      if (validateError) setError('The survey is incomplete. If you are creator: ' + validateError);
+      if (validateError) setError('This survey is incomplete. If you are the survey owner: ' + validateError);
       else setQuestionnaire(observable(res.data));
     }, reason => setError(reason.response.data));
   }, [testUrl, id, value]);
