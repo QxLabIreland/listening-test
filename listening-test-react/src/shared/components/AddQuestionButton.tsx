@@ -33,7 +33,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
         onAdd({
           id: uuid(),
           type: TestItemType.question,
-          title: 'Survey Question (click to edit)',
+          title: 'Title (click to edit)',
           questionControl: question
         });
         clearTimeout(timer);
@@ -71,7 +71,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
   const handleAddSectionHeader = () => {
     setAnchorEl(null);
     onAdd({
-      id: uuid(), type: TestItemType.sectionHeader, title: 'Group Divider (Click to edit this name)',
+      id: uuid(), type: TestItemType.sectionHeader, title: 'Group Divider (This will not visible to the participant)',
     });
   }
   // Get rid of other types of question

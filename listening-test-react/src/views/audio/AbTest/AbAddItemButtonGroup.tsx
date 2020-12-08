@@ -18,11 +18,11 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
     onAdd({
       id: uuid(),
       type: TestItemType.example,
-      title: 'Example (click to edit)',
+      title: 'Title (click to edit)',
       example: {
         fields: [{
           type: SurveyControlType.radio,
-          question: 'Which one is your preference?',
+          question: 'Select your preference from the options below',
           options: ['A', 'B'],
           value: null,
           required: true
@@ -35,7 +35,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
   const handleAddTraining = () => {
     addQuestionMenu.current?.closeMenu();
     onAdd({
-      id: uuid(), type: TestItemType.training, title: 'Training (click to edit)', example: {
+      id: uuid(), type: TestItemType.training, title: 'Title (click to edit)', example: {
         fields: [
           {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
         ], medias: []

@@ -18,7 +18,7 @@ export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type
     switch (type) {
       case TestItemType.example:
         newItem = {
-          id: uuid(), type: TestItemType.example, title: 'Mushra Test (Click to edit this)', example: {
+          id: uuid(), type: TestItemType.example, title: 'Title (Click to edit this)', example: {
             medias: [], fields: [
               {type: SurveyControlType.description, question: 'Compare the quality of these sounds.', value: null}
             ]
