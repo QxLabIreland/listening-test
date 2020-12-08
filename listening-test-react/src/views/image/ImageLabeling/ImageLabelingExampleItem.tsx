@@ -21,7 +21,7 @@ export const ImageLabelingExampleItem = observer((props: React.PropsWithChildren
   const addAdditionalQuestion = (item: ImageTestItemModel) => example.fields.push(item.questionControl);
   const deleteAdditionalQuestion = () => example.fields.pop();
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={action}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>

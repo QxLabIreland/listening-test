@@ -22,7 +22,7 @@ export const MushraTestItemExampleCard = observer((props: React.PropsWithChildre
   // Setting submitted
   const handleSettingChange = (settings: AudioExampleSettingsModel) => example.settings = settings;
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={<>
       <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
       {action}</>}/>

@@ -20,7 +20,7 @@ export const AbTestItemExampleCard = observer((props: React.PropsWithChildren<{
     type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false
   });
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={<>
       <AudioExampleSettingsDialog settings={example.settings} onConfirm={settings => example.settings = settings} disableRandomAudio/>
       {action} </>}/>

@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
-import React, {ChangeEvent, ReactNode, useContext, useEffect, useLayoutEffect} from "react";
+import React, {ChangeEvent, ReactNode, useContext, useEffect} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {
@@ -29,8 +29,6 @@ import {overrideExampleItem, overrideTrainingItem, TestItemExampleCardType} from
 import {BasicTaskItemModel} from "../../shared/models/BasicTaskModel";
 import Typography from "@material-ui/core/Typography";
 import {DetailTaskModel} from "../../shared/ReactContexts";
-import {useFormik} from "formik";
-import {AudioExampleSettingsModel} from "../../shared/models/AudioTestModel";
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', {duration: theme.transitions.duration.shortest});
@@ -99,7 +97,7 @@ const TestItemQuestionCard = observer(function ({item, action, collapsed}: {
   const gotoQuestionItems = curIndex >= taskModel.items.length - 1 ? undefined :
     taskModel.items.slice(curIndex + 2).map(item => ({id: item.id, title: item.title}));
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid green'}}>
     <CardHeader title={<input style={labelInputStyle} value={item.title} onChange={e => item.title = e.target.value}
                               onFocus={event => event.target.select()}/>} action={<>
       {item.questionControl.type !== SurveyControlType.description && <FormControlLabel label="Required" control={

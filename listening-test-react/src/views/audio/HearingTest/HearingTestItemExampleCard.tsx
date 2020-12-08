@@ -16,7 +16,7 @@ export const HearingTestItemExampleCard = observer((props: React.PropsWithChildr
 }>) => {
   const {example, title, action, collapsed} = props;
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={action}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
