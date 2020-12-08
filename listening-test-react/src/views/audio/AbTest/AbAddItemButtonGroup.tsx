@@ -50,13 +50,13 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
     <AddQuestionButton ref={addQuestionMenu} onAdd={onAdd}>
       <MenuItem onClick={handleAddExample}>
         <ListItemIcon>
-          <Icon fontSize="small">add_task</Icon>
+          <Icon fontSize="small" style={{color: 'dodgerblue'}}>add_task</Icon>
         </ListItemIcon>
         <ListItemText>Audio AB Test</ListItemText>
       </MenuItem>
       <MenuItem onClick={handleAddTraining}>
         <ListItemIcon>
-          <Icon fontSize="small">fitness_center</Icon>
+          <Icon fontSize="small" style={{color: 'coral'}}>fitness_center</Icon>
         </ListItemIcon>
         <ListItemText>Audio Training Example</ListItemText>
       </MenuItem>

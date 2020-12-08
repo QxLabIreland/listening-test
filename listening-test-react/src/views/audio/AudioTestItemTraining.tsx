@@ -28,7 +28,7 @@ export const AudioTestItemTraining = observer((props: React.PropsWithChildren<{
   const addAdditionalQuestion = (item: BasicTaskItemModel) => example.fields.push(item.questionControl);
   const deleteAdditionalQuestion = () => example.fields.pop();
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid coral'}}>
     <CardHeader title={title} action={<>
       <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange} disableSectionLoop disableRandomAudio/>
       {action}

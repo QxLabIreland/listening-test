@@ -22,7 +22,7 @@ export const ImageAbExampleItem = observer((props: React.PropsWithChildren<{
     type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false
   });
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={<>
       <ImageAbExampleSettings settings={example.settings} onConfirm={newSettings => example.settings = newSettings}/>
       {action}

@@ -4,11 +4,16 @@ import React, {forwardRef, PropsWithChildren, useContext, useImperativeHandle, u
 import {SurveyControlType, TestItemType} from "../models/EnumsAndTypes";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
-import {Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Typography} from "@material-ui/core";
+import {Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem} from "@material-ui/core";
 import {uuid} from "uuidv4";
 import {BasicTaskItemModel} from "../models/BasicTaskModel";
 import {DetailTaskModel} from "../ReactContexts";
+import {makeStyles} from "@material-ui/core/styles";
 export type AddQuestionButtonType = { closeMenu: () => void }
+
+const useStyles = makeStyles(() => ({
+  questionIcon: {color: 'green'}
+}));
 
 export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, PropsWithChildren<{
   onAdd: (type: BasicTaskItemModel) => void, onlyCore?: boolean
@@ -21,6 +26,7 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
     closeMenu: () => setAnchorEl(null)
   }));
   const taskModel = useContext(DetailTaskModel);
+  const classes = useStyles();
 
   // When menu clicked
   const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -118,25 +124,25 @@ export const AddQuestionButton = observer(forwardRef<AddQuestionButtonType, Prop
       <Divider/>
       <MenuItem onClick={() => handleAdd(SurveyControlType.text)}>
         <ListItemIcon>
-          <Icon fontSize="small">text_fields</Icon>
+          <Icon fontSize="small" className={classes.questionIcon}>text_fields</Icon>
         </ListItemIcon>
         <ListItemText primary="Text Input"/>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(SurveyControlType.radio)}>
         <ListItemIcon>
-          <Icon fontSize="small">radio_button_checked</Icon>
+          <Icon fontSize="small" className={classes.questionIcon}>radio_button_checked</Icon>
         </ListItemIcon>
         <ListItemText primary="Radio Group"/>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(SurveyControlType.checkbox)}>
         <ListItemIcon>
-          <Icon fontSize="small">check_box</Icon>
+          <Icon fontSize="small" className={classes.questionIcon}>check_box</Icon>
         </ListItemIcon>
         <ListItemText primary="Checkbox Group"/>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(SurveyControlType.description)}>
         <ListItemIcon>
-          <Icon fontSize="small">label</Icon>
+          <Icon fontSize="small" className={classes.questionIcon}>label</Icon>
         </ListItemIcon>
         <ListItemText primary="A Text Label"/>
       </MenuItem>

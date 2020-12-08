@@ -40,13 +40,13 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     <AddQuestionButton ref={addQuestionMenu} onAdd={onAdd}>
       <MenuItem onClick={() => handleAdd(TestItemType.example)}>
         <ListItemIcon>
-          <Icon fontSize="small">add_task</Icon>
+          <Icon fontSize="small" style={{color: 'dodgerblue'}}>add_task</Icon>
         </ListItemIcon>
         <ListItemText>ACR Test</ListItemText>
       </MenuItem>
       <MenuItem onClick={() => handleAdd(TestItemType.training)}>
         <ListItemIcon>
-          <Icon fontSize="small">fitness_center</Icon>
+          <Icon fontSize="small" style={{color: 'coral'}}>fitness_center</Icon>
         </ListItemIcon>
         <ListItemText>Audio Training Example</ListItemText>
       </MenuItem>

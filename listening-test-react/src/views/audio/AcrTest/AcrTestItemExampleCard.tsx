@@ -37,7 +37,7 @@ export const AcrTestItemExampleCard = observer((props: React.PropsWithChildren<{
     example.medias.splice(index, 1);
   }
 
-  return <Card>
+  return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={<>
       <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange} enableFixLastInternalQuestion/>
       {action}</>}/>
