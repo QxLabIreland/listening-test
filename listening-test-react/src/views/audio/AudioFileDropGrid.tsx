@@ -27,7 +27,7 @@ export const AudioFileDropGrid = observer(function ({example, reference, keepPla
     {/*Reference place*/}
     {reference && <Grid item xs={12} md={4}>
       <AudioFileUploadBox fileModel={example.mediaRef} onChange={fm => handleChange(fm, -1)}
-                    label="Reference Labeled (Optional)"/>
+                    label="Labeled Reference (Optional)"/>
     </Grid>}
     {/*File drop area. Use all same to slice into 1 or all*/}
     {example.medias.slice(0, allSame ? 1 : example.medias.length).map((a, i) =>
