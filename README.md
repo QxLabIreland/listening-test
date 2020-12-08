@@ -1,10 +1,11 @@
 # Listening test platform
 
 An open source platform for browser based speech and audio subjective quality tests. Version: `0.1.0`
+This repo gives you a fully functional end-to-end listening test platform which allows a user to create and share MUSHRA, ACR and A/B tests within minutes. Collected data can then be downloaded in CSV or JSON format. 
 
 ## Run with docker and docker compose or with aws
 
-Make sure your system has `docker` and `docker-compose` and run it as root user (or you can add `sudo` manually).
+Make sure your system has `docker` and `docker-compose` installed and run it as root user (or you can add `sudo` manually).
 
 ```bash
 wget https://github.com/QxLabIreland/listening-test/releases/download/v0.1.0-beta/listeningTest.tgz
@@ -13,28 +14,28 @@ cd listeningTest
 docker-compose up
 ```
 
-When it finished, the app will be served on localhost:80. The default email and password for admin user are `admin@yourdomain.com` `123456` (Use them in localhost:80/sign-in). The 443 port is reserved for nginx, the port of 8889 is for backend and the port 27017 is for MongoDB.
+When it finished, the app will be served on localhost:80. The default email and password for the admin user are `admin@yourdomain.com` `123456` (Use them in localhost:80/sign-in). The 443 port is reserved for nginx, the port of 8889 is for backend and the port 27017 is for MongoDB.
 
-Check release section to get the newest release
+Check the release section to get the newest release
 
 ### Some description
 
-There will be 3 container, mongo database, backend and frontend. Each container exposes some ports, you can check them in `docker-compose.yml` file. Such as frontend exposes 80 and 443 (you need to config your ssl and listening on 443).
+There will be 3 containers; mongo database, backend and frontend. Each container exposes some ports which you can check them in `docker-compose.yml` file. For example, the frontend exposes 80 and 443 (you will need to config your ssl and listening on 443).
 
-Without SSL certificate, some functions **will not** work. As far as we know, these functions will be affected without HTTPS:
+Without an SSL certificate, some functions **will not** work. As far as we are aware, these functions will be affected without HTTPS:
 - Copy test url to clipboard (the view button is working, so you can click VIEW button and copy the url from a browser navigation bar)
 
-In backend container, there is no processes management tool such as supervisor. It just uses python3 to run.
+In the backend container, there is no process management tool such as supervisor. It just uses python3 to run.
 
 ### Run with our AWS AMI and EC2
 
-Launch a AWS EC2, select community AMIs, and then search `ami-0e8863cb7176cf461`. The region of this AMIs is in `eu-west-1`. 
+Launch an AWS EC2 instance, select community AMIs, and then search `ami-0e8863cb7176cf461`. The region of this AMIs is in `eu-west-1`. 
 
-After the successful launch, you can use `cd ~/listeningTest && sudo docker-compose up` to bring the app online. Make sure inbound port of 80 is open to public in AWS security group settings.
+After the successful launch, you can use `cd ~/listeningTest && sudo docker-compose up` to bring the app online. Make sure inbound port 80 is open to the public in the AWS security group settings.
 
 ### Run with an AWS EC2
 
-With AWS EC2, get instance first and then you will need to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/). Please make sure ports of 80 and 443 of EC2 are open for public access.
+With an AWS EC2, get the instance first and then you will need to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/). Please make sure ports 80 and 443 of the EC2 instance are open for public access.
 
 When everything is ready, you can run the command above (get release, extract compiled files and `docker-compose up`)
 
@@ -119,7 +120,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Server dependencies and tips of how to install them
 
-With the steps of previous sections, you can run the app on your local machine. So, if you **do not need to deploy** this project on server you can skip this section.
+With the steps of previous sections, you can run the app on your local machine. So, if you **do not need to deploy** this project on a server you can skip this section.
 
 ### Server dependencies, and introduction
 
@@ -135,7 +136,7 @@ With the steps of previous sections, you can run the app on your local machine. 
 
 To install them, just run `sudo apt-get install -y nginx supervisor && chmod +x install-mongodb.sh && sudo sh install-mongodb.sh`
 
-There are lots of ways to install python3.8, and every linux has different version of python preinstalled. In our case, we got python3.5, so we need to upgrade it.
+There are lots of ways to install python3.8, and every linux distribution has a different version of python preinstalled. In our case, we use python3.5, so we need to upgrade it.
 
 ```bash
 sudo apt-get update
@@ -150,13 +151,13 @@ sudo python3.8 get-pip.py
 
 ### Serve frontend and backend on a server
 
-Our server has limited space and performance, so we build on a local machine. If you wanna build on a server, you must install node.js and npm on your server to build frontend project.
+Our server has limited space and performance, so we build on a local machine. If you want to build on a server, you must install node.js and npm on your server to build frontend project.
 
 1. Build the frontend and then transfer complied frontend files.
 
 2. Transfer files into the server and make sure frontend and backend folders are matched to conf files.
 
-A python automatic script can help use scp command and ssh to restart backend.
+A python automatic script can help use the scp command and ssh to restart the backend.
 
 3. Create *.conf files for nginx and supervisor to meet your requirements, including domain name, path, certificates, application path, app name, logs etc.
 
@@ -180,7 +181,7 @@ sudo pip3 install tornado pymongo
 
 ### Example of conf files
 
-Here is some examples of config files for a server. You need to do some modification to meet your requirements.
+Here are some examples of config files for a server. You need to do some modification to meet your requirements.
 
 #### /usr/lib/systemd/system/supervisord.service
 
