@@ -9,6 +9,7 @@ class StorageAllocationHandler(BaseHandler):
 
     # Get storage that the usage of storage has been used by current user
     async def get(self):
+        # TODO Test if this is gonna work
         medias_size = 0
         medias_count = 0
         # Get all collections and map data by user id

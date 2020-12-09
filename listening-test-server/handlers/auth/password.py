@@ -21,23 +21,13 @@ class PasswordHandler(BaseHandler):
         body = self.loads_body()
         user = self.db['users'].find_one({'_id': self.user_id})
         if user and user['password'] == body["password"]:
-            # TODO change this to a loop for collection names
-            # Delete user's records and survey
-            self.db['abTests'].delete_many({'userId': self.user_id})
-            self.db['abSurveys'].delete_many({'userId': self.user_id})
-            # ACR
-            self.db['acrTests'].delete_many({'userId': self.user_id})
-            self.db['acrSurveys'].delete_many({'userId': self.user_id})
-            # Mushra
-            self.db['mushraTests'].delete_many({'userId': self.user_id})
-            self.db['mushraSurveys'].delete_many({'userId': self.user_id})
-            # Hearing
-            self.db['hearingTests'].delete_many({'userId': self.user_id})
-            self.db['hearingSurveys'].delete_many({'userId': self.user_id})
+            for col in self.db.list_collection_names():
+                # Delete user's records and survey
+                self.db[col].delete_many({'userId': self.user_id})
             # Delete the account
             self.db['users'].delete_one({'_id': self.user_id})
             self.write('done')
-            # Clean the cookie
+            # Clean the cookie and logout
             self.clear_cookie("_user")
         else:
             self.set_error(400, 'user not found or the password is incorrect')
