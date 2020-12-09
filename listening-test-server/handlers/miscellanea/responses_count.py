@@ -7,6 +7,7 @@ class ResponsesCountHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user()
 
+    # Count the number of responses
     async def get(self):
         test_id = self.get_argument('testId')
         test_type = self.get_argument('testType')

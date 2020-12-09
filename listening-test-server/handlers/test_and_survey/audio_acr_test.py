@@ -8,11 +8,13 @@ from handlers.miscellanea.task_name_mapping import get_task_url_by_collection
 
 
 class AcrTestHandler(BaseHandler):
+    # Authorization and set task/surveys collection names
     async def prepare(self):
         self.user_id = await self.auth_current_user()
         self.taskCollectionName = 'acrTests'
         self.surveyCollectionName = 'acrSurveys'
 
+    # Get a list of task
     async def get(self):
         _id = self.get_argument('_id', None)
         if not _id:
@@ -37,6 +39,7 @@ class AcrTestHandler(BaseHandler):
                 self.set_error(404, 'Test not found')
         self.dumps_write(data)
 
+    # Create a task
     async def post(self):
         body = self.loads_body()
         # Del some useless fields
@@ -53,6 +56,7 @@ class AcrTestHandler(BaseHandler):
         data = self.db[self.taskCollectionName].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
         self.dumps_write(data)
 
+    # Modify a task
     async def put(self):
         body = self.loads_body()
         # Add modification date
@@ -61,6 +65,7 @@ class AcrTestHandler(BaseHandler):
             {'userId': self.user_id, '_id': body['_id']}, {"$set": body})
         self.dumps_write(result.raw_result)
 
+    # Delete a task
     async def delete(self):
         _id = ObjectId(self.get_argument('_id'))
         result = self.db[self.taskCollectionName].delete_one({'_id': ObjectId(_id)})
@@ -70,10 +75,12 @@ class AcrTestHandler(BaseHandler):
 
 
 class AcrSurveyHandler(BaseHandler):
+    # No authorization process
     def prepare(self):
         self.taskCollectionName = 'acrTests'
         self.surveyCollectionName = 'acrSurveys'
 
+    # Get a response
     async def get(self):
         _id = self.get_argument('_id')
         data = self.db[self.taskCollectionName].find_one(
@@ -83,13 +90,14 @@ class AcrSurveyHandler(BaseHandler):
         data['testId'] = ObjectId(_id)
         self.dumps_write(data)
 
+    # Submit a response
     async def post(self):
         body = self.loads_body()
         body['createdAt'] = datetime.now()
         result = self.db[self.surveyCollectionName].insert_one(body)
         self.dumps_write(result.inserted_id)
 
-    # The method that subject delete their own response
+    # Subjects can delete their own response
     async def delete(self):
         _id = self.get_argument('_id')
         # For message

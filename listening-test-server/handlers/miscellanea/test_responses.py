@@ -9,6 +9,7 @@ class TestResponsesHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user()
 
+    # Get all response of a task
     async def get(self):
         _id = self.get_argument('_id', None)
         # Downloadable is not a necessary parameter
@@ -35,6 +36,7 @@ class TestResponsesHandler(BaseHandler):
         # If it is downloadable, we will need 2 intent
         self.dumps_write(data, 2 if downloadable else None)
 
+    # Delete responses by ids
     async def delete(self):
         _ids = self.loads_body()
         test_type = self.get_argument('testType')

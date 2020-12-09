@@ -31,6 +31,7 @@ class MongoDBConnection:
             print(Exception)
 
 
+# This is used to create admin user and an initialization process for a new set-up
 def create_default_user():
     con = MongoDBConnection()
     # user default seed
