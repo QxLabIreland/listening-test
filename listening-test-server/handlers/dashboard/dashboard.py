@@ -6,7 +6,8 @@ class DashboardHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user(check_activated=False)
 
-    def get(self):
+    # Platform status
+    async def get(self):
         stat = {
             # Admin is not registered user
             'userNumber': self.db['users'].find().count(),
@@ -33,6 +34,7 @@ class DashboardHandler(BaseHandler):
         }
         self.dumps_write(stat)
 
-    def put(self):
+    # Resend confirmation email for new user
+    async def put(self):
         user = self.db['users'].find_one({'_id': self.user_id})
         send_confirmation_email(self.db['users'], user['email'])

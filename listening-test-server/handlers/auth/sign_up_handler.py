@@ -28,6 +28,7 @@ class SignUpHandler(BaseHandler):
             # Return user id
             self.dumps_write(user_oid)
 
+    # Go confirm an email address
     async def get(self):
         activation_code = self.get_argument('confirmationCode')
         # Get confirmation code user
