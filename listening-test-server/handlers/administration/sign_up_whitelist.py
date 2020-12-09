@@ -9,10 +9,12 @@ class SingUpWhitelistHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user()
 
+    # To get all domains and emails
     async def get(self):
         whitelist = SignUpWhitelistTool(self.db)
         self.dumps_write({'domains': whitelist.domains, 'emails': whitelist.emails})
 
+    # Add a domains or an email
     async def post(self):
         data = self.loads_body()
         result = self.db['signUpWhitelist'].insert_one(data)
@@ -22,6 +24,7 @@ class SingUpWhitelistHandler(BaseHandler):
         else:
             self.set_error(400, 'Input is invalid')
 
+    # Delete one entry
     async def delete(self):
         data = self.loads_body()
         if 'domain' in data:

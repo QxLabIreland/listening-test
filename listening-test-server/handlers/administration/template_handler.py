@@ -3,6 +3,7 @@ from handlers.miscellanea.task_name_mapping import switch_task_collection
 
 
 class TemplateHandler(BaseHandler):
+    # Get all templates based on test type
     async def get(self):
         test_type = self.get_argument('testType')
         collection = switch_task_collection(self, test_type)
@@ -16,6 +17,7 @@ class TemplateHandler(BaseHandler):
         ])
         self.dumps_write(data)
 
+    # Make a test a template
     async def put(self):
         # Get user and check the permissions
         self.user_id = await self.auth_current_user('Template')

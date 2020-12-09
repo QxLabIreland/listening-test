@@ -2,16 +2,18 @@ from handlers.base import BaseHandler
 from tools.constants import permission_list
 
 
-class UsersHandler(BaseHandler):
+class UsersManagementHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user('User')
 
+    # Get all users
     async def get(self):
         # Exclude current user and administrators
         # data = self.db['users'].find({'isAdmin': {'$ne': True}, '_id': {'$nin': [self.user_id]}}, {'password': 0})
         user = self.db['users'].find({'isAdmin': {'$ne': True}}, {'password': 0, 'confirmationCode': 0})
         self.dumps_write(user)
 
+    # Edit permissions
     async def post(self):
         body = self.loads_body()
         # Find the user needs to be updated
