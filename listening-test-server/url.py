@@ -1,6 +1,6 @@
 from handlers.auth.find_password import FindPasswordHandler
-from handlers.auth.sign_up_whitelist import SingUpWhitelistHandler
-from handlers.auth.users import UsersHandler
+from handlers.administration.sign_up_whitelist import SingUpWhitelistHandler
+from handlers.administration.users_management import UsersManagementHandler
 from handlers.dashboard.dashboard import DashboardHandler
 from handlers.dashboard.message_handler import MessageHandler
 from handlers.download_csv.audio_labeling_csv_download import AudioLabelingCsvDownload
@@ -10,7 +10,7 @@ from handlers.download_csv.image_labeling_csv_download import ImageLabelingCsvDo
 from handlers.download_csv.mushra_test_csv_download import MushraTestCsvDownload
 from handlers.download_csv.video_ab_csv_download import VideoAbCsvDownload
 from handlers.download_csv.video_labeling_csv_download import VideoLabelingCsvDownload
-from handlers.miscellanea.storage_status import StorageStatusHandler
+from handlers.administration.storage_status import StorageStatusHandler
 from handlers.test_and_survey.audio_acr_test import AcrTestHandler, AcrSurveyHandler
 from handlers.auth.sign_up_handler import SignUpHandler
 from handlers.auth.login import LoginHandler
@@ -26,7 +26,7 @@ from handlers.miscellanea.responses_count import ResponsesCountHandler
 from handlers.download_csv.ab_test_responses_download import AbTestResponsesDownload
 from handlers.miscellanea.test_responses import TestResponsesHandler
 from handlers.file_handler import FileHandler
-from handlers.miscellanea.template_handler import TemplateHandler
+from handlers.administration.template_handler import TemplateHandler
 from handlers.test_and_survey.video_ab_task import VideoAbHandler, VideoAbSurveyHandler
 from handlers.test_and_survey.video_labeling_task import VideoLabelingHandler, VideoLabelingSurveyHandler
 
@@ -40,7 +40,7 @@ path = [
     ("/api/password", PasswordHandler),
     ("/api/find-password", FindPasswordHandler),
     ("/api/dashboard", DashboardHandler),
-    ("/api/users", UsersHandler),
+    ("/api/users", UsersManagementHandler),
     ("/api/messages", MessageHandler),
     ("/api/whitelist", SingUpWhitelistHandler),
 

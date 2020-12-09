@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from handlers.auth.sign_up_whitelist import SignUpWhitelistTool
+from handlers.administration.sign_up_whitelist import SignUpWhitelistTool
 from handlers.base import BaseHandler
 
 from tools.email_tool import send_confirmation_email

@@ -13,6 +13,7 @@ class StorageStatusHandler(BaseHandler):
         # Get user and check the permissions
         self.user_id = await self.auth_current_user('Storage')
 
+    # Get general storage status of the system
     async def get(self):
         medias_checklist = get_medias_in_using(self.db)
         storage_status_dto = {'totalSize': 0, 'totalNum': 0, 'redundantSize': 0}
@@ -29,6 +30,7 @@ class StorageStatusHandler(BaseHandler):
             'redundantSize': sizeof_fmt(storage_status_dto['redundantSize'])
         })
 
+    # Delete unused files
     async def delete(self):
         medias_checklist = get_medias_in_using(self.db)
         total_size = 0
