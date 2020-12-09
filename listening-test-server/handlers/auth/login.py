@@ -2,6 +2,7 @@ from handlers.base import BaseHandler
 
 
 class LoginHandler(BaseHandler):
+    # Get the current user's data
     async def get(self):
         # Request the _xsrf cookies interface.
         if self.xsrf_token:
@@ -19,6 +20,7 @@ class LoginHandler(BaseHandler):
         else:
             self.set_error(200, "No xsrf token, set csrf token successfully")
 
+    # LOGIN
     async def post(self):
         body = self.loads_body()
         user = self.db['users'].find_one({'email': body["email"]})
@@ -39,6 +41,6 @@ class LoginHandler(BaseHandler):
         else:
             self.set_error(401, "Incorrect password")
 
-    # Delete the cookie for  current user
+    # LOGOUT: Delete the cookie for current user
     async def delete(self):
         self.clear_cookie("_user")

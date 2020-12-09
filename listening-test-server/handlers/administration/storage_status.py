@@ -1,13 +1,10 @@
 import os
-from collections import namedtuple
 
-from pymongo.database import Database
 from handlers.base import BaseHandler
-from tools.file_helper import sizeof_fmt
 
 
 class StorageStatusHandler(BaseHandler):
-    storage_folder = ['static2/audio_files', 'static2/audio_files', 'static2/videoFile']
+    storage_folder = ['static2/audio_files', 'static2/imageFile', 'static2/videoFile']
 
     async def prepare(self):
         # Get user and check the permissions
@@ -15,7 +12,7 @@ class StorageStatusHandler(BaseHandler):
 
     # Get general storage status of the system
     async def get(self):
-        medias_checklist = get_medias_in_using(self.db)
+        medias_checklist = self.get_medias_in_using()
         storage_status_dto = {'totalSize': 0, 'totalNum': 0, 'redundantSize': 0}
         # Get size of static folder
         for target_path in StorageStatusHandler.storage_folder:
@@ -32,7 +29,7 @@ class StorageStatusHandler(BaseHandler):
 
     # Delete unused files
     async def delete(self):
-        medias_checklist = get_medias_in_using(self.db)
+        medias_checklist = self.get_medias_in_using()
         total_size = 0
         total_num = 0
 
@@ -54,28 +51,29 @@ class StorageStatusHandler(BaseHandler):
             'redundantSize': 0
         })
 
+    # Get all media files in using of all the users
+    def get_medias_in_using(self) -> set:
+        medias_checklist = set()
+        # Get all collections and map data
+        for col in self.db.list_collection_names():
+            data_list = self.db[col].aggregate([
+                {"$addFields": {"listSrc": {'$reduce': {
+                    'input': "$items.example.medias",
+                    'initialValue': [],
+                    'in': {'$concatArrays': ["$$value", "$$this.src"]}
+                }}}},
+                {'$project': {'listSrc': 1}},
+                {'$match': {'listSrc.0': {'$exists': True}}}
+            ])
+            for d in data_list:
+                for src in d['listSrc']:
+                    if src:
+                        medias_checklist.add(os.path.split(src)[-1])
 
-def get_medias_in_using(db: Database) -> set:
-    medias_checklist = set()
-    # Get all collections and map data
-    for col in db.list_collection_names():
-        data_list = db[col].aggregate([
-            {"$addFields": {"listSrc": {'$reduce': {
-                'input': "$items.example.medias",
-                'initialValue': [],
-                'in': {'$concatArrays': ["$$value", "$$this.src"]}
-            }}}},
-            {'$project': {'listSrc': 1}},
-            {'$match': {'listSrc.0': {'$exists': True}}}
-        ])
-        for d in data_list:
-            for src in d['listSrc']:
-                if src:
-                    medias_checklist.add(os.path.split(src)[-1])
-
-    return medias_checklist
+        return medias_checklist
 
 
+# Get the usage of the path including total size, num of files and the size of redundant files
 def get_space_usage(target_path, db_medias_checklist):
     size = 0
     count = 0
@@ -96,3 +94,13 @@ def get_space_usage(target_path, db_medias_checklist):
                     redundant_size += f_size
 
     return {'totalSize': size, 'totalNum': count, 'redundantSize': redundant_size}
+
+
+# TODO Front end will do this thing
+# File size formatting tool
+def sizeof_fmt(num):
+    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s" % (num, unit)
+        num /= 1024.0
+    return "%.1f%s" % (num, 'YB')

@@ -43,28 +43,6 @@ def write_data_in_csv(columns: List[str], data: List[dict], prefix_name: str = '
     return filename
 
 
-def get_path_size(start_path='.'):
-    total_size = 0
-    total_num = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            # skip if it is symbolic link
-            if not os.path.islink(fp):
-                total_size += os.path.getsize(fp)
-                total_num += 1
-
-    return sizeof_fmt(total_size), total_num
-
-
-def sizeof_fmt(num):
-    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
-        if abs(num) < 1024.0:
-            return "%3.1f%s" % (num, unit)
-        num /= 1024.0
-    return "%.1f%s" % (num, 'YB')
-
-
 # Get a list of files in designated folder
 def list_files(folder):
     path = os.path.join(os.getcwd(), "static2", folder)

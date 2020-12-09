@@ -5,6 +5,7 @@ class PasswordHandler(BaseHandler):
     async def prepare(self):
         self.user_id = await self.auth_current_user(check_activated=False)
 
+    # Modify the password for the user
     async def put(self):
         body = self.loads_body()
         user = self.db['users'].find_one({'_id': self.user_id})
@@ -15,7 +16,7 @@ class PasswordHandler(BaseHandler):
         else:
             self.set_error(400, reason="Current password is wrong or the user not found")
 
-    # This is DELETE ACCOUNT method
+    # This is DELETE ACCOUNT
     async def delete(self):
         body = self.loads_body()
         user = self.db['users'].find_one({'_id': self.user_id})
