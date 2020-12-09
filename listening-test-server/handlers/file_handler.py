@@ -8,6 +8,7 @@ class FileHandler(BaseHandler):
     async def prepare(self):
         await self.auth_current_user()
 
+    # Upload files
     async def post(self):
         # Switch to different folder for different task
         if "audioFile" in self.request.files:

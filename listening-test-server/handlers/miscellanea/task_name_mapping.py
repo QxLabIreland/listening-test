@@ -7,7 +7,7 @@ from handlers.base import BaseHandler
 
 
 def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
-    # Get right collection
+    # Get right test collection
     if test_type == 'ab-test':
         return self.db['abSurveys']
     elif test_type == 'acr-test':
@@ -32,7 +32,7 @@ def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Co
 
 
 def switch_task_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
-    # Get right collection
+    # Get right task collection
     if test_type == 'ab-test':
         return self.db['abTests']
     elif test_type == 'acr-test':
@@ -57,6 +57,7 @@ def switch_task_collection(self: BaseHandler, test_type: str) -> Optional[Collec
 
 
 def get_task_url_by_collection(collection_name: str):
+    # Get the url by collection names
     if collection_name == 'abTests':
         return 'ab-test'
     elif collection_name == 'acrTests':

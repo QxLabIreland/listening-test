@@ -87,6 +87,7 @@ class MushraTestCsvDownload(BaseHandler):
         await self.finish()
 
 
+# Mushra is special test that requires multiple columns for a question
 def build_mushra_row(item):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
