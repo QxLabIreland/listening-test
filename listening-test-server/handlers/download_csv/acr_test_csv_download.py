@@ -105,7 +105,7 @@ def build_row(item, value_source='medias'):
                     value = json.loads(item["questionControl"]["value"])
                     return f'"{",".join(value)}"'
                 # To be compatible with old version of checkbox value
-                except JSONDecodeError as e:
+                except Exception as e:
                     print(e)
                     pass
             return f'"{item["questionControl"]["value"] or ""}"'

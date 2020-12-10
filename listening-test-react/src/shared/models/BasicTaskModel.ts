@@ -35,7 +35,7 @@ export interface BasicTaskItemModel {
   time?: number;
   // If the card expanded or not
   collapsed?: boolean;
-  // TODO Section header settings
+  // TODO Create an interface of section header settings
   sectionSettings?: {
     randomQuestions?: boolean,
     fixedItems?: string[] // use id of items

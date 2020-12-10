@@ -120,12 +120,12 @@ export const useSignInUpStyles = makeStyles((theme: Theme) => createStyles({
   textField: {
     marginTop: theme.spacing(2)
   },
-  policy: {
+  checkboxFormControl: {
     marginTop: theme.spacing(1),
     display: 'flex',
     alignItems: 'center'
   },
-  policyCheckbox: {
+  checkbox: {
     marginLeft: '-14px'
   },
   // Sign In Styles
