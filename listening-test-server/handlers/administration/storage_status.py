@@ -99,7 +99,7 @@ def get_space_usage(target_path, db_medias_checklist):
 # TODO Front end will do this thing
 # File size formatting tool
 def sizeof_fmt(num):
-    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
         if abs(num) < 1024.0:
             return "%3.1f%s" % (num, unit)
         num /= 1024.0

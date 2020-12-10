@@ -13,6 +13,7 @@ import ConfirmEmail from "../views/PublicPages/ConfirmEmail";
 import NotFoundView from "./components/NotFoundView";
 import {CookiesPolicy} from "../views/PublicPages/PolicyTerms/CookiesPolicy";
 import {TermsOfServices} from "../views/PublicPages/PolicyTerms/TermsOfSerivces";
+import {PrivacyStatement} from "../views/PublicPages/PolicyTerms/PrivacyStatement";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   toolbar: {
@@ -33,7 +34,6 @@ export default function PublicContainer() {
           <Button component={Link} to='sign-in' color="inherit" variant="outlined" className={classes.button}>Login</Button>
         </Toolbar>
       </AppBar>
-      {/*TODO cookies for subjects*/}
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route exact path="/sign-in" component={SignIn}/>
@@ -42,9 +42,7 @@ export default function PublicContainer() {
         <Route exact path="/confirm-email" component={ConfirmEmail}/>
         <Route exact path="/cookies-policy"><Container maxWidth="md"><CookiesPolicy/></Container></Route>
         <Route exact path="/terms-of-services"><Container maxWidth="md"><TermsOfServices/></Container></Route>
-        <Route exact path="/data-processing-agreement"><Container maxWidth="md">
-
-        </Container></Route>
+        <Route exact path="/privacy-statement"><Container maxWidth="md"><PrivacyStatement/></Container></Route>
         {/*Not found page*/}
         <Route exact path="/not-found"><NotFoundView/></Route>
         <Redirect to="/not-found"/>

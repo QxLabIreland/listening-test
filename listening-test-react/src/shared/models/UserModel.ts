@@ -10,4 +10,6 @@ export class UserModel {
   isAdmin?: boolean;
   permissions?: string[];
   messages?: MessageModel[];
+  // Privacy statement
+  privacyStatement?: boolean;
 }

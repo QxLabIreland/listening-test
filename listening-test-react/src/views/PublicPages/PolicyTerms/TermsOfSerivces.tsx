@@ -4,7 +4,6 @@ export function TermsOfServices() {
   return <main>
     <h1>Go Listen Privacy Statement</h1>
     <h3>Introduction</h3>
-    <div>&nbsp;</div>
     <div>Go Listen is a public service provided by QxLab at University College Dublin. Go Listen has published this
       Privacy Statement to demonstrate our firm commitment to the privacy of users of our Website. It applies to the use
       of your personal information (also known as ‘personal data’) by Go Listen through the viewing or use of its main
@@ -57,9 +56,9 @@ export function TermsOfServices() {
     <div>&nbsp;</div>
     <div>Occasionally cookie information is passed to third parties for analysing website activity and usage. This
       information will not include any of your personal information from which you will be readily identifiable. Further
-      Information regarding Go Listen cookie usage is available at <a href="https://golisten.ucd.ie/cookies-policy/"
-                                                                      target="_blank"
-                                                                      rel="noopener noreferrer">https://golisten.ucd.ie/cookies-policy/</a>
+      Information regarding Go Listen cookie usage is available at
+      <a href="https://golisten.ucd.ie/cookies-policy/" target="_blank"
+         rel="noopener noreferrer">https://golisten.ucd.ie/cookies-policy/</a>
     </div>
     <div>&nbsp;</div>
     <div>Technical details in connection with visits to this website may be logged on Go Listen’s server for accounting

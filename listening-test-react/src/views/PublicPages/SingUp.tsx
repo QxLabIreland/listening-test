@@ -19,7 +19,7 @@ export default function SignUp() {
 
   // Form initialization
   const formik = useFormik({
-    initialValues: {name: '', email: '', password: '', policy: false},
+    initialValues: {name: '', email: '', password: '', policy: false, privacyStatement: false},
     onSubmit: values => Axios.post('/api/sign-up', {...values, password: Md5.hashStr(values.password)})
       .then(() => {
         openSnackbar('The confirmation link has been sent. If you didn\'t receive anything please check your spam inbox', undefined, 'info');
@@ -31,6 +31,7 @@ export default function SignUp() {
       email: [email(), required()],
       password: [required(), minLength(6), password()],
       policy: [mustBeTrue()],
+      privacyStatement: [mustBeTrue()],
     })
   });
 
@@ -42,7 +43,7 @@ export default function SignUp() {
       <Typography color="textSecondary" gutterBottom className={classes.suggestion}>
         Use your email to create new account
       </Typography>
-      <TextField className={classes.textField} error={!!formik.errors.name} fullWidth
+      <TextField className={classes.textField} error={!!formik.errors.name} fullWidth autoFocus
                  helperText={formik.errors.name} label="Your Name" name="name"
                  onChange={formik.handleChange} type="text" variant="outlined"/>
 
@@ -54,9 +55,8 @@ export default function SignUp() {
                  helperText={formik.errors.password} label="Password" name="password" autoComplete="new-password"
                  onChange={formik.handleChange} type="password" variant="outlined"/>
       {/*Terms of services*/}
-      <div className={classes.policy}>
-        <Checkbox checked={formik.values.policy} className={classes.policyCheckbox}
-                  color="primary" name="policy" onChange={formik.handleChange}/>
+      <div className={classes.checkboxFormControl}>
+        <Checkbox checked={formik.values.policy} className={classes.checkbox} color="primary" name="policy" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
           <Link color="primary" component={RouterLink} to="/terms-of-services" variant="h6" type="button" target="_blank">
@@ -65,18 +65,19 @@ export default function SignUp() {
         </Typography>
       </div>
       {!!formik.errors.policy && <FormHelperText error>{formik.errors.policy}</FormHelperText>}
-      {/*Data processing agreement*/}
-      <div className={classes.policy} style={{margin: 0}}>
-        <Checkbox checked={formik.values.policy} className={classes.policyCheckbox} color="primary" name="policy"
-                  onChange={formik.handleChange}/>
+
+      {/*Privacy statement*/}
+      <div className={classes.checkboxFormControl} style={{margin: 0}}>
+        <Checkbox checked={formik.values.privacyStatement} className={classes.checkbox} color="primary" name="privacyStatement" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/data-processing-agreement" variant="h6" type="button" target="_blank">
-            Data Processing Agreement
+          <Link color="primary" component={RouterLink} to="/privacy-statement" variant="h6" type="button" target="_blank">
+            Privacy Statement
           </Link>
         </Typography>
       </div>
-      {!!formik.errors.policy && <FormHelperText error>{formik.errors.policy}</FormHelperText>}
+      {!!formik.errors.privacyStatement && <FormHelperText error>{formik.errors.privacyStatement}</FormHelperText>}
+
       <Button className={classes.signInUpButton} color="primary" fullWidth
               size="large" type="submit" variant="contained">
         Sign up now
