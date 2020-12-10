@@ -59,7 +59,7 @@ export default function SignUp() {
         <Checkbox checked={formik.values.policy} className={classes.checkbox} color="primary" name="policy" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/terms-of-services" variant="h6" type="button" target="_blank">
+          <Link color="primary" component={RouterLink} to="/TermsandConditions.html" variant="h6" type="button" target="_blank">
             Terms and Conditions
           </Link>
         </Typography>
@@ -71,7 +71,7 @@ export default function SignUp() {
         <Checkbox checked={formik.values.privacyStatement} className={classes.checkbox} color="primary" name="privacyStatement" onChange={formik.handleChange}/>
         <Typography color="textSecondary" variant="body1">
           I have read the{' '}
-          <Link color="primary" component={RouterLink} to="/privacy-statement" variant="h6" type="button" target="_blank">
+          <Link color="primary" component={RouterLink} to="/GoListenPrivacyStatment.html" variant="h6" type="button" target="_blank">
             Privacy Statement
           </Link>
         </Typography>
