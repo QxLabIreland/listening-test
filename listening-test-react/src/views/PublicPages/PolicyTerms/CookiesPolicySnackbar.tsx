@@ -13,7 +13,7 @@ export function CookiesPolicySnackbar() {
   return <Snackbar open={open} onClose={handleClose} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
     <Alert severity="info" onClose={handleClose}>
       This site uses cookies to provide you with a great user experience. By using Golisten, you accept our
-      <Link to="/cookies-policy" target="_blank"> use of cookies</Link>.
+      <Link to="/CookiePolicy.html" target="_blank"> use of cookies</Link>.
     </Alert>
   </Snackbar>
 }
