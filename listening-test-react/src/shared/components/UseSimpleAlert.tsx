@@ -15,7 +15,7 @@ interface SimpleAlertMessage {
   content: string;
 }
 
-export function useSimpleAlert(disableClose: boolean = false): [JSX.Element, (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => void, SimpleAlertMessage] {
+export function useSimpleAlert(disableClose: boolean = false): [JSX.Element, (severity: severityType, content: string, title?: string) => void, SimpleAlertMessage] {
   const [open, setOpen] = useState<boolean>();
   const [message, setMessage] = useState<SimpleAlertMessage>();
   const classes = useStyles();
@@ -27,7 +27,7 @@ export function useSimpleAlert(disableClose: boolean = false): [JSX.Element, (se
     setMessage(null);
   }
 
-  const setGeneralAlertMessage = (severity: 'success' | 'error' | 'warning' | 'info', content: string, title?: string) => {
+  const setGeneralAlertMessage = (severity: severityType, content: string, title?: string) => {
     setMessage({severity: severity, content: content, title: title});
     setOpen(true);
   }
