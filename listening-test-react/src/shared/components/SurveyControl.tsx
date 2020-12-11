@@ -122,6 +122,7 @@ const SurveyOptions = observer(function ({control, gotoQuestionItems, disableGot
                 <MenuItem value={''}>Continue to next question</MenuItem>
                 {/*<MenuItem value={gotoQuestionAbortValue}>Abort the test</MenuItem>*/}
                 {gotoQuestionItems.map(item => <MenuItem value={item.id} key={item.id}>Go to {item.title}</MenuItem>)}
+                <MenuItem value={'-1'}>Abort the test</MenuItem>
               </Select>
             </FormControl>
           </Tooltip>

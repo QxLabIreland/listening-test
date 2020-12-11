@@ -9,7 +9,7 @@ export interface SurveyControlModel {
   required?: boolean;
   disabled?: boolean;
   // A mapping allows subject to skip some question
-  // value equals: undefined or '': No mapping. [uuid]: Go to this question
+  // value equals: undefined or '': No mapping. [uuid]: Go to this question. '-1' Abort the test
   gotoQuestionMapping?: {[key: number]: string}
 }
 

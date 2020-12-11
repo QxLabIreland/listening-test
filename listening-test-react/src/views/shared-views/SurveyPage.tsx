@@ -57,6 +57,29 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     if (questionnaire?.settings?.isIndividual) setOpenedPanel(-1);
   }, [questionnaire]);
 
+  const gotoQuestionChecking = (item: BasicTaskItemModel): number => {
+    // Don't override when it is not an individual questionnaire
+    if (item?.type !== TestItemType.question || !questionnaire.settings?.isIndividual) return null;
+    const control = item.questionControl;
+    // Make sure the type and the mapping has value
+    if (control.type === SurveyControlType.radio && control.gotoQuestionMapping) {
+      // Get uuid based on control value
+      const targetId = control.gotoQuestionMapping[control.options.indexOf(control.value)];
+      if (targetId) {
+        // Abort the whole test without submitting
+        if (targetId === '-1') {
+          if (!value) history.replace('/task/finish', true);
+          else openDialog('The task has been aborted, thank you for you participation.');
+        }
+        else {
+          const index = questionnaire.items.findIndex(item => item.id === targetId);
+          if (index > -1) return index;
+        }
+      }
+    }
+    return null;
+  }
+
   function handlePanelChange(v: boolean, newIndex: number) {
     const validationError = validateError(randomItems[openedPanel]);
     // Value means this is in preview mode
@@ -71,7 +94,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
         if (randomItems[openedPanel])
           randomItems[openedPanel].time = (new Date().getTime() - startTime[openedPanel]) / 1000;
       }
-      const indexOverride = gotoQuestionChecking(randomItems[openedPanel], questionnaire);
+      const indexOverride = gotoQuestionChecking(randomItems[openedPanel]);
       // useState is async method, so put it at the end
       setOpenedPanel(indexOverride !== null ? indexOverride : newIndex);
     }
@@ -129,21 +152,6 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
     )}
   </Grid> : <Loading error={error}/>}</Box>
 })
-
-function gotoQuestionChecking(item: BasicTaskItemModel, questionnaire: BasicTaskModel): number {
-  // Don't override when it is not an individual questionnaire
-  if (item?.type !== TestItemType.question || !questionnaire.settings?.isIndividual) return null;
-  const control = item.questionControl;
-  // Make sure the type and the mapping has value
-  if (control.type === SurveyControlType.radio && control.gotoQuestionMapping) {
-    const targetId = control.gotoQuestionMapping[control.options.indexOf(control.value)];
-    if (targetId) {
-      const index = questionnaire.items.findIndex(item => item.id === targetId);
-      if (index > -1) return index;
-    }
-  }
-  return null;
-}
 
 // An hook to switch different views of card
 function useSurveyRenderItem(testUrl: TestUrl): { validateError: (item: BasicTaskItemModel) => string } {

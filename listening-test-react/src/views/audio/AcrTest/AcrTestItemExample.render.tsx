@@ -38,7 +38,7 @@ export const AcrTestItemExampleRender = observer(function (props: { example: Aud
   useEffect(() => {
     if (currentIndex >= randomAudios.length - 1) example.blockNext = false;
     // Delete placedOnce for next internal question
-    else delete example.playedOnce;
+    delete example.playedOnce;
   }, [currentIndex]);
 
   const handleClickNext = () => {
