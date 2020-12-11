@@ -40,11 +40,14 @@ export default function SurveyFinishPage() {
         Thank you for taking part in this test
       </Typography>
       {/*Survey finished page / Delete response page*/}
-      {location.state ? <>
+      {location.state ? <> {!id && !testUrl ?
+        <Typography variant="body2" color="textSecondary" className={classes.paragraphCenter}>
+          The task has been aborted. No data has been submitted.
+        </Typography> :
         <Typography variant="body2" color="textSecondary" className={classes.paragraphCenter}>
           Your responses are anonymous but if you do wish delete your responses at a later time, please save and visit
           this link: <Link href={deletionLink} target="_blank">{deletionLink}</Link>
-        </Typography>
+        </Typography>}
         <Typography variant="body1" className={classes.signupPrompt}>
           If you would like to create and share your own tests.
         </Typography>
@@ -59,7 +62,6 @@ export default function SurveyFinishPage() {
           {alert}
         </div>
       </>}
-
     </Grid>
   </Box>;
 }
