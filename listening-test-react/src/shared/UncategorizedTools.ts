@@ -18,3 +18,12 @@ export function getCurrentHost() {
   return isDevMode() ? DEV_HOST : PRODUCTION_HOST;
 }
 
+const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB'];
+// The size should be in byte unit
+export function fmtFileSize(size: number): string {
+  for (const unit of units) {
+    if (Math.abs(size) < 1024.0) return size.toFixed(2) + unit
+    size /= 1024.0
+  }
+  return size.toFixed(2) + 'YB'
+}

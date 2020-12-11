@@ -22,9 +22,9 @@ class StorageStatusHandler(BaseHandler):
                     storage_status_dto[key] += value
 
         self.dumps_write({
-            'totalSize': sizeof_fmt(storage_status_dto['totalSize']),
+            'totalSize': storage_status_dto['totalSize'],
             'totalNum': storage_status_dto['totalNum'],
-            'redundantSize': sizeof_fmt(storage_status_dto['redundantSize'])
+            'redundantSize': storage_status_dto['redundantSize']
         })
 
     # Delete unused files
@@ -46,7 +46,7 @@ class StorageStatusHandler(BaseHandler):
                     total_num += 1
 
         self.dumps_write({
-            'totalSize': sizeof_fmt(total_size),
+            'totalSize': total_size,
             'totalNum': total_num,
             'redundantSize': 0
         })
@@ -94,13 +94,3 @@ def get_space_usage(target_path, db_medias_checklist):
                     redundant_size += f_size
 
     return {'totalSize': size, 'totalNum': count, 'redundantSize': redundant_size}
-
-
-# TODO Front end will do this thing
-# File size formatting tool
-def sizeof_fmt(num):
-    for unit in ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
-        if abs(num) < 1024.0:
-            return "%3.1f%s" % (num, unit)
-        num /= 1024.0
-    return "%.1f%s" % (num, 'YB')

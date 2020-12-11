@@ -13,20 +13,21 @@ import {
 import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
 import Loading from "../layouts/components/Loading";
 import {GlobalDialog} from "../shared/ReactContexts";
+import {fmtFileSize} from "../shared/UncategorizedTools";
 
 interface StorageStatus {
-  totalSize: string;
+  totalSize: number;
   totalNum: number;
-  redundantSize: string;
+  redundantSize: number;
 }
 
 export default function() {
-  const [data, setData] = useState<StorageStatus>();
+  const [storageStatus, setStorageStatus] = useState<StorageStatus>();
   const [alert, setAlert, alertMessage] = useSimpleAlert();
   const [processing, setProcessing] = useState<boolean>();
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
-    Axios.get<StorageStatus>('/api/storage').then(res => setData(res.data), res => setAlert('error', res.response.data));
+    Axios.get<StorageStatus>('/api/storage').then(res => setStorageStatus(res.data), res => setAlert('error', res.response.data));
   }, []);
 
   // Give a alert when deleting redundant
@@ -34,24 +35,24 @@ export default function() {
     'Are your sure?', undefined, () => {
     setProcessing(true);
     Axios.delete<StorageStatus>('/api/storage').then(res => {
-      setData(res.data ? res.data : null);
+      setStorageStatus(res.data);
       setAlert('success', 'Delete redundant files successfully');
     }, res => setAlert('error', res.response.data)).finally(() => setProcessing(false));
   });
 
   // If data is undefined, show loading
-  if (data === undefined || alertMessage?.content) return <Loading error={alertMessage?.content}/>;
+  if (!storageStatus) return <Loading error={alertMessage?.content}/>;
 
   return <Grid container spacing={2}>
     <Grid item>
       <Card>
         <CardHeader title="Storage Status"/>
         <CardContent>
-          <Typography>Total size of all files uploaded: <span style={{marginLeft: 16}}>{data.totalSize}</span></Typography>
+          <Typography>Total size of all files uploaded: <span style={{marginLeft: 16}}>{fmtFileSize(storageStatus.totalSize)}</span></Typography>
 
-          <Typography>Number of files uploaded: <span style={{marginLeft: 16}}>{data.totalNum}</span></Typography>
+          <Typography>Number of files uploaded: <span style={{marginLeft: 16}}>{storageStatus.totalNum}</span></Typography>
 
-          <Typography>Total size of redundant files (that no survey or test is using): <span style={{marginLeft: 16}}>{data.redundantSize}</span></Typography>
+          <Typography>Total size of redundant files (that no survey or test is using): <span style={{marginLeft: 16}}>{fmtFileSize(storageStatus.redundantSize)}</span></Typography>
           <br/>
           <Typography variant="body2" color="textSecondary">Normally, the app doesn't delete audio files when users delete their tests,
             because it may take lots of time to query links and delete audio files. Test surveys follow the same rule.
