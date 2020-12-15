@@ -31,6 +31,8 @@ import Loading from "../layouts/components/Loading";
 import {UserModel} from "../shared/models/UserModel";
 import {GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
 import {SignUpWhitelistModel} from "../shared/models/SignUpWhitelistModel";
+import {fmtFileSize} from "../shared/UncategorizedTools";
+import {observer} from "mobx-react";
 
 export default function ManageUsers() {
   const [data, setData] = useState<UserModel[]>();
@@ -66,7 +68,7 @@ export default function ManageUsers() {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
-            {/*<TableCell>Space Allowed</TableCell>*/}
+            <TableCell>Storage Limit</TableCell>
             <TableCell>Permissions</TableCell>
           </TableRow>
         </TableHead>
@@ -74,7 +76,7 @@ export default function ManageUsers() {
           {data.length ? getFilterData().map(user => <TableRow hover key={user._id.$oid}>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
-            {/*<TableCell>500MB</TableCell>*/}
+            <TableCell>{fmtFileSize(user.storageAllocated ?? 524_288_000)}</TableCell>
             <TableCell><ManagePermissionDialog user={user}/></TableCell>
           </TableRow>) : <TableRow>
             <TableCell colSpan={4}>There is no user</TableCell>
@@ -87,7 +89,7 @@ export default function ManageUsers() {
 
 const fullPermissions = ['User', 'Template', 'Storage', 'Video'];
 
-function ManagePermissionDialog({user}: { user: UserModel }) {
+export const ManagePermissionDialog = observer(function ({user}: { user: UserModel }) {
   const [open, setOpen] = React.useState(false);
   const [processing, setProcessing] = useState<boolean>(false);
   const openSnackbar = useContext(GlobalSnackbar);
@@ -105,6 +107,7 @@ function ManagePermissionDialog({user}: { user: UserModel }) {
   }
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleStorageAllocatedChange = () => Axios.patch('/api/storage-allocation', user).then();;
 
   return (<>
     <Button color="primary" onClick={handleClickOpen}>View</Button>
@@ -119,14 +122,15 @@ function ManagePermissionDialog({user}: { user: UserModel }) {
                       onChange={() => handleAddPermission(per, user)}/>}
           />
         )}
-        {/*<TextField variant="standard" label="Storage space allowed"/>*/}
+        <TextField variant="standard" label="Storage space allowed" type="number" defaultValue={user.storageAllocated ?? 524_288_000}
+                   onChange={e => user.storageAllocated = Number(e.target.value)} onBlur={handleStorageAllocatedChange}/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>Ok</Button>
       </DialogActions>
     </Dialog>
   </>);
-}
+});
 
 function ManageWhitelist() {
   const [open, setOpen] = React.useState(false);
