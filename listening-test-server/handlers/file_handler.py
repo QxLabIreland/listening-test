@@ -10,6 +10,7 @@ class FileHandler(BaseHandler):
 
     # Upload files
     async def post(self):
+        # TODO Check the storage status first
         # Switch to different folder for different task
         if "audioFile" in self.request.files:
             file_metas = self.request.files["audioFile"]

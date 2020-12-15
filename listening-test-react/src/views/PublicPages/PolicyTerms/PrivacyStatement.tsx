@@ -56,7 +56,7 @@ export function PrivacyStatement() {
       University College Dublin (Go Listen)<br/>
       Belfield<br/>
       Dublin 4<br/>
-      Email: <a href="mailto:dan.barry@ucd.ie">dan.barry@ucd.ie</a><br/>
+      Email: <a href="mailto:golisten@ucd.ie">golisten@ucd.ie</a><br/>
       Website: <a href="https://www.google.com/url?q=http://golisten.ucd.ie&amp;sa=D&amp;ust=1607535142211000&amp;usg=AOvVaw0LSMiLfvIS42E8MWly8As1">http://golisten.ucd.ie</a>
     </p>
     <p><span>If you have concerns about how Go Listen processes personal data of account holders for administrative purposes, you can contact the UCD DPO by email </span><a href="mailto:gdpr@ucd.ie">gdpr@ucd.ie</a></p>

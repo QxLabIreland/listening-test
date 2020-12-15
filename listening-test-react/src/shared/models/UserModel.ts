@@ -12,4 +12,6 @@ export class UserModel {
   messages?: MessageModel[];
   // Privacy statement
   privacyStatement?: boolean;
+  // The number which is allocated for current user
+  storageAllocated?: number
 }

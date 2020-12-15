@@ -14,27 +14,22 @@ import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
 import Loading from "../layouts/components/Loading";
 import {GlobalDialog} from "../shared/ReactContexts";
 import {fmtFileSize} from "../shared/UncategorizedTools";
-
-interface StorageStatus {
-  totalSize: number;
-  totalNum: number;
-  redundantSize: number;
-}
+import {StorageStatusModel} from "../shared/models/StorageStatusModel";
 
 export default function() {
-  const [storageStatus, setStorageStatus] = useState<StorageStatus>();
+  const [storageStatus, setStorageStatus] = useState<StorageStatusModel>();
   const [alert, setAlert, alertMessage] = useSimpleAlert();
   const [processing, setProcessing] = useState<boolean>();
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
-    Axios.get<StorageStatus>('/api/storage').then(res => setStorageStatus(res.data), res => setAlert('error', res.response.data));
+    Axios.get<StorageStatusModel>('/api/storage').then(res => setStorageStatus(res.data), res => setAlert('error', res.response.data));
   }, []);
 
   // Give a alert when deleting redundant
   const handleDeleteRedundant = () => openDialog('This action will delete all redundant files permanently and deleted files are not recoverable',
     'Are your sure?', undefined, () => {
     setProcessing(true);
-    Axios.delete<StorageStatus>('/api/storage').then(res => {
+    Axios.delete<StorageStatusModel>('/api/storage').then(res => {
       setStorageStatus(res.data);
       setAlert('success', 'Delete redundant files successfully');
     }, res => setAlert('error', res.response.data)).finally(() => setProcessing(false));

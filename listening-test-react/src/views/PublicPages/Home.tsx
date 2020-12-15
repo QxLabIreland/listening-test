@@ -59,7 +59,7 @@ export default function Home() {
 
         </Typography>
         {/*<Typography variant="body2" gutterBottom align="center" className={classes.small}>
-          We are in closed beta! Contact <a href="mailto:dan.barry@ucd.ie" className={classes.mail}>dan.barry@ucd.ie</a> to discuss access
+          We are in closed beta! Contact <a href="mailto:golisten@ucd.ie" className={classes.mail}>golisten@ucd.ie</a> to discuss access
         </Typography>*/}
 
       </Container>

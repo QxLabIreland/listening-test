@@ -20,6 +20,7 @@ import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
 import NotFoundView from "../components/NotFoundView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
+import {StorageAllocation} from "../../views/StorageAllocation";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -93,22 +94,19 @@ export function AppBarDrawer(props: any) {
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><DashboardPage/></AppBarLayout>
         </Route>
         <AuthRoute exact path={`${path}/storage`} permission="Storage">
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <ManageStorage/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><ManageStorage/></AppBarLayout>
         </AuthRoute>
         <AuthRoute exact path={`${path}/people`} permission="User">
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <ManageUsers/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><ManageUsers/></AppBarLayout>
         </AuthRoute>
         <AuthRoute exact path={`${path}/template`} permission="Template">
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle>
-            <TemplatesPage/>
-          </AppBarLayout>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><TemplatesPage/></AppBarLayout>
         </AuthRoute>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
+        </Route>
+        <Route exact path={`${path}/storage-allocation`}>
+          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><StorageAllocation/></AppBarLayout>
         </Route>
 
         {/*Listening Task routes*/}
