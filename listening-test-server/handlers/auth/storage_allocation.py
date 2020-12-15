@@ -11,11 +11,11 @@ class StorageAllocationHandler(BaseHandler):
     async def get(self):
         # TODO Test if this is gonna work
         medias_size = 0
-        medias_count = 0
+        file_set = set()
         # Get all collections and map data by user id
         for col in self.db.list_collection_names():
             data_list = self.db[col].aggregate([
-                {'$match': {'_id': self.user_id}},
+                {'$match': {'userId': self.user_id}},
                 {"$addFields": {"paths": {'$reduce': {
                     'input': "$items.example.medias",
                     'initialValue': [],
@@ -24,10 +24,12 @@ class StorageAllocationHandler(BaseHandler):
                 {'$project': {'paths': 1}},
                 {'$unwind': '$paths'}
             ])
+            # Map all files' addresses
             for path_obj in data_list:
                 if 'paths' in path_obj and path_obj['paths']:
                     fp = path_obj['paths'][1:]
-                    if os.path.exists(fp):
+                    if os.path.exists(fp) and fp not in file_set:
+                        # Build status for storage
                         medias_size += os.path.getsize(fp)
-                        medias_count += 1
-        self.dumps_write({'totalSize': medias_size, 'totalNum': medias_count})
+                        file_set.add(fp)
+        self.dumps_write({'totalSize': medias_size, 'totalNum': len(file_set)})

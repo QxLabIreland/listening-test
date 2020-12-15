@@ -33,6 +33,12 @@ export function AccountDropMenu() {
         </ListItemIcon>
         <ListItemText primary="Settings"/>
       </MenuItem>
+      <MenuItem onClick={handleClose} component={Link} to={`/user/storage-allocation`}>
+        <ListItemIcon>
+          <Icon fontSize="small">data_usage</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Storage Usage"/>
+      </MenuItem>
       <MenuItem onClick={handleSignOut} component={Link} to="/sign-in">
         <ListItemIcon>
           <Icon fontSize="small">exit_to_app</Icon>
