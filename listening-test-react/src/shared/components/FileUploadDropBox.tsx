@@ -1,9 +1,10 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, createStyles, LinearProgress, Theme, Typography} from "@material-ui/core";
 import {observer} from "mobx-react";
-import React, {ChangeEvent, DragEvent, PropsWithChildren, useRef, useState} from "react";
+import React, {ChangeEvent, DragEvent, PropsWithChildren, useContext, useRef, useState} from "react";
 import {BasicFileModel} from "../models/BasicTaskModel";
 import Axios from "axios";
+import {GlobalDialog} from "../ReactContexts";
 
 const useStyles = makeStyles((_: Theme) => createStyles({
   // fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'},
@@ -27,6 +28,7 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
   const [progress, setProgress] = useState(0);
   // Mouse hovering
   const [hovering, setHovering] = useState(false);
+  const openDialog = useContext(GlobalDialog);
 
   // Config what to do when finished
   const onUploadingFinished = () => {
@@ -60,7 +62,11 @@ export const FileUploadDropBox = observer(function (props: PropsWithChildren<{
       onChange({src: res.data, filename: files[0].name} as BasicFileModel);
       // Finishing callback
       onUploadingFinished();
-    }, onUploadingFinished)
+    }, (res) => {
+      // When uploading fails
+      openDialog(res.response.data, 'Upload fails');
+      onUploadingFinished();
+    })
   }
   const handleFileUploadDragOver = (event: any) => {
     event.dataTransfer.dropEffect = 'copy';

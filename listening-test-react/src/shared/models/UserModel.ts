@@ -12,6 +12,6 @@ export class UserModel {
   messages?: MessageModel[];
   // Privacy statement
   privacyStatement?: boolean;
-  // The number which is allocated for current user
+  // The number which is allocated for current user. Default storage limit is 524_288_000
   storageAllocated?: number
 }
