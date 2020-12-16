@@ -78,9 +78,9 @@ export default function SignIn() {
       <Typography color="textSecondary" variant="body1">
         <Link component={RouterLink} to="/find-password" variant="body1">Forget password</Link>
       </Typography>
-      <Typography variant="body2" gutterBottom color="textSecondary" style={{marginTop: 8}}>
+      {/*<Typography variant="body2" gutterBottom color="textSecondary" style={{marginTop: 8}}>
         We are in closed beta! Contact <a href="mailto:golisten@ucd.ie" style={{color: 'black'}}>golisten@ucd.ie</a> to discuss access
-      </Typography>
+      </Typography>*/}
     </form>
   </PublicFormLayout>
 }
