@@ -17,7 +17,7 @@ import {
   ListItemText,
   Tab,
   Tabs,
-  TextField, Tooltip, Typography
+  TextField, Tooltip
 } from "@material-ui/core";
 import SearchInput from "../shared/components/SearchInput";
 import Card from "@material-ui/core/Card";
@@ -35,7 +35,7 @@ import {fmtFileSize} from "../shared/UncategorizedTools";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 
-export default function ManageUsers() {
+export const ManageUsers = observer(function () {
   const [data, setData] = useState<UserModel[]>();
   const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState();
@@ -86,7 +86,7 @@ export default function ManageUsers() {
       </Table></CardContent></Card> : <Loading error={error}/>}
     </Grid>
   </Grid>
-}
+});
 
 const fullPermissions = ['User', 'Template', 'Storage', 'Video'];
 
@@ -130,13 +130,18 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
           />
         )}
         <DialogContentText/>
-        <Box display="flex" alignItems="center">
-          <TextField variant="standard" label="Storage space allowed" type="number"
-                     value={user.storageAllocated ?? 524_288_000}
-                     onChange={e => user.storageAllocated = Number(e.target.value)} onBlur={handleStorageAllocatedChange}/>
-          <Button type="button" color="primary" onClick={handleStorageAllocatedReset}>Reset</Button>
-        </Box>
-        <DialogContentText>{fmtFileSize(user.storageAllocated)}</DialogContentText>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <TextField variant="standard" label="Storage allowed in MB" type="number"
+                       value={(user.storageAllocated ?? 524_288_000) / 1024 ** 2} onBlur={handleStorageAllocatedChange}
+                       onChange={e => user.storageAllocated = Number(e.target.value) * 1024 ** 2}/>
+          </Grid>
+          <Grid item>
+            <Button type="button" color="primary" onClick={handleStorageAllocatedReset} startIcon={<Icon>restore</Icon>}>
+              Reset limit
+            </Button>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>Ok</Button>

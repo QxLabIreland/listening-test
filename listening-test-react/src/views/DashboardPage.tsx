@@ -25,20 +25,19 @@ export default function DashboardPage() {
           radio buttons or checkbox questions. You can also add image by providing img url.
           <br/> For example: ![alt
           text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png).
-          <br/> Please check here for <Link href="https://commonmark.org/help/" target="_blank">How to use
+          <br/> Please check here for <Link href="https://commonmark.org/help/" target="_blank">How to Use
           Markdown</Link>
         </Typography>
       </CardContent>
       <CardActions style={{justifyContent: 'flex-end'}}/>
     </Card></Grid>
     <Grid item xs={12}><Card>
-      <CardHeader title="Tips"/>
+      <CardHeader title="New updates"/>
       <CardContent>
         <Typography>
-          Golisten recently introduces storage limit for each user, you can check your usage of storage by clicking
-          your
-          name on the upper right to check storage status. Or you can just click here
-          <Link to="/user/storage-allocation" component={RouterLink}> Storage usage</Link>
+          Golisten recently introduces storage limit for each user, you can check your usage of storage by
+          clicking your name on the upper right to check storage status in settings page. Or you can just click
+          here <Link to="/user/settings" component={RouterLink}>Settings</Link>
         </Typography>
       </CardContent>
     </Card></Grid>

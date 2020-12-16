@@ -1,5 +1,16 @@
-import React, {useContext} from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, TextField, Typography} from "@material-ui/core";
+import React, {useContext, useEffect, useState} from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  LinearProgress,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import {useFormik} from "formik";
 import Axios from "axios";
 import {minLength, password, pipeValidator, required} from "../shared/FormikValidator";
@@ -7,26 +18,22 @@ import {CurrentUser, GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
 import {useSimpleAlert} from "../shared/components/UseSimpleAlert";
 import {useHistory} from "react-router";
+import {useMatStyles} from "./SharedStyles";
+import {StorageStatusModel} from "../shared/models/StorageStatusModel";
+import {fmtFileSize} from "../shared/UncategorizedTools";
+import Loading from "../layouts/components/Loading";
 
 export default function SettingsPage() {
 
   return <Grid container spacing={3}>
+    <Grid item xs={12}>
+      <StorageAllocation/>
+    </Grid>
     <Grid item xs={12} md={6}>
       <ChangePassword/>
     </Grid>
     <Grid item xs={12} md={6}>
       <AccountDeletion/>
-    </Grid>
-    <Grid item xs={12} md={6}>
-      <Card>
-        <CardHeader title="Other settings"/>
-        <CardContent>
-          More settings will come soon.
-        </CardContent>
-        <CardActions style={{justifyContent: 'flex-end'}}>
-          {/*<Button color="primary">Upload</Button>*/}
-        </CardActions>
-      </Card>
     </Grid>
   </Grid>
 }
@@ -56,12 +63,14 @@ function ChangePassword() {
     })
   });
 
-  return <Card><form onSubmit={formik.handleSubmit}>
+  return <Card>
+    <form onSubmit={formik.handleSubmit}>
       <CardHeader title="Update password"/>
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="body2" color="textSecondary">Enter your current and new password to update your password.</Typography>
+            <Typography variant="body2" color="textSecondary">Enter your current and new password to update your
+              password.</Typography>
           </Grid>
           <input type="hidden" value={currentUser.email} name="email"/>
           <Grid item xs={12}>
@@ -87,7 +96,8 @@ function ChangePassword() {
           Update
         </Button>
       </CardActions>
-    </form></Card>
+    </form>
+  </Card>
 }
 
 function AccountDeletion() {
@@ -134,4 +144,50 @@ function AccountDeletion() {
       </CardActions>
     </form>
   </Card>
+}
+
+function StorageAllocation() {
+  const classes = useMatStyles();
+  const [usage, setUsage] = useState<StorageStatusModel>();
+  const {currentUser} = useContext(CurrentUser);
+  const [expandStorageAlert, setExpandStorageAlert] = useSimpleAlert();
+  useEffect(() => {
+    Axios.get<StorageStatusModel>('/api/storage-allocation').then(res => setUsage(res.data));
+  }, []);
+
+  currentUser.storageAllocated = currentUser.storageAllocated ?? 524_288_000;
+
+  const handlerExpandStorage = () => setExpandStorageAlert('info', 'Please email golisten@ucd.ie to expand storage');
+  if (usage) return <Card>
+    <CardHeader title="Storage Usage"/>
+    <CardContent>
+      <Box display="flex" alignItems="center">
+        <Box width="100%" mr={1}>
+          <LinearProgress variant="determinate"
+                          value={usage.totalSize * 100 / currentUser.storageAllocated}/>
+        </Box>
+        <Box minWidth={35}>
+          <Typography variant="body2" color="textSecondary">
+            {(usage.totalSize * 100 / currentUser.storageAllocated).toFixed(2)}%
+          </Typography>
+        </Box>
+      </Box>
+      <Typography>
+        {`Usage of storage: ${fmtFileSize(usage.totalSize)} / ${fmtFileSize(currentUser.storageAllocated)}`}
+      </Typography>
+      <Typography>
+        Number of files uploaded: {usage.totalNum}
+      </Typography>
+      <br/>
+      <Typography variant="body2" color="textSecondary">
+        Each account has default 500MB storage. You can delete old or unused tests to free up space.
+        Files with the same hash values will be only counted once.
+      </Typography>
+      {expandStorageAlert}
+    </CardContent>
+    <CardActions className={classes.flexEnd}>
+      <Button color="primary" onClick={handlerExpandStorage}>Expanded storage</Button>
+    </CardActions>
+  </Card>
+  else return <Loading/>;
 }
