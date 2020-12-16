@@ -70,6 +70,11 @@ class AcrTestCsvDownload(BaseHandler):
 
 
 def build_tags(item):
+    """
+    Build the row of tags for a CSV file
+    :param item: A test item, normally the first test item in responses of a test
+    :return: CSV format string
+    """
     if item['type'] == 1:  # Question
         return ''
     elif item['type'] == 2 or item['type'] == 3:  # Example or training also will get tags fields
@@ -82,6 +87,12 @@ def build_tags(item):
 
 
 def build_header(item, suffix='rating'):
+    """
+    Build the row of header for a CSV file
+    :param item: A test item, normally the first test item in responses of a test
+    :param suffix: This will be using in a test with rating bar
+    :return: CSV format string including double quota
+    """
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'question' in item['questionControl']:
             return f'"{item["questionControl"]["question"] or ""}"'
@@ -97,6 +108,12 @@ def build_header(item, suffix='rating'):
 
 
 def build_row(item, value_source='medias'):
+    """
+    Build a row for a response, this may execute many times
+    :param item: A test item
+    :param value_source: Identify the source of values, from medias or fields
+    :return: CSV format string including double quota
+    """
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
             # Checkbox is json type, so we need to un stringify
@@ -132,5 +149,6 @@ def build_row(item, value_source='medias'):
         return None
 
 
+# Check if the test should be timed
 def check_is_timed(row):
     return 'settings' in row and 'isTimed' in row['settings'] and row['settings']['isTimed']

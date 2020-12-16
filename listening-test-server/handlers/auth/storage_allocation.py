@@ -24,7 +24,14 @@ class StorageAllocationHandler(BaseHandler):
         self.db['users'].update({'_id': user['_id']}, {'$set': user})
         self.dumps_write(user)
 
+
 def calculate_user_storage(db: Database, user_id: ObjectId):
+    """
+    Get storage that the user has used
+    :param db: Database instance
+    :param user_id: The user's objectId
+    :return: Storage size, a list of files
+    """
     medias_size = 0
     file_set = set()
     # Get all collections and map data by user id
