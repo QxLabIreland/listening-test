@@ -17,7 +17,7 @@ import {
   ListItemText,
   Tab,
   Tabs,
-  TextField, Tooltip
+  TextField, Tooltip, Typography
 } from "@material-ui/core";
 import SearchInput from "../shared/components/SearchInput";
 import Card from "@material-ui/core/Card";
@@ -33,6 +33,7 @@ import {GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
 import {SignUpWhitelistModel} from "../shared/models/SignUpWhitelistModel";
 import {fmtFileSize} from "../shared/UncategorizedTools";
 import {observer} from "mobx-react";
+import {observable} from "mobx";
 
 export default function ManageUsers() {
   const [data, setData] = useState<UserModel[]>();
@@ -41,7 +42,7 @@ export default function ManageUsers() {
 
   useEffect(() => {
     Axios.get<UserModel[]>('/api/users').then((res) => {
-      setData(res.data);
+      setData(observable(res.data));
     }, reason => setError(reason.response.data));
   }, []);
 
@@ -107,7 +108,13 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
   }
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleStorageAllocatedChange = () => Axios.patch('/api/storage-allocation', user).then();;
+  const handleStorageAllocatedChange = () => {
+    Axios.patch('/api/storage-allocation', user).then()
+  };
+  const handleStorageAllocatedReset = () => {
+    user.storageAllocated = 524_288_000;
+    handleStorageAllocatedChange();
+  };
 
   return (<>
     <Button color="primary" onClick={handleClickOpen}>View</Button>
@@ -122,8 +129,14 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
                       onChange={() => handleAddPermission(per, user)}/>}
           />
         )}
-        <TextField variant="standard" label="Storage space allowed" type="number" defaultValue={user.storageAllocated ?? 524_288_000}
-                   onChange={e => user.storageAllocated = Number(e.target.value)} onBlur={handleStorageAllocatedChange}/>
+        <DialogContentText/>
+        <Box display="flex" alignItems="center">
+          <TextField variant="standard" label="Storage space allowed" type="number"
+                     value={user.storageAllocated ?? 524_288_000}
+                     onChange={e => user.storageAllocated = Number(e.target.value)} onBlur={handleStorageAllocatedChange}/>
+          <Button type="button" color="primary" onClick={handleStorageAllocatedReset}>Reset</Button>
+        </Box>
+        <DialogContentText>{fmtFileSize(user.storageAllocated)}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>Ok</Button>

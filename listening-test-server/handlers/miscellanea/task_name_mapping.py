@@ -7,6 +7,12 @@ from handlers.base import BaseHandler
 
 
 def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
+    """
+    Get a response collection instance of MongoDB by test_type (test url)
+    :param self: The handler instance that calls this method
+    :param test_type: Test url such as ab-test
+    :return: A response collection instance
+    """
     # Get right test collection
     if test_type == 'ab-test':
         return self.db['abSurveys']
@@ -32,7 +38,12 @@ def switch_response_collection(self: BaseHandler, test_type: str) -> Optional[Co
 
 
 def switch_task_collection(self: BaseHandler, test_type: str) -> Optional[Collection]:
-    # Get right task collection
+    """
+    Get a task collection instance of MongoDB by test_type (test url)
+    :param self: The handler instance that calls this method
+    :param test_type: Test url such as ab-test
+    :return: A task collection instance
+    """
     if test_type == 'ab-test':
         return self.db['abTests']
     elif test_type == 'acr-test':
@@ -57,7 +68,11 @@ def switch_task_collection(self: BaseHandler, test_type: str) -> Optional[Collec
 
 
 def get_task_url_by_collection(collection_name: str):
-    # Get the url by collection names
+    """
+    Get the task url string by collection name
+    :param collection_name: The name of collection
+    :return: Task url string
+    """
     if collection_name == 'abTests':
         return 'ab-test'
     elif collection_name == 'acrTests':

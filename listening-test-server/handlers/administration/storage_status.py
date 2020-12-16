@@ -73,8 +73,13 @@ class StorageStatusHandler(BaseHandler):
         return medias_checklist
 
 
-# Get the usage of the path including total size, num of files and the size of redundant files
 def get_space_usage(target_path, db_medias_checklist):
+    """
+    Get the usage of the path including total size, num of files and the size of redundant files
+    :param target_path: The path store files
+    :param db_medias_checklist: A list of filenames that is being used by tests or responses
+    :return: A dict contains totalSize, totalNum and redundantSize
+    """
     size = 0
     count = 0
     redundant_size = 0
