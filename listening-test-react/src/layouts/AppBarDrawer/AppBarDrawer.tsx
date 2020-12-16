@@ -13,14 +13,13 @@ import {ListItemNavLink} from "./ListItemNavLink";
 import AppBarLayout, {drawerWidth} from "./AppBarLayout";
 import TestListPage from "../../views/shared-views/TestListPage";
 import TestTabPage from "../../views/shared-views/TestTabPage";
-import ManageUsers from "../../views/ManageUsers";
+import {ManageUsers} from "../../views/ManageUsers";
 import AuthRoute, {useUserAuthResult} from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
 import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
 import NotFoundView from "../components/NotFoundView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {StorageAllocation} from "../../views/StorageAllocation";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {display: 'flex'},
@@ -104,9 +103,6 @@ export function AppBarDrawer(props: any) {
         </AuthRoute>
         <Route exact path={`${path}/settings`}>
           <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><SettingsPage/></AppBarLayout>
-        </Route>
-        <Route exact path={`${path}/storage-allocation`}>
-          <AppBarLayout handleDrawerToggle={handleDrawerToggle} fixedTitle><StorageAllocation/></AppBarLayout>
         </Route>
 
         {/*Listening Task routes*/}
