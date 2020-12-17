@@ -56,7 +56,7 @@ class AcrTestCsvDownload(BaseHandler):
                 is_header_writen = True
 
             # Build three different lists of data
-            value_list = [row['name'], row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
+            value_list = [f'"{row["name"]}"', row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
             for x in row['items']:
                 t = build_row(x, value_source)
                 if t is not None:
