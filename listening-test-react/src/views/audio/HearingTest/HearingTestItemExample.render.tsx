@@ -16,7 +16,7 @@ import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   volumeBarContainer: {margin: `${theme.spacing(2)}px 0`},
-  volumeBar: {height: theme.spacing(16)}
+  volumeBar: {minHeight: theme.spacing(16)}
 }));
 
 export const HearingTestItemExampleRender = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
