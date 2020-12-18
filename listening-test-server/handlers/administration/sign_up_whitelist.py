@@ -12,7 +12,8 @@ class SingUpWhitelistHandler(BaseHandler):
     # To get all domains and emails
     async def get(self):
         whitelist = SignUpWhitelistTool(self.db)
-        self.dumps_write({'domains': whitelist.domains, 'emails': whitelist.emails})
+        str_domains = ['.'.join(d) for d in whitelist.domains]
+        self.dumps_write({'domains': str_domains, 'emails': whitelist.emails})
 
     # Add a domains or an email
     async def post(self):
@@ -38,12 +39,13 @@ class SingUpWhitelistHandler(BaseHandler):
 class SignUpWhitelistTool(object):
     def __init__(self, db: Database):
         # Create domain list and email list
-        self.domains: List[str] = []
+        self.domains: List[List[str]] = []
         self.emails: List[str] = []
         data = db['signUpWhitelist'].find()
         for i in data:
             if 'domain' in i and i['domain']:
-                self.domains.append(i['domain'])
+                # Split domain into array and compare elements of array
+                self.domains.append(i['domain'].split('.'))
             elif 'email' in i and i['email']:
                 self.emails.append(i['email'])
 
@@ -52,5 +54,18 @@ class SignUpWhitelistTool(object):
         split_result = email.split('@')
         if len(split_result) != 2:
             raise Exception('Wrong email format')
-        e_domain = split_result[1]
-        return email in self.emails or e_domain in self.domains
+        input_domain = split_result[1].split('.')
+
+        for domain in self.domains:
+            if len(domain) == len(input_domain):
+                is_match = True
+                # Find a string which doesn't match
+                for i, v in enumerate(domain):
+                    # Skip wildcards
+                    if v != '*' and v != input_domain[i]:
+                        is_match = False
+                        break
+                # If each part of domain match
+                if is_match:
+                    return True
+        return False
