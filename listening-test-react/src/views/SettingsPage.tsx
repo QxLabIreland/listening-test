@@ -149,10 +149,11 @@ function AccountDeletion() {
 function StorageAllocation() {
   const classes = useMatStyles();
   const [usage, setUsage] = useState<StorageStatusModel>();
+  const [error, setError] = useState<string>();
   const {currentUser} = useContext(CurrentUser);
   const [expandStorageAlert, setExpandStorageAlert] = useSimpleAlert();
   useEffect(() => {
-    Axios.get<StorageStatusModel>('/api/storage-allocation').then(res => setUsage(res.data));
+    Axios.get<StorageStatusModel>('/api/storage-allocation').then(res => setUsage(res.data), res => setError(res.response.data));
   }, []);
 
   currentUser.storageAllocated = currentUser.storageAllocated ?? 524_288_000;
@@ -189,5 +190,5 @@ function StorageAllocation() {
       <Button color="primary" onClick={handlerExpandStorage}>Expanded storage</Button>
     </CardActions>
   </Card>
-  else return <Loading/>;
+  else return <Loading error={error}/>;
 }
