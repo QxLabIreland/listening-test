@@ -1,5 +1,5 @@
 import json
-from json import JSONDecodeError
+from typing import Callable
 
 import pymongo
 from bson import ObjectId
@@ -69,7 +69,7 @@ class AcrTestCsvDownload(BaseHandler):
         await self.finish()
 
 
-def csv_serialize(function):
+def csv_serialize(function: Callable):
     def wrapper(*args, **kwargs):
         value = function(*args, **kwargs)
         if value is None:
