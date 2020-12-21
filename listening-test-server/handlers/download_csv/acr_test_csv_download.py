@@ -69,6 +69,18 @@ class AcrTestCsvDownload(BaseHandler):
         await self.finish()
 
 
+def csv_serialize(function):
+    def wrapper(*args, **kwargs):
+        value = function(*args, **kwargs)
+        if value is None:
+            return None
+        # Replace quota and \n
+        serialized = value.replace('"', '""')
+        return f'"{serialized}"' if len(serialized) > 0 else ''
+    return wrapper
+
+
+@csv_serialize
 def build_tags(item):
     """
     Build the row of tags for a CSV file
@@ -86,6 +98,7 @@ def build_tags(item):
         return None
 
 
+@csv_serialize
 def build_header(item, suffix='rating'):
     """
     Build the row of header for a CSV file
@@ -95,18 +108,19 @@ def build_header(item, suffix='rating'):
     """
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'question' in item['questionControl']:
-            return f'"{item["questionControl"]["question"] or ""}"'
+            return item['questionControl']['question'] or ''
         else:
             return ''
     elif item['type'] == 2 or item['type'] == 3:  # Example with suffix or training
         if 'example' in item:
-            return f'"{item["title"]} {suffix if item["type"] == 2 else ""}"'
+            return item['title'] + ' ' + (suffix if item['type'] == 2 else '')
         else:
             return ''
     else:  # 0: Section header, 3 Training
         return None
 
 
+@csv_serialize
 def build_row(item, value_source='medias'):
     """
     Build a row for a response, this may execute many times
@@ -120,12 +134,12 @@ def build_row(item, value_source='medias'):
             if 'type' in item['questionControl'] and item['questionControl']['type'] == 2:
                 try:
                     value = json.loads(item["questionControl"]["value"])
-                    return f'"{",".join(value)}"'
+                    return ','.join(value)
                 # To be compatible with old version of checkbox value
                 except Exception as e:
                     print(e)
                     pass
-            return f'"{item["questionControl"]["value"] or ""}"'
+            return item['questionControl']['value'] or ''
         else:
             return ''
     elif item['type'] == 2:  # Example
@@ -136,13 +150,13 @@ def build_row(item, value_source='medias'):
                 if 'type' in a and a['type'] == 3:
                     continue
                 row_values.append((a['value'] or '') if 'value' in a else '')
-            return f'"{",".join(row_values)}"'
+            return ','.join(row_values)
         else:
             return ''
     elif item['type'] == 3:  # Training with only one 'ask a question'
         if 'example' in item and 'fields' in item['example'] \
                 and len(item['example']['fields']) > 1 and 'value' in item['example']['fields'][1]:
-            return f'"{item["example"]["fields"][1]["value"] or ""}"'
+            return item['example']['fields'][1]['value'] or ''
         else:
             return ''
     else:  # 0: Section header
