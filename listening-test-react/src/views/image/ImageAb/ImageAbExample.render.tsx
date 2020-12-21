@@ -3,19 +3,25 @@ import {SurveyControlRender} from "../../../shared/components/SurveyControl.rend
 import React, {useEffect, useRef, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {Theme} from "@material-ui/core";
+import {Box, Theme} from "@material-ui/core";
 import {useSharedStyles} from "../../SharedStyles";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((_: Theme) => ({
   canvasContainer: {position: 'relative', width: '100%'},
-  sliderStickWrapper: {position: 'absolute', top: 0, bottom: 5},
   sliderStick: {
-    position: 'absolute', top: 0, bottom: 0, left: -3,
-    borderLeft: '2px solid black', borderRight:'2px solid black',
-    background: 'white', width: 6, cursor: 'move',
+    position: 'absolute', top: 0, bottom: 5,
+    borderLeft: '2px solid black', borderRight: '2px solid black',
+    background: 'white', width: 7, cursor: 'move',
     touchAction: 'none', // Disable default touch action
+    display: 'flex', alignItems: 'center'
   },
+  sliderLabel: {
+    background: 'white', opacity: 0.8, borderRadius: '50%', fontWeight: 900, fontSize: '12pt',
+    position: 'relative', left: '-24px', minWidth: 50, minHeight: 50,
+    display: 'flex', justifyContent: 'space-around', alignItems: 'center'
+  },
+  strongText: {fontSize: '12pt', fontWeight: 900}
 }));
 
 export const ImageAbExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
@@ -44,15 +50,15 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
     return () => window.removeEventListener('resize', handleOnResize);
   }, [item.example.medias, active]);
 
+  /** Draw 2 images on the canvas*/
   const drawOnCanvas = () => {
     if (!images.current || images.current.length < 2) return;
     // Draw on canvas based on mask width
     const cxt = canvasRef.current.getContext('2d');
     const ratio = maskWidth / 100;
     const drawWidth = canvasRef.current.width * ratio;
-
-    cxt.drawImage(images.current[0], 0,0, images.current[0].width * ratio, images.current[0].height,0, 0, drawWidth, canvasRef.current.height);
-    cxt.drawImage(images.current[1], images.current[1].width * ratio, 0, images.current[1].width, images.current[1].height,  drawWidth, 0, canvasRef.current.width, canvasRef.current.height);
+    cxt.drawImage(images.current[0], 0, 0, images.current[0].width * ratio, images.current[0].height, 0, 0, drawWidth, canvasRef.current.height);
+    cxt.drawImage(images.current[1], images.current[1].width * ratio, 0, images.current[1].width, images.current[1].height, drawWidth, 0, canvasRef.current.width, canvasRef.current.height);
   }
   // Update canvas
   useEffect(drawOnCanvas, [maskWidth]);
@@ -64,6 +70,7 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
     canvasRef.current.height = canvasHeight;
     drawOnCanvas();
   }
+  /** Drag the scrub bar to mask or unmask image*/
   const handleMouseDown = (ev: any) => {
     ev.preventDefault();
     // Remove listeners
@@ -91,13 +98,18 @@ export const ImageAbExampleRender = observer(function (props: { item: ImageTestI
 
   return <Grid container spacing={2}>
     {/*Images grids. Horizontally or draggable bar*/}
-    {item.example?.settings?.isHorizontalDisplay ? <div>
-      {item.example.medias.map((v, i) => <img src={v.src} alt={v.filename} width="50%"/>)}
+    {item.example.settings?.isHorizontalDisplay ? <div>
+      {item.example.medias.map((v, i) => <img src={v.src} alt={v.filename} width="50%" style={{
+        paddingRight: i % 2 === 0 ? 4 : 0, paddingLeft: i % 2 === 0 ? 0 : 4
+      }}/>)}
+      <Box display="flex" justifyContent="space-around">
+        <strong className={classes.strongText}>A</strong><strong className={classes.strongText}>B</strong>
+      </Box>
     </div> : <div className={classes.canvasContainer} ref={canvasContainerRef}>
       <canvas ref={canvasRef} width="320" height="320"/>
-      <span style={{left: maskWidth + '%'}} className={classes.sliderStickWrapper}>
-        <span className={classes.sliderStick} onMouseDown={handleMouseDown} onTouchStart={handleMouseDown}/>
-      </span>
+      <div style={{left: `calc(${maskWidth}% - 3px)`}} className={classes.sliderStick} onMouseDown={handleMouseDown} onTouchStart={handleMouseDown}>
+        <div className={classes.sliderLabel}><span>A</span><span>B</span></div>
+      </div>
     </div>}
     {/*Questions*/}
     {item.example.fields?.map((value, i) => <Grid item xs={12} key={i}>
