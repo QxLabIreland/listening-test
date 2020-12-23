@@ -1,17 +1,15 @@
 import {observer} from "mobx-react";
 import {SurveyControlRender} from "../../../shared/components/SurveyControl.render";
 import React, {CSSProperties, useRef, useState} from "react";
-import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
+import {ImageFileModel, ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
 import Grid from "@material-ui/core/Grid";
-import {Dialog, GridList, GridListTile, Slide} from "@material-ui/core";
+import {Dialog, Slide} from "@material-ui/core";
 import {TransitionProps} from "@material-ui/core/transitions";
 import {useSharedStyles} from "../../SharedStyles";
 
 export const ImageLabelingExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
   const {item} = props;
   const [openedImg, setOpenedImg] = useState<string>();
-  const classes = useSharedStyles();
-  const colsNum = item.example.medias.length < 3 ? item.example.medias.length : 3;
 
   return <Grid container spacing={2}>
     {/*Description for the example*/}
@@ -19,11 +17,10 @@ export const ImageLabelingExampleRender = observer(function (props: { item: Imag
       <SurveyControlRender control={item.example.fields[0]}/>
     </Grid>}
     {/*Images grids*/}
-    <GridList cols={colsNum} className={classes.fullWidth} cellHeight={'auto'}>
-      {item.example.medias.map((v, i) => <GridListTile key={i} onClick={() => setOpenedImg(v.src)}>
-        <img src={v.src} alt={v.filename} className={classes.cursorPointer}/>
-      </GridListTile>)}
-    </GridList>
+    <Grid item container justify="center">
+      {item.example.medias.map((v, i) =>
+        <AutoFillImage key={i} imgFile={v} setOpenedImg={setOpenedImg}/>)}
+    </Grid>
     {/*Questions*/}
     {item.example.fields.slice(1)?.map((value, i) => <Grid item xs={12} key={i}>
       <SurveyControlRender control={value}/>
@@ -56,5 +53,20 @@ function PreviewDialog({openedImg, setOpenedImg}: { openedImg: string, setOpened
       <img src={openedImg} ref={openedImgRef} alt="Grid List" onLoad={handleLoad} className={classes.cursorPointer}
            onClick={() => setOpenedImg(undefined)} style={openedImgStyle}/>
     </div>
-  </Dialog>
+  </Dialog>;
+}
+
+function AutoFillImage({imgFile, setOpenedImg}: {imgFile: ImageFileModel, setOpenedImg: (src: string) => void}) {
+  const classes = useSharedStyles();
+  const imgRef = useRef<HTMLImageElement>();
+  const [width, setWidth] = useState('100%');
+  const handleOnLoad = () => {
+    const imgRatio = imgRef.current.naturalWidth / imgRef.current.naturalHeight;
+    // According to card width to calculate suitable height of card for img dimension
+    if (imgRatio < 2) setWidth(imgRef.current.width * 0.5 * imgRatio + 'px')
+  };
+
+  return <img ref={imgRef} src={imgFile.src} alt={imgFile.filename} className={classes.cursorPointer}
+              style={{width: width}} onClick={() => setOpenedImg(imgFile.src)} onLoad={handleOnLoad}
+  />;
 }
