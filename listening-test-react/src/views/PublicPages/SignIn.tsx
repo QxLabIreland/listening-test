@@ -57,10 +57,10 @@ export default function SignIn() {
         </Grid>
       </Grid>*/}
       <Typography className={classes.suggestion} gutterBottom color="textSecondary" variant="body1">
-        Login with email address
+        Login with your email address.
       </Typography>
       <TextField name="email" type="text" onChange={formik.handleChange} value={formik.values.email} className={classes.textField}
-                 fullWidth label="Email address" variant="outlined"
+                 fullWidth label="Email Address" variant="outlined"
                  error={!!formik.errors.email} helperText={formik.errors.email}/>
 
       <TextField type="password" className={classes.textField} fullWidth label="Password" variant="outlined"
@@ -73,7 +73,7 @@ export default function SignIn() {
       </Button>
       <Typography color="textSecondary" variant="body1">
         Don't have an account?{' '}
-        <Link component={RouterLink} to="/sign-up" variant="h6">Sign up</Link>
+        <Link component={RouterLink} to="/sign-up" variant="h6">Sign up here</Link>
       </Typography>
       <Typography color="textSecondary" variant="body1">
         <Link component={RouterLink} to="/find-password" variant="body1">Forget password</Link>

@@ -88,7 +88,8 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   return <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
     <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
     {testModel ? <React.Fragment>
-      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged} handleSubmit={handleSubmit}/>
+      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged}
+                         handleSubmit={handleSubmit}/>
       <Grid item xs={12}>
         <TextField variant="outlined" label="Test Name" fullWidth defaultValue={testModel.name} name="name"
                    onChange={e => testModel.name = e.target.value}/>
@@ -104,23 +105,26 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
           <ButtonGroup onAdd={addItem}/>
         </Grid>
       </DetailTaskModel.Provider>
-      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged} handleSubmit={handleSubmit}/>
+      <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged}
+                         handleSubmit={handleSubmit}/>
     </React.Fragment> : <Grid item><Loading error={loadingError}/></Grid>}
   </Grid>
 })
 
-const DetailViewActions = observer(function (props: {testModel: BasicTaskModel, testUrl: TestUrl, isTestChanged: boolean, handleSubmit: () => void}) {
+const DetailViewActions = observer(function (props: { testModel: BasicTaskModel, testUrl: TestUrl, isTestChanged: boolean, handleSubmit: () => void }) {
   const {testModel, testUrl, isTestChanged, handleSubmit} = props
   // Share Dialog state
   const shareDialogState = React.useState(false);
 
   return <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
-    <Grid item><FormControlLabel label="Collapse All" control={
-      <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
-                indeterminate={testModel.items.some(v => v.collapsed) && !testModel.items.every(v => v.collapsed)}
-                onChange={e => testModel.items.forEach(v => v.collapsed = e.target.checked)}/>
-    }/></Grid>
+    <Grid item><Tooltip title="Click to fold or expand all cards">
+      <FormControlLabel label="Collapse All" control={
+        <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
+                  indeterminate={testModel.items.some(v => v.collapsed) && !testModel.items.every(v => v.collapsed)}
+                  onChange={e => testModel.items.forEach(v => v.collapsed = e.target.checked)}/>
+      }/>
+    </Tooltip></Grid>
     <Grid item><TestSettingsDialog settings={testModel.settings}
                                    onConfirm={settings => testModel.settings = settings}/></Grid>
     <Grid item>
