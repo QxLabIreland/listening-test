@@ -21,7 +21,7 @@ export default function DashboardPage() {
             Welcome to Go Listen! This page is under construction but you can choose an option from the side menu to create a test
           </Typography>*/}
         <Typography>
-          The markdown syntax (Rich Text) has been added into our website. Now you can use rich text for description,
+          The markdown syntax (Rich Text) has been added to our website. Now you can use rich text for description,
           radio buttons or checkbox questions. You can also add image by providing img url.
           <br/> For example: ![alt
           text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png).
@@ -35,8 +35,8 @@ export default function DashboardPage() {
       <CardHeader title="New updates"/>
       <CardContent>
         <Typography>
-          Golisten recently introduces storage limit for each user, you can check your usage of storage by
-          clicking your name on the upper right to check storage status in settings page. Or you can just click
+          Golisten recently introduced storage limit for each user, you can check your usage by clicking your name on
+          the upper right, and then you can check storage status in settings page. Or you can just click
           here <Link to="/user/settings" component={RouterLink}>Settings</Link>
         </Typography>
       </CardContent>
@@ -58,7 +58,7 @@ function StatisticCard() {
     <CardContent>
       <Typography>Total registered test creators: {statistic.userNumber}</Typography>
       <Typography>Total number of subject responses: {statistic.responsesNumber}</Typography>
-      <Typography>Total number of Tests: {statistic.testsNumber}</Typography>
+      <Typography>Total number of tests: {statistic.testsNumber}</Typography>
     </CardContent>
   </Card></Grid>;
   else return null;
@@ -73,7 +73,8 @@ function ResendActivationEmailCard() {
   if (!currentUser?.activated) return <Grid item xs={12}>
     <Alert severity="info" action={<Button onClick={handleResend} disabled={sent}>{sent ? 'Sent' : 'Resend'}</Button>}>
       <AlertTitle>Please confirm your email address</AlertTitle>
-      Please check the link which has been sent to your email address. Or you can send another one.
+      Please check the link which has been sent to your email address. If you didn't see the link you can
+      click the button send another one.
     </Alert>
   </Grid>
   else return null;
