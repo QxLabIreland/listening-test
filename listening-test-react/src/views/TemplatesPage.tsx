@@ -42,7 +42,7 @@ function TemplatesList({testUrl}: { testUrl: TestUrl }) {
     <TableHead>
       <TableRow>
         <TableCell>Name</TableCell>
-        <TableCell>Creation Date</TableCell>
+        <TableCell>Created At</TableCell>
         <TableCell>Creator</TableCell>
         <TableCell>Template</TableCell>
         <TableCell/>

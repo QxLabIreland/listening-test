@@ -41,7 +41,7 @@ export default function() {
   return <Grid container spacing={2}>
     <Grid item>
       <Card>
-        <CardHeader title="Storage Status"/>
+        <CardHeader title="Golisten Storage Status"/>
         <CardContent>
           <Typography>Total size of all files uploaded: <span style={{marginLeft: 16}}>{fmtFileSize(storageStatus.totalSize)}</span></Typography>
 

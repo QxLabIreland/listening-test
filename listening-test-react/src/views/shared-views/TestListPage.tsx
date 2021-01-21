@@ -113,9 +113,9 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                       <TableSortLabel active direction="desc">Creation Date</TableSortLabel>
                     </Tooltip>
                   </TableCell>*/}
-          <TableCell>Creation Date</TableCell>
+          <TableCell>Created At</TableCell>
           {userAuth && <TableCell>Template</TableCell>}
-          <TableCell/>
+          <TableCell>Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

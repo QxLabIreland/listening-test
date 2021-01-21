@@ -21,7 +21,7 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
   useEffect(() => {
     // Set correct value based on url
     setValue(location.hash === '#responses' ? 1 : 0);
-    setTitle(+id === 0 ? `New ${testName}` : location.hash !== '#responses' ? `Edit an ${testName}` : `${testName} Responses`);
+    setTitle(+id === 0 ? `New ${testName}` : location.hash !== '#responses' ? `Edit ${testName}` : `${testName} Responses`);
   }, [id, preSetValue]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
