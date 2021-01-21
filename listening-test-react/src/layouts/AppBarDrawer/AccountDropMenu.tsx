@@ -31,13 +31,13 @@ export function AccountDropMenu() {
         <ListItemIcon>
           <Icon fontSize="small">settings</Icon>
         </ListItemIcon>
-        <ListItemText primary="Settings"/>
+        <ListItemText primary="Settings and Usage"/>
       </MenuItem>
       <MenuItem onClick={handleSignOut} component={Link} to="/sign-in">
         <ListItemIcon>
           <Icon fontSize="small">exit_to_app</Icon>
         </ListItemIcon>
-        <ListItemText primary="Sign out"/>
+        <ListItemText primary="Sign Out"/>
       </MenuItem>
     </Menu>
   </>;

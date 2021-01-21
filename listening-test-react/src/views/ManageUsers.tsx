@@ -55,7 +55,7 @@ export const ManageUsers = observer(function () {
   return <Grid container spacing={2}>
     <Grid item container xs={12}>
       <Grid item xs={12} md={6}>
-        <SearchInput placeholder="Search names/emails/permissions"
+        <SearchInput placeholder="Search by names/emails/permissions"
                      onChange={(event: any) => setSearchStr(event.target.value)}/>
       </Grid>
       <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
@@ -122,7 +122,7 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
             aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">Mange permissions for {user.name}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">Permissions</DialogContentText>
+        <DialogContentText id="alert-dialog-description">Permissions Allowed</DialogContentText>
         {fullPermissions.map(per =>
           <FormControlLabel key={per} label={per} disabled={processing} control={
             <Checkbox color="primary" checked={user.permissions?.indexOf(per) > -1}

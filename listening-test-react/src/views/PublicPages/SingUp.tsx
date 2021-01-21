@@ -41,14 +41,14 @@ export default function SignUp() {
         Create new account
       </Typography>
       <Typography color="textSecondary" gutterBottom className={classes.suggestion}>
-        Use your email to create new account
+        Use valid email address to create new account.
       </Typography>
       <TextField className={classes.textField} error={!!formik.errors.name} fullWidth autoFocus
                  helperText={formik.errors.name} label="Your Name" name="name"
                  onChange={formik.handleChange} type="text" variant="outlined"/>
 
       <TextField className={classes.textField} error={!!formik.errors.email} fullWidth
-                 helperText={formik.errors.email} label="Email address" name="email"
+                 helperText={formik.errors.email} label="Email Address" name="email"
                  onChange={formik.handleChange} type="text" variant="outlined"/>
 
       <TextField className={classes.textField} error={!!formik.errors.password} fullWidth
@@ -85,7 +85,7 @@ export default function SignUp() {
       <Typography color="textSecondary" variant="body1">
         Have an account?{' '}
         <Link component={RouterLink} to="/sign-in" variant="h6" type="button">
-          Sign in
+          Sign in here
         </Link>
       </Typography>
     </form>
