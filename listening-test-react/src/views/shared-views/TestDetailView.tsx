@@ -118,6 +118,14 @@ const DetailViewActions = observer(function (props: { testModel: BasicTaskModel,
 
   return <Grid item xs={12} container alignItems="center" spacing={1}>
     <Grid item style={{flexGrow: 1}}/>
+    <Grid item>
+      <Tooltip title="If you don't wanna receive more responses, you can check this option">
+        <FormControlLabel label="Stop receiving responses" control={
+          <Checkbox checked={testModel.stopReceivingRes || false} color="primary" name="policy"
+                    onChange={event => testModel.stopReceivingRes = event.target.checked}/>
+        }/>
+      </Tooltip>
+    </Grid>
     <Grid item><Tooltip title="Click to fold or expand all cards">
       <FormControlLabel label="Collapse All" control={
         <Checkbox color="primary" checked={testModel.items.every(v => v.collapsed)}
