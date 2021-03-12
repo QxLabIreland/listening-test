@@ -12,7 +12,7 @@ import {observer} from "mobx-react";
 import Axios from "axios";
 import {useHistory, useParams} from "react-router";
 import Loading from "../../layouts/components/Loading";
-import {Box, MobileStepper} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import {BasicTaskItemModel, BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {SurveyControlType, TestItemType, TestUrl} from "../../shared/models/EnumsAndTypes";
@@ -47,6 +47,7 @@ export const SurveyPage = observer(function ({value, testUrl}: { value?: BasicTa
       if (validateError) setError('The task is incomplete: ' + validateError);
       else setQuestionnaire(observable(value));
     } else Axios.get<BasicTaskModel>('/api/task/' + testUrl, {params: {_id: id}}).then(res => {
+      if (res.data.stopReceivingRes) history.replace('/task/stop-receiving-res');
       const validateError = testItemsValidateIncomplete(res.data);
       if (validateError) setError('This survey is incomplete. If you are the survey owner: ' + validateError);
       else setQuestionnaire(observable(res.data));

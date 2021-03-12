@@ -10,20 +10,22 @@ import {TestUrl} from "../../../shared/models/EnumsAndTypes";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
-export const ShareLinkDialog = forwardRef<
-  HTMLElement & { openShareLinkDialog: () => void },
-  IconButtonProps & { taskUrl: TestUrl, task: BasicTaskModel, shareDialogState: [boolean, React.Dispatch<React.SetStateAction<boolean>>] }
->(function (props, forwardedRef) {
+export const ShareLinkDialog = forwardRef<HTMLElement & { openShareLinkDialog: () => void },
+  IconButtonProps & {
+  taskUrl: TestUrl, task: BasicTaskModel,
+  shareDialogState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+}>(function (props, forwardedRef) {
   const {taskUrl, task, shareDialogState} = props;
   const [open, setOpen] = shareDialogState;
   const openGlobalDialog = useContext(GlobalDialog);
-  // Create a url for shared link
-  if (!task?._id?.$oid) return null;
-  const url = getCurrentHost() + `/task/${taskUrl}/${task._id.$oid}`;
 
   useImperativeHandle(forwardedRef, () => ({
     openShareLinkDialog: handleClickOpen
   } as any));
+
+  // Create a url for shared link
+  if (!task?._id?.$oid) return null;
+  const url = getCurrentHost() + `/task/${taskUrl}/${task._id.$oid}`;
 
   const handleClickOpen = () => {
     // Give a dialog alert that ask if user want to continue. The survey may confuse people.

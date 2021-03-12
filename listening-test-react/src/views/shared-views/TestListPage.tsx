@@ -34,6 +34,7 @@ import {useUserAuthResult} from "../../layouts/components/AuthRoute";
 import {ShareLinkDialog} from "./dialogs/ShareLinkDialog";
 import {makeStyles} from "@material-ui/core/styles";
 import {AudioExampleModel} from "../../shared/models/AudioTestModel";
+import {DeleteButtonAndDialog} from "./dialogs/DeleteButtonAndDialog";
 
 const useStyles = makeStyles(() => ({
   actionTd: {whiteSpace: 'nowrap'}
@@ -202,9 +203,7 @@ function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: 
       <Tooltip title="Duplicate test"><IconButton size="small" color="primary" onClick={() => onCopy(taskModel)}>
         <Icon>content_copy</Icon>
       </IconButton></Tooltip>
-      <Tooltip title="Delete"><IconButton size="small" color="default" onClick={() => onDelete(taskModel)}>
-        <Icon>delete</Icon>
-      </IconButton></Tooltip>
+      <DeleteButtonAndDialog onDelete={() => onDelete(taskModel)}/>
     </Hidden>
     <Hidden lgUp>
       <IconButton size="small" color="primary" onClick={handleClick}><Icon>menu</Icon></IconButton>
@@ -224,10 +223,7 @@ function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: 
           <ListItemIcon color="primary"><Icon>content_copy</Icon></ListItemIcon>
           <ListItemText primary="Duplicate"/>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
-          <ListItemIcon><Icon>delete</Icon></ListItemIcon>
-          <ListItemText primary="Delete"/>
-        </MenuItem>
+        <DeleteButtonAndDialog onDelete={handleDelete} menu/>
       </Menu>
     </Hidden>
     <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center',}} open={snackbarOpen} autoHideDuration={10_000}
