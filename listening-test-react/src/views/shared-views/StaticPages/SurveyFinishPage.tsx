@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
 import {Box, Button, createStyles, Grid, Icon, Link, Theme, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {GlobalDialog} from "../../shared/ReactContexts";
+import {GlobalDialog} from "../../../shared/ReactContexts";
 import Axios from "axios";
-import {useSimpleAlert} from "../../shared/components/UseSimpleAlert";
+import {useSimpleAlert} from "../../../shared/components/UseSimpleAlert";
 import {useLocation} from "react-router";
-import {getCurrentHost} from "../../shared/UncategorizedTools";
+import {getCurrentHost} from "../../../shared/UncategorizedTools";
 import {Link as RouterLink} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

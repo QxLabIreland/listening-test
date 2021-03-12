@@ -22,6 +22,8 @@ export interface BasicTaskModel {
   description: string;
   items: BasicTaskItemModel[];
   settings?: TestSettingsModel;
+  // If this has been set, app will stop going to test page
+  stopReceivingRes?: boolean;
 }
 
 export interface BasicTaskItemModel {
