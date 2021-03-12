@@ -2,6 +2,5 @@
 /listeningTest.tgz
 /listeningTestDb
 /*.pem
-/golisten.nginx.conf
-/golisten.supervisor.conf
 /pack_test_server.py
+node_modules
