@@ -33,6 +33,7 @@ export default function PublicContainer() {
       </AppBar>
       <Switch>
         <Route exact path="/" component={Home}/>
+        <Redirect exact path="/go" to="/"/>
         <Route exact path="/sign-in" component={SignIn}/>
         <Route exact path="/sign-up" component={SignUp}/>
         <Route exact path="/find-password" component={FindPassword}/>
