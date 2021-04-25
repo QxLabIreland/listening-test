@@ -5,6 +5,7 @@ import Axios from "axios";
 import {CurrentUser} from "../shared/ReactContexts";
 import {useUserAuthResult} from "../layouts/components/AuthRoute";
 import {Link as RouterLink} from "react-router-dom";
+import {makeStyles} from "@material-ui/core/styles";
 
 interface StatisticModel {
   userNumber: number;
@@ -12,14 +13,15 @@ interface StatisticModel {
   testsNumber: number
 }
 
+const useStyles = makeStyles(() => ({
+  header: {marginTop: 24, marginBottom:8},
+}));
+
 export default function DashboardPage() {
   return <Grid container spacing={3}>
     <Grid item xs={12}><Card>
       <CardHeader title="Welcome back"/>
       <CardContent>
-        {/*<Typography>
-            Welcome to Go Listen! This page is under construction but you can choose an option from the side menu to create a test
-          </Typography>*/}
         <Typography>
           The markdown syntax (Rich Text) has been added to our website. Now you can use rich text for description,
           radio buttons or checkbox questions. You can also add image by providing img url.
@@ -41,8 +43,9 @@ export default function DashboardPage() {
         </Typography>
       </CardContent>
     </Card></Grid>
-    <StatisticCard/>
     <ResendActivationEmailCard/>
+    <StatisticCard/>
+    <AboutCard/>
   </Grid>
 }
 
@@ -78,4 +81,50 @@ function ResendActivationEmailCard() {
     </Alert>
   </Grid>
   else return null;
+}
+
+function AboutCard() {
+  const classes = useStyles();
+  return <Grid item xs={12}>
+    <Card>
+      <CardHeader title="About The App"/>
+      <CardContent>
+        <Typography>
+          Go Listen was created by{' '}
+          <Link href="https://www.linkedin.com/in/qijian-zhang-1112a217b/" target="_blank">Qijian Zhang</Link>,{' '}
+          <Link href="https://www.linkedin.com/in/dan-barry/" target="_blank">Dan Barry</Link> and{' '}
+          <Link href="https://www.linkedin.com/in/andrew-hines/" target="_blank">Andrew Hines</Link> at{' '}
+          <Link href="https://qxlab.ucd.ie/" target="_blank">QxLab</Link> in{' '}
+          <Link href="https://www.ucd.ie/cs/" target="_blank">University College Dublin</Link>.
+          The app is free to use including commercial use. Each user is given 500 MB of audio storage
+          but if you need more email us using the details below.
+          If you have found the app useful, please cite the app using the citation below.
+        </Typography>
+
+        <Typography variant="h5" className={classes.header}>Contact Us</Typography>
+        <Typography>
+          golisten@ucd.ie
+        </Typography>
+
+        <Typography variant="h5" className={classes.header}>Prefered Citation</Typography>
+        <Typography>
+          Zhang, Qijian, Dan Barry, Pheobe Wenyi Sun, and Andrew Hines. “An Online Subjective Listening Test Platform.” Go Listen.
+          QxLab - University College Dublin, April 12, 2021. https://golisten.ucd.ie/.
+        </Typography>
+
+        <Typography variant="h5" className={classes.header}/>
+        <code>
+          @misc{'{'}zhang_barry_sun_hines_2021, title={'{'}An Online Subjective Listening Test Platform{'}'},
+          url={'{'}https://golisten.ucd.ie/{'}'}, journal={'{'}Go Listen{'}'}, publisher={'{'}QxLab - University College
+          Dublin{'}'}, author={'{'}Zhang, Qijian and Barry, Dan and Sun, Pheobe Wenyi and Hines, Andrew{'}'},
+          year={'{'}2021{'}'}, month={'{'}Apr{'}}'}
+        </code>
+
+        <Typography variant="h5" className={classes.header}>Source Code</Typography>
+        <Typography>
+          https://github.com/QxLabIreland/listening-test
+        </Typography>
+      </CardContent>
+    </Card>
+  </Grid>
 }
