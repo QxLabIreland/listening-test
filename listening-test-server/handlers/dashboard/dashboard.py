@@ -11,7 +11,7 @@ class DashboardHandler(BaseHandler):
         stat = {
             # Admin is not registered user
             'userNumber': self.db['users'].find().count(),
-            'responsesNumber':
+            'testsNumber':
                 self.db['abTests'].find().count()
                 + self.db['acrTests'].find().count()
                 + self.db['mushraTests'].find().count()
@@ -21,7 +21,7 @@ class DashboardHandler(BaseHandler):
                 + self.db['imageAbTasks'].find().count()
                 + self.db['videoLabelingTasks'].find().count()
                 + self.db['videoAbTasks'].find().count(),
-            'testsNumber':
+            'responsesNumber':
                 self.db['abSurveys'].find().count()
                 + self.db['acrSurveys'].find().count()
                 + self.db['mushraSurveys'].find().count()
