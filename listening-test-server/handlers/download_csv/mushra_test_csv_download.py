@@ -85,7 +85,7 @@ class MushraTestCsvDownload(BaseHandler):
                 for x in row['items']:
                     t = build_mushra_row(x)
                     if t is not None:
-                        value_list.append(t)
+                        value_list += t
                         if check_is_timed(row):
                             value_list.append(str(x['time']) if 'time' in x else '0')
 
@@ -102,12 +102,14 @@ class MushraTestCsvDownload(BaseHandler):
 def build_mushra_row(item):
     if item['type'] == 1:  # Question
         if 'questionControl' in item and 'value' in item['questionControl']:
-            return item['questionControl']['value'] or ''
+            return [item['questionControl']['value'] or '']
+        return ''
 
     elif item['type'] == 2:  # Example
         if 'example' in item and 'medias' in item['example']:
             row_values = [(a['value'] or '') if 'value' in a else '' for a in item['example']['medias']]
-            return ','.join(row_values)
+            return row_values
+        return ''
 
     elif item['type'] == 3:  # Training with only one 'ask a question'
         if 'example' in item and 'fields' in item['example']:
@@ -118,5 +120,7 @@ def build_mushra_row(item):
                     continue
                 row_values.append((a['value'] or '') if 'value' in a else '')
             # return f'"{item["example"]["fields"][1]["value"] or ""}"'
-            return row_values[-1]
-    return ''
+            return [row_values[-1]]
+        return ''
+    else:
+        return None
