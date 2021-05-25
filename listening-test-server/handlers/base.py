@@ -91,6 +91,6 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
         """
         user_id = self.get_current_user()
         user = self.db['users'].find_one({'_id': user_id})
-        if user_id is not None and 'Testing' in user['permissions']:
+        if user_id is not None and 'permissions' in user and 'Testing' in user['permissions']:
             query_params.pop('userId')
         return query_params

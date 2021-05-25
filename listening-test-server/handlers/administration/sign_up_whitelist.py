@@ -50,6 +50,8 @@ class SignUpWhitelistTool(object):
                 self.emails.append(i['email'])
 
     def validate(self, email: str) -> bool:
+        if email in self.emails:
+            return True
         # Check if the email is matched
         split_result = email.split('@')
         if len(split_result) != 2:
