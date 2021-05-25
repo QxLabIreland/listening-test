@@ -32,7 +32,7 @@ def write_data_in_csv(columns: List[str], data: List[dict], prefix_name: str = '
     if not os.path.exists(path):
         os.makedirs(path)
     # Build filename
-    csv_file = prefix_name + datetime.now().strftime('%Y%m%d%H%M%S') + '.csv'
+    csv_file = prefix_name + datetime.now().strftime('%Y%m%d%H%M%S%f') + '.csv'
     filename = os.path.join(path, csv_file)
     # Open a file and write data into it.
     with open(filename, 'w', newline='') as outfile:

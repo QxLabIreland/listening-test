@@ -88,7 +88,7 @@ export const ManageUsers = observer(function () {
   </Grid>
 });
 
-const fullPermissions = ['User', 'Template', 'Storage', 'Video'];
+const fullPermissions = ['User', 'Template', 'Storage', 'Video', 'Testing'];
 
 export const ManagePermissionDialog = observer(function ({user}: { user: UserModel }) {
   const [open, setOpen] = React.useState(false);

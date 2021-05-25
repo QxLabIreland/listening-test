@@ -1,5 +1,6 @@
+import csv
 import json
-from typing import Callable
+import os
 
 import pymongo
 from bson import ObjectId
@@ -16,71 +17,67 @@ class AcrTestCsvDownload(BaseHandler):
     async def get(self, head_suffix='rating', value_source='medias'):
         # Get responses, based on 1 test
         test_id = self.get_argument('testId')
-        data = self.db[self.surveyCollectionName].find({'userId': self.user_id, 'testId': ObjectId(test_id)})\
-            .sort('createdAt', pymongo.DESCENDING)
+        data = self.db[self.surveyCollectionName].find(
+            await self.overwrite_query_params({'userId': self.user_id, 'testId': ObjectId(test_id)})
+        ).sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
         if data.count() == 0:
             self.set_error(404, 'There is no enough responses')
             return
 
         # Build file name with test type and datetime
-        csv_name = f"{self.surveyCollectionName}-{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+        csv_name = f"{self.surveyCollectionName}-{datetime.now().strftime('%Y%m%d%H%M%S%f')}.csv"
+        csv_filename = os.path.join(os.getcwd(), 'static2', csv_name)
         # Set http response header for downloading file
         self.set_header('Content-Type', 'application/octet-stream')
         self.set_header('Content-Disposition', f'attachment; filename="{csv_name}"')
 
         # Set build csv and write
         is_header_writen = False
-        for row in data:
-            if not is_header_writen:
-                # Tags header: replace , for |. Add extra , for Comment field
-                tag_list = []
+        with open(csv_filename, 'w', newline='') as f:
+            writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+            for row in data:
+                if not is_header_writen:
+                    # Tags header: replace , for |. Add extra , for Comment field
+                    tag_list = []
+                    for x in row['items']:
+                        t = build_tags(x)
+                        if t is not None:
+                            tag_list.append(t)
+                            if check_is_timed(row):
+                                tag_list.append('')
+                    # Tags label + blanks + tags for examples + next row
+                    writer.writerow(['', 'Tags'] + tag_list)
+
+                    # Questions header. Examples header: Example and Comment
+                    header_list = ['Name', 'Date']
+                    for x in row['items']:
+                        t = build_header(x, head_suffix)
+                        if t is not None:
+                            header_list.append(t)
+                            if check_is_timed(row):
+                                header_list.append('Time (s)')
+                    writer.writerow(header_list)
+                    is_header_writen = True
+
+                # Build three different lists of data
+                value_list = [row["name"], row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
                 for x in row['items']:
-                    t = build_tags(x)
+                    t = build_row(x, value_source)
                     if t is not None:
-                        tag_list.append(t)
+                        value_list.append(t)
                         if check_is_timed(row):
-                            tag_list.append('')
-                # Tags label + blanks + tags for examples + next row
-                self.write('Tags' + ',,' + ','.join(tag_list) + '\n')
+                            value_list.append(str(x['time']) if 'time' in x else '0')
 
-                # Questions header. Examples header: Example and Comment
-                header_list = ['Name', 'Date']
-                for x in row['items']:
-                    t = build_header(x, head_suffix)
-                    if t is not None:
-                        header_list.append(t)
-                        if check_is_timed(row):
-                            header_list.append('Time (s)')
-                self.write(','.join(header_list) + '\n')
-                is_header_writen = True
-
-            # Build three different lists of data
-            value_list = [f'"{row["name"]}"', row['createdAt'].strftime("%Y-%m-%d %H:%M:%S")]
-            for x in row['items']:
-                t = build_row(x, value_source)
-                if t is not None:
-                    value_list.append(t)
-                    if check_is_timed(row):
-                        value_list.append(str(x['time']) if 'time' in x else '0')
-
-            # Append these three list and write
-            self.write(','.join(value_list) + '\n')
-        await self.finish()
+                # Append these three list and write
+                writer.writerow(value_list)
+        # Read and write stream
+        with open(csv_filename, 'rb') as f:
+            self.write(f.read())
+            await self.finish()
+        os.remove(csv_filename)
 
 
-def csv_serialize(function: Callable):
-    def wrapper(*args, **kwargs):
-        value = function(*args, **kwargs)
-        if value is None:
-            return None
-        # Replace quota and \n
-        serialized = value.replace('"', '""')
-        return f'"{serialized}"' if len(serialized) > 0 else ''
-    return wrapper
-
-
-@csv_serialize
 def build_tags(item):
     """
     Build the row of tags for a CSV file
@@ -98,7 +95,6 @@ def build_tags(item):
         return None
 
 
-@csv_serialize
 def build_header(item, suffix='rating'):
     """
     Build the row of header for a CSV file
@@ -120,7 +116,6 @@ def build_header(item, suffix='rating'):
         return None
 
 
-@csv_serialize
 def build_row(item, value_source='medias'):
     """
     Build a row for a response, this may execute many times
