@@ -84,3 +84,13 @@ class BaseHandler(tornado.web.RequestHandler, ABC):
                 raise tornado.web.Finish
         # If no exception raised
         return user_id
+
+    async def overwrite_query_params(self, query_params: dict) -> dict:
+        """
+        Delete userId filter for mongo query object
+        """
+        user_id = self.get_current_user()
+        user = self.db['users'].find_one({'_id': user_id})
+        if user_id is not None and 'Testing' in user['permissions']:
+            query_params.pop('userId')
+        return query_params

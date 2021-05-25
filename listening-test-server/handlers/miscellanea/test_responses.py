@@ -29,7 +29,7 @@ class TestResponsesHandler(BaseHandler):
             data = collection.find_one({'userId': self.user_id, '_id': ObjectId(_id)})
         # Check if the responses are downloadable
         if downloadable:
-            json_file_name = f"{test_type}-{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
+            json_file_name = f"{test_type}-{datetime.now().strftime('%Y%m%d%H%M%S%f')}.json"
             # Set http response header for downloading file
             self.set_header('Content-Type', 'application/octet-stream')
             self.set_header('Content-Disposition', f'attachment; filename="{json_file_name}"')
