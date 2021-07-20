@@ -106,18 +106,21 @@ function AboutCard() {
           golisten@ucd.ie
         </Typography>
 
-        <Typography variant="h5" className={classes.header}>Prefered Citation</Typography>
+        <Typography variant="h5" className={classes.header}>Preferred Citation</Typography>
         <Typography>
-          Zhang, Qijian, Dan Barry, Pheobe Wenyi Sun, and Andrew Hines. “An Online Subjective Listening Test Platform.” Go Listen.
-          QxLab - University College Dublin, April 12, 2021. https://golisten.ucd.ie/.
+          Barry, D., Zhang, Q., Sun, P.W. and Hines, A., 2021. Go Listen: An End-to-End Online Listening Test Platform. Journal of Open Research Software, 9(1), p.20. DOI: http://doi.org/10.5334/jors.361
         </Typography>
 
         <Typography variant="h5" className={classes.header}/>
         <code>
-          @misc{'{'}zhang_barry_sun_hines_2021, title={'{'}An Online Subjective Listening Test Platform{'}'},
-          url={'{'}https://golisten.ucd.ie/{'}'}, journal={'{'}Go Listen{'}'}, publisher={'{'}QxLab - University College
-          Dublin{'}'}, author={'{'}Zhang, Qijian and Barry, Dan and Sun, Pheobe Wenyi and Hines, Andrew{'}'},
-          year={'{'}2021{'}'}, month={'{'}Apr{'}}'}
+          article{'{'}zhang_barry_sun_hines_2021,
+          title={'{'}Go Listen: An End-to-End Online Listening Test Platform{'}'},
+          journal={'{'}Journal of Open Research Software{'}'},
+          author={'{'}Dan Barry and Qijian Zhang and Pheobe Wenyi Sun and Andrew Hines{'}'},
+          doi={'{'}10.5334/jors.361{'}'},
+          url={'{'}http://doi.org/10.5334/jors.361{'}'},
+          year={'{'}2021{'}'}
+          {'}'}
         </code>
 
         <Typography variant="h5" className={classes.header}>Source Code</Typography>
