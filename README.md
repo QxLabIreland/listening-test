@@ -30,12 +30,6 @@ Without an SSL certificate, some functions **will not** work. As far as we are a
 
 In the backend container, there is no process management tool such as supervisor. It just uses python3 to run.
 
-### Run with our AWS AMI and EC2
-
-Launch an AWS EC2 instance, select community AMIs, and then search `ami-0e8863cb7176cf461`. The region of this AMIs is in `eu-west-1`. 
-
-After the successful launch, you can use `cd ~/listeningTest && sudo docker-compose up` to bring the app online. Make sure inbound port 80 is open to the public in the AWS security group settings.
-
 ### Run with an AWS EC2
 
 With an AWS EC2, get the instance first and then you will need to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/). Please make sure ports 80 and 443 of the EC2 instance are open for public access.
@@ -245,41 +239,3 @@ server {
 ```
 
 For more settings, please check [nginx documentation](https://nginx.org/en/docs/) 
-
-## More about create-react-app project
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
