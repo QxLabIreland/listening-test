@@ -5,7 +5,7 @@ import {GlobalDialog} from "../../shared/ReactContexts";
 import Axios from "axios";
 import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
 import {useLocation} from "react-router";
-import {getCurrentHost} from "../../shared/UncategorizedTools";
+import {getCurrentHost} from "../../shared/tools/UncategorizedTools";
 import {Link as RouterLink} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

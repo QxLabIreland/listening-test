@@ -20,9 +20,9 @@ import {
   questionedExValidateError,
   sliderItemValidateError,
   testItemsValidateIncomplete
-} from "../../shared/ErrorValidators";
+} from "../../shared/validators/ErrorValidators";
 import {TestItemCardRender} from "./TestItemCard.render";
-import {useDivideIntoSections} from "../../shared/RandomizationTools";
+import {useDivideIntoSections} from "../../shared/tools/RandomizationTools";
 import ReactMarkdown from "react-markdown";
 
 /** If there is no value, it means survey page is on preview mode*/

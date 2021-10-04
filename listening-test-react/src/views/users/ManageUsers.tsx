@@ -31,7 +31,7 @@ import Loading from "../../layouts/components/Loading";
 import {UserModel} from "../../shared/models/UserModel";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {SignUpWhitelistModel} from "../../shared/models/SignUpWhitelistModel";
-import {fmtFileSize} from "../../shared/UncategorizedTools";
+import {fmtFileSize} from "../../shared/tools/UncategorizedTools";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 

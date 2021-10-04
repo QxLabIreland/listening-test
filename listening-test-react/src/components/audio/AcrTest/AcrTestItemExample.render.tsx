@@ -5,13 +5,13 @@ import Grid from "@material-ui/core/Grid";
 import {SurveyControlRender} from "../../forms/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../web-audio/AudiosPlayer";
 import {AudioLoading, useAllAudioRefsReady} from "../../web-audio/AudiosLoading";
-import {useRandomization} from "../../../shared/RandomizationTools";
+import {useRandomization} from "../../../shared/tools/RandomizationTools";
 import {ratingAreaStyle, useMatStyles} from "../../../shared/SharedStyles";
 import {AudioSectionLoopingController} from "../../web-audio/AudioSectionLoopingController";
 import {Box, Collapse, Slider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {GlobalDialog} from "../../../shared/ReactContexts";
-import {validatePlayedOnceError} from "../../../shared/ErrorValidators";
+import {validatePlayedOnceError} from "../../../shared/validators/ErrorValidators";
 
 export const AcrTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean, previewMode?: boolean }) {
   const {example, active, previewMode} = props;

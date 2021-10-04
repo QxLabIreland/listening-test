@@ -13,14 +13,14 @@ import {
 } from "@material-ui/core";
 import {useFormik} from "formik";
 import Axios from "axios";
-import {minLength, password, pipeValidator, required} from "../shared/FormikValidator";
+import {minLength, password, pipeValidator, required} from "../shared/validators/FormikValidator";
 import {CurrentUser, GlobalDialog} from "../shared/ReactContexts";
 import {Md5} from "ts-md5";
 import {useSimpleAlert} from "../components/utils/UseSimpleAlert";
 import {useHistory} from "react-router";
 import {useMatStyles} from "../shared/SharedStyles";
 import {StorageStatusModel} from "../shared/models/StorageStatusModel";
-import {fmtFileSize} from "../shared/UncategorizedTools";
+import {fmtFileSize} from "../shared/tools/UncategorizedTools";
 import Loading from "../layouts/components/Loading";
 
 export default function SettingsPage() {

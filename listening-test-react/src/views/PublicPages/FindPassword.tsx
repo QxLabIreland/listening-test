@@ -4,7 +4,7 @@ import {useSignInUpStyles} from "../../shared/SharedStyles";
 import {Button, TextField, Typography} from "@material-ui/core";
 import Axios from "axios";
 import {Md5} from "ts-md5";
-import {email, minLength, password, pipeValidator, required} from "../../shared/FormikValidator";
+import {email, minLength, password, pipeValidator, required} from "../../shared/validators/FormikValidator";
 import {useFormik} from "formik";
 import {useLocation} from "react-router";
 import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";

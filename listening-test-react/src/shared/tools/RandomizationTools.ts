@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {toJS} from "mobx";
-import {BasicTaskItemModel} from "./models/BasicTaskModel";
-import {TestItemType} from "./models/EnumsAndTypes";
+import {BasicTaskItemModel} from "../models/BasicTaskModel";
+import {TestItemType} from "../models/EnumsAndTypes";
 
 export function useRandomization<T>(items: T[], activated: boolean, fixLast?: boolean): [T[], number[]] {
   const [randoms, setRandoms] = useState<[T[], number[]]>([items, Array.from(items.keys())]);
