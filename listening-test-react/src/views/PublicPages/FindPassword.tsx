@@ -1,13 +1,13 @@
 import React from "react";
 import PublicFormLayout from "./PublicFormLayout";
-import {useSignInUpStyles} from "../SharedStyles";
+import {useSignInUpStyles} from "../../shared/SharedStyles";
 import {Button, TextField, Typography} from "@material-ui/core";
 import Axios from "axios";
 import {Md5} from "ts-md5";
 import {email, minLength, password, pipeValidator, required} from "../../shared/FormikValidator";
 import {useFormik} from "formik";
 import {useLocation} from "react-router";
-import {useSimpleAlert} from "../../shared/components/UseSimpleAlert";
+import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
 
 export default function () {
   const classes = useSignInUpStyles();
