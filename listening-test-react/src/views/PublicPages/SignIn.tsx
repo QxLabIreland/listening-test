@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Link as RouterLink, useHistory, useLocation} from 'react-router-dom';
 import {Button, Link, TextField, Typography} from '@material-ui/core';
 import {useFormik} from "formik";
-import {email, minLength, pipeValidator, required} from "../../shared/FormikValidator";
+import {email, minLength, pipeValidator, required} from "../../shared/validators/FormikValidator";
 import Axios from "axios";
 import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5';

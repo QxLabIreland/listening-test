@@ -13,7 +13,7 @@ import {
 import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
 import Loading from "../../layouts/components/Loading";
 import {GlobalDialog} from "../../shared/ReactContexts";
-import {fmtFileSize} from "../../shared/UncategorizedTools";
+import {fmtFileSize} from "../../shared/tools/UncategorizedTools";
 import {StorageStatusModel} from "../../shared/models/StorageStatusModel";
 
 export default function() {

@@ -1,7 +1,7 @@
-import {AudioExampleModel} from "./models/AudioTestModel";
-import {TestItemType} from "./models/EnumsAndTypes";
-import {SurveyControlModel} from "./models/SurveyControlModel";
-import {BasicTaskItemModel, BasicTaskModel} from "./models/BasicTaskModel";
+import {AudioExampleModel} from "../models/AudioTestModel";
+import {TestItemType} from "../models/EnumsAndTypes";
+import {SurveyControlModel} from "../models/SurveyControlModel";
+import {BasicTaskItemModel, BasicTaskModel} from "../models/BasicTaskModel";
 
 /** Audio setting playback setting validation */
 export function validatePlayedOnceError(example: AudioExampleModel): string {

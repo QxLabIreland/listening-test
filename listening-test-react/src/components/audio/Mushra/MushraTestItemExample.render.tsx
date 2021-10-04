@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import {SurveyControlRender} from "../../forms/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../web-audio/AudiosPlayer";
 import {AudioLoading, useAllAudioRefsReady} from "../../web-audio/AudiosLoading";
-import {useRandomization} from "../../../shared/RandomizationTools";
+import {useRandomization} from "../../../shared/tools/RandomizationTools";
 import {ratingAreaStyle} from "../../../shared/SharedStyles";
 import {AudioSectionLoopingController} from "../../web-audio/AudioSectionLoopingController";
 import {Box, Slider} from "@material-ui/core";
