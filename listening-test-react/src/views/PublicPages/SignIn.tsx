@@ -6,7 +6,7 @@ import {email, minLength, pipeValidator, required} from "../../shared/FormikVali
 import Axios from "axios";
 import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5';
-import {useSignInUpStyles} from "../SharedStyles";
+import {useSignInUpStyles} from "../../shared/SharedStyles";
 import PublicFormLayout from "./PublicFormLayout";
 
 export default function SignIn() {

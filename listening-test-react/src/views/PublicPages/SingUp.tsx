@@ -6,7 +6,7 @@ import {email, maxLength, minLength, mustBeTrue, password, pipeValidator, requir
 import Axios from "axios";
 import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
 import {Md5} from 'ts-md5/dist/md5';
-import {useSignInUpStyles} from "../SharedStyles";
+import {useSignInUpStyles} from "../../shared/SharedStyles";
 import PublicFormLayout from "./PublicFormLayout";
 import {CookiesPolicySnackbar} from "./PolicyTerms/CookiesPolicySnackbar";
 
