@@ -16,7 +16,7 @@ import TestTabPage from "../../views/test-list/TestTabPage";
 import {ManageUsers} from "../../views/users/ManageUsers";
 import AuthRoute, {useUserAuthResult} from "../components/AuthRoute";
 import TemplatesPage from "../../views/TemplatesPage";
-import ManageStorage from "../../views/users/ManageStorage";
+import ManageStorage from "../../views/ManageStorage";
 import {ListSubheader} from "@material-ui/core";
 import NotFoundView from "../components/NotFoundView";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";

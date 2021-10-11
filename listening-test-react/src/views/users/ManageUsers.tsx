@@ -1,24 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import Axios from "axios";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControlLabel,
-  Grid,
-  Icon,
-  List,
-  ListItem,
-  ListItemText,
-  Tab,
-  Tabs,
-  TextField, Tooltip
-} from "@material-ui/core";
+import {Checkbox, Grid} from "@material-ui/core";
 import SearchInput from "../../components/utils/SearchInput";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -29,11 +11,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Loading from "../../layouts/components/Loading";
 import {UserModel} from "../../shared/models/UserModel";
-import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
-import {SignUpWhitelistModel} from "../../shared/models/SignUpWhitelistModel";
 import {fmtFileSize} from "../../shared/tools/UncategorizedTools";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
+import {ManagePermissionDialog} from "./ManagePermissionDialog";
+import {ManageWhitelist} from "./ManageWhitelistDialog";
+import {GlobalSnackbar} from "../../shared/ReactContexts";
 
 export const ManageUsers = observer(function () {
   const [data, setData] = useState<UserModel[]>();
@@ -71,6 +54,7 @@ export const ManageUsers = observer(function () {
             <TableCell>Email</TableCell>
             <TableCell>Storage Limit</TableCell>
             <TableCell>Permissions</TableCell>
+            <TableCell>Activated</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -79,6 +63,7 @@ export const ManageUsers = observer(function () {
             <TableCell>{user.email}</TableCell>
             <TableCell>{fmtFileSize(user.storageAllocated ?? 524_288_000)}</TableCell>
             <TableCell><ManagePermissionDialog user={user}/></TableCell>
+            <TableCell><ActivationCheckbox user={user}/></TableCell>
           </TableRow>) : <TableRow>
             <TableCell colSpan={4}>There is no user</TableCell>
           </TableRow>}
@@ -88,139 +73,18 @@ export const ManageUsers = observer(function () {
   </Grid>
 });
 
-const fullPermissions = ['User', 'Template', 'Storage', 'Video', 'Testing'];
-
-export const ManagePermissionDialog = observer(function ({user}: { user: UserModel }) {
-  const [open, setOpen] = React.useState(false);
-  const [processing, setProcessing] = useState<boolean>(false);
+const ActivationCheckbox = observer(({user}: { user: UserModel }) => {
   const openSnackbar = useContext(GlobalSnackbar);
 
-  const handleAddPermission = (newPermission: string, user: UserModel) => {
-    // Adding processing prevents user click too many times
-    setProcessing(true);
-    Axios.post('/api/users', {newPermission, _id: user._id}).then((res) => {
-      user.permissions = res.data;
-      setProcessing(false);
-    }, reason => {
-      openSnackbar(reason.response.data, undefined, 'error');
-      setProcessing(false);
-    });
+  const handleActivatedChange = (event: ChangeEvent<HTMLInputElement>, user: UserModel) => {
+    Axios.patch(`/api/user/${user._id.$oid}`).then(() => {
+        user.activated = !user.activated;
+        openSnackbar(`The user has been ${user.activated ? 'activated' : 'deactivated'}.`, 6_000, 'success');
+      }
+      , () => openSnackbar('Activation failed.', 6_000, 'error')
+    );
   }
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleStorageAllocatedChange = () => {
-    Axios.patch('/api/storage-allocation', user).then()
-  };
-  const handleStorageAllocatedReset = () => {
-    user.storageAllocated = 524_288_000;
-    handleStorageAllocatedChange();
-  };
+  return <Checkbox checked={user.activated ?? false}
+                   onChange={event => handleActivatedChange(event, user)}/>
+})
 
-  return (<>
-    <Button color="primary" onClick={handleClickOpen}>View</Button>
-    <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description">
-      <DialogTitle id="alert-dialog-title">Mange permissions for {user.name}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">Permissions Allowed</DialogContentText>
-        {fullPermissions.map(per =>
-          <FormControlLabel key={per} label={per} disabled={processing} control={
-            <Checkbox color="primary" checked={user.permissions?.indexOf(per) > -1}
-                      onChange={() => handleAddPermission(per, user)}/>}
-          />
-        )}
-        <DialogContentText/>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <TextField variant="standard" label="Storage allowed in MB" type="number"
-                       value={(user.storageAllocated ?? 524_288_000) / 1024 ** 2} onBlur={handleStorageAllocatedChange}
-                       onChange={e => user.storageAllocated = Number(e.target.value) * 1024 ** 2}/>
-          </Grid>
-          <Grid item>
-            <Button type="button" color="primary" onClick={handleStorageAllocatedReset} startIcon={<Icon>restore</Icon>}>
-              Reset limit
-            </Button>
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} autoFocus>Ok</Button>
-      </DialogActions>
-    </Dialog>
-  </>);
-});
-
-function ManageWhitelist() {
-  const [open, setOpen] = React.useState(false);
-  const [currentTab, setCurrentTab] = useState(0);
-  const [data, setData] = useState<SignUpWhitelistModel>();
-  const [textValue, setTextValue] = useState('');
-  const openDialog = useContext(GlobalDialog);
-
-  const getData = () => {
-    Axios.get<SignUpWhitelistModel>('/api/whitelist').then(res => setData(res.data), res => openDialog(res.response.statusText));
-  }
-  const handleClickOpen = () => {
-    setOpen(true);
-    getData();
-  }
-  const handleClose = () => setOpen(false);
-  const handleTabChange = (event: React.ChangeEvent<any>, newValue: number) => setCurrentTab(newValue);
-  const handleAdd = () =>
-    Axios.post('/api/whitelist', currentTab === 0 ? {domain: textValue} : {email: textValue}).then(getData);
-  const handleDelete = () =>
-    Axios.delete('/api/whitelist', {data: currentTab === 0 ? {domain: textValue} : {email: textValue}}).then(getData);
-  const getFilterData = () => (currentTab === 0 ? data?.domains : data?.emails)?.filter(value => value.includes(textValue));
-
-  return (<>
-    <Button color="primary" variant="contained" onClick={handleClickOpen}>Sign Up Whitelist</Button>
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth aria-labelledby="whitelist-dialog-title"
-            aria-describedby="whitelist-dialog-description">
-      <DialogTitle id="whitelist-dialog-title">Mange Sign Up Whitelist</DialogTitle>
-      <DialogContent>
-
-        <DialogContentText id="alert-dialog-description">
-          Here you can add domains and email address into sign up whitelist,
-          so people with these domain and emails are able to sign up for their own account.
-          DO NOT ADD General Domain, such as gmail.com and outlook.com.
-        </DialogContentText>
-        <Tabs value={currentTab} onChange={handleTabChange} indicatorColor="primary" aria-label="Whitelist tab">
-          <Tab label="Domain" value={0}/>
-          <Tab label="Email address" value={1}/>
-        </Tabs>
-        <Box pt={2}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs>
-              <TextField fullWidth variant="standard" label={currentTab === 0 ? 'Institution Domain (without @)' : 'Email Address'}
-                         type={currentTab === 0 ? 'text' : 'email'} value={textValue}
-                         onChange={event => setTextValue(event.target.value)}/>
-            </Grid>
-            <Grid item>
-              <Button startIcon={<Icon>add</Icon>} color="primary" onClick={handleAdd} disabled={!textValue}>Add</Button>
-            </Grid>
-            <Grid item>
-              <Button startIcon={<Icon>remove</Icon>} color="secondary" onClick={handleDelete} disabled={!textValue}>Delete</Button>
-            </Grid>
-            <Grid item>
-              <Tooltip title="If you wanna add, just enter text right and click add. To delete, enter EXACT domain or
-              email address and click delete. The list on the bottom will change if add or delete successfully. Please
-              note the text box will search what you entered.">
-                <Icon>help_outline</Icon>
-              </Tooltip>
-            </Grid>
-            <Grid item xs={12}>
-              <List dense>
-                {getFilterData()?.map(value => <ListItem><ListItemText primary={value}/></ListItem>)}
-                {textValue && <ListItem><ListItemText secondary="(empty text box to see full list)"/></ListItem>}
-              </List>
-            </Grid>
-          </Grid>
-        </Box>
-
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} autoFocus>Ok</Button>
-      </DialogActions>
-    </Dialog>
-  </>);
-}

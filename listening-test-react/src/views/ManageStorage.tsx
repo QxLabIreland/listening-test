@@ -10,13 +10,13 @@ import {
   Grid,
   Typography
 } from "@material-ui/core";
-import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
-import Loading from "../../layouts/components/Loading";
-import {GlobalDialog} from "../../shared/ReactContexts";
-import {fmtFileSize} from "../../shared/tools/UncategorizedTools";
-import {StorageStatusModel} from "../../shared/models/StorageStatusModel";
+import {useSimpleAlert} from "../components/utils/UseSimpleAlert";
+import Loading from "../layouts/components/Loading";
+import {GlobalDialog} from "../shared/ReactContexts";
+import {fmtFileSize} from "../shared/tools/UncategorizedTools";
+import {StorageStatusModel} from "../shared/models/StorageStatusModel";
 
-export default function() {
+export default function ManageStorage() {
   const [storageStatus, setStorageStatus] = useState<StorageStatusModel>();
   const [alert, setAlert, alertMessage] = useSimpleAlert();
   const [processing, setProcessing] = useState<boolean>();

@@ -1,6 +1,6 @@
 import tornado.web
 
-from handlers.auth.storage_allocation import calculate_user_storage
+from handlers.administration.storage_allocation import calculate_user_storage
 from handlers.base import BaseHandler
 from tools import file_helper
 

@@ -1,7 +1,8 @@
+from handlers.administration.users_manual_activation import UsersManualActivationHandler
 from handlers.auth.find_password import FindPasswordHandler
 from handlers.administration.sign_up_whitelist import SingUpWhitelistHandler
 from handlers.administration.users_management import UsersManagementHandler
-from handlers.auth.storage_allocation import StorageAllocationHandler
+from handlers.administration.storage_allocation import StorageAllocationHandler
 from handlers.dashboard.dashboard import DashboardHandler
 from handlers.dashboard.message_handler import MessageHandler
 from handlers.download_csv.audio_labeling_csv_download import AudioLabelingCsvDownload
@@ -41,10 +42,13 @@ path = [
     ("/api/password", PasswordHandler),
     ("/api/find-password", FindPasswordHandler),
     ("/api/dashboard", DashboardHandler),
-    ("/api/users", UsersManagementHandler),
     ("/api/messages", MessageHandler),
     ("/api/whitelist", SingUpWhitelistHandler),
     ("/api/storage-allocation", StorageAllocationHandler),
+
+    # User management
+    ("/api/users", UsersManagementHandler),
+    (r"/api/user/(?P<user_id>\w+)", UsersManualActivationHandler),
 
     # Listening tests and Survey
     ("/api/ab-test", AbTestHandler),
