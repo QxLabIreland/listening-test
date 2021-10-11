@@ -34,5 +34,3 @@ class UsersManagementHandler(BaseHandler):
 
         self.db['users'].update({'_id': user['_id']}, {'$set': user})
         self.dumps_write(user['permissions'])
-
-
