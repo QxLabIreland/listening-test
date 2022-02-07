@@ -1,0 +1,11 @@
+{
+  "printWidth": 120,
+  "singleQuote": true,
+  "importOrder": [
+    "^[A-Za-z]/?(.*)$",
+    "^@material-ui/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
