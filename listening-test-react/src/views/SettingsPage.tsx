@@ -22,6 +22,7 @@ import {useMatStyles} from "../shared/SharedStyles";
 import {StorageStatusModel} from "../shared/models/StorageStatusModel";
 import {fmtFileSize} from "../shared/tools/UncategorizedTools";
 import Loading from "../layouts/components/Loading";
+import {DEFAULT_STORAGE_LIMIT} from "../shared/constants";
 
 export default function SettingsPage() {
 
@@ -156,7 +157,7 @@ function StorageAllocation() {
     Axios.get<StorageStatusModel>('/api/storage-allocation').then(res => setUsage(res.data), res => setError(res.response.data));
   }, []);
 
-  currentUser.storageAllocated = currentUser.storageAllocated ?? 524_288_000;
+  currentUser.storageAllocated = currentUser.storageAllocated ?? DEFAULT_STORAGE_LIMIT;
 
   const handlerExpandStorage = () => setExpandStorageAlert('info', 'Please email golisten@ucd.ie to expand storage');
   if (usage) return <Card>

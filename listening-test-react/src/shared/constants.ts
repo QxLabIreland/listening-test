@@ -1,0 +1,1 @@
+export const DEFAULT_STORAGE_LIMIT = 524_288_000;

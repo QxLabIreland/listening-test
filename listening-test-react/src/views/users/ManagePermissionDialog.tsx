@@ -12,9 +12,6 @@ import {
   DialogContentText,
   DialogTitle,
   FormControlLabel,
-  Grid,
-  Icon,
-  TextField,
   Tooltip
 } from "@material-ui/core";
 
@@ -38,13 +35,6 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
   }
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleStorageAllocatedChange = () => {
-    Axios.patch('/api/storage-allocation', user).then()
-  };
-  const handleStorageAllocatedReset = () => {
-    user.storageAllocated = 524_288_000;
-    handleStorageAllocatedChange();
-  };
 
   return (<>
     <Tooltip title="Click to view all permissions">
@@ -53,7 +43,7 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
           ? 'Admin'
           : !user.permissions || user.permissions.length === 0
             ? 'Add'
-            : user.permissions.slice(0,2).toString() + (user.permissions.length > 2 ? '...' : '')
+            : user.permissions.slice(0, 2).toString() + (user.permissions.length > 2 ? '...' : '')
       }</Button>
     </Tooltip>
     <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title"
@@ -67,20 +57,6 @@ export const ManagePermissionDialog = observer(function ({user}: { user: UserMod
                       onChange={() => handleAddPermission(per, user)}/>}
           />
         )}
-        <DialogContentText/>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <TextField variant="standard" label="Storage allowed in MB" type="number"
-                       value={(user.storageAllocated ?? 524_288_000) / 1024 ** 2} onBlur={handleStorageAllocatedChange}
-                       onChange={e => user.storageAllocated = Number(e.target.value) * 1024 ** 2}/>
-          </Grid>
-          <Grid item>
-            <Button type="button" color="primary" onClick={handleStorageAllocatedReset}
-                    startIcon={<Icon>restore</Icon>}>
-              Reset limit
-            </Button>
-          </Grid>
-        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>Ok</Button>

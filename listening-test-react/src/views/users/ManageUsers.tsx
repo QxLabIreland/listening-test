@@ -11,12 +11,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Loading from "../../layouts/components/Loading";
 import {UserModel} from "../../shared/models/UserModel";
-import {fmtFileSize} from "../../shared/tools/UncategorizedTools";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 import {ManagePermissionDialog} from "./ManagePermissionDialog";
 import {ManageWhitelist} from "./ManageWhitelistDialog";
 import {GlobalSnackbar} from "../../shared/ReactContexts";
+import {StorageLimitDialog} from "./StorageLimitDialog";
 
 export const ManageUsers = observer(function () {
   const [data, setData] = useState<UserModel[]>();
@@ -61,7 +61,7 @@ export const ManageUsers = observer(function () {
           {data.length ? getFilterData().map(user => <TableRow hover key={user._id.$oid}>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
-            <TableCell>{fmtFileSize(user.storageAllocated ?? 524_288_000)}</TableCell>
+            <TableCell><StorageLimitDialog user={user}/></TableCell>
             <TableCell><ManagePermissionDialog user={user}/></TableCell>
             <TableCell><ActivationCheckbox user={user}/></TableCell>
           </TableRow>) : <TableRow>

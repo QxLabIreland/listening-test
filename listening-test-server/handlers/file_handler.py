@@ -1,8 +1,12 @@
+from typing import Final
+
 import tornado.web
 
 from handlers.administration.storage_allocation import calculate_user_storage
 from handlers.base import BaseHandler
 from tools import file_helper
+
+DEFAULT_STORAGE_LIMIT: Final = 524_288_000
 
 
 class FileHandler(BaseHandler):
@@ -14,7 +18,8 @@ class FileHandler(BaseHandler):
         # Check the storage status first
         medias_size, _ = calculate_user_storage(self.db, self.user_id)
         current_user = self.db['users'].find_one({'_id': self.user_id})
-        if 'storageAllocated' in current_user and medias_size > (current_user['storageAllocated'] or 524_288_000):
+        if 'storageAllocated' in current_user \
+                and medias_size > (current_user['storageAllocated'] or DEFAULT_STORAGE_LIMIT):
             self.set_error(400, 'You have reached your storage limit. '
                                 'Please delete old or unused tests to free up space. '
                                 'If you need more space than 500 MB email golisten@ucd.ie')
