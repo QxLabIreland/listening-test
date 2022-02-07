@@ -1,6 +1,6 @@
-import {BasicExampleModel, BasicFileModel, BasicTaskItemModel, BasicTaskModel} from "./BasicTaskModel";
+import { BasicExampleModel, BasicFileModel, BasicTaskItemModel, BasicTaskModel } from './BasicTaskModel';
 
-export interface AudioTestModel extends BasicTaskModel{
+export interface AudioTestModel extends BasicTaskModel {
   items: AudioTestItemModel[];
 }
 
@@ -26,9 +26,10 @@ export interface AudioExampleSettingsModel {
   disablePlayerSlider?: boolean;
   randomMedia?: boolean;
   fixLastInternalQuestion?: boolean;
+  alwaysStartFrom0?: boolean;
 }
 
-export interface AudioFileModel extends BasicFileModel{
+export interface AudioFileModel extends BasicFileModel {
   settings?: AudioSettings;
 }
 
