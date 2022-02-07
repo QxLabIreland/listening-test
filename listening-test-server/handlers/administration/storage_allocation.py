@@ -20,7 +20,7 @@ class StorageAllocationHandler(BaseHandler):
         body = self.loads_body()
         # Find the user needs to be updated
         user = self.db['users'].find_one({'_id': body['_id']})
-        user['storageAllocated'] = body['storageAllocated']
+        user['storageAllocated'] = body.get('storageAllocated')
         self.db['users'].update({'_id': user['_id']}, {'$set': user})
         self.dumps_write(user)
 
