@@ -4,6 +4,7 @@
   "importOrder": [
     "^[A-Za-z]/?(.*)$",
     "^@material-ui/(.*)$",
+    "^@testing-library/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
