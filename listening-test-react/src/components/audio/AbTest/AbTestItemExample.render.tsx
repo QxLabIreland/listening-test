@@ -38,7 +38,7 @@ export const AbTestItemExampleRender = observer(function (props: { value: AudioE
 
   // To over
   const handlePlayOverride: typeof handlePlay = (current: AudioFileModel) => {
-    if (value.settings.alwaysStartFrom0 && current !== prevPlayedAudio) resetCurrentTime();
+    if (value.settings?.alwaysStartFrom0 && current !== prevPlayedAudio) resetCurrentTime();
     handlePlay(current);
   };
 
