@@ -1,6 +1,6 @@
 /listeningTest
 /listeningTest.tgz
 /listeningTestDb
-/*.pem
 /pack_test_server.py
 node_modules
+/.ssh
