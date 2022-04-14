@@ -27,6 +27,7 @@
     "react-scripts": "^5.0.1",
     "ts-md5": "^1.2.7",
     "typescript": "^3.9.5",
+    "util": "^0.12.4",
     "uuidv4": "^6.1.1"
   },
   "scripts": {

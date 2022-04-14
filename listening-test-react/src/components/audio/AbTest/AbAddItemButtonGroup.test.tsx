@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 
-import { queryByTestId, waitForElement } from '@testing-library/react';
+import { queryByTestId, waitFor } from '@testing-library/react';
 
 import { jestTestContainer as container } from '../../../setupTests';
 import { DetailTaskModel } from '../../../shared/ReactContexts';
@@ -41,7 +41,7 @@ it('Add button behaviour', async () => {
   act(() => {
     queryByTestId(container, 'openAddMenu').click();
   });
-  const addExButton = await waitForElement(() => queryByTestId(container, 'buttonAddEx'));
+  const addExButton = await waitFor(() => queryByTestId(container, 'buttonAddEx'));
   act(() => {
     addExButton.click();
   });

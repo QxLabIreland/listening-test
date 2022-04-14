@@ -122,7 +122,7 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
           <Tooltip title="Delete selected items">
             <IconButton onClick={handleDelete}><Icon>delete</Icon></IconButton>
           </Tooltip>
-          <TablePagination component="div" count={responses.length} onChangePage={handlePageChange}
+          <TablePagination component="div" count={responses.length} onPageChange={handlePageChange}
                            onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
                            rowsPerPageOptions={[10, 25, 50]}/>
         </CardActions>
