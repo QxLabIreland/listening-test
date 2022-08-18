@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { useRef } from 'react';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 import { Box, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
@@ -18,7 +18,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
   const handleAddExample = () => {
     addQuestionMenu.current?.closeMenu();
     onAdd({
-      id: uuid(),
+      id: v4(),
       type: TestItemType.example,
       title: 'Title (click to edit)',
       example: {
@@ -40,7 +40,7 @@ export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: Au
   const handleAddTraining = () => {
     addQuestionMenu.current?.closeMenu();
     onAdd({
-      id: uuid(),
+      id: v4(),
       type: TestItemType.training,
       title: 'Title (click to edit)',
       example: {

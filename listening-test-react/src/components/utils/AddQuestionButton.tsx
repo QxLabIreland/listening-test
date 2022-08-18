@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { PropsWithChildren, forwardRef, useContext, useImperativeHandle, useState } from 'react';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 import { Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -45,7 +45,7 @@ export const AddQuestionButton = observer(
         // Bad solution for scrolling
         const timer = setTimeout(() => {
           onAdd({
-            id: uuid(),
+            id: v4(),
             type: TestItemType.question,
             title: 'Title (click to edit)',
             questionControl: question,
@@ -78,14 +78,14 @@ export const AddQuestionButton = observer(
     const handleCopyLastItem = () => {
       setAnchorEl(null);
       const newItem: BasicTaskItemModel = JSON.parse(JSON.stringify(taskModel.items[taskModel.items.length - 1]));
-      newItem.id = uuid();
+      newItem.id = v4();
       onAdd(newItem);
     };
     // Add section header
     const handleAddSectionHeader = () => {
       setAnchorEl(null);
       onAdd({
-        id: uuid(),
+        id: v4(),
         type: TestItemType.sectionHeader,
         title: 'Group Divider (This will not visible to the participant)',
       });

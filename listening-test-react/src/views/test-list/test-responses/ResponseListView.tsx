@@ -46,7 +46,7 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
   const [page, setPage] = useState(0);
   const [responses, setResponse] = useState<any[]>(null);
   const [error, setError] = useState<any>(undefined);
-  const {id} = useParams();
+  const {id} = useParams<{id: string}>();
 
   useEffect(() => {
     Axios.get('/api/response', {params: {testType: testUrl, testId: id}})
@@ -123,12 +123,12 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
             <IconButton onClick={handleDelete}><Icon>delete</Icon></IconButton>
           </Tooltip>
           <TablePagination component="div" count={responses.length} onPageChange={handlePageChange}
-                           onChangeRowsPerPage={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
+                           onRowsPerPageChange={handleRowsPerPageChange} page={page} rowsPerPage={rowsPerPage}
                            rowsPerPageOptions={[10, 25, 50]}/>
         </CardActions>
       </Card> : <Loading error={error}/>}
     </Grid>
-    <Grid item xs={12} container justify="flex-end">
+    <Grid item xs={12} container justifyContent="flex-end">
       <Tooltip title="Download all Responses in JSON format">
         <Button variant="outlined" color="primary" className={classes.button} onClick={handleDownloadInJSON}>
           <Icon>code</Icon>Download in JSON</Button>

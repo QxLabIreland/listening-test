@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {uuid} from "uuidv4";
+import {v4} from "uuid";
 import {Box} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
@@ -14,7 +14,7 @@ export const VideoLabelingButtonGroup = observer(function (props: { onAdd: (_: I
   const classes = useMatStyles();
 
   const handleAddExample = () => onAdd({
-    id: uuid(), type: TestItemType.example, title: 'Title (click to edit)', example: {
+    id: v4(), type: TestItemType.example, title: 'Title (click to edit)', example: {
       fields: [{
         type: SurveyControlType.description,
         question: 'Please describe these video.',

@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
 import {AudioTestItemModel} from "../../../shared/models/AudioTestModel";
 import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
-import {uuid} from "uuidv4";
+import {v4} from "uuid";
 import {Box, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import React, {useRef} from "react";
@@ -18,7 +18,7 @@ export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type
     switch (type) {
       case TestItemType.example:
         newItem = {
-          id: uuid(), type: TestItemType.example, title: 'Title (Click to edit this)', example: {
+          id: v4(), type: TestItemType.example, title: 'Title (Click to edit this)', example: {
             medias: [], fields: [
               {type: SurveyControlType.description, question: 'Compare the quality of these sounds.', value: null}
             ]
@@ -27,7 +27,7 @@ export const MushraAddItemButtonGroup = observer(function (props: { onAdd: (type
         break;
       case TestItemType.training:
         newItem = {
-          id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
+          id: v4(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
             medias: [], fields: [
               {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
             ]

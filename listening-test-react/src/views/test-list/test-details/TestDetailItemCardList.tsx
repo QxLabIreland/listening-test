@@ -6,7 +6,7 @@ import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/
 import {TestItemCard} from "./TestItemCard";
 import {makeStyles} from "@material-ui/core/styles";
 import {BasicTaskItemModel} from "../../../shared/models/BasicTaskModel";
-import {uuid} from "uuidv4";
+import {v4} from "uuid";
 import {TestUrl} from "../../../shared/models/EnumsAndTypes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -111,7 +111,7 @@ export const TestDetailItemCardList = observer(function ({items, testUrl}: {
   });
   const copyItem = (item: BasicTaskItemModel, index: number) => {
     const copied = JSON.parse(JSON.stringify(item)) as BasicTaskItemModel;
-    copied.id = uuid();
+    copied.id = v4();
     // Use splice to insert an item
     items.splice(index, 0, copied);
   }

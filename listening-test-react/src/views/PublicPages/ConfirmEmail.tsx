@@ -16,7 +16,7 @@ export default function () {
   }, [location.search]);
 
   return <Box mt={8}>
-    <Grid container justify="center" alignItems="center" direction="column">
+    <Grid container justifyContent="center" alignItems="center" direction="column">
       {!loading ? <>
         <Box m={2}>
           <Icon fontSize="large">check_circle_outline</Icon>

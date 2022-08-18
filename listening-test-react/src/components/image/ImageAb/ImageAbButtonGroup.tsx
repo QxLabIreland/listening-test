@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 import { Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,7 @@ export const ImageAbButtonGroup = observer(function (props: { onAdd: (type: Imag
 
   const handleAddExample = () =>
     onAdd({
-      id: uuid(),
+      id: v4(),
       type: TestItemType.example,
       title: 'Title (click to edit)',
       example: {

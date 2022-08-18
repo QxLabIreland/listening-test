@@ -57,7 +57,7 @@ export function NotificationDrawer() {
 
   return <>
     <IconButton aria-label="notifications" color="inherit" onClick={handleNotificationToggle}>
-      <Badge badgeContent={messages?.filter(v => v.unRead).length} color="secondary">
+      <Badge badgeContent={messages?.filter(v => v.unRead).length} color="secondary" overlap="rectangular" >
         <Icon>notifications</Icon>
       </Badge>
     </IconButton>

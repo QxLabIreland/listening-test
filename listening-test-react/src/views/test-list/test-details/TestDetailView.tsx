@@ -85,7 +85,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   // Local methods
   const addItem = (newItem: BasicTaskItemModel) => testModel.items.push(newItem);
 
-  return <Grid container spacing={2} justify="center" alignItems="center" id='containerTestDetailItemCardList'>
+  return <Grid container spacing={2} justifyContent="center" alignItems="center" id='containerTestDetailItemCardList'>
     <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
     {testModel ? <React.Fragment>
       <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged}
@@ -95,13 +95,13 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
                    onChange={e => testModel.name = e.target.value}/>
       </Grid>
       <Grid item xs={12}>
-        <TextField variant="outlined" label="Test Description" rowsMax={8} multiline fullWidth
+        <TextField variant="outlined" label="Test Description" maxRows={8} multiline fullWidth
                    defaultValue={testModel.description} name="description"
                    onChange={(e) => testModel.description = e.target.value}/>
       </Grid>
       <DetailTaskModel.Provider value={testModel}>
         <TestDetailItemCardList items={testModel.items} testUrl={testUrl}/>
-        <Grid item container justify="center" xs={12}>
+        <Grid item container justifyContent="center" xs={12}>
           <ButtonGroup onAdd={addItem}/>
         </Grid>
       </DetailTaskModel.Provider>

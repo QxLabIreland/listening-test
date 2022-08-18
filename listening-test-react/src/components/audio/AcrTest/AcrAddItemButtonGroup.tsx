@@ -4,7 +4,7 @@ import {useMatStyles} from "../../../shared/SharedStyles";
 import React, {useRef} from "react";
 import {AddQuestionButton, AddQuestionButtonType} from "../../utils/AddQuestionButton";
 import {SurveyControlType, TestItemType} from "../../../shared/models/EnumsAndTypes";
-import {uuid} from "uuidv4";
+import {v4} from "uuid";
 import {Box, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 
@@ -18,14 +18,14 @@ export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: A
     switch (type) {
       case TestItemType.example:
         onAdd({
-          id: uuid(), type: TestItemType.example, title: 'Title (Click to edit this)', example: {
+          id: v4(), type: TestItemType.example, title: 'Title (Click to edit this)', example: {
             medias: [], fields: []
           }
         });
         break;
       case TestItemType.training:
         onAdd({
-          id: uuid(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
+          id: v4(), type: TestItemType.training, title: 'Training Example (Click to edit this)', example: {
             medias: [], fields: [
               {type: SurveyControlType.description, question: 'Please listen these sounds.', value: null}
             ]

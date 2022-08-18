@@ -17,7 +17,7 @@ export const ImageLabelingExampleRender = observer(function (props: { item: Imag
       <SurveyControlRender control={item.example.fields[0]}/>
     </Grid>}
     {/*Images grids*/}
-    <Grid item container justify="center">
+    <Grid item container justifyContent="center">
       {item.example.medias.map((v, i) =>
         <AutoFillImage key={i} imgFile={v} setOpenedImg={setOpenedImg}/>)}
     </Grid>
