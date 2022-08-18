@@ -120,7 +120,7 @@ def build_mushra_row(item):
                     continue
                 row_values.append((a['value'] or '') if 'value' in a else '')
             # return f'"{item["example"]["fields"][1]["value"] or ""}"'
-            return [row_values[-1]]
+            return [row_values[-1] if row_values else '']
         return ''
     else:
         return None
