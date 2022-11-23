@@ -136,7 +136,10 @@ const TestItemQuestionCard = observer(function ({
   const gotoQuestionItems =
     curIndex >= taskModel.items.length - 1
       ? undefined
-      : taskModel.items.slice(curIndex + 2).map((item) => ({ id: item.id, title: item.title }));
+      : taskModel.items
+          .slice(curIndex + 2)
+          .filter((item) => item.type !== TestItemType.sectionHeader)
+          .map((item) => ({ id: item.id, title: item.title }));
 
   return (
     <Card style={{ borderTop: '3px solid green' }}>

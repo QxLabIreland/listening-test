@@ -78,7 +78,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
           if (!value) history.replace('/task/finish', true);
           else openDialog('The task has been aborted, thank you for you participation.');
         } else {
-          const index = questionnaire.items.findIndex((item) => item.id === targetId);
+          const index = randomItems.findIndex((item) => item.id === targetId);
           if (index > -1) return index;
         }
       }
