@@ -3,3 +3,4 @@
 /listeningTestDb
 node_modules
 /.ssh
+*.pem
