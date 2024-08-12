@@ -23,7 +23,7 @@ class SignUpHandler(BaseHandler):
             # # To disable email confirmation, uncomment this line and comment email sending code
             # body['activated'] = True
             body['createdAt'] = datetime.now()
-            user_oid = self.db['users'].insert(body)
+            user_oid = self.db['users'].insert_one(body)
             send_confirmation_email(self.db['users'], body['email'])
             # Return user id
             self.dumps_write(user_oid)

@@ -16,7 +16,7 @@ class TestResponsesHandler(BaseHandler):
         downloadable = self.get_argument('downloadable', None)
         test_type = self.get_argument('testType')
         collection = switch_response_collection(self, test_type)
-        if not collection:
+        if collection is None:
             self.set_error(400, 'Invalid test type')
             return
         # Get a list or a response
@@ -42,7 +42,7 @@ class TestResponsesHandler(BaseHandler):
         _ids = self.loads_body()
         test_type = self.get_argument('testType')
         collection = switch_response_collection(self, test_type)
-        if not collection:
+        if collection is None:
             return
         # Multiple deletion
         result = collection.delete_many({'userId': self.user_id, '_id': {'$in': _ids}})

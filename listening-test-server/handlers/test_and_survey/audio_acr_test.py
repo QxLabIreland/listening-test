@@ -51,9 +51,9 @@ class AcrTestHandler(BaseHandler):
             del body['responses']
         body['userId'] = self.user_id
         body['createdAt'] = datetime.now()
-        _id = self.db[self.taskCollectionName].insert(body)
+        _id = self.db[self.taskCollectionName].insert_one(body)
         # Find the inserted test
-        data = self.db[self.taskCollectionName].find_one({'userId': self.user_id, '_id': ObjectId(_id)})
+        data = self.db[self.taskCollectionName].find_one({'userId': self.user_id, '_id': _id.inserted_id})
         self.dumps_write(data)
 
     # Modify a task
@@ -67,10 +67,10 @@ class AcrTestHandler(BaseHandler):
 
     # Delete a task
     async def delete(self):
-        _id = ObjectId(self.get_argument('_id'))
-        result = self.db[self.taskCollectionName].delete_one({'_id': ObjectId(_id)})
+        oid = ObjectId(self.get_argument('_id'))
+        result = self.db[self.taskCollectionName].delete_one({'_id': oid})
         # Delete related surveys
-        self.db[self.surveyCollectionName].delete_many({'testId': ObjectId(_id)})
+        self.db[self.surveyCollectionName].delete_many({'testId': oid})
         self.dumps_write(result.raw_result)
 
 

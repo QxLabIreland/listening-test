@@ -21,7 +21,11 @@ class AcrTestCsvDownload(BaseHandler):
             await self.overwrite_query_params({'userId': self.user_id, 'testId': ObjectId(test_id)})
         ).sort('createdAt', pymongo.DESCENDING)
         # If there is no data here
-        if data.count() == 0:
+        if self.db[self.surveyCollectionName].count_documents(
+                await self.overwrite_query_params(
+                    {"userId": self.user_id, "testId": ObjectId(test_id)}
+                )
+            ) == 0:
             self.set_error(404, 'There is no enough responses')
             return
 

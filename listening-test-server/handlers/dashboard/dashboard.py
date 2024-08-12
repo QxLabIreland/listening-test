@@ -10,27 +10,27 @@ class DashboardHandler(BaseHandler):
     async def get(self):
         stat = {
             # Admin is not registered user
-            'userNumber': self.db['users'].find().count(),
+            'userNumber': self.db['users'].count_documents({}),
             'testsNumber':
-                self.db['abTests'].find().count()
-                + self.db['acrTests'].find().count()
-                + self.db['mushraTests'].find().count()
-                + self.db['hearingTests'].find().count()
-                + self.db['audioLabelingTasks'].find().count()
-                + self.db['imageLabelingTasks'].find().count()
-                + self.db['imageAbTasks'].find().count()
-                + self.db['videoLabelingTasks'].find().count()
-                + self.db['videoAbTasks'].find().count(),
+                self.db['abTests'].count_documents({})
+                + self.db['acrTests'].count_documents({})
+                + self.db['mushraTests'].count_documents({})
+                + self.db['hearingTests'].count_documents({})
+                + self.db['audioLabelingTasks'].count_documents({})
+                + self.db['imageLabelingTasks'].count_documents({})
+                + self.db['imageAbTasks'].count_documents({})
+                + self.db['videoLabelingTasks'].count_documents({})
+                + self.db['videoAbTasks'].count_documents({}),
             'responsesNumber':
-                self.db['abSurveys'].find().count()
-                + self.db['acrSurveys'].find().count()
-                + self.db['mushraSurveys'].find().count()
-                + self.db['hearingSurveys'].find().count()
-                + self.db['audioLabelingSurveys'].find().count()
-                + self.db['imageLabelingSurveys'].find().count()
-                + self.db['imageAbSurveys'].find().count()
-                + self.db['videoLabelingSurveys'].find().count()
-                + self.db['videoAbSurveys'].find().count(),
+                self.db['abSurveys'].count_documents({})
+                + self.db['acrSurveys'].count_documents({})
+                + self.db['mushraSurveys'].count_documents({})
+                + self.db['hearingSurveys'].count_documents({})
+                + self.db['audioLabelingSurveys'].count_documents({})
+                + self.db['imageLabelingSurveys'].count_documents({})
+                + self.db['imageAbSurveys'].count_documents({})
+                + self.db['videoLabelingSurveys'].count_documents({})
+                + self.db['videoAbSurveys'].count_documents({}),
         }
         self.dumps_write(stat)
 

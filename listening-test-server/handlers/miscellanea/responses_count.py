@@ -12,5 +12,5 @@ class ResponsesCountHandler(BaseHandler):
         test_id = self.get_argument('testId')
         test_type = self.get_argument('testType')
         collection = switch_response_collection(self, test_type)
-        responses_count = collection.find({'userId': self.user_id, 'testId': ObjectId(test_id)}).count()
+        responses_count = collection.count_documents({'userId': self.user_id, 'testId': ObjectId(test_id)})
         self.dumps_write(responses_count)

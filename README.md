@@ -4,7 +4,7 @@ An open source platform for browser based speech and audio subjective quality te
 
 Use the app free at https://golisten.ucd.ie/ or host yourself using this open source repo
 
-This repo gives you a fully functional end-to-end listening test platform which allows a user to create and share MUSHRA, ACR and A/B tests within minutes. Collected data can then be downloaded in CSV or JSON format. 
+This repo gives you a fully functional end-to-end listening test platform which allows a user to create and share MUSHRA, ACR and A/B tests within minutes. Collected data can then be downloaded in CSV or JSON format.
 
 ## Run with docker and docker compose or with aws
 
@@ -26,6 +26,7 @@ Check the release section to get the newest release
 There will be 3 containers; mongo database, backend and frontend. Each container exposes some ports which you can check them in `docker-compose.yml` file. For example, the frontend exposes 80 and 443 (you will need to config your ssl and listening on 443).
 
 Without an SSL certificate, some functions **will not** work. As far as we are aware, these functions will be affected without HTTPS:
+
 - Copy test url to clipboard (the view button is working, so you can click VIEW button and copy the url from a browser navigation bar)
 
 In the backend container, there is no process management tool such as supervisor. It just uses python3 to run.
@@ -52,8 +53,8 @@ The back-end of this platform is using **Tornado** (a python web server) and **M
 
 - python3.8
 - pip3 (some python installation doesn't have pip)
-    - tornado
-    - pymongo
+  - tornado
+  - pymongo
 - MongoDB
 
 `pip install -r requirements.txt` to install all dependencies for the backend.
@@ -74,20 +75,20 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Node.js
 - Npm (some node.js installation may skip npm installation)
-    - react
-    - react-dom
-    - react-router
-    - react-router-dom
-    - @material-ui/core
-    - @material-ui/lab
-    - axios
-    - formik
-    - mobx
-    - mobx-react
-    - mobx-utils
-    - ts-md5
-    - typescript
-    - uuidv4  
+  - react
+  - react-dom
+  - react-router
+  - react-router-dom
+  - @mui/core
+  - @mui/lab
+  - axios
+  - formik
+  - mobx
+  - mobx-react
+  - mobx-utils
+  - ts-md5
+  - typescript
+  - uuidv4  
     ...  
     more dependencies in package.json
 
@@ -123,10 +124,10 @@ With the steps of previous sections, you can run the app on your local machine. 
 
 - nginx
 - supervisor
-- python3.8
+- python3.11
 - python3-pip
-    - tornado
-    - pymongo
+  - tornado
+  - pymongo
 - mongodb
 
 `nginx` is for server static pages(React.js), `supervisor` is to mange tornado server, such as logging and restarting.
@@ -156,7 +157,7 @@ Our server has limited space and performance, so we build on a local machine. If
 
 A python automatic script can help use the scp command and ssh to restart the backend.
 
-3. Create *.conf files for nginx and supervisor to meet your requirements, including domain name, path, certificates, application path, app name, logs etc.
+3. Create \*.conf files for nginx and supervisor to meet your requirements, including domain name, path, certificates, application path, app name, logs etc.
 
 4. Log into the server. Move conf files into conf.d folder of nginx and supervisor and install backend dependencies.
 
@@ -185,21 +186,22 @@ Here are some examples of config files for a server. You need to do some modific
 The purpose of supervisord.service is to make supervisor running after the a reboot of server. The location of supervisor problem maybe different, so you can use `type supervisord` to check the location and create `.service` file.
 
 ```conf
-[Unit] 
+[Unit]
 Description=Supervisor daemon
-[Service] 
+[Service]
 Type=forking
 ExecStart=/usr/local/bin/supervisord
-ExecStop=/usr/local/bin/supervisorctl shutdown 
-ExecReload=/usr/local/bin/supervisorctl reload 
-KillMode=process 
-Restart=on-failure 
+ExecStop=/usr/local/bin/supervisorctl shutdown
+ExecReload=/usr/local/bin/supervisorctl reload
+KillMode=process
+Restart=on-failure
 RestartSec=42s
-[Install] 
+[Install]
 WantedBy=multi-user.target
 ```
 
 #### golisten.supervisor.conf
+
 ```conf
 [program:golisten]
 command=sudo python3.8 /home/golistenadmin/golisten/server/server.py
@@ -212,6 +214,7 @@ loglevel=info
 ```
 
 #### golisten.nginx.conf
+
 ```conf
 server {
     listen       443 ssl http2;
@@ -238,4 +241,4 @@ server {
 }
 ```
 
-For more settings, please check [nginx documentation](https://nginx.org/en/docs/) 
+For more settings, please check [nginx documentation](https://nginx.org/en/docs/)

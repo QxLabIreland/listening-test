@@ -25,7 +25,7 @@ class CJsonEncoder(json.JSONEncoder):
 class MongoDBConnection:
     def __init__(self):
         try:
-            self.client = pymongo.MongoClient("mongodb://localhost:27017/")
+            self.client = pymongo.MongoClient("localhost", 27017)
             self.db = self.client["golisten_db"]
         except():
             print(Exception)
@@ -46,7 +46,7 @@ def create_default_user():
     admin = con.db['users'].find_one({'isAdmin': True})
     # Create an admin
     if not admin:
-        con.db['users'].insert(default_user)
+        con.db['users'].insert_one(default_user)
         print('default admin user created')
     # Grant admin all permissions
     elif admin['permissions'] != permission_list:
