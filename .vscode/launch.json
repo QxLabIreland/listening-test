@@ -6,12 +6,15 @@
   "configurations": [
     {
       "name": "Python start golisten server",
-      "type": "python",
+      "type": "debugpy",
       "cwd": "${workspaceFolder}/listening-test-server",
       "request": "launch",
-      "program": "./server.py",
+      "module": "server",
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": true,
+      "autoReload": {
+        "enable": true
+      }
     },
     {
       "cwd": "${workspaceFolder}/listening-test-react",
