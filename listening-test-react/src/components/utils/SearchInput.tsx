@@ -1,6 +1,8 @@
-import React, {ChangeEvent} from 'react';
 import clsx from 'clsx';
-import {createStyles, Icon, Input, makeStyles, Paper, Theme} from '@material-ui/core';
+import React, { ChangeEvent } from 'react';
+
+import { Icon, Input, Paper, Theme } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

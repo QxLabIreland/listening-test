@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import Axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   Checkbox,
-  createStyles,
   Grid,
   Icon,
   IconButton,
@@ -16,16 +18,14 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  withStyles,
-} from '@material-ui/core';
-import {makeStyles} from "@material-ui/core/styles";
-import {useParams} from "react-router-dom";
-import Axios from "axios";
-import Loading from "../../../layouts/components/Loading";
-import {downloadFileTool} from "../../../shared/tools/UncategorizedTools";
-import {ResponsePreviewDialog} from "./ResponsePreviewDialog";
-import {TestUrl} from "../../../shared/models/EnumsAndTypes";
-import {red} from "@material-ui/core/colors";
+} from '@mui/material';
+import { red } from '@mui/material/colors';
+import { createStyles, makeStyles, withStyles } from '@mui/styles';
+
+import Loading from '../../../layouts/components/Loading';
+import { TestUrl } from '../../../shared/models/EnumsAndTypes';
+import { downloadFileTool } from '../../../shared/tools/UncategorizedTools';
+import { ResponsePreviewDialog } from './ResponsePreviewDialog';
 
 const useStyles = makeStyles((_) => (createStyles({
   content: {padding: 0},

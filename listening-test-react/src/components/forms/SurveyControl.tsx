@@ -1,12 +1,14 @@
-import React, {useState} from "react";
-import {Box, createStyles, FormControl, Grid, MenuItem, Select, TextField, Theme, Tooltip} from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import {GotoQuestionItemModel, SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {SurveyControlType} from "../../shared/models/EnumsAndTypes";
-import {observer} from "mobx-react";
-import {makeStyles} from "@material-ui/core/styles";
-import ReactMarkdown from "react-markdown";
+import { observer } from 'mobx-react';
+import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
+import { Box, FormControl, Grid, MenuItem, Select, TextField, Theme, Tooltip } from '@mui/material';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { SurveyControlType } from '../../shared/models/EnumsAndTypes';
+import { GotoQuestionItemModel, SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel,
@@ -24,7 +26,7 @@ export const SurveyControl = observer(function (props: {
                  onChange={e => control.question = e.target.value}
                  onFocus={event => event.target.select()}/>
     </Box>
-    <ReactMarkdown linkTarget="_blank">{control.question}</ReactMarkdown>
+    <ReactMarkdown>{control.question}</ReactMarkdown>
   </>;
 
   switch (control.type) {

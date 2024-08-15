@@ -1,17 +1,19 @@
-import React, {useContext} from 'react';
-import {Link as RouterLink, useHistory, useLocation} from 'react-router-dom';
-import {Button, Link, TextField, Typography} from '@material-ui/core';
-import {useFormik} from "formik";
-import {email, minLength, pipeValidator, required} from "../../shared/validators/FormikValidator";
-import Axios from "axios";
-import {CurrentUser, GlobalDialog} from "../../shared/ReactContexts";
-import {Md5} from 'ts-md5';
-import {useSignInUpStyles} from "../../shared/SharedStyles";
-import PublicFormLayout from "./PublicFormLayout";
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useContext } from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Md5 } from 'ts-md5';
+
+import { Button, Link, TextField, Typography } from '@mui/material';
+
+import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
+import { useSignInUpStyles } from '../../shared/SharedStyles';
+import { email, minLength, pipeValidator, required } from '../../shared/validators/FormikValidator';
+import PublicFormLayout from './PublicFormLayout';
 
 export default function SignIn() {
   const classes = useSignInUpStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
   // Authorization hooks
   const {setCurrentUser} = useContext(CurrentUser);
@@ -26,7 +28,7 @@ export default function SignIn() {
         setCurrentUser(res.data);
         // Get state where user has been blocked by authentication
         const from = (location.state as any)?.from || { pathname: '/user' };
-        history.push(from);
+        navigate(from);
       }, (reason) => {
         openDialog(reason.response.data);
       }),
@@ -61,7 +63,7 @@ export default function SignIn() {
       </Typography>
       <TextField name="email" type="text" onChange={formik.handleChange} value={formik.values.email} className={classes.textField}
                  fullWidth label="Email Address" variant="outlined"
-                 error={!!formik.errors.email} helperText={formik.errors.email}/>
+                 error={!!formik.errors.email} helperText={formik.errors.email as string}/>
 
       <TextField type="password" className={classes.textField} fullWidth label="Password" variant="outlined"
                  {...formik.getFieldProps('password')}

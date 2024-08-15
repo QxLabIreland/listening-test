@@ -1,10 +1,12 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Box, Tab, Tabs} from "@material-ui/core";
-import {useHistory, useLocation, useParams} from "react-router";
-import {AppBarTitle} from "../../shared/ReactContexts";
-import ResponseListView from "./test-responses/ResponseListView";
-import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {TestDetailViewWrapper} from "../../components/ComponentsOverrider";
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+import { Box, Tab, Tabs } from '@mui/material';
+
+import { TestDetailViewWrapper } from '../../components/ComponentsOverrider';
+import { AppBarTitle } from '../../shared/ReactContexts';
+import { TestUrl } from '../../shared/models/EnumsAndTypes';
+import ResponseListView from './test-responses/ResponseListView';
 
 export default function TestTabPage(props: {testUrl: TestUrl, testName: string}) {
   const {testUrl, testName} = props;
@@ -12,7 +14,7 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
   const location = useLocation();
   const [value, setValue] = React.useState<number>(location.hash === '#responses' ? 1 : 0);
   const {id} = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {setTitle} = useContext(AppBarTitle);
   // This is the state for triggering useEffect
   const [preSetValue, setPreSetValue] = useState<boolean>(null);
@@ -25,7 +27,7 @@ export default function TestTabPage(props: {testUrl: TestUrl, testName: string})
   }, [id, preSetValue]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    history.replace({hash: newValue === 1 ? 'responses' : null});
+    navigate({hash: newValue === 1 ? 'responses' : null});
     // Because prompt block cannot block code here. So we need do this in useEffect callback.
     setPreSetValue(!preSetValue);
   }

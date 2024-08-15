@@ -9,7 +9,7 @@ import {
   Icon,
   TextField,
   Tooltip
-} from "@material-ui/core";
+} from "@mui/material";
 import React from "react";
 import {observer} from "mobx-react";
 import Axios from "axios";

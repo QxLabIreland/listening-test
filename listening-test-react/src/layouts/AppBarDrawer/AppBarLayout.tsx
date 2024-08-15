@@ -1,15 +1,17 @@
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import Typography from "@material-ui/core/Typography";
-import React, {PropsWithChildren, useState} from "react";
-import {Container} from "@material-ui/core";
-import {useHistory} from "react-router";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AppBarTitle} from "../../shared/ReactContexts";
-import {NotificationDrawer} from "./NotificationDrawer";
-import {AccountDropMenu} from "./AccountDropMenu";
+import React, { PropsWithChildren, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Container, Theme } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { AppBarTitle } from '../../shared/ReactContexts';
+import { AccountDropMenu } from './AccountDropMenu';
+import { NotificationDrawer } from './NotificationDrawer';
 
 export const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any, fixedTitle?: boolean}>) {
   const {handleDrawerToggle, fixedTitle} = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [title, setTitle] = useState<string>();
   const classes = useStyles();
 
@@ -52,7 +54,7 @@ export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerTogg
                           className={classes.menuButton}>
               <Icon>menu</Icon>
             </IconButton>
-            : <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={() => history.goBack()}>
+            : <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={() => navigate(-1)}>
               <Icon>arrow_back</Icon>
             </IconButton>
           }

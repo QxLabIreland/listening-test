@@ -1,22 +1,25 @@
-import {Prompt, useHistory, useLocation, useParams} from "react-router";
-import React, {FunctionComponent, useContext, useEffect, useState} from "react";
-import {GlobalDialog, GlobalSnackbar} from "../../../shared/ReactContexts";
-import Axios from "axios";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import {Checkbox, FormControlLabel, Icon, IconButton, TextField} from "@material-ui/core";
-import Loading from "../../../layouts/components/Loading";
-import {TestItemType, TestUrl} from "../../../shared/models/EnumsAndTypes";
-import {BasicTaskItemModel, BasicTaskModel} from "../../../shared/models/BasicTaskModel";
-import {observer} from "mobx-react";
-import {observable} from "mobx";
-import {TestSettingsDialog} from "./TestSettingsDialog";
-import {TestDetailItemCardList} from "./TestDetailItemCardList";
-import {deepObserve} from "mobx-utils";
-import Tooltip from "@material-ui/core/Tooltip";
-import {ResponsePreviewDialog} from "../test-responses/ResponsePreviewDialog";
-import {ShareLinkDialog} from "../ShareLinkDialog";
-import {DetailTaskModel} from "../../../shared/ReactContexts";
+import Axios from 'axios';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { deepObserve } from 'mobx-utils';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Prompt from 'src/shared/components/Prompt';
+
+import { Checkbox, FormControlLabel, Icon, IconButton, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Tooltip from '@mui/material/Tooltip';
+
+import Loading from '../../../layouts/components/Loading';
+import { GlobalDialog, GlobalSnackbar } from '../../../shared/ReactContexts';
+import { DetailTaskModel } from '../../../shared/ReactContexts';
+import { BasicTaskItemModel, BasicTaskModel } from '../../../shared/models/BasicTaskModel';
+import { TestItemType, TestUrl } from '../../../shared/models/EnumsAndTypes';
+import { ShareLinkDialog } from '../ShareLinkDialog';
+import { ResponsePreviewDialog } from '../test-responses/ResponsePreviewDialog';
+import { TestDetailItemCardList } from './TestDetailItemCardList';
+import { TestSettingsDialog } from './TestSettingsDialog';
 
 export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   testUrl: TestUrl,
@@ -25,7 +28,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   const {id} = useParams();
   const [testModel, setTestModel] = useState<BasicTaskModel>(null);
   const [loadingError, setLoadingError] = useState<string>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // No submit alert variable
@@ -67,7 +70,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
     Axios.request({
       method: isNew ? 'POST' : 'PUT', url: '/api/' + testUrl, data: testModel
     }).then(() => {
-      history.push('./');
+      navigate('./');
       openSnackbar('Save successfully', undefined, 'success');
     }, reason => openDialog(reason.response.data, 'Something wrong'));
   }
@@ -86,7 +89,7 @@ export const TestDetailView = observer(function ({testUrl, ButtonGroup}: {
   const addItem = (newItem: BasicTaskItemModel) => testModel.items.push(newItem);
 
   return <Grid container spacing={2} justifyContent="center" alignItems="center" id='containerTestDetailItemCardList'>
-    <Prompt when={isTestChanged} message={'You have unsaved changes, are you sure you want to leave?'}/>
+    <Prompt when={isTestChanged} />
     {testModel ? <React.Fragment>
       <DetailViewActions testUrl={testUrl} testModel={testModel} isTestChanged={isTestChanged}
                          handleSubmit={handleSubmit}/>

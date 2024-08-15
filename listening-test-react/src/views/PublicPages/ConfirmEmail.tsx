@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import Axios from "axios";
-import {Box, Grid, Icon, Typography} from "@material-ui/core";
+import {Box, Grid, Icon, Typography} from "@mui/material";
 import Loading from "../../layouts/components/Loading";
 
 export default function () {

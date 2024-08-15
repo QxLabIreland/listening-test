@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import {Button, DialogActions, Icon, IconButton, ListItemIcon, ListItemText, MenuItem} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import Tooltip from "@material-ui/core/Tooltip";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import {Button, DialogActions, Icon, IconButton, ListItemIcon, ListItemText, MenuItem} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import Tooltip from "@mui/material/Tooltip";
 
 export function DeleteButtonAndDialog({onDelete, menu = false}: { onDelete: () => void, menu?: boolean }) {
   const [open, setOpen] = useState(false);

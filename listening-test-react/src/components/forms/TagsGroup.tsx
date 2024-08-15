@@ -1,9 +1,11 @@
-import React, {useRef, useState} from "react";
-import {Box, Chip, createStyles} from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
-import {observer} from "mobx-react";
-import {useMatStyles} from "../../shared/SharedStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import { observer } from 'mobx-react';
+import React, { useRef, useState } from 'react';
+
+import { Box, Chip } from '@mui/material';
+import Icon from '@mui/material/Icon';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { useMatStyles } from '../../shared/SharedStyles';
 
 const useStyles = makeStyles(() => createStyles({
   chipIcon: {fontSize: '1.1rem', cursor: 'pointer'},

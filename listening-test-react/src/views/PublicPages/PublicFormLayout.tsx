@@ -1,4 +1,4 @@
-import {Grid, Typography} from "@material-ui/core";
+import {Grid, Typography} from "@mui/material";
 import React, {PropsWithChildren} from "react";
 
 export default function (props: PropsWithChildren<{ classes: any }>) {

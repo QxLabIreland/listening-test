@@ -1,18 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {observer} from "mobx-react";
-import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
-import {SurveyControlRender} from "../../forms/SurveyControl.render";
-import Grid from "@material-ui/core/Grid";
-import {createStyles, Slider, Theme} from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
-import Button from "@material-ui/core/Button";
-import {
-  createOscillatorAndGain,
-  disposeOscillatorAndGain,
-  OscillatorAngGain
-} from "./OscillatorAngGain";
-import {ratingAreaStyle} from "../../../shared/SharedStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import { observer } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+
+import { Slider, Theme } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { ratingAreaStyle } from '../../../shared/SharedStyles';
+import { AudioExampleModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
+import { SurveyControlRender } from '../../forms/SurveyControl.render';
+import { OscillatorAngGain, createOscillatorAndGain, disposeOscillatorAndGain } from './OscillatorAngGain';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   volumeBarContainer: {margin: `${theme.spacing(2)}px 0`},

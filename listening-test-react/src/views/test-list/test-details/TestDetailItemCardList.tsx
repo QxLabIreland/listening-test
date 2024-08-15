@@ -1,13 +1,15 @@
-import {observer} from "mobx-react";
-import React, {MouseEvent, useState} from "react";
-import Grid from "@material-ui/core/Grid";
-import {action, observable} from "mobx";
-import {Box, createStyles, Icon, IconButton, Theme, Tooltip} from "@material-ui/core";
-import {TestItemCard} from "./TestItemCard";
-import {makeStyles} from "@material-ui/core/styles";
-import {BasicTaskItemModel} from "../../../shared/models/BasicTaskModel";
-import {v4} from "uuid";
-import {TestUrl} from "../../../shared/models/EnumsAndTypes";
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { MouseEvent, useState } from 'react';
+import { v4 } from 'uuid';
+
+import { Box, Icon, IconButton, Theme, Tooltip } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { BasicTaskItemModel } from '../../../shared/models/BasicTaskModel';
+import { TestUrl } from '../../../shared/models/EnumsAndTypes';
+import { TestItemCard } from './TestItemCard';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   grid: {position: 'relative', visibility: 'visible'},

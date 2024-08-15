@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import { AudioExampleModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
 import { SurveyControlRender } from '../../forms/SurveyControl.render';

@@ -2,9 +2,9 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { v4 } from 'uuid';
 
-import { Box } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
 
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { SurveyControlType, TestItemType } from '../../../shared/models/EnumsAndTypes';

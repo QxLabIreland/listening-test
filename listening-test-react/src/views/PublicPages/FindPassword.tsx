@@ -1,13 +1,16 @@
-import React from "react";
-import PublicFormLayout from "./PublicFormLayout";
-import {useSignInUpStyles} from "../../shared/SharedStyles";
-import {Button, TextField, Typography} from "@material-ui/core";
-import Axios from "axios";
-import {Md5} from "ts-md5";
-import {email, minLength, password, pipeValidator, required} from "../../shared/validators/FormikValidator";
-import {useFormik} from "formik";
-import {useLocation} from "react-router";
-import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Md5 } from 'ts-md5';
+
+import { Button, TextField, Typography } from '@mui/material';
+
+import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
+import { useSignInUpStyles } from '../../shared/SharedStyles';
+import { email, minLength, password, pipeValidator, required } from '../../shared/validators/FormikValidator';
+import PublicFormLayout from './PublicFormLayout';
+
 
 export default function () {
   const classes = useSignInUpStyles();

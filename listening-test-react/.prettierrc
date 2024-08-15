@@ -3,10 +3,11 @@
   "singleQuote": true,
   "importOrder": [
     "^[A-Za-z]/?(.*)$",
-    "^@material-ui/(.*)$",
+    "^@mui/(.*)$",
     "^@testing-library/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "bracketSameLine": true
 }

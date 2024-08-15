@@ -1,6 +1,6 @@
-import React from "react";
-import {CircularProgress, Typography} from "@material-ui/core";
-import {Alert, AlertTitle} from "@material-ui/lab";
+import React from 'react';
+
+import { Alert, AlertTitle, CircularProgress, Typography } from '@mui/material';
 
 export default class Loading extends React.Component<{ error?: string}> {
   render() {

@@ -1,6 +1,7 @@
-import {Box, createStyles, Grid, Icon, Theme, Typography} from "@material-ui/core";
-import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import React from 'react';
+
+import { Box, Grid, Icon, Theme, Typography } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paragraph: {marginBottom: theme.spacing(4)},

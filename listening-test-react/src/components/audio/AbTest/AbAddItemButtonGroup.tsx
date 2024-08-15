@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import React, { useRef } from 'react';
 import { v4 } from 'uuid';
 
-import { Box, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
-import Icon from '@material-ui/core/Icon';
+import { Box, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
+import Icon from '@mui/material/Icon';
 
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';

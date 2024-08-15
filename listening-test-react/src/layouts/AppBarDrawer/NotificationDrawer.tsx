@@ -1,16 +1,18 @@
-import Drawer from "@material-ui/core/Drawer";
-import React, {useEffect, useState} from "react";
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import {makeStyles, Theme} from "@material-ui/core/styles";
-import {Badge, Divider, Link} from "@material-ui/core";
-import {MessageModel} from "../../shared/models/MessageModel";
-import {observable} from "mobx";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import Axios from "axios";
-import {UserModel} from "../../shared/models/UserModel";
+import Axios from 'axios';
+import { observable } from 'mobx';
+import React, { useEffect, useState } from 'react';
+
+import { Badge, Divider, Link, Theme } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import { makeStyles } from '@mui/styles';
+
+import { MessageModel } from '../../shared/models/MessageModel';
+import { UserModel } from '../../shared/models/UserModel';
 
 const useStyles = makeStyles((_: Theme) => ({
   drawerPaper: {width: 300},

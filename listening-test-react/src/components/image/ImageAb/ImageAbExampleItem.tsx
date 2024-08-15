@@ -1,9 +1,9 @@
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import {Button, CardContent, Collapse, Icon} from "@material-ui/core";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import {Button, CardContent, Collapse, Icon} from "@mui/material";
 import React, {ReactNode} from "react";
 import {TagsGroup} from "../../forms/TagsGroup";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {observer} from "mobx-react";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
 import {RemovableSurveyControl} from "../../forms/RemovableSurveyControl";

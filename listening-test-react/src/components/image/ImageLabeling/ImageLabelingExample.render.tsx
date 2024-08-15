@@ -1,11 +1,13 @@
-import {observer} from "mobx-react";
-import {SurveyControlRender} from "../../forms/SurveyControl.render";
-import React, {CSSProperties, useRef, useState} from "react";
-import {ImageFileModel, ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
-import Grid from "@material-ui/core/Grid";
-import {Dialog, Slide} from "@material-ui/core";
-import {TransitionProps} from "@material-ui/core/transitions";
-import {useSharedStyles} from "../../../shared/SharedStyles";
+import { observer } from 'mobx-react';
+import React, { CSSProperties, useRef, useState } from 'react';
+
+import { Dialog, Slide } from '@mui/material';
+import Grid from '@mui/material/Grid';
+
+import { useSharedStyles } from '../../../shared/SharedStyles';
+import { ImageFileModel, ImageTestItemModel } from '../../../shared/models/ImageTaskModel';
+import { SurveyControlRender } from '../../forms/SurveyControl.render';
+import { TransitionProps } from '@mui/material/transitions';
 
 export const ImageLabelingExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {
   const {item} = props;
@@ -30,7 +32,8 @@ export const ImageLabelingExampleRender = observer(function (props: { item: Imag
 })
 
 const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & { children?: React.ReactElement }, ref: React.Ref<unknown>,
+  props: TransitionProps & { children: React.ReactElement },
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -53,7 +56,7 @@ function PreviewDialog({openedImg, setOpenedImg}: { openedImg: string, setOpened
       <img src={openedImg} ref={openedImgRef} alt="Grid List" onLoad={handleLoad} className={classes.cursorPointer}
            onClick={() => setOpenedImg(undefined)} style={openedImgStyle}/>
     </div>
-  </Dialog>;
+  </Dialog>
 }
 
 function AutoFillImage({imgFile, setOpenedImg}: {imgFile: ImageFileModel, setOpenedImg: (src: string) => void}) {

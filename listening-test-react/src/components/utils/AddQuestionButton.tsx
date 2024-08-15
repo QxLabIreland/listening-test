@@ -2,10 +2,10 @@ import { observer } from 'mobx-react';
 import React, { PropsWithChildren, forwardRef, useContext, useImperativeHandle, useState } from 'react';
 import { v4 } from 'uuid';
 
-import { Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import { makeStyles } from '@material-ui/core/styles';
+import { Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem } from '@mui/material';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+import { makeStyles } from '@mui/styles';
 
 import { DetailTaskModel } from '../../shared/ReactContexts';
 import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';

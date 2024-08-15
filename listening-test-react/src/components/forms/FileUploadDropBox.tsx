@@ -1,10 +1,12 @@
-import {makeStyles} from "@material-ui/core/styles";
-import {Box, createStyles, LinearProgress, Theme, Typography} from "@material-ui/core";
-import {observer} from "mobx-react";
-import React, {ChangeEvent, DragEvent, PropsWithChildren, useContext, useRef, useState} from "react";
-import {BasicFileModel} from "../../shared/models/BasicTaskModel";
-import Axios from "axios";
-import {GlobalDialog} from "../../shared/ReactContexts";
+import Axios from 'axios';
+import { observer } from 'mobx-react';
+import React, { ChangeEvent, DragEvent, PropsWithChildren, useContext, useRef, useState } from 'react';
+
+import { Box, LinearProgress, Theme, Typography } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { GlobalDialog } from '../../shared/ReactContexts';
+import { BasicFileModel } from '../../shared/models/BasicTaskModel';
 
 const useStyles = makeStyles((_: Theme) => createStyles({
   // fileNameEllipsis: {overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'},

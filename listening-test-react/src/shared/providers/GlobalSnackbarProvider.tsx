@@ -1,13 +1,14 @@
-import React, {PropsWithChildren, useState} from "react";
-import {Icon, IconButton, Snackbar} from "@material-ui/core";
-import {GlobalSnackbar} from "../ReactContexts";
-import {Alert} from "@material-ui/lab";
+import React, { PropsWithChildren, useState } from 'react';
+
+import { Alert, Icon, IconButton, Snackbar } from '@mui/material';
+
+import { GlobalSnackbar } from '../ReactContexts';
 
 export default function GlobalSnackbarProvider(props: PropsWithChildren<any>) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<any>({});
 
-  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+  const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return
     setOpen(false);
   };

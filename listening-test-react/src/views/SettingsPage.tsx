@@ -1,4 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Md5 } from 'ts-md5';
+
 import {
   Box,
   Button,
@@ -9,20 +14,17 @@ import {
   Grid,
   LinearProgress,
   TextField,
-  Typography
-} from "@material-ui/core";
-import {useFormik} from "formik";
-import Axios from "axios";
-import {minLength, password, pipeValidator, required} from "../shared/validators/FormikValidator";
-import {CurrentUser, GlobalDialog} from "../shared/ReactContexts";
-import {Md5} from "ts-md5";
-import {useSimpleAlert} from "../components/utils/UseSimpleAlert";
-import {useHistory} from "react-router";
-import {useMatStyles} from "../shared/SharedStyles";
-import {StorageStatusModel} from "../shared/models/StorageStatusModel";
-import {fmtFileSize} from "../shared/tools/UncategorizedTools";
-import Loading from "../layouts/components/Loading";
-import {DEFAULT_STORAGE_LIMIT} from "../shared/constants";
+  Typography,
+} from '@mui/material';
+
+import { useSimpleAlert } from '../components/utils/UseSimpleAlert';
+import Loading from '../layouts/components/Loading';
+import { CurrentUser, GlobalDialog } from '../shared/ReactContexts';
+import { useMatStyles } from '../shared/SharedStyles';
+import { DEFAULT_STORAGE_LIMIT } from '../shared/constants';
+import { StorageStatusModel } from '../shared/models/StorageStatusModel';
+import { fmtFileSize } from '../shared/tools/UncategorizedTools';
+import { minLength, password, pipeValidator, required } from '../shared/validators/FormikValidator';
 
 export default function SettingsPage() {
 
@@ -104,7 +106,7 @@ function ChangePassword() {
 function AccountDeletion() {
   const openDialog = useContext(GlobalDialog);
   const [accountDeletionAlert, setAccountDeletionMessage] = useSimpleAlert();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const accountDeletion = useFormik({
     initialValues: {password: ''},
@@ -112,7 +114,7 @@ function AccountDeletion() {
       'Are your sure?', null, () => Axios.delete('/api/password', {
         // Hash all of things
         data: {password: Md5.hashStr(values.password)}
-      }).then(() => openDialog('You have successfully delete your account', 'Success', () => history.push('/sign-in')),
+      }).then(() => openDialog('You have successfully delete your account', 'Success', () => navigate('/sign-in')),
         (reason) => setAccountDeletionMessage('error', reason.response.data)
       )
     ),

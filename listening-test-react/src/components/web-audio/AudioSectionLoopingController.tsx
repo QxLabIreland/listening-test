@@ -1,7 +1,8 @@
-import {makeStyles, Theme} from "@material-ui/core/styles";
-import {Box, createStyles, Typography} from "@material-ui/core";
-import React, {RefObject, useEffect, useState} from "react";
-import Slider from "@material-ui/core/Slider";
+import React, { RefObject, useEffect, useState } from 'react';
+
+import { Box, Theme, Typography } from '@mui/material';
+import Slider from '@mui/material/Slider';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const useSectionLoopingStyles = makeStyles((_: Theme) => createStyles({
   valueLabel: {top: 22, '& *': {background: 'transparent', color: '#000'}},

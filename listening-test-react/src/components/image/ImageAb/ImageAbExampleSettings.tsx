@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@material-ui/core";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import {Checkbox, FormControlLabel, Icon, IconButton, Tooltip} from "@mui/material";
 import {useFormik} from "formik";
 import {observer} from "mobx-react";
 import {ImageExampleSettingsModel} from "../../../shared/models/ImageTaskModel";

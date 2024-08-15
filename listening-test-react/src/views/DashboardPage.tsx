@@ -1,11 +1,23 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Card, CardActions, CardContent, CardHeader, Grid, Link, Typography} from "@material-ui/core";
-import {Alert, AlertTitle} from "@material-ui/lab";
-import Axios from "axios";
-import {CurrentUser} from "../shared/ReactContexts";
-import {useUserAuthResult} from "../layouts/components/AuthRoute";
-import {Link as RouterLink} from "react-router-dom";
-import {makeStyles} from "@material-ui/core/styles";
+import Axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Link,
+  Typography,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { useUserAuthResult } from '../layouts/components/AuthRoute';
+import { CurrentUser } from '../shared/ReactContexts';
 
 interface StatisticModel {
   userNumber: number;

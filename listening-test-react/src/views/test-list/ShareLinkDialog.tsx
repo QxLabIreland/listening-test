@@ -1,14 +1,14 @@
 import React, {forwardRef, useContext, useImperativeHandle} from "react";
-import {IconButtonProps} from "@material-ui/core/IconButton";
-import {Button, DialogActions, Link, TextField} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
+import {IconButtonProps} from "@mui/material/IconButton";
+import {Button, DialogActions, Link, TextField} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
 import {testItemsValidateIncomplete} from "../../shared/validators/ErrorValidators";
 import {getCurrentHost} from "../../shared/tools/UncategorizedTools";
 import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
 import {GlobalDialog} from "../../shared/ReactContexts";
 import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
 
 export const ShareLinkDialog = forwardRef<HTMLElement & { openShareLinkDialog: () => void },
   IconButtonProps & {

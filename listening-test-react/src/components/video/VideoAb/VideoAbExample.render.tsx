@@ -2,9 +2,9 @@ import {observer} from "mobx-react";
 import {SurveyControlRender} from "../../forms/SurveyControl.render";
 import React, {useEffect, useState} from "react";
 import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
-import Grid from "@material-ui/core/Grid";
-import {Button} from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
+import Grid from "@mui/material/Grid";
+import {Button} from "@mui/material";
+import Icon from "@mui/material/Icon";
 
 
 export const VideoAbExampleRender = observer(function (props: { item: ImageTestItemModel, active?: boolean }) {

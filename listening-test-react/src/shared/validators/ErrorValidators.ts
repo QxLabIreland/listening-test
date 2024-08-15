@@ -2,6 +2,7 @@ import {AudioExampleModel} from "../models/AudioTestModel";
 import {TestItemType} from "../models/EnumsAndTypes";
 import {SurveyControlModel} from "../models/SurveyControlModel";
 import {BasicTaskItemModel, BasicTaskModel} from "../models/BasicTaskModel";
+import { toJS } from "mobx";
 
 /** Audio setting playback setting validation */
 export function validatePlayedOnceError(example: AudioExampleModel): string {
@@ -40,6 +41,8 @@ export function sliderItemValidateError(item: BasicTaskItemModel): string {
   else if (item.type === TestItemType.example) {
     // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.medias) {
+      console.log(toJS(item.example));
+      
       delete a.isActive;
       if (!a.value) return 'You must complete this question to continue'
     }

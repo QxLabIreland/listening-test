@@ -19,7 +19,7 @@ import {
   Tabs,
   TextField,
   Tooltip
-} from "@material-ui/core";
+} from "@mui/material";
 
 export function ManageWhitelist() {
   const [open, setOpen] = React.useState(false);

@@ -1,11 +1,14 @@
-import {observer} from "mobx-react";
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import {BasicExampleModel, BasicFileModel} from "../../shared/models/BasicTaskModel";
-import {Box, createStyles, IconButton, Theme, Tooltip, Typography} from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
-import {makeStyles} from "@material-ui/core/styles";
-import {FileUploadDropBox, useFileBoxesFunc} from "../forms/FileUploadDropBox";
+import { observer } from 'mobx-react';
+import React from 'react';
+
+import { Box, IconButton, Theme, Tooltip, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { BasicExampleModel, BasicFileModel } from '../../shared/models/BasicTaskModel';
+import { FileUploadDropBox, useFileBoxesFunc } from '../forms/FileUploadDropBox';
+
 // reference means we can upload reference. keepPlace means the audio place will be kept after a deletion
 export const AudioFileDropGrid = observer(function ({example, reference, keepPlace, allSame, hidDeleteButton}: {
   example: BasicExampleModel, reference?: boolean, keepPlace?: boolean, allSame?: boolean, hidDeleteButton?: boolean

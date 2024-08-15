@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Grid,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {useSimpleAlert} from "../components/utils/UseSimpleAlert";
 import Loading from "../layouts/components/Loading";
 import {GlobalDialog} from "../shared/ReactContexts";

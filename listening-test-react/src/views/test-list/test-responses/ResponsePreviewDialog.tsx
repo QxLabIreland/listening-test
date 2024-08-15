@@ -1,29 +1,30 @@
-import React, {forwardRef, useState} from "react";
-import {TransitionProps} from "@material-ui/core/transitions";
-import Slide from "@material-ui/core/Slide";
-import IconButton, {IconButtonProps} from "@material-ui/core/IconButton";
-import {AppBar, Container, Icon} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {makeStyles} from "@material-ui/core/styles";
-import {BasicTaskModel} from "../../../shared/models/BasicTaskModel";
-import {TestUrl} from "../../../shared/models/EnumsAndTypes";
-import {SurveyPage} from "../../survery/SurveyPage";
-import {observer} from "mobx-react";
+import { observer } from 'mobx-react';
+import React, { forwardRef, useState } from 'react';
+
+import { AppBar, Container, Icon, Slide, Theme } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Dialog from '@mui/material/Dialog';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+
+import { BasicTaskModel } from '../../../shared/models/BasicTaskModel';
+import { TestUrl } from '../../../shared/models/EnumsAndTypes';
+import { SurveyPage } from '../../survery/SurveyPage';
+import { TransitionProps } from '@mui/material/transitions';
 
 const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & { children?: React.ReactElement },
+  props: TransitionProps & { children: React.ReactElement },
   ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   rootAppBar: {backgroundColor: theme.palette.warning.dark},
 }));
-const useMatBackground = makeStyles((theme) => ({
+const useMatBackground = makeStyles((theme: Theme) => ({
   paperFullScreen: {backgroundColor: theme.palette.background.default}
 }));
 

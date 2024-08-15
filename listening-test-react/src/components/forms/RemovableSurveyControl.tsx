@@ -1,13 +1,14 @@
-import {observer} from "mobx-react";
-import {FormControlLabel, Switch, Tooltip} from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import {SurveyControl} from "./SurveyControl";
-import React from "react";
-import {SurveyControlModel} from "../../shared/models/SurveyControlModel";
-import {useMatStyles} from "../../shared/SharedStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import { observer } from 'mobx-react';
+import React from 'react';
 
+import { FormControlLabel, Switch, Tooltip } from '@mui/material';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import { makeStyles } from '@mui/styles';
+
+import { useMatStyles } from '../../shared/SharedStyles';
+import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
+import { SurveyControl } from './SurveyControl';
 const useStyles = makeStyles(() => ({
   controlGroup: {alignItems: 'start'},
   controlWrapper: {width: '100%'}

@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react';
 import React, { RefObject, forwardRef, useRef, useState } from 'react';
 
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import Slider from '@material-ui/core/Slider';
-import { Theme, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+import Slider from '@mui/material/Slider';
+import { makeStyles } from '@mui/styles';
 
 import { AudioExampleModel, AudioFileModel } from '../../shared/models/AudioTestModel';
 

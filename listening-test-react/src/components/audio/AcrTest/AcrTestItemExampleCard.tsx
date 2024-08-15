@@ -1,13 +1,13 @@
 import {observer} from "mobx-react";
 import React, {ReactNode, useEffect} from "react";
-import {Button, Card, CardContent, Collapse, Typography} from "@material-ui/core";
-import CardHeader from "@material-ui/core/CardHeader";
+import {Button, Card, CardContent, Collapse, Typography} from "@mui/material";
+import CardHeader from "@mui/material/CardHeader";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {TagsGroup} from "../../forms/TagsGroup";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
 import {FileUploadDropBox} from "../../forms/FileUploadDropBox";
-import Icon from "@material-ui/core/Icon";
+import Icon from "@mui/material/Icon";
 import {AudioExampleModel, AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
 import {useMatStyles} from "../../../shared/SharedStyles";

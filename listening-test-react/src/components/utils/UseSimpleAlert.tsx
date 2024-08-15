@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {Alert, AlertTitle} from "@material-ui/lab";
-import {Collapse, createStyles, Icon, IconButton, Theme} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import React, { useState } from 'react';
+
+import { Alert, AlertTitle, Collapse, Icon, IconButton, Theme } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   alertTop: {marginTop: theme.spacing(2)}

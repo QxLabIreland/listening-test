@@ -1,4 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
+import Axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Checkbox,
   Grid,
@@ -6,42 +9,40 @@ import {
   Icon,
   IconButton,
   ListItemIcon,
-  ListItemText, ListSubheader,
+  ListItemText,
+  ListSubheader,
   Menu,
   MenuItem,
-  Snackbar
-} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import {Link} from "react-router-dom";
-import SearchInput from "../../components/utils/SearchInput";
-import {useRouteMatch} from "react-router";
-import Axios from "axios";
-import Loading from "../../layouts/components/Loading";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
-import TableBody from "@material-ui/core/TableBody";
-import {BasicTaskModel} from "../../shared/models/BasicTaskModel";
-import {TestUrl} from "../../shared/models/EnumsAndTypes";
-import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
-import {useMatStyles} from "../../shared/SharedStyles";
-import {useTemplateList} from "../TemplatesPage";
-import {useUserAuthResult} from "../../layouts/components/AuthRoute";
-import {ShareLinkDialog} from "./ShareLinkDialog";
-import {makeStyles} from "@material-ui/core/styles";
-import {AudioExampleModel} from "../../shared/models/AudioTestModel";
-import {DeleteButtonAndDialog} from "./DeleteButtonAndDialog";
+  Snackbar,
+} from '@mui/material';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+import { makeStyles } from '@mui/styles';
+
+import SearchInput from '../../components/utils/SearchInput';
+import { useUserAuthResult } from '../../layouts/components/AuthRoute';
+import Loading from '../../layouts/components/Loading';
+import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
+import { useMatStyles } from '../../shared/SharedStyles';
+import { AudioExampleModel } from '../../shared/models/AudioTestModel';
+import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import { TestUrl } from '../../shared/models/EnumsAndTypes';
+import { useTemplateList } from '../TemplatesPage';
+import { DeleteButtonAndDialog } from './DeleteButtonAndDialog';
+import { ShareLinkDialog } from './ShareLinkDialog';
 
 const useStyles = makeStyles(() => ({
   actionTd: {whiteSpace: 'nowrap'}
 }))
 
 export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
-  const {path} = useRouteMatch();
   const classes = {...useMatStyles(), ...useStyles()};
   const [data, setData] = useState<BasicTaskModel[]>(null);
   const [searchStr, setSearchStr] = useState<string>('');
@@ -101,7 +102,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
       </Grid>
       <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
         <span style={{flexGrow: 1}}/>
-        <AddTestMenu path={path} templates={templates}/>
+        <AddTestMenu templates={templates}/>
       </Grid>
     </Grid>
     <Grid item xs={12}>{data ? <Card><CardContent style={{padding: 0}}><Table>
@@ -123,7 +124,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
         {data.length ? getFilterData().map(taskModel => <TableRow hover key={taskModel._id.$oid}>
           <TableCell>{taskModel.name}</TableCell>
           <TableCell><Tooltip title="Check responses">
-            <Button to={{pathname: `${path}/${taskModel._id.$oid}`, hash: "#responses"}} component={Link}
+            <Button to={{pathname:taskModel._id.$oid, hash: "#responses"}} component={Link}
                     color="primary">{taskModel.responseNum}</Button>
           </Tooltip></TableCell>
           <TableCell>{new Date(taskModel.createdAt?.$date).toLocaleString()}</TableCell>
@@ -132,7 +133,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
                       onChange={() => handleIsTemplateChange(taskModel)}/>
           </TableCell>}
           <TableCell className={classes.elementGroup + ' ' + classes.actionTd}>
-            <ActionsGroup testUrl={testUrl} path={path} taskModel={taskModel} onDelete={handleDelete}
+            <ActionsGroup testUrl={testUrl} taskModel={taskModel} onDelete={handleDelete}
                           onCopy={handleCopyTest} handleEdit={handleTemplateEdit}/>
           </TableCell>
         </TableRow>) : <TableRow><TableCell colSpan={4}>
@@ -144,7 +145,7 @@ export default function TestListPage({testUrl}: { testUrl: TestUrl }) {
 }
 
 /** The menu to add using templates or just a blank page*/
-function AddTestMenu({path, templates}: { path: string, templates: BasicTaskModel[] }) {
+function AddTestMenu({templates}: { templates: BasicTaskModel[] }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -153,18 +154,18 @@ function AddTestMenu({path, templates}: { path: string, templates: BasicTaskMode
   return <>
     <Button color="primary" variant="contained" onClick={handleClick}>Add test</Button>
     <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-      <MenuItem onClick={handleClose} component={Link} to={`${path}/0`}>Blank test</MenuItem>
+      <MenuItem onClick={handleClose} component={Link} to="0">Blank test</MenuItem>
       {templates && templates.length ? templates.map(temp =>
           <MenuItem key={temp._id.$oid} component={Link}
-                    to={{pathname: `${path}/0`, state: temp._id.$oid}}>{temp.name}</MenuItem>)
+                    to="0" state={temp._id.$oid}>{temp.name}</MenuItem>)
         : <ListSubheader>No template</ListSubheader>}
     </Menu>
   </>
 }
 
 /** When width is less than md, the button will be put into a menu*/
-function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: {
-  testUrl: TestUrl, path: string, handleEdit: (_: BasicTaskModel) => void,
+function ActionsGroup({testUrl, taskModel, onDelete, onCopy, handleEdit}: {
+  testUrl: TestUrl, handleEdit: (_: BasicTaskModel) => void,
   taskModel: BasicTaskModel, onDelete: (_: BasicTaskModel) => void, onCopy: (_: BasicTaskModel) => void
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
@@ -198,7 +199,7 @@ function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: 
       <Tooltip title="Edit">{taskModel.isTemplate
         ? <IconButton size="small" color="primary" onClick={() => handleEdit(taskModel)}><Icon>edit</Icon></IconButton>
         : <IconButton size="small" color="primary" component={Link}
-                      to={`${path}/${taskModel._id.$oid}`}><Icon>edit</Icon></IconButton>
+                      to={taskModel._id.$oid}><Icon>edit</Icon></IconButton>
       }</Tooltip>
       <Tooltip title="Duplicate test"><IconButton size="small" color="primary" onClick={() => onCopy(taskModel)}>
         <Icon>content_copy</Icon>
@@ -215,7 +216,7 @@ function ActionsGroup({testUrl, path, taskModel, onDelete, onCopy, handleEdit}: 
         {taskModel.isTemplate ? <MenuItem onClick={() => handleEdit(taskModel)}>
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
-        </MenuItem> : <MenuItem component={Link} to={`${path}/${taskModel._id.$oid}`}>
+        </MenuItem> : <MenuItem component={Link} to={taskModel._id.$oid}>
           <ListItemIcon color="primary"><Icon>edit</Icon></ListItemIcon>
           <ListItemText primary="Edit"/>
         </MenuItem>}

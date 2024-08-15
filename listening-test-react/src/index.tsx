@@ -1,20 +1,22 @@
+import Axios from 'axios';
+import 'mobx-react/batchingForReactDom';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
+import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import App from "./App";
-import 'mobx-react/batchingForReactDom'
-import Axios from "axios";
 
 Axios.defaults.withCredentials = true;
-Axios.defaults.xsrfHeaderName = "X-CSRFToken";
-Axios.defaults.xsrfCookieName = "_xsrf";
+Axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+Axios.defaults.xsrfCookieName = '_xsrf';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <App />
+  </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

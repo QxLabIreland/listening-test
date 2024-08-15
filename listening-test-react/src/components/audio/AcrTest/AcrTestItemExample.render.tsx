@@ -1,15 +1,15 @@
 import {observer} from "mobx-react";
 import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import React, {useContext, useEffect, useState} from "react";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {SurveyControlRender} from "../../forms/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../web-audio/AudiosPlayer";
 import {AudioLoading, useAllAudioRefsReady} from "../../web-audio/AudiosLoading";
 import {useRandomization} from "../../../shared/tools/RandomizationTools";
 import {ratingAreaStyle, useMatStyles} from "../../../shared/SharedStyles";
 import {AudioSectionLoopingController} from "../../web-audio/AudioSectionLoopingController";
-import {Box, Collapse, Slider, Typography} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
+import {Box, Collapse, Slider, Typography} from "@mui/material";
+import Button from "@mui/material/Button";
 import {GlobalDialog} from "../../../shared/ReactContexts";
 import {validatePlayedOnceError} from "../../../shared/validators/ErrorValidators";
 

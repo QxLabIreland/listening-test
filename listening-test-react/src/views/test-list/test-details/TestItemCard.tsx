@@ -16,14 +16,13 @@ import {
   Switch,
   Theme,
   Tooltip,
-  createStyles,
-} from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Icon from '@material-ui/core/Icon';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { createStyles, makeStyles } from '@mui/styles';
 
 import {
   TestItemExampleCardType,
@@ -214,7 +213,7 @@ const SectionHeaderSettings = observer(function (props: {
   const handleRandomizationChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) =>
     (item.sectionSettings.randomQuestions = checked);
 
-  const handleSelectedFixChange = (event: React.ChangeEvent<{ value: unknown }>) =>
+  const handleSelectedFixChange = (event: any) =>
     // This will clean fixedItems by filtering out those not in items
     (item.sectionSettings.fixedItems = (event.target.value as string[]).filter(
       (id) => items.findIndex((item) => item.id === id) > -1
@@ -250,7 +249,6 @@ const SectionHeaderSettings = observer(function (props: {
             value={item.sectionSettings?.fixedItems ?? [{ id: '0', title: 'No items' }]}
             onChange={handleSelectedFixChange}
             input={<Input />}
-            MenuProps={{ getContentAnchorEl: () => null }}
             renderValue={(selected) =>
               (selected as string[]).map((id) => items.find((value1) => value1.id === id)?.title).join(', ')
             }

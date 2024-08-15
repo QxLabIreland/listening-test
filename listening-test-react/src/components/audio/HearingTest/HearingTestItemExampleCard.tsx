@@ -1,12 +1,12 @@
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse, Slider, TextField, Tooltip} from "@material-ui/core";
+import IconButton from "@mui/material/IconButton";
+import Icon from "@mui/material/Icon";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import {CardContent, Collapse, Slider, TextField, Tooltip} from "@mui/material";
 import {SurveyControl} from "../../forms/SurveyControl";
 import React, {ReactNode, useEffect, useState} from "react";
 import {TagsGroup} from "../../forms/TagsGroup";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {observer} from "mobx-react";
 import {createOscillatorAndGain, disposeOscillatorAndGain} from "./OscillatorAngGain";
 import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";

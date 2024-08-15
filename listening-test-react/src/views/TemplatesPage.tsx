@@ -1,19 +1,21 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Box, Checkbox, Icon, IconButton, Tab, Tabs} from "@material-ui/core";
-import {TestUrl} from "../shared/models/EnumsAndTypes";
-import Axios from "axios";
-import CardContent from "@material-ui/core/CardContent";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Card from "@material-ui/core/Card";
-import {CurrentUser, GlobalDialog, GlobalSnackbar} from "../shared/ReactContexts";
-import Loading from "../layouts/components/Loading";
-import {useHistory} from "react-router";
-import Tooltip from "@material-ui/core/Tooltip";
-import {BasicTaskModel} from "../shared/models/BasicTaskModel";
+import Axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Box, Checkbox, Icon, IconButton, Tab, Tabs } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+
+import Loading from '../layouts/components/Loading';
+import { CurrentUser, GlobalDialog, GlobalSnackbar } from '../shared/ReactContexts';
+import { BasicTaskModel } from '../shared/models/BasicTaskModel';
+import { TestUrl } from '../shared/models/EnumsAndTypes';
 
 export default function () {
   // Change Test URL and the active tab will change
@@ -76,7 +78,7 @@ export function useTemplateList(testUrl: TestUrl) {
   const [templates, setTemplates] = useState<BasicTaskModel[]>();
   const [templatesError, setTemplatesError] = useState();
   const openDialog = useContext(GlobalDialog);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get('/api/template', {params: {testType: testUrl}}).then(res => setTemplates(res.data),
@@ -110,8 +112,8 @@ export function useTemplateList(testUrl: TestUrl) {
     // If it is a template, the dialog will be opened for warning
     if (aTest.isTemplate) openDialog(
       'This test is currently being used as a template. Are you sure you want to edit this template?'
-      , 'Are you sure?', null, () => history.push(`/user/${testUrl}/${aTest._id.$oid}`)
-    ); else history.push(`/user/${testUrl}/${aTest._id.$oid}`);
+      , 'Are you sure?', null, () => navigate(`/user/${testUrl}/${aTest._id.$oid}`)
+    ); else navigate(`/user/${testUrl}/${aTest._id.$oid}`);
   }
 
   return {templates, templatesError, handleIsTemplateChange, handleTemplateEdit};

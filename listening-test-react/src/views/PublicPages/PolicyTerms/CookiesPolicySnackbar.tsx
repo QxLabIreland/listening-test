@@ -1,12 +1,12 @@
-import React, {useState} from "react";
-import {Snackbar} from "@material-ui/core";
-import {Link} from "react-router-dom";
-import {Alert} from "@material-ui/lab";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { Alert, Snackbar } from '@mui/material';
 
 export function CookiesPolicySnackbar() {
   const [open, setOpen] = useState(true);
 
-  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+  const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return
     setOpen(false);
   };

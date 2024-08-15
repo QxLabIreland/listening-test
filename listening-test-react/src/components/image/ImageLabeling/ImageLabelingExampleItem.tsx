@@ -1,9 +1,9 @@
 import {observer} from "mobx-react";
 import React, {ReactNode} from "react";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import {CardContent, Collapse} from "@mui/material";
+import Grid from "@mui/material/Grid";
 import {TagsGroup} from "../../forms/TagsGroup";
 import {SurveyControl} from "../../forms/SurveyControl";
 import {TestItemDropGridList} from "../TestItemDropGridList";

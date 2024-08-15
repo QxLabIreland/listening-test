@@ -1,14 +1,13 @@
 import React, { Suspense } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router';
-import { Redirect } from 'react-router-dom';
+import 'react-router';
+import { Route, Routes } from 'react-router-dom';
 
-import { Box, Button } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import { Alert } from '@material-ui/lab';
+import { Alert, Box, Button, Theme } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import { createStyles, makeStyles } from '@mui/styles';
 
 import { CookiesPolicySnackbar } from '../views/PublicPages/PolicyTerms/CookiesPolicySnackbar';
 import { StopReceivingResPage } from '../views/survery/StopRecivingResPage';
@@ -30,7 +29,6 @@ const iOS = () => {
 };
 
 export default function SurveyContainer() {
-  const { path } = useRouteMatch();
   const classes = useStyles();
 
   return (
@@ -59,42 +57,21 @@ export default function SurveyContainer() {
       ) : (
         <Container maxWidth="md">
           <Suspense fallback={<Loading />}>
-            <Switch>
-              <Route exact path={`${path}/finish`} component={SurveyFinishPage} />
-              <Route exact path={`${path}/stop-receiving-res`} component={StopReceivingResPage} />
-              <Route exact path={`${path}/ab-test/:id`}>
-                <SurveyPage testUrl="ab-test" />
-              </Route>
-              <Route exact path={`${path}/acr-test/:id`}>
-                <SurveyPage testUrl="acr-test" />
-              </Route>
-              <Route exact path={`${path}/mushra-test/:id`}>
-                <SurveyPage testUrl="mushra-test" />
-              </Route>
-              <Route exact path={`${path}/hearing-test/:id`}>
-                <SurveyPage testUrl="hearing-test" />
-              </Route>
-              <Route exact path={`${path}/audio-labeling/:id`}>
-                <SurveyPage testUrl="audio-labeling" />
-              </Route>
-              <Route exact path={`${path}/image-labeling/:id`}>
-                <SurveyPage testUrl="image-labeling" />
-              </Route>
-              <Route exact path={`${path}/image-ab/:id`}>
-                <SurveyPage testUrl="image-ab" />
-              </Route>
-              <Route exact path={`${path}/video-labeling/:id`}>
-                <SurveyPage testUrl="video-labeling" />
-              </Route>
-              <Route exact path={`${path}/video-ab/:id`}>
-                <SurveyPage testUrl="video-ab" />
-              </Route>
+            <Routes>
+              <Route path="finish" element={<SurveyFinishPage />} />
+              <Route path="stop-receiving-res" element={<StopReceivingResPage />} />
+              <Route path="ab-test/:id" element={<SurveyPage testUrl="ab-test" />} />
+              <Route path="acr-test/:id" element={<SurveyPage testUrl="acr-test" />} />
+              <Route path="mushra-test/:id" element={<SurveyPage testUrl="mushra-test" />} />
+              <Route path="hearing-test/:id" element={<SurveyPage testUrl="hearing-test" />} />
+              <Route path="audio-labeling/:id" element={<SurveyPage testUrl="audio-labeling" />} />
+              <Route path="image-labeling/:id" element={<SurveyPage testUrl="image-labeling" />} />
+              <Route path="image-ab/:id" element={<SurveyPage testUrl="image-ab" />} />
+              <Route path="video-labeling/:id" element={<SurveyPage testUrl="video-labeling" />} />
+              <Route path="video-ab/:id" element={<SurveyPage testUrl="video-ab" />} />
               {/*Not found page*/}
-              <Route exact path={`${path}/not-found`}>
-                <NotFoundView />
-              </Route>
-              <Redirect to={`${path}/not-found`} />
-            </Switch>
+              <Route element={<NotFoundView />} />
+            </Routes>
           </Suspense>
           <CookiesPolicySnackbar />
         </Container>

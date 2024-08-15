@@ -1,14 +1,14 @@
 import {observer} from "mobx-react";
 import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
 import React, {useEffect, useState} from "react";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {SurveyControlRender} from "../../forms/SurveyControl.render";
 import {AudioButton, AudioController, useAudioPlayer} from "../../web-audio/AudiosPlayer";
 import {AudioLoading, useAllAudioRefsReady} from "../../web-audio/AudiosLoading";
 import {useRandomization} from "../../../shared/tools/RandomizationTools";
 import {ratingAreaStyle} from "../../../shared/SharedStyles";
 import {AudioSectionLoopingController} from "../../web-audio/AudioSectionLoopingController";
-import {Box, Slider} from "@material-ui/core";
+import {Box, Slider} from "@mui/material";
 
 export const MushraTestItemExampleRender = observer(function (props: { example: AudioExampleModel, active?: boolean }) {
   const {example, active} = props;

@@ -1,18 +1,28 @@
-import React, {useContext} from 'react';
-import {Link as RouterLink, useHistory} from 'react-router-dom';
-import {Button, Checkbox, FormHelperText, Link, TextField, Typography} from '@material-ui/core';
-import {useFormik} from "formik";
-import {email, maxLength, minLength, mustBeTrue, password, pipeValidator, required} from "../../shared/validators/FormikValidator";
-import Axios from "axios";
-import {GlobalDialog, GlobalSnackbar} from "../../shared/ReactContexts";
-import {Md5} from 'ts-md5/dist/md5';
-import {useSignInUpStyles} from "../../shared/SharedStyles";
-import PublicFormLayout from "./PublicFormLayout";
-import {CookiesPolicySnackbar} from "./PolicyTerms/CookiesPolicySnackbar";
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useContext } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Md5 } from 'ts-md5';
+
+import { Button, Checkbox, FormHelperText, Link, TextField, Typography } from '@mui/material';
+
+import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
+import { useSignInUpStyles } from '../../shared/SharedStyles';
+import {
+  email,
+  maxLength,
+  minLength,
+  mustBeTrue,
+  password,
+  pipeValidator,
+  required,
+} from '../../shared/validators/FormikValidator';
+import { CookiesPolicySnackbar } from './PolicyTerms/CookiesPolicySnackbar';
+import PublicFormLayout from './PublicFormLayout';
 
 export default function SignUp() {
   const classes = useSignInUpStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
   const openSnackbar = useContext(GlobalSnackbar);
   // Authorization hooks
@@ -24,7 +34,7 @@ export default function SignUp() {
       .then(() => {
         openSnackbar('The confirmation link has been sent. If you didn\'t receive anything please check your spam inbox', undefined, 'info');
         // Get state where user has been blocked by authentication
-        history.push('/sign-in', {email: values.email});
+        navigate('/sign-in', {state:{email: values.email}});
       }, (reason) => openDialog(reason.response.data, 'Send us an email to add your organisation')),
     validate: pipeValidator({
       name: [required(), maxLength(128)],

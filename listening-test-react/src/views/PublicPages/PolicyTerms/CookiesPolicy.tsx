@@ -1,5 +1,5 @@
 import React from "react";
-import {Divider, List, ListItem, ListItemText} from "@material-ui/core";
+import {Divider, List, ListItem, ListItemText} from "@mui/material";
 
 export function CookiesPolicy() {
 

@@ -13,7 +13,7 @@ import {
   DialogTitle,
   FormControlLabel,
   Tooltip
-} from "@material-ui/core";
+} from "@mui/material";
 
 const fullPermissions = ['User', 'Template', 'Storage', 'Video', 'Testing'];
 

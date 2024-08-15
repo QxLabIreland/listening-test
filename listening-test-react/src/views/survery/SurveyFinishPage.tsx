@@ -1,12 +1,14 @@
-import React, {useContext} from "react";
-import {Box, Button, createStyles, Grid, Icon, Link, Theme, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import {GlobalDialog} from "../../shared/ReactContexts";
-import Axios from "axios";
-import {useSimpleAlert} from "../../components/utils/UseSimpleAlert";
-import {useLocation} from "react-router";
-import {getCurrentHost} from "../../shared/tools/UncategorizedTools";
-import {Link as RouterLink} from "react-router-dom";
+import Axios from 'axios';
+import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { Box, Button, Grid, Icon, Link, Theme, Typography } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
+
+import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
+import { GlobalDialog } from '../../shared/ReactContexts';
+import { getCurrentHost } from '../../shared/tools/UncategorizedTools';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paragraphCenter: {marginBottom: theme.spacing(4), textAlign: 'center'},

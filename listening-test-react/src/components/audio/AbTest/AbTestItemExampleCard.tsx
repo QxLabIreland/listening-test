@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import React, { ReactNode } from 'react';
 
-import { Button, CardContent, Collapse, Icon } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
+import { Button, CardContent, Collapse, Icon } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Grid from '@mui/material/Grid';
 
 import { AudioExampleModel } from '../../../shared/models/AudioTestModel';
 import { SurveyControlType } from '../../../shared/models/EnumsAndTypes';

@@ -1,7 +1,8 @@
 /** Styles will be used multiple times */
 
 import {CSSProperties} from "react";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {createStyles, makeStyles} from "@mui/styles";
+import { Theme } from "@mui/material";
 
 export const ratingAreaStyle = {
   display: 'flex',

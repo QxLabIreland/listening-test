@@ -1,11 +1,13 @@
-import {observer} from "mobx-react";
-import {SurveyControlRender} from "../../forms/SurveyControl.render";
-import React, {useEffect, useRef, useState} from "react";
-import {ImageTestItemModel} from "../../../shared/models/ImageTaskModel";
-import Grid from "@material-ui/core/Grid";
-import {Box, Theme} from "@material-ui/core";
-import {useSharedStyles} from "../../../shared/SharedStyles";
-import {makeStyles} from "@material-ui/core/styles";
+import { observer } from 'mobx-react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { Box, Theme } from '@mui/material';
+import { Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { useSharedStyles } from '../../../shared/SharedStyles';
+import { ImageTestItemModel } from '../../../shared/models/ImageTaskModel';
+import { SurveyControlRender } from '../../forms/SurveyControl.render';
 
 const useStyles = makeStyles((_: Theme) => ({
   canvasContainer: {position: 'relative', width: '100%'},

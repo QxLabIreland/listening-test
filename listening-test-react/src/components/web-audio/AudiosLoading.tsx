@@ -1,6 +1,6 @@
 import React, {RefObject, useEffect, useState} from "react";
-import Grid from "@material-ui/core/Grid";
-import {CircularProgress} from "@material-ui/core";
+import Grid from "@mui/material/Grid";
+import {CircularProgress} from "@mui/material";
 
 export function useAllAudioRefsReady(refs: RefObject<HTMLAudioElement>[]) {
   const [loading, setLoading] = useState(true);

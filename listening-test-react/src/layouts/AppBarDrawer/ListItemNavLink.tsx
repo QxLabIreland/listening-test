@@ -1,10 +1,9 @@
-import {NavLink, useLocation} from "react-router-dom";
-import Icon from "@material-ui/core/Icon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import React, {PropsWithChildren, useEffect, useState} from "react";
-import {useTheme} from "@material-ui/core/styles";
-import {useUserAuthResult} from "../components/AuthRoute";
+import React, { PropsWithChildren, useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+
+import { Icon, ListItemButton, ListItemText, useTheme } from '@mui/material';
+
+import { useUserAuthResult } from '../components/AuthRoute';
 
 export function ListItemNavLink (props: PropsWithChildren<any>) {
   const {to, icon, permission, ...rest} = props;
@@ -23,12 +22,11 @@ export function ListItemNavLink (props: PropsWithChildren<any>) {
   if (!userAuthResult) return null;
 
   return (
-    <ListItem button component={NavLink} to={to} selected={selected} {...rest}
-              activeStyle={{color: theme.palette.primary.main}}>
+    <ListItemButton component={NavLink} to={to} selected={selected} {...rest} >
         <span style={{minWidth: 40}}>
           <Icon>{icon}</Icon>
-        </span>
+        </span>        
       <ListItemText primary={props.children}/>
-    </ListItem>
+    </ListItemButton>
   )
 }

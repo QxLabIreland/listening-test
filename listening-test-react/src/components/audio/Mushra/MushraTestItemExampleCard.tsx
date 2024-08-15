@@ -1,15 +1,15 @@
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import {CardContent, Collapse, Typography} from "@material-ui/core";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import {CardContent, Collapse, Typography} from "@mui/material";
 import {SurveyControl} from "../../forms/SurveyControl";
 import React, {ReactNode} from "react";
 import {TagsGroup} from "../../forms/TagsGroup";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {AudioExampleSettingsDialog} from "../AudioExampleSettingsDialog";
 import {observer} from "mobx-react";
 import {AudioFileDropGrid} from "../AudioFileDropGrid";
 import {AudioExampleModel, AudioExampleSettingsModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
-import Icon from "@material-ui/core/Icon";
+import Icon from "@mui/material/Icon";
 import {FileUploadDropBox} from "../../forms/FileUploadDropBox";
 
 export const MushraTestItemExampleCard = observer((props: React.PropsWithChildren<{

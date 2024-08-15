@@ -1,10 +1,10 @@
 import {observer} from "mobx-react";
 import {AudioExampleModel} from "../../shared/models/AudioTestModel";
 import React, {useEffect, useState} from "react";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {SurveyControlRender} from "../forms/SurveyControl.render";
 import {AudioButton} from "../web-audio/AudiosPlayer";
-import Slider from "@material-ui/core/Slider";
+import Slider from "@mui/material/Slider";
 
 export const AudioTestItemTraining = observer(function (props: { value: AudioExampleModel, active?: boolean }) {
   const {value, active} = props;
@@ -45,6 +45,9 @@ export const AudioTestItemTraining = observer(function (props: { value: AudioExa
   }
   const dragSlider = (event: any, newValue: number | number[]) =>
     refs[currentAudioIndex].currentTime = newValue ? Number(newValue) : 0;
+
+  console.log(currentTime, refs[currentAudioIndex]?.duration);
+  
 
   return <Grid container spacing={2}>
     {/*Description for the example*/}

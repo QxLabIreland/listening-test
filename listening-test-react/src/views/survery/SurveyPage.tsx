@@ -3,17 +3,16 @@ import { observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Grid from '@material-ui/core/Grid';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
+import { Box } from '@mui/material';
+import { Accordion, AccordionSummary } from '@mui/material';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import Typography from '@mui/material/Typography';
 
 import Loading from '../../layouts/components/Loading';
 import { GlobalDialog } from '../../shared/ReactContexts';
@@ -33,7 +32,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
   const [error, setError] = useState<string>();
   const [openedPanel, setOpenedPanel] = useState(0);
   const { id } = useParams<{ id: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
   const [startTime] = useState<{ [key: number]: number }>({});
   // Expose isIndividual setting to reduce code
@@ -51,7 +50,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
     } else
       Axios.get<BasicTaskModel>('/api/task/' + testUrl, { params: { _id: id } }).then(
         (res) => {
-          if (res.data.stopReceivingRes) history.replace('/task/stop-receiving-res');
+          if (res.data.stopReceivingRes) navigate('/task/stop-receiving-res', { replace: true });
           const validateError = testItemsValidateIncomplete(res.data);
           if (validateError) setError('This survey is incomplete. If you are the survey owner: ' + validateError);
           else setQuestionnaire(observable(res.data));
@@ -75,7 +74,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
       if (targetId) {
         // Abort the whole test without submitting
         if (targetId === '-1') {
-          if (!value) history.replace('/task/finish', true);
+          if (!value) navigate('/task/finish', { state: true, replace: true });
           else openDialog('The task has been aborted, thank you for you participation.');
         } else {
           const index = randomItems.findIndex((item) => item.id === targetId);
@@ -126,7 +125,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
     // Start request
     if (!value)
       Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then((res) => {
-        history.replace(`/task/finish?${res.data?.$oid}&${testUrl}`, true);
+        navigate(`/task/finish?${res.data?.$oid}&${testUrl}`, { replace: true, state: true });
       });
   }
 
@@ -142,7 +141,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
           {/*When the title and description doesn't show*/}
           {(!isIndividual || openedPanel === -1) && (
             <Grid item xs={12}>
-              <ReactMarkdown linkTarget="_blank">{questionnaire.description}</ReactMarkdown>
+              <ReactMarkdown>{questionnaire.description}</ReactMarkdown>
               {isIndividual && (
                 <div style={{ textAlign: 'right' }}>
                   <Button color="primary" onClick={() => handlePanelChange(true, 0)}>
@@ -154,20 +153,20 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
           )}
           {randomItems?.map((v, i) => (
             <Grid item xs={12} key={v.id} hidden={isIndividual && openedPanel !== i}>
-              <ExpansionPanel expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
-                <ExpansionPanelSummary
+              <Accordion expanded={openedPanel === i} onChange={(_, v) => handlePanelChange(v, i)}>
+                <AccordionSummary
                   expandIcon={isIndividual ? null : <Icon>expand_more</Icon>}
                   aria-controls="panel1a-content"
                 >
                   <Typography variant="h6" style={{ marginLeft: 8 }}>
                     {v.title}
                   </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                   <TestItemCardRender testUrl={testUrl} item={v} active={openedPanel === i} previewMode={!!value} />
-                </ExpansionPanelDetails>
+                </AccordionDetails>
                 {!v.example?.blockNext && (
-                  <ExpansionPanelActions>
+                  <AccordionActions>
                     {i < randomItems.length - 1 ? (
                       <Button color="primary" onClick={() => handlePanelChange(true, i + 1)}>
                         Next Question
@@ -177,9 +176,9 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
                         Submit
                       </Button>
                     )}
-                  </ExpansionPanelActions>
+                  </AccordionActions>
                 )}
-              </ExpansionPanel>
+              </Accordion>
             </Grid>
           ))}
         </Grid>
