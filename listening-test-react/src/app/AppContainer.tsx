@@ -1,17 +1,21 @@
-import AuthRoute from './AppBarDrawer/AuthRoute';
 import React from 'react';
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import AuthRoute from './AppBarDrawer/AuthRoute';
 
-import { ListSubheader, Theme } from '@mui/material';
+import { Box, ListSubheader, Theme } from '@mui/material';
 // {lazy,
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import Hidden from '@mui/material/Hidden';
 import List from '@mui/material/List';
 import { createStyles, makeStyles } from '@mui/styles';
 
-import { TEST_URLS, TestUrl } from '../shared/enums/test-urls';
+import NotFoundView from '../layouts/components/NotFoundView';
+import { AppPermissions } from '../shared/enums/permissions';
+import { TEST_URLS, URL_TO_TITLE } from '../shared/enums/test-urls';
+import AppBarLayout, { DRAWER_WIDTH } from './AppBarDrawer/AppBarLayout';
+import { useUserAuthResult } from './AppBarDrawer/AuthRoute';
+import { ListItemNavLink } from './AppBarDrawer/ListItemNavLink';
 import DashboardPage from './general/DashboardPage';
 import ManageStorage from './general/ManageStorage';
 import SettingsPage from './general/SettingsPage';
@@ -19,11 +23,6 @@ import TemplatesPage from './general/TemplatesPage';
 import TestListPage from './test-list/TestListPage';
 import TestTabPage from './test-list/TestTabPage';
 import { ManageUsers } from './users/ManageUsers';
-import { useUserAuthResult } from './AppBarDrawer/AuthRoute';
-import NotFoundView from '../layouts/components/NotFoundView';
-import { ListItemNavLink } from './AppBarDrawer/ListItemNavLink';
-import AppBarLayout from './AppBarDrawer/AppBarLayout';
-import { AppPermissions } from '../shared/enums/permissions';
 
 const DrawerList = () => {
   const videoPermission = useUserAuthResult(AppPermissions.Veido);
@@ -31,7 +30,7 @@ const DrawerList = () => {
   return (
     <List>
       <ListItemNavLink to="dashboard" icon="dashboard">
-        DASHBOARD
+        Go Listen Home
       </ListItemNavLink>
       <ListItemNavLink to="storage" icon="storage" permission={AppPermissions.Storage}>
         Storage Status
@@ -85,23 +84,10 @@ const DrawerList = () => {
   );
 };
 
-const testUrlsWithTitle = [
-  ['ab-test', 'AB Test'],
-  ['acr-test', 'ACR Test'],
-  ['mushra-test', 'MUSHRA Test'],
-  ['hearing-test', 'Hearing Sensitivity Test'],
-  ['audio-labeling', 'Audio Labeling Task'],
-  ['image-labeling', 'Image Labeling Task'],
-  ['image-ab', 'Image AB Task'],
-  ['video-labeling', 'Video Labeling Task'],
-  ['video-ab', 'Video AB Task'],
-] as [TestUrl, string][];
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: { display: 'flex' },
-    drawer: { [theme.breakpoints.up('sm')]: { width: 240, flexShrink: 0 } },
-    drawerPaper: { width: 240 },
+    drawer: { [theme.breakpoints.up('sm')]: { width: DRAWER_WIDTH, flexShrink: 0 } },
   }),
 );
 
@@ -115,26 +101,31 @@ export default function AppContainer() {
     <AuthRoute>
       <div className={classes.root}>
         <CssBaseline />
-        <nav className={classes.drawer} aria-label="mailbox folders">
+        <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
-            <Drawer
-              // container={window.document.body}
-              variant="temporary"
-              anchor="left"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{ paper: classes.drawerPaper }}
-              ModalProps={{ keepMounted: true }}>
-              <DrawerList />
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer classes={{ paper: classes.drawerPaper }} variant="permanent" open>
-              <DrawerList />
-            </Drawer>
-          </Hidden>
-        </nav>
+          <Drawer
+            // container={window.document.body}
+            variant="temporary"
+            anchor="left"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+            }}>
+            <DrawerList />
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            open
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+            }}>
+            <DrawerList />
+          </Drawer>
+        </Box>
 
         <AppBarLayout handleDrawerToggle={handleDrawerToggle}>
           <Routes>
@@ -170,11 +161,11 @@ export default function AppContainer() {
               <Route key={i} path={testUrl} element={<TestListPage testUrl={testUrl} />} />
             ))}
             {/*Detail with back arrow button. Aka: no navigation page*/}
-            {testUrlsWithTitle.map((urlTitle, i) => (
+            {TEST_URLS.map((url) => (
               <Route
-                key={i}
-                path={`${urlTitle[0]}/:id`}
-                element={<TestTabPage testName={urlTitle[1]} testUrl={urlTitle[0]} />}
+                key={url}
+                path={`${url}/:id`}
+                element={<TestTabPage testName={URL_TO_TITLE[url]} testUrl={url} />}
               />
             ))}
 

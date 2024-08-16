@@ -8,11 +8,13 @@ import { AppBarTitle } from '../../shared/ReactContexts';
 import { TestUrl } from '../../shared/enums/test-urls';
 import ResponseListView from '../test-responses/ResponseListView';
 
+const RESPONSE_URL = '#responses';
+
 export default function TestTabPage(props: { testUrl: TestUrl; testName: string }) {
   const { testUrl, testName } = props;
   // Hash of location, switch to response tab. url -> value -> title
   const location = useLocation();
-  const [value, setValue] = React.useState<number>(location.hash === '#responses' ? 1 : 0);
+  const [value, setValue] = React.useState<number>(location.hash === RESPONSE_URL ? 1 : 0);
   const { id } = useParams();
   const navigate = useNavigate();
   const { setTitle } = useContext(AppBarTitle);
@@ -22,14 +24,14 @@ export default function TestTabPage(props: { testUrl: TestUrl; testName: string 
   // Run when value is changed and first mount
   useEffect(() => {
     // Set correct value based on url
-    setValue(location.hash === '#responses' ? 1 : 0);
+    setValue(location.hash === RESPONSE_URL ? 1 : 0);
     setTitle(
-      +id === 0 ? `New ${testName}` : location.hash !== '#responses' ? `Edit ${testName}` : `${testName} Responses`,
+      +id === 0 ? `New ${testName}` : location.hash !== RESPONSE_URL ? `Edit ${testName}` : `${testName} Responses`,
     );
   }, [id, preSetValue]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    navigate({ hash: newValue === 1 ? 'responses' : null });
+    navigate({ hash: newValue === 1 ? RESPONSE_URL : null });
     // Because prompt block cannot block code here. So we need do this in useEffect callback.
     setPreSetValue(!preSetValue);
   };
