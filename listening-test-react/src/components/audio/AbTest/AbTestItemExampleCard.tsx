@@ -7,7 +7,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 
 import { AudioExampleModel } from '../../../shared/models/AudioTestModel';
-import { SurveyControlType } from '../../../shared/models/EnumsAndTypes';
+import { SurveyControlType } from '../../../shared/enums/EnumsAndTypes';
 import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 import { TagsGroup } from '../../forms/TagsGroup';
 import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
@@ -20,7 +20,7 @@ export const AbTestItemExampleCard = observer(
       title: ReactNode;
       action: ReactNode;
       collapsed?: boolean;
-    }>
+    }>,
   ) => {
     const { example, action, title, collapsed } = props;
     // Methods for audios changed
@@ -78,5 +78,5 @@ export const AbTestItemExampleCard = observer(
         </Collapse>
       </Card>
     );
-  }
+  },
 );

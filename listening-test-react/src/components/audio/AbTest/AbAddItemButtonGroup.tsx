@@ -7,7 +7,7 @@ import Icon from '@mui/material/Icon';
 
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
-import { SurveyControlType, TestItemType } from '../../../shared/models/EnumsAndTypes';
+import { SurveyControlType, TestItemType } from '../../../shared/enums/EnumsAndTypes';
 import { AddQuestionButton, AddQuestionButtonType } from '../../utils/AddQuestionButton';
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {

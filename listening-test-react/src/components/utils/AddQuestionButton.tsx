@@ -9,7 +9,7 @@ import { makeStyles } from '@mui/styles';
 
 import { DetailTaskModel } from '../../shared/ReactContexts';
 import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
-import { SurveyControlType, TestItemType } from '../../shared/models/EnumsAndTypes';
+import { SurveyControlType, TestItemType } from '../../shared/enums/EnumsAndTypes';
 import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 export type AddQuestionButtonType = { closeMenu: () => void };
@@ -181,5 +181,5 @@ export const AddQuestionButton = observer(
           </Menu>
         </>
       );
-  })
+  }),
 );

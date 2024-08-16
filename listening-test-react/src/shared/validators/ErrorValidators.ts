@@ -1,13 +1,13 @@
-import {AudioExampleModel} from "../models/AudioTestModel";
-import {TestItemType} from "../models/EnumsAndTypes";
-import {SurveyControlModel} from "../models/SurveyControlModel";
-import {BasicTaskItemModel, BasicTaskModel} from "../models/BasicTaskModel";
-import { toJS } from "mobx";
+import { AudioExampleModel } from '../models/AudioTestModel';
+import { TestItemType } from '../enums/EnumsAndTypes';
+import { SurveyControlModel } from '../models/SurveyControlModel';
+import { BasicTaskItemModel, BasicTaskModel } from '../models/BasicTaskModel';
+import { toJS } from 'mobx';
 
 /** Audio setting playback setting validation */
 export function validatePlayedOnceError(example: AudioExampleModel): string {
   if (!example.settings?.requireClipEnded) return null;
-  if (!example.playedOnce) return 'Please listen to each audio clip in full'
+  if (!example.playedOnce) return 'Please listen to each audio clip in full';
   return null;
 }
 
@@ -15,7 +15,8 @@ export function surveyControlValidateError(control: SurveyControlModel): string 
   // Pass description type
   // if (control.type === SurveyControlType.description) return null;
   // Required checking
-  if (control.required) return control.value ? null : `${control.question} is required. You must answer this question to continue`;
+  if (control.required)
+    return control.value ? null : `${control.question} is required. You must answer this question to continue`;
   else return null;
 }
 
@@ -31,8 +32,7 @@ export function questionedExValidateError(item: BasicTaskItemModel): string {
     }
     // Audio validation
     return validatePlayedOnceError(item.example);
-  }
-  else return null;
+  } else return null;
 }
 /** For an example item with a slider or a value field */
 export function sliderItemValidateError(item: BasicTaskItemModel): string {
@@ -42,9 +42,9 @@ export function sliderItemValidateError(item: BasicTaskItemModel): string {
     // Map all audio and make sure played at least once and value is fill
     for (const a of item.example.medias) {
       console.log(toJS(item.example));
-      
+
       delete a.isActive;
-      if (!a.value) return 'You must complete this question to continue'
+      if (!a.value) return 'You must complete this question to continue';
     }
     // Make sure internal questions have been answered
     for (const a of item.example.fields) {
@@ -60,8 +60,12 @@ export function sliderItemValidateError(item: BasicTaskItemModel): string {
 export function testItemsValidateIncomplete(tests: BasicTaskModel) {
   for (const item of tests.items) {
     // Make sure audios array exists. When length is 0, some of them are null, there will be error
-    if (item.example && item.example.medias && (item.example.medias.length < 1 || item.example.medias.some(value => value == null))) {
-      return "Please check that you have added audio files to all audio related questions"
+    if (
+      item.example &&
+      item.example.medias &&
+      (item.example.medias.length < 1 || item.example.medias.some((value) => value == null))
+    ) {
+      return 'Please check that you have added audio files to all audio related questions';
     }
   }
   return null;

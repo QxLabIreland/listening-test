@@ -6,7 +6,7 @@ import { queryByTestId, waitFor } from '@testing-library/react';
 
 import { jestTestContainer as container } from '../../../setupTests';
 import { DetailTaskModel } from '../../../shared/ReactContexts';
-import { TestItemType } from '../../../shared/models/EnumsAndTypes';
+import { TestItemType } from '../../../shared/enums/EnumsAndTypes';
 import { AbAddItemButtonGroup } from './AbAddItemButtonGroup';
 
 it('Add button behaviour', async () => {
@@ -31,11 +31,10 @@ it('Add button behaviour', async () => {
           settings: {},
           // If this has been set, app will stop going to test page
           stopReceivingRes: false,
-        }}
-      >
+        }}>
         <AbAddItemButtonGroup onAdd={onAdd} />
       </DetailTaskModel.Provider>,
-      container
+      container,
     );
   });
   act(() => {

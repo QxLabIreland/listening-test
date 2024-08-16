@@ -1,13 +1,13 @@
-import {createContext} from "react";
-import {UserModel} from "./models/UserModel";
-import {BasicTaskModel} from "./models/BasicTaskModel";
+import { createContext } from 'react';
+import { UserModel } from './models/UserModel';
+import { BasicTaskModel } from './models/BasicTaskModel';
 
 /** This context can set the title of the app bar drawer*/
 interface IAppBarTitleContext {
   title: string;
   setTitle: (_: string) => void;
 }
-export const AppBarTitle = createContext<IAppBarTitleContext>({} as IAppBarTitleContext);
+export const AppBarTitle = createContext<IAppBarTitleContext>({ title: 'Dashboard' } as IAppBarTitleContext);
 
 // Global Contexts
 /** For detecting if user signed in */

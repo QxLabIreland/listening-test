@@ -13,70 +13,91 @@ import {
   Typography,
 } from '@mui/material';
 
-import { SurveyControlType } from '../../shared/models/EnumsAndTypes';
+import { SurveyControlType } from '../../shared/enums/EnumsAndTypes';
 import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
-export const SurveyControlRender = observer(function ({control}: { control: SurveyControlModel }) {
+export const SurveyControlRender = observer(function ({ control }: { control: SurveyControlModel }) {
   if (!control || control.disabled) return null;
 
   switch (control.type) {
     case SurveyControlType.text:
-      return <TextField fullWidth variant="filled" label={control.question} required={control.required}
-                        onChange={event => control.value = event.target.value}/>
+      return (
+        <TextField
+          fullWidth
+          variant="filled"
+          label={control.question}
+          required={control.required}
+          onChange={(event) => (control.value = event.target.value)}
+        />
+      );
     case SurveyControlType.radio:
-      return <SurveyRadio control={control}/>
+      return <SurveyRadio control={control} />;
     case SurveyControlType.checkbox:
-      return <SurveyCheckbox control={control}/>
+      return <SurveyCheckbox control={control} />;
     case SurveyControlType.description:
-      return <div><ReactMarkdown>{control.question}</ReactMarkdown></div>
+      return (
+        <div>
+          <ReactMarkdown>{control.question}</ReactMarkdown>
+        </div>
+      );
     default:
       return null;
   }
-})
+});
 
 const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
-  const {control} = props;
+  const { control } = props;
 
-  return <FormControl variant="filled" fullWidth>
-    <ReactMarkdown>{control.question}</ReactMarkdown>
-    <RadioGroup value={control.value} onChange={(event => control.value = event.target.value)}>
-      {control.options?.map(o =>
-        <FormControlLabel key={o} value={o} control={<Radio/>} label={o}/>
+  return (
+    <FormControl variant="filled" fullWidth>
+      <ReactMarkdown>{control.question}</ReactMarkdown>
+      <RadioGroup value={control.value} onChange={(event) => (control.value = event.target.value)}>
+        {control.options?.map((o) => <FormControlLabel key={o} value={o} control={<Radio />} label={o} />)}
+      </RadioGroup>
+      {control.required && (
+        <Typography variant="caption" color="textSecondary">
+          This question is required *
+        </Typography>
       )}
-    </RadioGroup>
-    {control.required && <Typography variant="caption" color="textSecondary">This question is required *</Typography>}
-  </FormControl>
-})
+    </FormControl>
+  );
+});
 
 const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }) {
-  const {control} = props;
+  const { control } = props;
   // Make sure it is compatible with old version of commas value
   let values: string[];
   try {
-    values = control.value ? JSON.parse(control.value): [];
-  }
-  catch (err) {
+    values = control.value ? JSON.parse(control.value) : [];
+  } catch (err) {
     values = control.value ? control.value.split(',') : [];
   }
 
   function handleCheckbox(event: any) {
     // To array for manipulation
-    if (event.target.checked) values.push(event.target.name)
+    if (event.target.checked) values.push(event.target.name);
     else values.splice(values.indexOf(event.target.name), 1);
     // To string for storing value
     control.value = JSON.stringify(values);
   }
 
-  return <FormControl variant="filled" fullWidth>
-    <ReactMarkdown>{control.question}</ReactMarkdown>
-    <FormGroup>
-      {control.options?.map(o =>
-        <FormControlLabel key={o} label={o} control={
-          <Checkbox name={o} onChange={handleCheckbox} checked={values.includes(o)}/>
-        }/>
+  return (
+    <FormControl variant="filled" fullWidth>
+      <ReactMarkdown>{control.question}</ReactMarkdown>
+      <FormGroup>
+        {control.options?.map((o) => (
+          <FormControlLabel
+            key={o}
+            label={o}
+            control={<Checkbox name={o} onChange={handleCheckbox} checked={values.includes(o)} />}
+          />
+        ))}
+      </FormGroup>
+      {control.required && (
+        <Typography variant="caption" color="textSecondary">
+          This question is required *
+        </Typography>
       )}
-    </FormGroup>
-    {control.required && <Typography variant="caption" color="textSecondary">This question is required *</Typography>}
-  </FormControl>
-})
-
+    </FormControl>
+  );
+});

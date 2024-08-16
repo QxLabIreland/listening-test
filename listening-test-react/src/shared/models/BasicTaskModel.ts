@@ -1,6 +1,6 @@
-import {UserModel} from "./UserModel";
-import {TestItemType} from "./EnumsAndTypes";
-import {SurveyControlModel} from "./SurveyControlModel";
+import { UserModel } from './UserModel';
+import { TestItemType } from '../enums/EnumsAndTypes';
+import { SurveyControlModel } from './SurveyControlModel';
 
 export interface TestSettingsModel {
   isIndividual?: boolean;
@@ -39,8 +39,8 @@ export interface BasicTaskItemModel {
   collapsed?: boolean;
   // TODO Create an interface of section header settings
   sectionSettings?: {
-    randomQuestions?: boolean,
-    fixedItems?: string[] // use id of items
+    randomQuestions?: boolean;
+    fixedItems?: string[]; // use id of items
   };
 }
 

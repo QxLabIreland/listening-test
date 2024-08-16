@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
-import {toJS} from "mobx";
-import {BasicTaskItemModel} from "../models/BasicTaskModel";
-import {TestItemType} from "../models/EnumsAndTypes";
+import { useEffect, useState } from 'react';
+import { toJS } from 'mobx';
+import { BasicTaskItemModel } from '../models/BasicTaskModel';
+import { TestItemType } from '../enums/EnumsAndTypes';
 
 export function useRandomization<T>(items: T[], activated: boolean, fixLast?: boolean): [T[], number[]] {
   const [randoms, setRandoms] = useState<[T[], number[]]>([items, Array.from(items.keys())]);
@@ -16,7 +16,7 @@ export function useRandomization<T>(items: T[], activated: boolean, fixLast?: bo
       const newRandomItems: T[] = Array(items.length);
       const newRandomPattern: number[] = [];
       // Go through all items
-      items.forEach(item => {
+      items.forEach((item) => {
         // If there is no indexes left and lastIndex is not null
         if (indexesLeft.length < 1 && !isNaN(lastIndex)) {
           newRandomItems[lastIndex] = item;
@@ -33,9 +33,12 @@ export function useRandomization<T>(items: T[], activated: boolean, fixLast?: bo
       });
       setRandoms([newRandomItems, newRandomPattern]);
       // Testing logging
-      console.log('Original', toJS(items))
-      console.log('Random', newRandomItems.map(value => toJS(value)))
-      console.log('Pattern', newRandomPattern)
+      console.log('Original', toJS(items));
+      console.log(
+        'Random',
+        newRandomItems.map((value) => toJS(value)),
+      );
+      console.log('Pattern', newRandomPattern);
     }
   }, [activated]);
 
@@ -50,7 +53,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
     // Divide items into sections first
     const sections: T[][] = [];
     let questions: T[] = [];
-    items.forEach(item => {
+    items.forEach((item) => {
       // If there is a section header, it means that the questions below to the section are belond to this section
       if (item.type === TestItemType.sectionHeader) {
         // We also need empty array
@@ -60,11 +63,14 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
     });
     // Push questions of the end of section
     sections.push(questions);
-    console.log('Grouped', sections.map(v => v.map(v1 => toJS(v1))))
+    console.log(
+      'Grouped',
+      sections.map((v) => v.map((v1) => toJS(v1))),
+    );
 
-    const newItems: T[] = []
+    const newItems: T[] = [];
     // Try to randomize questions for sections
-    sections.forEach(section => {
+    sections.forEach((section) => {
       if (section.length && section[0].type === TestItemType.sectionHeader) {
         // Only randomize if there is the setting
         if (section[0].sectionSettings?.randomQuestions) {
@@ -76,7 +82,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
               indexesLeft.push(index);
             }
           });
-          console.log('Indexes have been left', indexesLeft)
+          console.log('Indexes have been left', indexesLeft);
           // This will ignore the first element of an array
           let currentIndex = 0;
           // While there remain elements to shuffle...
@@ -85,7 +91,7 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
             const randomIndex = Math.floor(Math.random() * indexesLeft.length);
             currentIndex += 1;
             // Continue if it is fixed
-            console.log('Current override index: ', currentIndex)
+            console.log('Current override index: ', currentIndex);
             if (fixedItems?.indexOf(section[currentIndex].id) > -1) continue;
 
             // And swap it with the current element.
@@ -100,7 +106,10 @@ export function useDivideIntoSections<T extends BasicTaskItemModel>(items: T[]):
       // Push random items back to new items list and ignore section header
       newItems.push(...section);
     });
-    console.log('Random', newItems.map(v => toJS(v)))
+    console.log(
+      'Random',
+      newItems.map((v) => toJS(v)),
+    );
     setNewItems(newItems);
   }, [items]);
 

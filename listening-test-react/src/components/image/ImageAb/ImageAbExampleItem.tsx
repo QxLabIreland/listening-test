@@ -1,54 +1,83 @@
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import {Button, CardContent, Collapse, Icon} from "@mui/material";
-import React, {ReactNode} from "react";
-import {TagsGroup} from "../../forms/TagsGroup";
-import Grid from "@mui/material/Grid";
-import {observer} from "mobx-react";
-import {SurveyControlType} from "../../../shared/models/EnumsAndTypes";
-import {RemovableSurveyControl} from "../../forms/RemovableSurveyControl";
-import {TestItemDropGridList} from "../TestItemDropGridList";
-import {useMatStyles} from "../../../shared/SharedStyles";
-import {ImageExampleModel} from "../../../shared/models/ImageTaskModel";
-import {ImageAbExampleSettings} from "./ImageAbExampleSettings";
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import { Button, CardContent, Collapse, Icon } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { TagsGroup } from '../../forms/TagsGroup';
+import Grid from '@mui/material/Grid';
+import { observer } from 'mobx-react';
+import { SurveyControlType } from '../../../shared/enums/EnumsAndTypes';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
+import { TestItemDropGridList } from '../TestItemDropGridList';
+import { useMatStyles } from '../../../shared/SharedStyles';
+import { ImageExampleModel } from '../../../shared/models/ImageTaskModel';
+import { ImageAbExampleSettings } from './ImageAbExampleSettings';
 
-export const ImageAbExampleItem = observer((props: React.PropsWithChildren<{
-  example: ImageExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean, mediaType?: 'image' | 'video'
-}>) => {
-  const {example, action, title, collapsed, mediaType = 'image'} = props;
-  const classes = useMatStyles();
-  // Methods for audios changed
-  const handleDeletedQuestionAdd = () => example.fields.push({
-    type: SurveyControlType.text, question: 'Briefly comment on your choice.', value: null, required: false
-  });
+export const ImageAbExampleItem = observer(
+  (
+    props: React.PropsWithChildren<{
+      example: ImageExampleModel;
+      title: ReactNode;
+      action: ReactNode;
+      collapsed?: boolean;
+      mediaType?: 'image' | 'video';
+    }>,
+  ) => {
+    const { example, action, title, collapsed, mediaType = 'image' } = props;
+    const classes = useMatStyles();
+    // Methods for audios changed
+    const handleDeletedQuestionAdd = () =>
+      example.fields.push({
+        type: SurveyControlType.text,
+        question: 'Briefly comment on your choice.',
+        value: null,
+        required: false,
+      });
 
-  return <Card style={{borderTop: '3px solid dodgerblue'}}>
-    <CardHeader title={title} action={<>
-      <ImageAbExampleSettings settings={example.settings} onConfirm={newSettings => example.settings = newSettings}/>
-      {action}
-    </>}/>
-    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
-      <CardContent style={{paddingTop: 0}}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
-          </Grid>
-          <Grid item xs={12}>
-            <TestItemDropGridList example={example} type={mediaType} disableUpload keepSlot/>
-          </Grid>
-          {/*Special survey questions for ab test*/}
-          {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-            <RemovableSurveyControl question={q} hideRemoveButton={qi < 1}
-                                    onRemove={() => example.fields.splice(qi, 1)}/>
-          </Grid>)}
-          {/*An ability to delete one of special question*/}
-          {example.fields?.length < 2 && <Grid item xs={12} className={classes.flexEnd}>
-            <Button color="primary" onClick={handleDeletedQuestionAdd}>
-              <Icon>add</Icon> Add an additional question
-            </Button>
-          </Grid>}
-        </Grid>
-      </CardContent>
-    </Collapse>
-  </Card>;
-})
+    return (
+      <Card style={{ borderTop: '3px solid dodgerblue' }}>
+        <CardHeader
+          title={title}
+          action={
+            <>
+              <ImageAbExampleSettings
+                settings={example.settings}
+                onConfirm={(newSettings) => (example.settings = newSettings)}
+              />
+              {action}
+            </>
+          }
+        />
+        <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+          <CardContent style={{ paddingTop: 0 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TagsGroup value={example.tags} onChange={(newTags) => (example.tags = newTags)} />
+              </Grid>
+              <Grid item xs={12}>
+                <TestItemDropGridList example={example} type={mediaType} disableUpload keepSlot />
+              </Grid>
+              {/*Special survey questions for ab test*/}
+              {example.fields?.map((q, qi) => (
+                <Grid item xs={12} key={qi}>
+                  <RemovableSurveyControl
+                    question={q}
+                    hideRemoveButton={qi < 1}
+                    onRemove={() => example.fields.splice(qi, 1)}
+                  />
+                </Grid>
+              ))}
+              {/*An ability to delete one of special question*/}
+              {example.fields?.length < 2 && (
+                <Grid item xs={12} className={classes.flexEnd}>
+                  <Button color="primary" onClick={handleDeletedQuestionAdd}>
+                    <Icon>add</Icon> Add an additional question
+                  </Button>
+                </Grid>
+              )}
+            </Grid>
+          </CardContent>
+        </Collapse>
+      </Card>
+    );
+  },
+);

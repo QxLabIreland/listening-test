@@ -1,4 +1,4 @@
-import {SurveyControlType} from "./EnumsAndTypes";
+import { SurveyControlType } from '../enums/EnumsAndTypes';
 
 export interface SurveyControlModel {
   type: SurveyControlType;
@@ -10,11 +10,10 @@ export interface SurveyControlModel {
   disabled?: boolean;
   // A mapping allows subject to skip some question
   // value equals: undefined or '': No mapping. [uuid]: Go to this question. '-1' Abort the test
-  gotoQuestionMapping?: {[key: number]: string}
+  gotoQuestionMapping?: { [key: number]: string };
 }
 
 export interface GotoQuestionItemModel {
   id: string;
   title: string;
 }
-
