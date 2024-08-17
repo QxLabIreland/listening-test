@@ -1,23 +1,15 @@
 import React, { FunctionComponent, ReactNode } from 'react';
+
 import { TestUrl } from '../shared/enums/test-urls';
-import { AbTestItemExampleCard } from './audio/AbTest/AbTestItemExampleCard';
-import { HearingTestItemExampleCard } from './audio/HearingTest/HearingTestItemExampleCard';
-import { AudioTestItemTraining } from './audio/AudioTestItemTraining';
 import { BasicExampleModel } from '../shared/models/BasicTaskModel';
-import { MushraTestItemExampleCard } from './audio/Mushra/MushraTestItemExampleCard';
-import { ImageLabelingExampleItem } from './image/ImageLabeling/ImageLabelingExampleItem';
-import { ImageAbExampleItem } from './image/ImageAb/ImageAbExampleItem';
+import { AbTestItemExampleCard } from './audio/AbTest/AbTestItemExampleCard';
 import { AcrTestItemExampleCard } from './audio/AcrTest/AcrTestItemExampleCard';
-import { TestDetailView } from '../app/test-details/TestDetailView';
-import { AbAddItemButtonGroup } from './audio/AbTest/AbAddItemButtonGroup';
-import { AcrAddItemButtonGroup } from './audio/AcrTest/AcrAddItemButtonGroup';
-import { MushraAddItemButtonGroup } from './audio/Mushra/MushraAddItemButtonGroup';
-import { HearingAddItemButtons } from './audio/HearingTest/HearingAddItemButtons';
-import { AudioLabelingButtonGroup } from './audio/AudioLabeling/AudioLabelingButtonGroup';
-import { ImageLabelingButtonGroup } from './image/ImageLabeling/ImageLabelingButtonGroup';
-import { ImageAbButtonGroup } from './image/ImageAb/ImageAbButtonGroup';
-import { VideoLabelingButtonGroup } from './video/VideoLabeling/VideoLabelingButtonGroup';
-import { VideoAbButtonGroup } from './video/VideoAb/VideoAbButtonGroup';
+import { AudioTestItemTraining } from './audio/AudioTestItemTraining';
+import { HearingTestItemExampleCard } from './audio/HearingTest/HearingTestItemExampleCard';
+import { MushraTestItemExampleCard } from './audio/Mushra/MushraTestItemExampleCard';
+import { ImageAbExampleItem } from './image/ImageAb/ImageAbExampleItem';
+import { ImageLabelingExampleItem } from './image/ImageLabeling/ImageLabelingExampleItem';
+
 /** The purpose of this file is to simplify the code, because there are lots of places using this type and props */
 export type TestItemExampleCardType = FunctionComponent<{
   example: BasicExampleModel;
@@ -42,9 +34,9 @@ export function overrideExampleItem(testUrl: TestUrl): TestItemExampleCardType {
     case 'image-ab':
       return ImageAbExampleItem;
     case 'video-labeling':
-      return (props) => <ImageLabelingExampleItem {...props} type="video" />;
+      return props => <ImageLabelingExampleItem {...props} type="video" />;
     case 'video-ab':
-      return (props) => <ImageAbExampleItem {...props} mediaType="video" />;
+      return props => <ImageAbExampleItem {...props} mediaType="video" />;
     default:
       return null;
   }
@@ -58,32 +50,6 @@ export function overrideTrainingItem(testUrl: TestUrl): TestItemExampleCardType 
     case 'hearing-test':
     case 'audio-labeling': // Special task type, using training as example
       return AudioTestItemTraining;
-    default:
-      return null;
-  }
-}
-
-// Switch different card and button group through 'testType'
-export function TestDetailViewWrapper({ testUrl }: { testUrl: TestUrl }) {
-  switch (testUrl) {
-    case 'ab-test':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AbAddItemButtonGroup} />;
-    case 'acr-test':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AcrAddItemButtonGroup} />;
-    case 'mushra-test':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={MushraAddItemButtonGroup} />;
-    case 'hearing-test':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={HearingAddItemButtons} />;
-    case 'audio-labeling':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={AudioLabelingButtonGroup} />;
-    case 'image-labeling':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={ImageLabelingButtonGroup} />;
-    case 'image-ab':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={ImageAbButtonGroup} />;
-    case 'video-labeling':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoLabelingButtonGroup} />;
-    case 'video-ab':
-      return <TestDetailView testUrl={testUrl} ButtonGroup={VideoAbButtonGroup} />;
     default:
       return null;
   }

@@ -6,7 +6,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 export default function Prompt({ when }: { when: boolean }) {
   // Block navigating elsewhere when data has been entered into the input
   let blocker = useBlocker(
-    ({ currentLocation, nextLocation }) => when && currentLocation.pathname !== nextLocation.pathname,
+    ({ currentLocation, nextLocation }) =>
+      when && (currentLocation.pathname !== nextLocation.pathname || currentLocation.hash !== nextLocation.hash),
   );
 
   return (

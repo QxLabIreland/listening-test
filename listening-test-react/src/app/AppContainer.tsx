@@ -18,8 +18,8 @@ import DashboardPage from './general/DashboardPage';
 import ManageStorage from './general/ManageStorage';
 import SettingsPage from './general/SettingsPage';
 import TemplatesPage from './general/TemplatesPage';
+import TestTabPage from './test-details/TestTabPage';
 import TestListPage from './test-list/TestListPage';
-import TestTabPage from './test-list/TestTabPage';
 import { ManageUsers } from './users/ManageUsers';
 
 const DrawerList = () => {
@@ -90,7 +90,7 @@ export default function AppContainer() {
   return (
     <AuthRoute>
       <Box display="flex">
-        <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
+        <Box component="nav" sx={{ width: { md: DRAWER_WIDTH } }}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Drawer
             // container={window.document.body}
@@ -100,7 +100,7 @@ export default function AppContainer() {
             onClose={handleDrawerToggle}
             ModalProps={{ keepMounted: true }}
             sx={{
-              display: { xs: 'block', sm: 'none' },
+              display: { xs: 'block', md: 'none' },
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
             }}>
             <DrawerList />
@@ -109,7 +109,7 @@ export default function AppContainer() {
             variant="permanent"
             open
             sx={{
-              display: { xs: 'none', sm: 'block' },
+              display: { xs: 'none', md: 'block' },
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
             }}>
             <DrawerList />

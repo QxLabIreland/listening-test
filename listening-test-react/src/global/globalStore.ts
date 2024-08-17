@@ -8,6 +8,7 @@ export type SnakeBarData = { id: string; message: string; time: number; severity
 export const globalStore = makeAutoObservable({
   snackbarList: [] as SnakeBarData[],
   globalDialog: {},
+  appBarTitle: '',
 
   showSnackbar(message: string, time = 6_000, severity?: AlertColor) {
     globalStore.snackbarList.unshift({ id: v7(), message, time, severity, isOpen: true });
@@ -17,5 +18,9 @@ export const globalStore = makeAutoObservable({
   },
   removeSnakeBar(index: number) {
     globalStore.snackbarList.splice(index, 1);
+  },
+
+  setAppBarTitle(newTitle: string) {
+    globalStore.appBarTitle = newTitle;
   },
 });

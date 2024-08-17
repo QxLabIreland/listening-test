@@ -1,33 +1,7 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
+
 import { BasicTaskModel } from '../shared/models/BasicTaskModel';
-
-type InitialState<T> = { data: T | undefined; loading: boolean; error: AxiosError | undefined };
-
-function createApiActions<T>(store: InitialState<T>) {
-  const initialState: InitialState<T> = { data: undefined, loading: false, error: undefined };
-
-  return {
-    ...initialState,
-    setLoading() {
-      store.loading = true;
-    },
-    setData(newData: T) {
-      store.data = newData;
-      store.loading = false;
-      store.error = undefined;
-    },
-    setError(newError: AxiosError) {
-      store.loading = false;
-      store.error = newError;
-    },
-    reset() {
-      store.data = undefined;
-      store.loading = false;
-      store.error = undefined;
-    },
-  };
-}
 
 export const tasksStore = makeAutoObservable({
   data: undefined as BasicTaskModel[] | undefined,
