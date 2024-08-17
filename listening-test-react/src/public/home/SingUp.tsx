@@ -6,7 +6,8 @@ import { Md5 } from 'ts-md5';
 
 import { Button, Checkbox, FormHelperText, Link, TextField, Typography } from '@mui/material';
 
-import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
+import { globalStore } from '../../global/globalStore';
+import { GlobalDialog } from '../../shared/ReactContexts';
 import { useSignInUpStyles } from '../../shared/SharedStyles';
 import {
   email,
@@ -24,16 +25,15 @@ export default function SignUp() {
   const classes = useSignInUpStyles();
   const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
-  const openSnackbar = useContext(GlobalSnackbar);
   // Authorization hooks
 
   // Form initialization
   const formik = useFormik({
     initialValues: { name: '', email: '', password: '', policy: false, privacyStatement: false },
-    onSubmit: (values) =>
+    onSubmit: values =>
       Axios.post('/api/sign-up', { ...values, password: Md5.hashStr(values.password) }).then(
         () => {
-          openSnackbar(
+          globalStore.showSnakeBar(
             "The confirmation link has been sent. If you didn't receive anything please check your spam inbox",
             undefined,
             'info',
@@ -41,7 +41,7 @@ export default function SignUp() {
           // Get state where user has been blocked by authentication
           navigate('/sign-in', { state: { email: values.email } });
         },
-        (reason) => openDialog(reason.response.data, 'Send us an email to add your organisation'),
+        reason => openDialog(reason.response.data, 'Send us an email to add your organisation'),
       ),
     validate: pipeValidator({
       name: [required(), maxLength(128)],

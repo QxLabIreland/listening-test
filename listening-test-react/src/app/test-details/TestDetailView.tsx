@@ -10,17 +10,18 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 
+import { globalStore } from '../../global/globalStore';
 import Loading from '../../layouts/components/Loading';
-import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
+import { GlobalDialog } from '../../shared/ReactContexts';
 import { DetailTaskModel } from '../../shared/ReactContexts';
-import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import Prompt from '../../shared/components/Prompt';
 import { TestItemType } from '../../shared/enums/EnumsAndTypes';
 import { TestUrl } from '../../shared/enums/test-urls';
+import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { ShareLinkDialog } from '../test-list/ShareLinkDialog';
 import { ResponsePreviewDialog } from '../test-responses/ResponsePreviewDialog';
 import { TestDetailItemCardList } from './TestDetailItemCardList';
 import { TestSettingsDialog } from './TestSettingsDialog';
-import Prompt from '../../shared/components/Prompt';
 
 export const TestDetailView = observer(function ({
   testUrl,
@@ -34,7 +35,6 @@ export const TestDetailView = observer(function ({
   const [loadingError, setLoadingError] = useState<string>();
   const navigate = useNavigate();
   const openDialog = useContext(GlobalDialog);
-  const openSnackbar = useContext(GlobalSnackbar);
   // No submit alert variable
   const [isTestChanged, setIsTestChanged] = useState<boolean>(false);
   const location = useLocation();
@@ -43,12 +43,12 @@ export const TestDetailView = observer(function ({
     // If it is edit page, get data from back end. If there is value in location.state, we gonna use a template
     if (location.state || +id !== 0)
       Axios.get<BasicTaskModel>('/api/' + testUrl, { params: { _id: location.state || id } }).then(
-        (res) => {
+        res => {
           if (location.state) templateProcess(res.data, testUrl);
           const testModelObservable = addAnObserveForChanges(res.data);
           setTestModel(testModelObservable);
         },
-        (res) => setLoadingError(res.response.data),
+        res => setLoadingError(res.response.data),
       );
     // If in creation page
     else {
@@ -66,7 +66,7 @@ export const TestDetailView = observer(function ({
     const theTestStr = JSON.stringify(data);
     const dataObservable = observable(data);
     // Add an observe to set if is data changed
-    deepObserve(dataObservable, (newValue) => {
+    deepObserve(dataObservable, newValue => {
       setIsTestChanged(JSON.stringify(newValue.object) !== theTestStr);
     });
     return dataObservable;
@@ -81,16 +81,16 @@ export const TestDetailView = observer(function ({
     }).then(
       () => {
         navigate('./');
-        openSnackbar('Save successfully', undefined, 'success');
+        globalStore.showSnakeBar('Save successfully', undefined, 'success');
       },
-      (reason) => openDialog(reason.response.data, 'Something wrong'),
+      reason => openDialog(reason.response.data, 'Something wrong'),
     );
   };
   const handleSubmit = () => {
     // Create a new text or modify current test
     if (+id === 0) requestServer(true);
     else
-      Axios.get('/api/response-count', { params: { testId: id, testType: testUrl } }).then((res) => {
+      Axios.get('/api/response-count', { params: { testId: id, testType: testUrl } }).then(res => {
         // After checking with server, if there are responses, it will create a new test.
         if (res.data > 0)
           openDialog(
@@ -123,7 +123,7 @@ export const TestDetailView = observer(function ({
               fullWidth
               defaultValue={testModel.name}
               name="name"
-              onChange={(e) => (testModel.name = e.target.value)}
+              onChange={e => (testModel.name = e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -135,7 +135,7 @@ export const TestDetailView = observer(function ({
               fullWidth
               defaultValue={testModel.description}
               name="description"
-              onChange={(e) => (testModel.description = e.target.value)}
+              onChange={e => (testModel.description = e.target.value)}
             />
           </Grid>
           <DetailTaskModel.Provider value={testModel}>
@@ -182,7 +182,7 @@ const DetailViewActions = observer(function (props: {
                 checked={testModel.stopReceivingRes || false}
                 color="primary"
                 name="policy"
-                onChange={(event) => (testModel.stopReceivingRes = event.target.checked)}
+                onChange={event => (testModel.stopReceivingRes = event.target.checked)}
               />
             }
           />
@@ -195,16 +195,16 @@ const DetailViewActions = observer(function (props: {
             control={
               <Checkbox
                 color="primary"
-                checked={testModel.items.every((v) => v.collapsed)}
-                indeterminate={testModel.items.some((v) => v.collapsed) && !testModel.items.every((v) => v.collapsed)}
-                onChange={(e) => testModel.items.forEach((v) => (v.collapsed = e.target.checked))}
+                checked={testModel.items.every(v => v.collapsed)}
+                indeterminate={testModel.items.some(v => v.collapsed) && !testModel.items.every(v => v.collapsed)}
+                onChange={e => testModel.items.forEach(v => (v.collapsed = e.target.checked))}
               />
             }
           />
         </Tooltip>
       </Grid>
       <Grid item>
-        <TestSettingsDialog settings={testModel.settings} onConfirm={(settings) => (testModel.settings = settings)} />
+        <TestSettingsDialog settings={testModel.settings} onConfirm={settings => (testModel.settings = settings)} />
       </Grid>
       <Grid item>
         <Tooltip title="Preview Test">
@@ -234,7 +234,7 @@ function templateProcess(tem: BasicTaskModel, testUrl: TestUrl) {
   // Prevent it from becoming a template and some process
   tem.isTemplate = false;
   tem.name = 'Name of template ' + tem.name;
-  tem.items.forEach((item) => {
+  tem.items.forEach(item => {
     // Remove the links of audios and audioRef
     if (item.type === TestItemType.example || item.type === TestItemType.training) {
       // Only ab test needs to keep audio placeholders

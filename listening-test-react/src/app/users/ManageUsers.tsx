@@ -1,22 +1,24 @@
-import React, {ChangeEvent, useContext, useEffect, useState} from "react";
-import Axios from "axios";
-import {Checkbox, Grid} from "@mui/material";
-import SearchInput from "../../components/utils/SearchInput";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Loading from "../../layouts/components/Loading";
-import {UserModel} from "../../shared/models/UserModel";
-import {observer} from "mobx-react";
-import {observable} from "mobx";
-import {ManagePermissionDialog} from "./ManagePermissionDialog";
-import {ManageWhitelist} from "./ManageWhitelistDialog";
-import {GlobalSnackbar} from "../../shared/ReactContexts";
-import {StorageLimitDialog} from "./StorageLimitDialog";
+import Axios from 'axios';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import { Checkbox, Grid } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+import SearchInput from '../../components/utils/SearchInput';
+import { globalStore } from '../../global/globalStore';
+import Loading from '../../layouts/components/Loading';
+import { UserModel } from '../../shared/models/UserModel';
+import { ManagePermissionDialog } from './ManagePermissionDialog';
+import { ManageWhitelist } from './ManageWhitelistDialog';
+import { StorageLimitDialog } from './StorageLimitDialog';
 
 export const ManageUsers = observer(function () {
   const [data, setData] = useState<UserModel[]>();
@@ -24,67 +26,99 @@ export const ManageUsers = observer(function () {
   const [error, setError] = useState();
 
   useEffect(() => {
-    Axios.get<UserModel[]>('/api/users').then((res) => {
-      setData(observable(res.data));
-    }, reason => setError(reason.response.data));
+    Axios.get<UserModel[]>('/api/users').then(
+      res => {
+        setData(observable(res.data));
+      },
+      reason => setError(reason.response.data),
+    );
   }, []);
 
   // Filter data through search input
-  const getFilterData = () => data.filter(value =>
-    // Name, email and permissions searching
-    [value.name, value.email, value.permissions?.toString()].toString().toLowerCase().includes(searchStr.toLowerCase())
-  );
+  const getFilterData = () =>
+    data.filter(value =>
+      // Name, email and permissions searching
+      [value.name, value.email, value.permissions?.toString()]
+        .toString()
+        .toLowerCase()
+        .includes(searchStr.toLowerCase()),
+    );
 
-  return <Grid container spacing={2}>
-    <Grid item container xs={12}>
-      <Grid item xs={12} md={6}>
-        <SearchInput placeholder="Search by names/emails/permissions"
-                     onChange={(event: any) => setSearchStr(event.target.value)}/>
+  return (
+    <Grid container spacing={2}>
+      <Grid item container xs={12}>
+        <Grid item xs={12} md={6}>
+          <SearchInput
+            placeholder="Search by names/emails/permissions"
+            onChange={(event: any) => setSearchStr(event.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} md={6} style={{ display: 'flex', alignItems: 'center', paddingTop: 9 }}>
+          <span style={{ flexGrow: 1 }} />
+          <ManageWhitelist />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={6} style={{display: 'flex', alignItems: 'center', paddingTop: 9}}>
-        <span style={{flexGrow: 1}}/>
-        <ManageWhitelist/>
+      <Grid item xs={12}>
+        {data ? (
+          <Card>
+            <CardContent style={{ padding: 0 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Storage Limit</TableCell>
+                    <TableCell>Permissions</TableCell>
+                    <TableCell>Activated</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.length ? (
+                    getFilterData().map(user => (
+                      <TableRow hover key={user._id.$oid}>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>
+                          <StorageLimitDialog user={user} />
+                        </TableCell>
+                        <TableCell>
+                          <ManagePermissionDialog user={user} />
+                        </TableCell>
+                        <TableCell>
+                          <ActivationCheckbox user={user} />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4}>There is no user</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        ) : (
+          <Loading error={error} />
+        )}
       </Grid>
     </Grid>
-    <Grid item xs={12}>
-      {data ? <Card><CardContent style={{padding: 0}}><Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Storage Limit</TableCell>
-            <TableCell>Permissions</TableCell>
-            <TableCell>Activated</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.length ? getFilterData().map(user => <TableRow hover key={user._id.$oid}>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell><StorageLimitDialog user={user}/></TableCell>
-            <TableCell><ManagePermissionDialog user={user}/></TableCell>
-            <TableCell><ActivationCheckbox user={user}/></TableCell>
-          </TableRow>) : <TableRow>
-            <TableCell colSpan={4}>There is no user</TableCell>
-          </TableRow>}
-        </TableBody>
-      </Table></CardContent></Card> : <Loading error={error}/>}
-    </Grid>
-  </Grid>
+  );
 });
 
-const ActivationCheckbox = observer(({user}: { user: UserModel }) => {
-  const openSnackbar = useContext(GlobalSnackbar);
-
+const ActivationCheckbox = observer(({ user }: { user: UserModel }) => {
   const handleActivatedChange = (event: ChangeEvent<HTMLInputElement>, user: UserModel) => {
-    Axios.patch(`/api/user/${user._id.$oid}`).then(() => {
+    Axios.patch(`/api/user/${user._id.$oid}`).then(
+      () => {
         user.activated = !user.activated;
-        openSnackbar(`The user has been ${user.activated ? 'activated' : 'deactivated'}.`, 6_000, 'success');
-      }
-      , () => openSnackbar('Activation failed.', 6_000, 'error')
+        globalStore.showSnakeBar(
+          `The user has been ${user.activated ? 'activated' : 'deactivated'}.`,
+          6_000,
+          'success',
+        );
+      },
+      () => globalStore.showSnakeBar('Activation failed.', 6_000, 'error'),
     );
-  }
-  return <Checkbox checked={user.activated ?? false}
-                   onChange={event => handleActivatedChange(event, user)}/>
-})
-
+  };
+  return <Checkbox checked={user.activated ?? false} onChange={event => handleActivatedChange(event, user)} />;
+});

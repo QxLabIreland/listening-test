@@ -12,10 +12,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 
+import { globalStore } from '../../global/globalStore';
 import Loading from '../../layouts/components/Loading';
-import { CurrentUser, GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
-import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
 import { TestUrl } from '../../shared/enums/test-urls';
+import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 
 export default function () {
   // Change Test URL and the active tab will change
@@ -56,7 +57,7 @@ function TemplatesList({ testUrl }: { testUrl: TestUrl }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {templates.map((test) => (
+                {templates.map(test => (
                   <TableRow hover key={test._id.$oid}>
                     <TableCell>{test.name}</TableCell>
                     <TableCell>{new Date(test.createdAt?.$date).toLocaleString()}</TableCell>
@@ -99,7 +100,6 @@ function TemplatesList({ testUrl }: { testUrl: TestUrl }) {
 
 /** This hook is reusable. There are two place using this hook: TemplatesList and TestListPage */
 export function useTemplateList(testUrl: TestUrl) {
-  const openSnackbar = useContext(GlobalSnackbar);
   const [templates, setTemplates] = useState<BasicTaskModel[]>();
   const [templatesError, setTemplatesError] = useState();
   const openDialog = useContext(GlobalDialog);
@@ -107,8 +107,8 @@ export function useTemplateList(testUrl: TestUrl) {
 
   useEffect(() => {
     Axios.get('/api/template', { params: { testType: testUrl } }).then(
-      (res) => setTemplates(res.data),
-      (reason) => setTemplatesError(reason.response.data),
+      res => setTemplates(res.data),
+      reason => setTemplatesError(reason.response.data),
     );
     // Unmount process to make sure data in current tab will change
     return () => {
@@ -121,20 +121,20 @@ export function useTemplateList(testUrl: TestUrl) {
     // Create a request method for reusing purpose
     const openRequest = () =>
       Axios.put<boolean>('/api/template', { _id: test._id }, { params: { testType: testUrl } }).then(
-        (res) => {
+        res => {
           test.isTemplate = res.data;
           // Append test at the end
           if (test.isTemplate) setTemplates([...templates, test]);
           else {
             // According to oid to delete the template
             templates.splice(
-              templates.findIndex((value) => value._id.$oid === test._id.$oid),
+              templates.findIndex(value => value._id.$oid === test._id.$oid),
               1,
             );
             setTemplates([...templates]);
           }
         },
-        (reason) => openSnackbar('Something went wrong: ' + reason.response.data),
+        reason => globalStore.showSnakeBar('Something went wrong: ' + reason.response.data),
       );
     // If it is a template, the dialog will be opened for warning
     if (test.isTemplate)

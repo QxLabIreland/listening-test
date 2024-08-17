@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -26,21 +27,20 @@ import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 
 import SearchInput from '../../components/utils/SearchInput';
-import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
+import { globalStore } from '../../global/globalStore';
 import Loading from '../../layouts/components/Loading';
-import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
+import { GlobalDialog } from '../../shared/ReactContexts';
+import { AppPermissions } from '../../shared/enums/permissions';
+import { TestUrl } from '../../shared/enums/test-urls';
 import { AudioExampleModel } from '../../shared/models/AudioTestModel';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
-import { TestUrl } from '../../shared/enums/test-urls';
+import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
 import { useTemplateList } from '../general/TemplatesPage';
+import { tasksStore } from '../task-list-store';
 import { DeleteButtonAndDialog } from './DeleteButtonAndDialog';
 import { ShareLinkDialog } from './ShareLinkDialog';
-import { AppPermissions } from '../../shared/enums/permissions';
-import { tasksStore } from '../task-list-store';
-import { observer } from 'mobx-react';
 
 export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl }) {
-  const openSnackbar = useContext(GlobalSnackbar);
   // Authenticate if user has permission to template
   const userAuth = useUserAuthResult(AppPermissions.Template);
   const { templates, handleIsTemplateChange, handleTemplateEdit } = useTemplateList(testUrl);
@@ -59,7 +59,7 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
     const openRequest = () =>
       Axios.delete('/api/' + testUrl, { params: { _id: obj._id.$oid } }).then(() => {
         tasksStore.delete(obj);
-        openSnackbar('Delete successfully', undefined, 'success');
+        globalStore.showSnakeBar('Delete successfully', undefined, 'success');
       });
     if (obj.isTemplate)
       openDialog(
@@ -82,9 +82,9 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
         // Give a 0 responseNum and put at the top of the list
         data.responseNum = 0;
         tasksStore.unshift(data);
-        openSnackbar('Duplicate successfully', undefined, 'success');
+        globalStore.showSnakeBar('Duplicate successfully', undefined, 'success');
       },
-      reason => openSnackbar('Something went wrong: ' + reason.response.data),
+      reason => globalStore.showSnakeBar('Something went wrong: ' + reason.response.data),
     );
   };
 

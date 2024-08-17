@@ -1,8 +1,7 @@
-import { observer } from 'mobx-react';
-import { UserModel } from '../../shared/models/UserModel';
-import React, { useContext, useState } from 'react';
-import { GlobalSnackbar } from '../../shared/ReactContexts';
 import Axios from 'axios';
+import { observer } from 'mobx-react';
+import React, { useState } from 'react';
+
 import {
   Button,
   Checkbox,
@@ -14,23 +13,25 @@ import {
   FormControlLabel,
   Tooltip,
 } from '@mui/material';
+
+import { globalStore } from '../../global/globalStore';
 import { FULL_PERMISSIONS } from '../../shared/enums/permissions';
+import { UserModel } from '../../shared/models/UserModel';
 
 export const ManagePermissionDialog = observer(function ({ user }: { user: UserModel }) {
   const [open, setOpen] = React.useState(false);
   const [processing, setProcessing] = useState<boolean>(false);
-  const openSnackbar = useContext(GlobalSnackbar);
 
   const handleAddPermission = (newPermission: string, user: UserModel) => {
     // Adding processing prevents user click too many times
     setProcessing(true);
     Axios.post('/api/users', { newPermission, _id: user._id }).then(
-      (res) => {
+      res => {
         user.permissions = res.data;
         setProcessing(false);
       },
-      (reason) => {
-        openSnackbar(reason.response.data, undefined, 'error');
+      reason => {
+        globalStore.showSnakeBar(reason.response.data, undefined, 'error');
         setProcessing(false);
       },
     );
@@ -42,7 +43,7 @@ export const ManagePermissionDialog = observer(function ({ user }: { user: UserM
     <>
       <Tooltip title="Click to view all permissions">
         <Button color="primary" onClick={handleClickOpen} autoCapitalize="disabled">
-          {FULL_PERMISSIONS.every((p) => user.permissions?.includes(p))
+          {FULL_PERMISSIONS.every(p => user.permissions?.includes(p))
             ? 'Admin'
             : !user.permissions || user.permissions.length === 0
               ? 'Add'
@@ -57,7 +58,7 @@ export const ManagePermissionDialog = observer(function ({ user }: { user: UserM
         <DialogTitle id="alert-dialog-title">Mange permissions for {user.name}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">Permissions Allowed</DialogContentText>
-          {FULL_PERMISSIONS.map((per) => (
+          {FULL_PERMISSIONS.map(per => (
             <FormControlLabel
               key={per}
               label={per}
