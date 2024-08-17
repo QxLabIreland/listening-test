@@ -40,7 +40,6 @@ import { tasksStore } from '../task-list-store';
 import { observer } from 'mobx-react';
 
 export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl }) {
-  const [searchStr, setSearchStr] = useState<string>('');
   const openSnackbar = useContext(GlobalSnackbar);
   // Authenticate if user has permission to template
   const userAuth = useUserAuthResult(AppPermissions.Template);
@@ -48,21 +47,13 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
     Axios.get<BasicTaskModel[]>('/api/' + testUrl, { withCredentials: true }).then(
-      ({ data }) => tasksStore.dataFetched(data),
+      ({ data }) => tasksStore.setData(data),
       tasksStore.setError,
     );
     // Reset state
-    return tasksStore.clear;
+    return tasksStore.reset;
   }, [testUrl]);
 
-  const getFilterData = () =>
-    tasksStore.list.filter(
-      task =>
-        // Name searching
-        task.name.toLowerCase().includes(searchStr.toLowerCase()) ||
-        // Date searching
-        task.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase()),
-    );
   // When trash button clicked. If it is a temple there will be alert
   const handleDelete = (obj: BasicTaskModel) => {
     const openRequest = () =>
@@ -101,7 +92,7 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
     <Grid container spacing={2}>
       <Grid item container xs={12}>
         <Grid item xs={12} md={6}>
-          <SearchInput placeholder="Search tests" onChange={e => setSearchStr(e.target.value)} />
+          <SearchInput placeholder="Search tests" onChange={e => tasksStore.setSearchStr(e.target.value)} />
         </Grid>
         <Grid item xs={12} md={6} style={{ display: 'flex', alignItems: 'center', paddingTop: 9 }}>
           <span style={{ flexGrow: 1 }} />
@@ -109,7 +100,7 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        {tasksStore.loading ? (
+        {tasksStore.data ? (
           <Card>
             <CardContent style={{ padding: 0 }}>
               <Table>
@@ -128,8 +119,8 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {tasksStore.list.length ? (
-                    getFilterData().map(taskModel => (
+                  {tasksStore.data.length ? (
+                    tasksStore.filteredData.map(taskModel => (
                       <TableRow hover key={taskModel._id.$oid}>
                         <TableCell>{taskModel.name}</TableCell>
                         <TableCell>
