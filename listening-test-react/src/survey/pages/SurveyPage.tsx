@@ -14,11 +14,11 @@ import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 
-import Loading from '../../layouts/components/Loading';
 import { GlobalDialog } from '../../shared/ReactContexts';
-import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import Loading from '../../shared/components/Loading';
 import { SurveyControlType, TestItemType } from '../../shared/enums/EnumsAndTypes';
 import { TestUrl } from '../../shared/enums/test-urls';
+import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { useDivideIntoSections } from '../../shared/tools/RandomizationTools';
 import {
   questionedExValidateError,
@@ -50,13 +50,13 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
       else setQuestionnaire(observable(value));
     } else
       Axios.get<BasicTaskModel>('/api/task/' + testUrl, { params: { _id: id } }).then(
-        (res) => {
+        res => {
           if (res.data.stopReceivingRes) navigate('/task/stop-receiving-res', { replace: true });
           const validateError = testItemsValidateIncomplete(res.data);
           if (validateError) setError('This survey is incomplete. If you are the survey owner: ' + validateError);
           else setQuestionnaire(observable(res.data));
         },
-        (reason) => setError(reason.response.data),
+        reason => setError(reason.response.data),
       );
   }, [testUrl, id, value]);
   // If isIndividual, goto description
@@ -78,7 +78,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
           if (!value) navigate('/task/finish', { state: true, replace: true });
           else openDialog('The task has been aborted, thank you for you participation.');
         } else {
-          const index = randomItems.findIndex((item) => item.id === targetId);
+          const index = randomItems.findIndex(item => item.id === targetId);
           if (index > -1) return index;
         }
       }
@@ -125,7 +125,7 @@ export const SurveyPage = observer(function ({ value, testUrl }: { value?: Basic
     setOpenedPanel(null);
     // Start request
     if (!value)
-      Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then((res) => {
+      Axios.post('/api/task/' + testUrl, toJS(questionnaire)).then(res => {
         navigate(`/task/finish?${res.data?.$oid}&${testUrl}`, { replace: true, state: true });
       });
   }

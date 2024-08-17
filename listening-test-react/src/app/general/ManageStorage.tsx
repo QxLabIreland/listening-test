@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
 import Axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+
 import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Grid, Typography } from '@mui/material';
+
 import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
-import Loading from '../../layouts/components/Loading';
 import { GlobalDialog } from '../../shared/ReactContexts';
-import { fmtFileSize } from '../../shared/tools/UncategorizedTools';
+import Loading from '../../shared/components/Loading';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';
+import { fmtFileSize } from '../../shared/tools/UncategorizedTools';
 
 export default function ManageStorage() {
   const [storageStatus, setStorageStatus] = useState<StorageStatusModel>();
@@ -14,8 +16,8 @@ export default function ManageStorage() {
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
     Axios.get<StorageStatusModel>('/api/storage').then(
-      (res) => setStorageStatus(res.data),
-      (res) => setAlert('error', res.response.data),
+      res => setStorageStatus(res.data),
+      res => setAlert('error', res.response.data),
     );
   }, []);
 
@@ -29,11 +31,11 @@ export default function ManageStorage() {
         setProcessing(true);
         Axios.delete<StorageStatusModel>('/api/storage')
           .then(
-            (res) => {
+            res => {
               setStorageStatus(res.data);
               setAlert('success', 'Delete redundant files successfully');
             },
-            (res) => setAlert('error', res.response.data),
+            res => setAlert('error', res.response.data),
           )
           .finally(() => setProcessing(false));
       },

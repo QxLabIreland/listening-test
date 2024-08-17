@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { CurrentUser } from '../../shared/ReactContexts';
-import Loading from '../../layouts/components/Loading';
+import Loading from '../../shared/components/Loading';
 import { AppPermissions } from '../../shared/enums/permissions';
 
 export default function AuthRoute(props: PropsWithChildren<{ permission?: AppPermissions }>) {

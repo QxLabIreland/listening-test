@@ -28,8 +28,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import SearchInput from '../../components/utils/SearchInput';
 import { globalStore } from '../../global/globalStore';
-import Loading from '../../layouts/components/Loading';
 import { GlobalDialog } from '../../shared/ReactContexts';
+import Loading from '../../shared/components/Loading';
 import { AppPermissions } from '../../shared/enums/permissions';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { AudioExampleModel } from '../../shared/models/AudioTestModel';

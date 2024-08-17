@@ -1,6 +1,5 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AuthRoute from './AppBarDrawer/AuthRoute';
 
 import { Box, ListSubheader } from '@mui/material';
 // {lazy,
@@ -8,10 +7,11 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 
-import NotFoundView from '../layouts/components/NotFoundView';
+import NotFoundView from '../shared/components/NotFoundView';
 import { AppPermissions } from '../shared/enums/permissions';
 import { TEST_URLS, URL_TO_TITLE } from '../shared/enums/test-urls';
 import AppBarLayout, { DRAWER_WIDTH } from './AppBarDrawer/AppBarLayout';
+import AuthRoute from './AppBarDrawer/AuthRoute';
 import { useUserAuthResult } from './AppBarDrawer/AuthRoute';
 import { ListItemNavLink } from './AppBarDrawer/ListItemNavLink';
 import DashboardPage from './general/DashboardPage';
@@ -150,7 +150,7 @@ export default function AppContainer() {
               <Route key={i} path={testUrl} element={<TestListPage testUrl={testUrl} />} />
             ))}
             {/*Detail with back arrow button. Aka: no navigation page*/}
-            {TEST_URLS.map((url) => (
+            {TEST_URLS.map(url => (
               <Route
                 key={url}
                 path={`${url}/:id`}

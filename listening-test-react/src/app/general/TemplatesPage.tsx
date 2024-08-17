@@ -13,8 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 
 import { globalStore } from '../../global/globalStore';
-import Loading from '../../layouts/components/Loading';
 import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
+import Loading from '../../shared/components/Loading';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 

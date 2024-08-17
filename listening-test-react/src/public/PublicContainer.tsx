@@ -7,13 +7,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { createStyles, makeStyles } from '@mui/styles';
 
+import Loading from '../shared/components/Loading';
+import NotFoundView from '../shared/components/NotFoundView';
 import ConfirmEmail from './home/ConfirmEmail';
 import FindPassword from './home/FindPassword';
 import Home from './home/Home';
 import SignIn from './home/SignIn';
 import SignUp from './home/SingUp';
-import Loading from '../layouts/components/Loading';
-import NotFoundView from '../layouts/components/NotFoundView';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

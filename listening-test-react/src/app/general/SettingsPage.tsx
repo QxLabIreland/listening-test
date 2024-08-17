@@ -18,9 +18,9 @@ import {
 } from '@mui/material';
 
 import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
-import Loading from '../../layouts/components/Loading';
 import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
 import { useMatStyles } from '../../shared/SharedStyles';
+import Loading from '../../shared/components/Loading';
 import { DEFAULT_STORAGE_LIMIT } from '../../shared/constants';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';
 import { fmtFileSize } from '../../shared/tools/UncategorizedTools';
@@ -47,14 +47,14 @@ function ChangePassword() {
   const { currentUser } = useContext(CurrentUser);
   const formik = useFormik({
     initialValues: { currentPassword: '', newPassword: '', newPasswordConfirm: '' },
-    onSubmit: (values) =>
+    onSubmit: values =>
       Axios.put('/api/password', {
         // Hash all of things
         password: Md5.hashStr(values.currentPassword),
         newPassword: Md5.hashStr(values.newPassword),
       }).then(
         () => setPasswordMessage('success', 'You have successfully updated your password'),
-        (reason) => setPasswordMessage('error', reason.response.data),
+        reason => setPasswordMessage('error', reason.response.data),
       ),
     // Validation before submitting
     validate: pipeValidator({
@@ -140,7 +140,7 @@ function AccountDeletion() {
 
   const accountDeletion = useFormik({
     initialValues: { password: '' },
-    onSubmit: (values) =>
+    onSubmit: values =>
       openDialog(
         'Your account and all the data related to it will be deleted permanently. Once you confirmed, the process cannot be stop',
         'Are your sure?',
@@ -151,7 +151,7 @@ function AccountDeletion() {
             data: { password: Md5.hashStr(values.password) },
           }).then(
             () => openDialog('You have successfully delete your account', 'Success', () => navigate('/sign-in')),
-            (reason) => setAccountDeletionMessage('error', reason.response.data),
+            reason => setAccountDeletionMessage('error', reason.response.data),
           ),
       ),
     validate: pipeValidator({
@@ -203,8 +203,8 @@ function StorageAllocation() {
   const [expandStorageAlert, setExpandStorageAlert] = useSimpleAlert();
   useEffect(() => {
     Axios.get<StorageStatusModel>('/api/storage-allocation').then(
-      (res) => setUsage(res.data),
-      (res) => setError(res.response.data),
+      res => setUsage(res.data),
+      res => setError(res.response.data),
     );
   }, []);
 

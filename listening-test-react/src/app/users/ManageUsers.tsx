@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 
 import SearchInput from '../../components/utils/SearchInput';
 import { globalStore } from '../../global/globalStore';
-import Loading from '../../layouts/components/Loading';
+import Loading from '../../shared/components/Loading';
 import { UserModel } from '../../shared/models/UserModel';
 import { ManagePermissionDialog } from './ManagePermissionDialog';
 import { ManageWhitelist } from './ManageWhitelistDialog';

@@ -9,11 +9,11 @@ import Toolbar from '@mui/material/Toolbar';
 import { createStyles, makeStyles } from '@mui/styles';
 
 import { CookiesPolicySnackbar } from '../public/PolicyTerms/CookiesPolicySnackbar';
+import Loading from '../shared/components/Loading';
+import NotFoundView from '../shared/components/NotFoundView';
 import { StopReceivingResPage } from './pages/StopRecivingResPage';
 import SurveyFinishPage from './pages/SurveyFinishPage';
 import { SurveyPage } from './pages/SurveyPage';
-import Loading from '../layouts/components/Loading';
-import NotFoundView from '../layouts/components/NotFoundView';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -11,9 +11,9 @@ import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 
 import { globalStore } from '../../global/globalStore';
-import Loading from '../../layouts/components/Loading';
 import { GlobalDialog } from '../../shared/ReactContexts';
 import { DetailTaskModel } from '../../shared/ReactContexts';
+import Loading from '../../shared/components/Loading';
 import Prompt from '../../shared/components/Prompt';
 import { TestItemType } from '../../shared/enums/EnumsAndTypes';
 import { TestUrl } from '../../shared/enums/test-urls';

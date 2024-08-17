@@ -22,12 +22,12 @@ import {
 import { red } from '@mui/material/colors';
 import { createStyles, makeStyles, withStyles } from '@mui/styles';
 
-import Loading from '../../layouts/components/Loading';
+import Loading from '../../shared/components/Loading';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { downloadFileTool } from '../../shared/tools/UncategorizedTools';
 import { ResponsePreviewDialog } from './ResponsePreviewDialog';
 
-const useStyles = makeStyles((_) =>
+const useStyles = makeStyles(_ =>
   createStyles({
     content: { padding: 0 },
     actions: { display: 'flex', justifyContent: 'space-between', paddingLeft: 0 },
@@ -35,7 +35,7 @@ const useStyles = makeStyles((_) =>
   }),
 );
 
-const DangerCheckbox = withStyles((_) => ({
+const DangerCheckbox = withStyles(_ => ({
   root: { '&$checked': { color: red[500] } },
   checked: null,
 }))(Checkbox);
@@ -52,14 +52,14 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
 
   useEffect(() => {
     Axios.get('/api/response', { params: { testType: testUrl, testId: id } }).then(
-      (res) => setResponse(res.data),
-      (reason) => setError(reason.response.data),
+      res => setResponse(res.data),
+      reason => setError(reason.response.data),
     );
   }, [id, testUrl]);
 
   // Checkbox methods
   const handleSelectAll = (event: any) => {
-    currentPageList().forEach((res) => (res.selected = event.target.checked));
+    currentPageList().forEach(res => (res.selected = event.target.checked));
     setResponse([...responses]);
   };
   const handleSelectOne = (event: any, res: any) => {
@@ -74,9 +74,9 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
 
   // Batch delete checked items
   const handleDelete = () => {
-    const deletedList = responses.filter((r) => r.selected).map((r) => r._id);
+    const deletedList = responses.filter(r => r.selected).map(r => r._id);
     Axios.delete('/api/response', { params: { testType: testUrl, testId: id }, data: deletedList }).then(() =>
-      setResponse(responses.filter((r) => !r.selected)),
+      setResponse(responses.filter(r => !r.selected)),
     );
   };
   const handleDownload = () =>
@@ -99,9 +99,9 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
                     <TableCell padding="checkbox">
                       <Tooltip title="Select all to delete">
                         <DangerCheckbox
-                          checked={currentPageList().every((v) => v.selected)}
+                          checked={currentPageList().every(v => v.selected)}
                           indeterminate={
-                            currentPageList().some((v) => v.selected) && !currentPageList().every((v) => v.selected)
+                            currentPageList().some(v => v.selected) && !currentPageList().every(v => v.selected)
                           }
                           onChange={handleSelectAll}
                         />
@@ -114,11 +114,11 @@ export default function ResponseListView(props: { testUrl: TestUrl }) {
                 </TableHead>
                 <TableBody>
                   {currentPageList().length ? (
-                    currentPageList().map((r) => (
+                    currentPageList().map(r => (
                       <TableRow hover key={r._id.$oid}>
                         <TableCell padding="checkbox">
                           <Tooltip title="Select to delete">
-                            <DangerCheckbox checked={!!r.selected} onChange={(event) => handleSelectOne(event, r)} />
+                            <DangerCheckbox checked={!!r.selected} onChange={event => handleSelectOne(event, r)} />
                           </Tooltip>
                         </TableCell>
                         <TableCell>{r.name}</TableCell>
