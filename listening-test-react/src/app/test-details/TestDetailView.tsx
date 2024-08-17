@@ -81,7 +81,7 @@ export const TestDetailView = observer(function ({
     }).then(
       () => {
         navigate('./');
-        globalStore.showSnakeBar('Save successfully', undefined, 'success');
+        globalStore.showSnackbar('Save successfully', undefined, 'success');
       },
       reason => openDialog(reason.response.data, 'Something wrong'),
     );

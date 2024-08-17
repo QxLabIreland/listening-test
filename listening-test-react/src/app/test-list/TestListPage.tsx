@@ -59,7 +59,7 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
     const openRequest = () =>
       Axios.delete('/api/' + testUrl, { params: { _id: obj._id.$oid } }).then(() => {
         tasksStore.delete(obj);
-        globalStore.showSnakeBar('Delete successfully', undefined, 'success');
+        globalStore.showSnackbar('Delete successfully', undefined, 'success');
       });
     if (obj.isTemplate)
       openDialog(
@@ -82,9 +82,9 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
         // Give a 0 responseNum and put at the top of the list
         data.responseNum = 0;
         tasksStore.unshift(data);
-        globalStore.showSnakeBar('Duplicate successfully', undefined, 'success');
+        globalStore.showSnackbar('Duplicate successfully', undefined, 'success');
       },
-      reason => globalStore.showSnakeBar('Something went wrong: ' + reason.response.data),
+      reason => globalStore.showSnackbar('Something went wrong: ' + reason.response.data),
     );
   };
 

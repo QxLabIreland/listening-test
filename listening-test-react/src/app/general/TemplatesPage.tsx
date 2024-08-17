@@ -134,7 +134,7 @@ export function useTemplateList(testUrl: TestUrl) {
             setTemplates([...templates]);
           }
         },
-        reason => globalStore.showSnakeBar('Something went wrong: ' + reason.response.data),
+        reason => globalStore.showSnackbar('Something went wrong: ' + reason.response.data),
       );
     // If it is a template, the dialog will be opened for warning
     if (test.isTemplate)

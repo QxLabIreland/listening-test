@@ -33,7 +33,7 @@ export default function SignUp() {
     onSubmit: values =>
       Axios.post('/api/sign-up', { ...values, password: Md5.hashStr(values.password) }).then(
         () => {
-          globalStore.showSnakeBar(
+          globalStore.showSnackbar(
             "The confirmation link has been sent. If you didn't receive anything please check your spam inbox",
             undefined,
             'info',

@@ -13,7 +13,7 @@ export default observer(function GlobalSnackbarProvider() {
 
   return (
     <Stack spacing={2} position="fixed" bottom={2} left={2} zIndex={5500}>
-      {globalStore.snakeBarList.map((option, index) =>
+      {globalStore.snackbarList.map((option, index) =>
         option.severity ? (
           <Snackbar
             key={option.id}

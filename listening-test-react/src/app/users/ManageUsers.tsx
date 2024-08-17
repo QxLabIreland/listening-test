@@ -111,13 +111,13 @@ const ActivationCheckbox = observer(({ user }: { user: UserModel }) => {
     Axios.patch(`/api/user/${user._id.$oid}`).then(
       () => {
         user.activated = !user.activated;
-        globalStore.showSnakeBar(
+        globalStore.showSnackbar(
           `The user has been ${user.activated ? 'activated' : 'deactivated'}.`,
           6_000,
           'success',
         );
       },
-      () => globalStore.showSnakeBar('Activation failed.', 6_000, 'error'),
+      () => globalStore.showSnackbar('Activation failed.', 6_000, 'error'),
     );
   };
   return <Checkbox checked={user.activated ?? false} onChange={event => handleActivatedChange(event, user)} />;

@@ -31,7 +31,7 @@ export const ManagePermissionDialog = observer(function ({ user }: { user: UserM
         setProcessing(false);
       },
       reason => {
-        globalStore.showSnakeBar(reason.response.data, undefined, 'error');
+        globalStore.showSnackbar(reason.response.data, undefined, 'error');
         setProcessing(false);
       },
     );
