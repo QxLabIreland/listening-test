@@ -2,13 +2,11 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthRoute from './AppBarDrawer/AuthRoute';
 
-import { Box, ListSubheader, Theme } from '@mui/material';
+import { Box, ListSubheader } from '@mui/material';
 // {lazy,
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import { createStyles, makeStyles } from '@mui/styles';
 
 import NotFoundView from '../layouts/components/NotFoundView';
 import { AppPermissions } from '../shared/enums/permissions';
@@ -84,23 +82,14 @@ const DrawerList = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: { display: 'flex' },
-    drawer: { [theme.breakpoints.up('sm')]: { width: DRAWER_WIDTH, flexShrink: 0 } },
-  }),
-);
-
 export default function AppContainer() {
-  const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   return (
     <AuthRoute>
-      <div className={classes.root}>
-        <CssBaseline />
+      <Box display="flex">
         <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Drawer
@@ -173,7 +162,7 @@ export default function AppContainer() {
             <Route element={<NotFoundView />} />
           </Routes>
         </AppBarLayout>
-      </div>
+      </Box>
     </AuthRoute>
   );
 }

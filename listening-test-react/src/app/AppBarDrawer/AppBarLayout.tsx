@@ -15,7 +15,7 @@ import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 
 export const DRAWER_WIDTH = 240;
 
-export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any; fixedTitle?: boolean }>) {
+export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerToggle: any }>) {
   const { handleDrawerToggle } = props;
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>();
@@ -59,7 +59,14 @@ export default function AppBarLayout(props: PropsWithChildren<{ handleDrawerTogg
           <NotificationDrawer />
         </Toolbar>
       </AppBar>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` } }}>
+      <Box
+        component="main"
+        sx={(theme) => ({
+          flexGrow: 1,
+          padding: 3,
+          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+          backgroundColor: theme.palette.background.default,
+        })}>
         <Toolbar />
         <Container maxWidth="md">{props.children}</Container>
       </Box>

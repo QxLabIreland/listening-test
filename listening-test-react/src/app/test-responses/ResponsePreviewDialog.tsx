@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import React, { forwardRef, useState } from 'react';
 
 import { AppBar, Container, Icon, Slide, Theme } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -51,7 +50,6 @@ export const ResponsePreviewDialog = observer(
         <IconButton ref={ref} {...rest} onClick={handleClickOpen}>
           <Icon>visibility</Icon>
         </IconButton>
-        <CssBaseline />
         <Dialog
           fullScreen
           open={open}

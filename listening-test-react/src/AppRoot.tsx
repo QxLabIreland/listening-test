@@ -1,9 +1,10 @@
 import React from 'react';
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 
-import { createTheme } from '@mui/material';
-import { ThemeProvider } from '@mui/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { CssBaseline } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import AppContainer from './app/AppContainer';
 import PublicContainer from './public/PublicContainer';
 import GlobalDialogProvider from './shared/providers/GlobalDialogProvider';
@@ -11,7 +12,13 @@ import GlobalSnackbarProvider from './shared/providers/GlobalSnackbarProvider';
 import XsrfAuthUserProvider from './shared/providers/XsrfAuthUserProvider';
 import SurveyContainer from './survey/SurveyContainer';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      default: grey[50],
+    },
+  },
+});
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +33,7 @@ const router = createBrowserRouter(
 export default function AppRoot() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <GlobalSnackbarProvider>
         <GlobalDialogProvider>
           <XsrfAuthUserProvider>

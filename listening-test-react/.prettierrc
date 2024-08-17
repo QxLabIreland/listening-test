@@ -1,13 +1,9 @@
 {
   "printWidth": 120,
   "singleQuote": true,
-  "importOrder": [
-    "^[A-Za-z]/?(.*)$",
-    "^@mui/(.*)$",
-    "^@testing-library/(.*)$",
-    "^[./]"
-  ],
+  "importOrder": ["^[A-Za-z]/?(.*)$", "^@mui/(.*)$", "^@testing-library/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "arrowParens": "avoid"
 }

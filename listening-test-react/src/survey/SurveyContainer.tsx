@@ -5,7 +5,6 @@ import { Route, Routes } from 'react-router-dom';
 import { Alert, Box, Button, Theme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import { createStyles, makeStyles } from '@mui/styles';
 
@@ -41,7 +40,6 @@ export default function SurveyContainer() {
           {/*<Typography>Subject View</Typography>*/}
         </Toolbar>
       </AppBar>
-      <CssBaseline />
       {iOS() ? (
         <Container maxWidth="md">
           <Box marginTop={4}>

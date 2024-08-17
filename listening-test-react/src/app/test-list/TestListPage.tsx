@@ -24,13 +24,11 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
-import { makeStyles } from '@mui/styles';
 
 import SearchInput from '../../components/utils/SearchInput';
 import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
 import Loading from '../../layouts/components/Loading';
 import { GlobalDialog, GlobalSnackbar } from '../../shared/ReactContexts';
-import { useMatStyles } from '../../shared/SharedStyles';
 import { AudioExampleModel } from '../../shared/models/AudioTestModel';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { TestUrl } from '../../shared/enums/test-urls';
@@ -38,16 +36,11 @@ import { useTemplateList } from '../general/TemplatesPage';
 import { DeleteButtonAndDialog } from './DeleteButtonAndDialog';
 import { ShareLinkDialog } from './ShareLinkDialog';
 import { AppPermissions } from '../../shared/enums/permissions';
+import { tasksStore } from '../task-list-store';
+import { observer } from 'mobx-react';
 
-const useStyles = makeStyles(() => ({
-  actionTd: { whiteSpace: 'nowrap' },
-}));
-
-export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
-  const classes = { ...useMatStyles(), ...useStyles() };
-  const [data, setData] = useState<BasicTaskModel[]>(null);
+export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl }) {
   const [searchStr, setSearchStr] = useState<string>('');
-  const [error, setError] = useState();
   const openSnackbar = useContext(GlobalSnackbar);
   // Authenticate if user has permission to template
   const userAuth = useUserAuthResult(AppPermissions.Template);
@@ -55,30 +48,26 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
   const openDialog = useContext(GlobalDialog);
   useEffect(() => {
     Axios.get<BasicTaskModel[]>('/api/' + testUrl, { withCredentials: true }).then(
-      (res) => setData(res.data),
-      (reason) => setError(reason.response.data),
+      ({ data }) => tasksStore.dataFetched(data),
+      tasksStore.setError,
     );
     // Reset state
-    return () => {
-      setData(null);
-      setError(undefined);
-    };
+    return tasksStore.clear;
   }, [testUrl]);
 
   const getFilterData = () =>
-    data.filter(
-      (value) =>
+    tasksStore.list.filter(
+      task =>
         // Name searching
-        value.name.toLowerCase().includes(searchStr.toLowerCase()) ||
+        task.name.toLowerCase().includes(searchStr.toLowerCase()) ||
         // Date searching
-        value.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase()),
+        task.createdAt.$date.toString().toLowerCase().includes(searchStr.toLowerCase()),
     );
   // When trash button clicked. If it is a temple there will be alert
   const handleDelete = (obj: BasicTaskModel) => {
     const openRequest = () =>
       Axios.delete('/api/' + testUrl, { params: { _id: obj._id.$oid } }).then(() => {
-        data.splice(data.indexOf(obj), 1);
-        setData([...data]);
+        tasksStore.delete(obj);
         openSnackbar('Delete successfully', undefined, 'success');
       });
     if (obj.isTemplate)
@@ -92,20 +81,19 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
   };
   const handleCopyTest = (oldTest: BasicTaskModel) => {
     // Compatible fix for previous bug, delete the value that set in preview mode.
-    oldTest.items.forEach((value) => {
+    oldTest.items.forEach(value => {
       if (value.questionControl?.value) value.questionControl.value = undefined;
       if (value.example?.hasOwnProperty('playedOnce')) delete (value.example as AudioExampleModel).playedOnce;
-      if (value.example?.fields) value.example.fields.forEach((value1) => (value1.value = undefined));
+      if (value.example?.fields) value.example.fields.forEach(value1 => (value1.value = undefined));
     });
     Axios.post<BasicTaskModel>('/api/' + testUrl, { ...oldTest, name: oldTest.name + ' copy' }).then(
-      (res) => {
+      ({ data }) => {
         // Give a 0 responseNum and put at the top of the list
-        res.data.responseNum = 0;
-        data.unshift(res.data);
-        setData([...data]);
+        data.responseNum = 0;
+        tasksStore.unshift(data);
         openSnackbar('Duplicate successfully', undefined, 'success');
       },
-      (reason) => openSnackbar('Something went wrong: ' + reason.response.data),
+      reason => openSnackbar('Something went wrong: ' + reason.response.data),
     );
   };
 
@@ -113,7 +101,7 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
     <Grid container spacing={2}>
       <Grid item container xs={12}>
         <Grid item xs={12} md={6}>
-          <SearchInput placeholder="Search tests" onChange={(e) => setSearchStr(e.target.value)} />
+          <SearchInput placeholder="Search tests" onChange={e => setSearchStr(e.target.value)} />
         </Grid>
         <Grid item xs={12} md={6} style={{ display: 'flex', alignItems: 'center', paddingTop: 9 }}>
           <span style={{ flexGrow: 1 }} />
@@ -121,7 +109,7 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        {data ? (
+        {tasksStore.loading ? (
           <Card>
             <CardContent style={{ padding: 0 }}>
               <Table>
@@ -140,8 +128,8 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.length ? (
-                    getFilterData().map((taskModel) => (
+                  {tasksStore.list.length ? (
+                    getFilterData().map(taskModel => (
                       <TableRow hover key={taskModel._id.$oid}>
                         <TableCell>{taskModel.name}</TableCell>
                         <TableCell>
@@ -164,7 +152,7 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
                             />
                           </TableCell>
                         )}
-                        <TableCell className={classes.elementGroup + ' ' + classes.actionTd}>
+                        <TableCell sx={theme => ({ whiteSpace: 'nowrap', '& > *': { margin: theme.spacing(0.5) } })}>
                           <ActionsGroup
                             testUrl={testUrl}
                             taskModel={taskModel}
@@ -187,12 +175,12 @@ export default function TestListPage({ testUrl }: { testUrl: TestUrl }) {
             </CardContent>
           </Card>
         ) : (
-          <Loading error={error} />
+          <Loading error={tasksStore.error?.message} />
         )}
       </Grid>
     </Grid>
   );
-}
+});
 
 /** The menu to add using templates or just a blank page*/
 function AddTestMenu({ templates }: { templates: BasicTaskModel[] }) {
@@ -211,7 +199,7 @@ function AddTestMenu({ templates }: { templates: BasicTaskModel[] }) {
           Blank test
         </MenuItem>
         {templates && templates.length ? (
-          templates.map((temp) => (
+          templates.map(temp => (
             <MenuItem key={temp._id.$oid} component={Link} to="0" state={temp._id.$oid}>
               {temp.name}
             </MenuItem>

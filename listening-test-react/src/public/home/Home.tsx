@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { Button, Dialog, Theme } from '@mui/material';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import { createStyles, makeStyles } from '@mui/styles';
 
@@ -50,7 +49,6 @@ export default function Home() {
 
   return (
     <div className={classes.background}>
-      <CssBaseline />
       <Typography align="center">
         <SimpleDialog />
       </Typography>
