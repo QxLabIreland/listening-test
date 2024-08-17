@@ -1,13 +1,16 @@
 import { observer } from 'mobx-react';
-import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
-import { SurveyControlType, TestItemType } from '../../../shared/enums/EnumsAndTypes';
+import React from 'react';
 import { v4 } from 'uuid';
+
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
-import React from 'react';
-import { AddQuestionButton } from '../../utils/AddQuestionButton';
+
 import { useMatStyles } from '../../../shared/SharedStyles';
+import { TestItemType } from '../../../shared/enums/test-items';
+import { SurveyControlType } from '../../../shared/enums/test-items';
+import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
+import { AddQuestionButton } from '../../utils/AddQuestionButton';
 
 export const AudioLabelingButtonGroup = observer(function (props: { onAdd: (_: AudioTestItemModel) => void }) {
   const { onAdd } = props;

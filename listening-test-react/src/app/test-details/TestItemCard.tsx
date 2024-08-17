@@ -32,9 +32,10 @@ import {
 import { SurveyControl } from '../../components/forms/SurveyControl';
 import { DetailTaskModel } from '../../shared/ReactContexts';
 import { labelInputStyle } from '../../shared/SharedStyles';
-import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
-import { SurveyControlType, TestItemType } from '../../shared/enums/EnumsAndTypes';
+import { TestItemType } from '../../shared/enums/test-items';
+import { SurveyControlType } from '../../shared/enums/test-items';
 import { TestUrl } from '../../shared/enums/test-urls';
+import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
 
 const useStyles = makeStyles((theme: Theme) => {
   const trans = theme.transitions.create('all', { duration: theme.transitions.duration.shortest });
@@ -77,7 +78,7 @@ const TitleInput = observer(function ({ item }: { item: BasicTaskItemModel }) {
   return (
     <input
       style={labelInputStyle}
-      onFocus={(event) => event.target.select()}
+      onFocus={event => event.target.select()}
       value={item.title}
       onChange={handleLabelChange}
     />
@@ -130,15 +131,15 @@ const TestItemQuestionCard = observer(function ({
 }) {
   const taskModel = useContext(DetailTaskModel);
   // Find the index of current item
-  const curIndex = taskModel.items.findIndex((value) => value.id === item.id);
+  const curIndex = taskModel.items.findIndex(value => value.id === item.id);
   // If the index is at end of list, the goto feature will be delete
   const gotoQuestionItems =
     curIndex >= taskModel.items.length - 1
       ? undefined
       : taskModel.items
           .slice(curIndex + 2)
-          .filter((item) => item.type !== TestItemType.sectionHeader)
-          .map((item) => ({ id: item.id, title: item.title }));
+          .filter(item => item.type !== TestItemType.sectionHeader)
+          .map(item => ({ id: item.id, title: item.title }));
 
   return (
     <Card style={{ borderTop: '3px solid green' }}>
@@ -147,8 +148,8 @@ const TestItemQuestionCard = observer(function ({
           <input
             style={labelInputStyle}
             value={item.title}
-            onChange={(e) => (item.title = e.target.value)}
-            onFocus={(event) => event.target.select()}
+            onChange={e => (item.title = e.target.value)}
+            onFocus={event => event.target.select()}
           />
         }
         action={
@@ -159,7 +160,7 @@ const TestItemQuestionCard = observer(function ({
                 control={
                   <Switch
                     checked={item.questionControl.required}
-                    onChange={(e) => (item.questionControl.required = e.target.checked)}
+                    onChange={e => (item.questionControl.required = e.target.checked)}
                   />
                 }
               />
@@ -182,7 +183,7 @@ const TestItemQuestionCard = observer(function ({
   );
 });
 
-const sectionUseStyles = makeStyles((_theme) => ({
+const sectionUseStyles = makeStyles(_theme => ({
   header: { display: 'flex', marginRight: 8 },
   selection: { width: 340 },
 }));
@@ -199,7 +200,7 @@ const SectionHeaderSettings = observer(function (props: {
   const items: { title: string; id: string }[] = [];
   (function () {
     const fullItems = useContext(DetailTaskModel).items;
-    for (let i = fullItems.findIndex((value) => value === item) + 1; i < fullItems.length; i++) {
+    for (let i = fullItems.findIndex(value => value === item) + 1; i < fullItems.length; i++) {
       if (fullItems[i].type !== TestItemType.sectionHeader)
         items.push({ title: fullItems[i].title, id: fullItems[i].id });
       else break;
@@ -216,7 +217,7 @@ const SectionHeaderSettings = observer(function (props: {
   const handleSelectedFixChange = (event: any) =>
     // This will clean fixedItems by filtering out those not in items
     (item.sectionSettings.fixedItems = (event.target.value as string[]).filter(
-      (id) => items.findIndex((item) => item.id === id) > -1,
+      id => items.findIndex(item => item.id === id) > -1,
     ));
 
   return (
@@ -249,10 +250,10 @@ const SectionHeaderSettings = observer(function (props: {
             value={item.sectionSettings?.fixedItems ?? [{ id: '0', title: 'No items' }]}
             onChange={handleSelectedFixChange}
             input={<Input />}
-            renderValue={(selected) =>
-              (selected as string[]).map((id) => items.find((value1) => value1.id === id)?.title).join(', ')
+            renderValue={selected =>
+              (selected as string[]).map(id => items.find(value1 => value1.id === id)?.title).join(', ')
             }>
-            {items.map((value) => (
+            {items.map(value => (
               // Disable when id is '0' and show no items tip.
               <MenuItem key={value.id} value={value.id} disabled={value.id === '0'}>
                 <Checkbox checked={item.sectionSettings?.fixedItems?.indexOf(value.id) > -1} />

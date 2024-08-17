@@ -7,7 +7,8 @@ import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
 
 import { useMatStyles } from '../../../shared/SharedStyles';
-import { SurveyControlType, TestItemType } from '../../../shared/enums/EnumsAndTypes';
+import { TestItemType } from '../../../shared/enums/test-items';
+import { SurveyControlType } from '../../../shared/enums/test-items';
 import { ImageTestItemModel } from '../../../shared/models/ImageTaskModel';
 import { AddQuestionButton } from '../../utils/AddQuestionButton';
 

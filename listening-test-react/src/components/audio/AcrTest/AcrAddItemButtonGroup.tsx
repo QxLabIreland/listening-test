@@ -1,12 +1,15 @@
 import { observer } from 'mobx-react';
-import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
-import { useMatStyles } from '../../../shared/SharedStyles';
 import React, { useRef } from 'react';
-import { AddQuestionButton, AddQuestionButtonType } from '../../utils/AddQuestionButton';
-import { SurveyControlType, TestItemType } from '../../../shared/enums/EnumsAndTypes';
 import { v4 } from 'uuid';
+
 import { Box, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import Icon from '@mui/material/Icon';
+
+import { useMatStyles } from '../../../shared/SharedStyles';
+import { TestItemType } from '../../../shared/enums/test-items';
+import { SurveyControlType } from '../../../shared/enums/test-items';
+import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
+import { AddQuestionButton, AddQuestionButtonType } from '../../utils/AddQuestionButton';
 
 export const AcrAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
   const { onAdd } = props;

@@ -6,8 +6,8 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 
+import { SurveyControlType } from '../../../shared/enums/test-items';
 import { AudioExampleModel } from '../../../shared/models/AudioTestModel';
-import { SurveyControlType } from '../../../shared/enums/EnumsAndTypes';
 import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 import { TagsGroup } from '../../forms/TagsGroup';
 import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
@@ -40,7 +40,7 @@ export const AbTestItemExampleCard = observer(
             <>
               <AudioExampleSettingsDialog
                 settings={example.settings}
-                onConfirm={(settings) => (example.settings = settings)}
+                onConfirm={settings => (example.settings = settings)}
                 disableRandomAudio
                 enableAlwaysStartFrom0
               />
@@ -52,7 +52,7 @@ export const AbTestItemExampleCard = observer(
           <CardContent style={{ paddingTop: 0 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TagsGroup value={example.tags} onChange={(newTags) => (example.tags = newTags)} />
+                <TagsGroup value={example.tags} onChange={newTags => (example.tags = newTags)} />
               </Grid>
               <AudioFileDropGrid example={example} reference keepPlace />
               {/*Special survey questions for ab test*/}

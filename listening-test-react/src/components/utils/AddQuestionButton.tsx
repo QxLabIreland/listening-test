@@ -8,8 +8,9 @@ import Icon from '@mui/material/Icon';
 import { makeStyles } from '@mui/styles';
 
 import { DetailTaskModel } from '../../shared/ReactContexts';
+import { TestItemType } from '../../shared/enums/test-items';
+import { SurveyControlType } from '../../shared/enums/test-items';
 import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
-import { SurveyControlType, TestItemType } from '../../shared/enums/EnumsAndTypes';
 import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 export type AddQuestionButtonType = { closeMenu: () => void };

@@ -6,7 +6,7 @@ import { queryByTestId, waitFor } from '@testing-library/react';
 
 import { jestTestContainer as container } from '../../../setupTests';
 import { DetailTaskModel } from '../../../shared/ReactContexts';
-import { TestItemType } from '../../../shared/enums/EnumsAndTypes';
+import { TestItemType } from '../../../shared/enums/test-items';
 import { AbAddItemButtonGroup } from './AbAddItemButtonGroup';
 
 it('Add button behaviour', async () => {

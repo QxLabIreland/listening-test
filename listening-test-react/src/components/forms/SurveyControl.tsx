@@ -7,7 +7,7 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import { createStyles, makeStyles } from '@mui/styles';
 
-import { SurveyControlType } from '../../shared/enums/EnumsAndTypes';
+import { SurveyControlType } from '../../shared/enums/test-items';
 import { GotoQuestionItemModel, SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 export const SurveyControl = observer(function (props: {
@@ -30,8 +30,8 @@ export const SurveyControl = observer(function (props: {
           multiline
           label={label}
           value={control.question}
-          onChange={(e) => (control.question = e.target.value)}
-          onFocus={(event) => event.target.select()}
+          onChange={e => (control.question = e.target.value)}
+          onFocus={event => event.target.select()}
         />
       </Box>
       <ReactMarkdown>{control.question}</ReactMarkdown>
@@ -50,8 +50,8 @@ export const SurveyControl = observer(function (props: {
               style={{ flexGrow: 1 }}
               label={label}
               value={control.question}
-              onChange={(e) => (control.question = e.target.value)}
-              onFocus={(event) => event.target.select()}
+              onChange={e => (control.question = e.target.value)}
+              onFocus={event => event.target.select()}
             />
           </Box>
           <TextField
@@ -146,9 +146,9 @@ const SurveyOptions = observer(function ({
               variant="standard"
               value={o}
               autoFocus={autoFocus}
-              onFocus={(event) => event.target.select()}
-              onBlur={(event) => handleBlur(event, i)}
-              onChange={(e) => handleChange(e.target.value, i)}
+              onFocus={event => event.target.select()}
+              onBlur={event => handleBlur(event, i)}
+              onChange={e => handleChange(e.target.value, i)}
             />
           </Grid>
           {/*Goto question selection*/}
@@ -166,7 +166,7 @@ const SurveyOptions = observer(function ({
                     displayEmpty
                     disabled={disableGoto}
                     onClick={openGlobalSetting}
-                    onChange={(event) => handleGotoQuestionChange(event, i)}
+                    onChange={event => handleGotoQuestionChange(event, i)}
                     value={
                       control.gotoQuestionMapping
                         ? control.gotoQuestionMapping[i]
@@ -176,7 +176,7 @@ const SurveyOptions = observer(function ({
                     }>
                     <MenuItem value={''}>Continue to next question</MenuItem>
                     {/*<MenuItem value={gotoQuestionAbortValue}>Abort the test</MenuItem>*/}
-                    {gotoQuestionItems.map((item) => (
+                    {gotoQuestionItems.map(item => (
                       <MenuItem value={item.id} key={item.id}>
                         Go to {item.title}
                       </MenuItem>

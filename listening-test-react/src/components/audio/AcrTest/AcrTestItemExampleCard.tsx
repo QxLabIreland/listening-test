@@ -1,17 +1,19 @@
 import { observer } from 'mobx-react';
 import React, { ReactNode, useEffect } from 'react';
+
 import { Button, Card, CardContent, Collapse, Typography } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
-import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
 import Grid from '@mui/material/Grid';
-import { TagsGroup } from '../../forms/TagsGroup';
-import { AudioFileDropGrid } from '../AudioFileDropGrid';
-import { FileUploadDropBox } from '../../forms/FileUploadDropBox';
 import Icon from '@mui/material/Icon';
-import { AudioExampleModel, AudioExampleSettingsModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
-import { SurveyControlType } from '../../../shared/enums/EnumsAndTypes';
+
 import { useMatStyles } from '../../../shared/SharedStyles';
+import { SurveyControlType } from '../../../shared/enums/test-items';
+import { AudioExampleModel, AudioExampleSettingsModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
+import { FileUploadDropBox } from '../../forms/FileUploadDropBox';
 import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
+import { TagsGroup } from '../../forms/TagsGroup';
+import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
+import { AudioFileDropGrid } from '../AudioFileDropGrid';
 
 export const AcrTestItemExampleCard = observer(
   (
@@ -26,7 +28,7 @@ export const AcrTestItemExampleCard = observer(
     const classes = useMatStyles();
     // Set all field require to false if it is true
     useEffect(() => {
-      example.fields?.forEach((value) => {
+      example.fields?.forEach(value => {
         if (value?.required) delete value.required;
       });
     }, []);
@@ -66,7 +68,7 @@ export const AcrTestItemExampleCard = observer(
           <CardContent style={{ paddingTop: 0 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TagsGroup value={example.tags} onChange={(newTags) => (example.tags = newTags)} />
+                <TagsGroup value={example.tags} onChange={newTags => (example.tags = newTags)} />
               </Grid>
               {/*Description for this example*/}
               {!example.fields || example.fields.length < 1 ? (

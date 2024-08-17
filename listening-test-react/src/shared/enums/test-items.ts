@@ -5,7 +5,6 @@ export enum SurveyControlType {
   checkbox,
   description,
 }
-
 export enum TestItemType {
   sectionHeader,
   question,

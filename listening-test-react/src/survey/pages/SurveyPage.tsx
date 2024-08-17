@@ -16,7 +16,8 @@ import Typography from '@mui/material/Typography';
 
 import { GlobalDialog } from '../../shared/ReactContexts';
 import Loading from '../../shared/components/Loading';
-import { SurveyControlType, TestItemType } from '../../shared/enums/EnumsAndTypes';
+import { TestItemType } from '../../shared/enums/test-items';
+import { SurveyControlType } from '../../shared/enums/test-items';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { useDivideIntoSections } from '../../shared/tools/RandomizationTools';

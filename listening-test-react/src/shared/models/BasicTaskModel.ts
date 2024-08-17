@@ -1,6 +1,6 @@
-import { UserModel } from './UserModel';
-import { TestItemType } from '../enums/EnumsAndTypes';
+import { TestItemType } from '../enums/test-items';
 import { SurveyControlModel } from './SurveyControlModel';
+import { UserModel } from './UserModel';
 
 export interface TestSettingsModel {
   isIndividual?: boolean;

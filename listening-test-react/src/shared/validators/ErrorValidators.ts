@@ -1,8 +1,9 @@
-import { AudioExampleModel } from '../models/AudioTestModel';
-import { TestItemType } from '../enums/EnumsAndTypes';
-import { SurveyControlModel } from '../models/SurveyControlModel';
-import { BasicTaskItemModel, BasicTaskModel } from '../models/BasicTaskModel';
 import { toJS } from 'mobx';
+
+import { TestItemType } from '../enums/test-items';
+import { AudioExampleModel } from '../models/AudioTestModel';
+import { BasicTaskItemModel, BasicTaskModel } from '../models/BasicTaskModel';
+import { SurveyControlModel } from '../models/SurveyControlModel';
 
 /** Audio setting playback setting validation */
 export function validatePlayedOnceError(example: AudioExampleModel): string {
@@ -63,7 +64,7 @@ export function testItemsValidateIncomplete(tests: BasicTaskModel) {
     if (
       item.example &&
       item.example.medias &&
-      (item.example.medias.length < 1 || item.example.medias.some((value) => value == null))
+      (item.example.medias.length < 1 || item.example.medias.some(value => value == null))
     ) {
       return 'Please check that you have added audio files to all audio related questions';
     }

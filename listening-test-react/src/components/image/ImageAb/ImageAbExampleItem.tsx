@@ -1,15 +1,17 @@
+import { observer } from 'mobx-react';
+import React, { ReactNode } from 'react';
+
+import { Button, CardContent, Collapse, Icon } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import { Button, CardContent, Collapse, Icon } from '@mui/material';
-import React, { ReactNode } from 'react';
-import { TagsGroup } from '../../forms/TagsGroup';
 import Grid from '@mui/material/Grid';
-import { observer } from 'mobx-react';
-import { SurveyControlType } from '../../../shared/enums/EnumsAndTypes';
-import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
-import { TestItemDropGridList } from '../TestItemDropGridList';
+
 import { useMatStyles } from '../../../shared/SharedStyles';
+import { SurveyControlType } from '../../../shared/enums/test-items';
 import { ImageExampleModel } from '../../../shared/models/ImageTaskModel';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
+import { TagsGroup } from '../../forms/TagsGroup';
+import { TestItemDropGridList } from '../TestItemDropGridList';
 import { ImageAbExampleSettings } from './ImageAbExampleSettings';
 
 export const ImageAbExampleItem = observer(
@@ -41,7 +43,7 @@ export const ImageAbExampleItem = observer(
             <>
               <ImageAbExampleSettings
                 settings={example.settings}
-                onConfirm={(newSettings) => (example.settings = newSettings)}
+                onConfirm={newSettings => (example.settings = newSettings)}
               />
               {action}
             </>
@@ -51,7 +53,7 @@ export const ImageAbExampleItem = observer(
           <CardContent style={{ paddingTop: 0 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TagsGroup value={example.tags} onChange={(newTags) => (example.tags = newTags)} />
+                <TagsGroup value={example.tags} onChange={newTags => (example.tags = newTags)} />
               </Grid>
               <Grid item xs={12}>
                 <TestItemDropGridList example={example} type={mediaType} disableUpload keepSlot />

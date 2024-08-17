@@ -1,17 +1,18 @@
 import { observer } from 'mobx-react';
-import { TestItemType } from '../../shared/enums/EnumsAndTypes';
-import { TestUrl } from '../../shared/enums/test-urls';
-import { SurveyControlRender } from '../../components/forms/SurveyControl.render';
 import React from 'react';
+
 import { AbTestItemExampleRender } from '../../components/audio/AbTest/AbTestItemExample.render';
-import { HearingTestItemExampleRender } from '../../components/audio/HearingTest/HearingTestItemExample.render';
-import { ImageLabelingExampleRender } from '../../components/image/ImageLabeling/ImageLabelingExample.render';
-import { ImageAbExampleRender } from '../../components/image/ImageAb/ImageAbExample.render';
-import { VideoLabelingExampleRender } from '../../components/video/VideoLabeling/VideoLabelingExample.render';
-import { VideoAbExampleRender } from '../../components/video/VideoAb/VideoAbExample.render';
-import { MushraTestItemExampleRender } from '../../components/audio/Mushra/MushraTestItemExample.render';
-import { AudioTestItemTraining } from '../../components/audio/AudioTestItemTraining.render';
 import { AcrTestItemExampleRender } from '../../components/audio/AcrTest/AcrTestItemExample.render';
+import { AudioTestItemTraining } from '../../components/audio/AudioTestItemTraining.render';
+import { HearingTestItemExampleRender } from '../../components/audio/HearingTest/HearingTestItemExample.render';
+import { MushraTestItemExampleRender } from '../../components/audio/Mushra/MushraTestItemExample.render';
+import { SurveyControlRender } from '../../components/forms/SurveyControl.render';
+import { ImageAbExampleRender } from '../../components/image/ImageAb/ImageAbExample.render';
+import { ImageLabelingExampleRender } from '../../components/image/ImageLabeling/ImageLabelingExample.render';
+import { VideoAbExampleRender } from '../../components/video/VideoAb/VideoAbExample.render';
+import { VideoLabelingExampleRender } from '../../components/video/VideoLabeling/VideoLabelingExample.render';
+import { TestItemType } from '../../shared/enums/test-items';
+import { TestUrl } from '../../shared/enums/test-urls';
 import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
 
 export const TestItemCardRender = observer(function (props: {

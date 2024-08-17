@@ -15,7 +15,7 @@ import { GlobalDialog } from '../../shared/ReactContexts';
 import { DetailTaskModel } from '../../shared/ReactContexts';
 import Loading from '../../shared/components/Loading';
 import Prompt from '../../shared/components/Prompt';
-import { TestItemType } from '../../shared/enums/EnumsAndTypes';
+import { TestItemType } from '../../shared/enums/test-items';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { BasicTaskItemModel, BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { ShareLinkDialog } from '../test-list/ShareLinkDialog';

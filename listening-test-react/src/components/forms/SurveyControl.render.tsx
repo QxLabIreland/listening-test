@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { SurveyControlType } from '../../shared/enums/EnumsAndTypes';
+import { SurveyControlType } from '../../shared/enums/test-items';
 import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 export const SurveyControlRender = observer(function ({ control }: { control: SurveyControlModel }) {
@@ -27,7 +27,7 @@ export const SurveyControlRender = observer(function ({ control }: { control: Su
           variant="filled"
           label={control.question}
           required={control.required}
-          onChange={(event) => (control.value = event.target.value)}
+          onChange={event => (control.value = event.target.value)}
         />
       );
     case SurveyControlType.radio:
@@ -51,8 +51,8 @@ const SurveyRadio = observer(function (props: { control: SurveyControlModel }) {
   return (
     <FormControl variant="filled" fullWidth>
       <ReactMarkdown>{control.question}</ReactMarkdown>
-      <RadioGroup value={control.value} onChange={(event) => (control.value = event.target.value)}>
-        {control.options?.map((o) => <FormControlLabel key={o} value={o} control={<Radio />} label={o} />)}
+      <RadioGroup value={control.value} onChange={event => (control.value = event.target.value)}>
+        {control.options?.map(o => <FormControlLabel key={o} value={o} control={<Radio />} label={o} />)}
       </RadioGroup>
       {control.required && (
         <Typography variant="caption" color="textSecondary">
@@ -85,7 +85,7 @@ const SurveyCheckbox = observer(function (props: { control: SurveyControlModel }
     <FormControl variant="filled" fullWidth>
       <ReactMarkdown>{control.question}</ReactMarkdown>
       <FormGroup>
-        {control.options?.map((o) => (
+        {control.options?.map(o => (
           <FormControlLabel
             key={o}
             label={o}

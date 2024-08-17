@@ -1,4 +1,4 @@
-import { SurveyControlType } from '../enums/EnumsAndTypes';
+import { SurveyControlType } from '../enums/test-items';
 
 export interface SurveyControlModel {
   type: SurveyControlType;
