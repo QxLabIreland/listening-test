@@ -1,57 +1,27 @@
-import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import React, { MouseEvent, useState } from 'react';
-import { v4 } from 'uuid';
+import React, { MouseEvent, useReducer, useRef, useState } from 'react';
 
-import { Box, Icon, IconButton, Theme, Tooltip } from '@mui/material';
+import { Box, Icon, IconButton, Tooltip } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { createStyles, makeStyles } from '@mui/styles';
 
-import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
 import { TestUrl } from '../../shared/enums/test-urls';
-import { TestItemCard } from './TestItemCard';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    grid: { position: 'relative', visibility: 'visible' },
-    gridHidden: { position: 'relative', visibility: 'hidden' },
-    container: {
-      position: 'absolute',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      width: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      [theme.breakpoints.down(1245)]: { right: 14 },
-    },
-    reorder: { width: 12, cursor: 'grab', position: 'absolute', left: 7, color: 'rgba(0, 0, 0, 0.54)' },
-    upDown: { fontSize: 16 },
-  }),
-);
+import { testDetails } from './test-details-store';
+import { TestItemCard } from './test-items/TestItemCard';
 
 /**
  * The list of items for Detail page. It converts testUrl into different Cards
  * This component is for reordering purpose
  */
-export const TestDetailItemCardList = observer(function ({
-  items,
-  testUrl,
-}: {
-  items: BasicTaskItemModel[];
-  testUrl: TestUrl;
-}) {
-  if (!items) items = observable([]);
-  const [state] = useState(observable({ index: null }));
+export default observer(function TestDetailItemCardList({ testUrl }: { testUrl: TestUrl }) {
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const operatingIndex = useRef(null);
   const [refs] = useState<HTMLDivElement[]>([]);
-  const classes = useStyles();
 
   const findCollision = (event: MouseEvent<any>) => {
     for (let i = 0; i < refs.length; i += 1) {
-      if (!refs[i] || i === state.index) continue;
+      if (!refs[i] || i === operatingIndex.current) continue;
       const rect = refs[i].getBoundingClientRect();
-      const targetRect = refs[state.index].getBoundingClientRect();
+      const targetRect = refs[operatingIndex.current].getBoundingClientRect();
       // Collision item is above target: mouse is below the top of collision, mouse is above
       if (
         (rect.top < targetRect.top &&
@@ -65,18 +35,17 @@ export const TestDetailItemCardList = observer(function ({
     }
     return undefined;
   };
-  const deleteItem = action((index: number) => items.splice(index, 1));
   // When mouse down, start dragging
-  const handleMouseDown = (event: MouseEvent<any>, index: number) => {
+  const handleMouseDown = (event: MouseEvent<HTMLElement>, index: number) => {
     // Get index of the element
-    state.index = index;
-    const shiftX = event.clientX - refs[state.index].getBoundingClientRect().left;
-    const shiftY = event.clientY - refs[state.index].getBoundingClientRect().top;
+    operatingIndex.current = index;
+    const shiftX = event.clientX - refs[operatingIndex.current].getBoundingClientRect().left;
+    const shiftY = event.clientY - refs[operatingIndex.current].getBoundingClientRect().top;
     // Clone a element for items display (move up or down)
-    const clonedDragEle = refs[state.index].cloneNode(true) as HTMLDivElement;
+    const clonedDragEle = refs[operatingIndex.current].cloneNode(true) as HTMLDivElement;
     clonedDragEle.style.position = 'absolute';
-    clonedDragEle.style.width = refs[state.index].clientWidth + 'px';
-    clonedDragEle.style.height = refs[state.index].clientHeight + 'px';
+    clonedDragEle.style.width = refs[operatingIndex.current].clientWidth + 'px';
+    clonedDragEle.style.height = refs[operatingIndex.current].clientHeight + 'px';
     clonedDragEle.style.left = event.pageX - shiftX + 'px';
     clonedDragEle.style.top = event.pageY - shiftY + 'px';
     clonedDragEle.style.zIndex = '1000';
@@ -85,7 +54,7 @@ export const TestDetailItemCardList = observer(function ({
     listContainer.append(clonedDragEle);
     // const start = event.pageY ? event.pageY : event.clientY ? event.clientY : 0
     // About setting interval to scroll the screen
-    let scrollIntervalY: any = null;
+    let scrollIntervalY: ReturnType<typeof setInterval> = null;
     const onMouseMove = (event: any) => {
       // Scroll when mouse is close to top or bottom of the window
       if (!scrollIntervalY) {
@@ -104,7 +73,7 @@ export const TestDetailItemCardList = observer(function ({
       clonedDragEle.style.top = event.pageY - shiftY + 'px';
       // Give a threshold for movement, and if dragging element is out of list
       const collision = findCollision(event);
-      if (collision) handleReorder(state.index, refs.indexOf(collision));
+      if (collision) handleReorder(operatingIndex.current, refs.indexOf(collision));
       // const end = event.pageY ? event.pageY : event.clientY ? event.clientY : 0;
       // // When element position is relative
       // draggingRef.style.top = end - start + 'px';
@@ -117,71 +86,71 @@ export const TestDetailItemCardList = observer(function ({
       clonedDragEle.remove();
       clearInterval(scrollIntervalY);
       scrollIntervalY = null;
-      state.index = null;
+      operatingIndex.current = null;
+      forceUpdate();
     };
     // Move the clone on mousemove
     document?.addEventListener('mousemove', onMouseMove);
     document?.addEventListener('mouseup', onMouseUp);
     document?.addEventListener('mouseleave', onMouseUp);
+    forceUpdate();
   };
-  const handleReorder = action((previousIndex: number, newIndex: number, resetIndex = false) => {
+  const handleReorder = (previousIndex: number, newIndex: number, resetIndex = false) => {
     // Reorder the items list
-    items.splice(newIndex, 0, ...items.splice(previousIndex, 1));
-    state.index = resetIndex ? null : newIndex;
-  });
-  const copyItem = (item: BasicTaskItemModel, index: number) => {
-    const copied = JSON.parse(JSON.stringify(item)) as BasicTaskItemModel;
-    copied.id = v4();
-    // Use splice to insert an item
-    items.splice(index, 0, copied);
+    testDetails.reorderItem(previousIndex, newIndex);
+    operatingIndex.current = resetIndex ? null : newIndex;
   };
 
-  return (
-    <>
-      {items.map((v, i) => (
-        <Grid
-          item
-          xs={12}
-          key={v.id}
-          ref={(ref) => (refs[i] = ref)}
-          className={state.index === i ? classes.gridHidden : classes.grid}>
-          <Box className={classes.container}>
-            {v.collapsed ? (
-              <Tooltip title="Hold and drag to reorder">
-                <Icon className={classes.reorder} onMouseDown={(e) => handleMouseDown(e, i)}>
-                  reorder
-                </Icon>
-              </Tooltip>
-            ) : (
-              <>
-                <Tooltip title="Move this card up">
-                  <span>
-                    <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
-                      <Icon className={classes.upDown}>arrow_upward</Icon>
-                    </IconButton>
-                  </span>
-                </Tooltip>
-                <Tooltip title="Move this card down">
-                  <span>
-                    <IconButton
-                      size="small"
-                      disabled={i === items.length - 1}
-                      onClick={() => handleReorder(i, i + 1, true)}>
-                      <Icon className={classes.upDown}>arrow_downward</Icon>
-                    </IconButton>
-                  </span>
-                </Tooltip>
-              </>
-            )}
-          </Box>
-          <TestItemCard
-            item={v}
-            onDelete={() => deleteItem(i)}
-            testUrl={testUrl}
-            onCopy={(item) => copyItem(item, i)}
-          />
-        </Grid>
-      ))}
-    </>
-  );
+  return testDetails.data.items.map((v, i) => (
+    <Grid
+      item
+      xs={12}
+      key={v.id}
+      ref={ref => (refs[i] = ref)}
+      sx={{ position: 'relative', visibility: operatingIndex.current === i ? 'hidden' : 'visible' }}>
+      <Box
+        sx={theme => ({
+          position: 'absolute',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          width: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          [theme.breakpoints.down(1245)]: { right: 14 },
+        })}>
+        {v.collapsed ? (
+          <Tooltip title="Hold and drag to reorder">
+            <Icon
+              sx={{ width: 12, cursor: 'grab', position: 'absolute', left: 7, color: 'rgba(0, 0, 0, 0.54)' }}
+              onMouseDown={e => handleMouseDown(e, i)}>
+              reorder
+            </Icon>
+          </Tooltip>
+        ) : (
+          <>
+            <Tooltip title="Move this card up">
+              <span>
+                <IconButton size="small" disabled={i === 0} onClick={() => handleReorder(i, i - 1, true)}>
+                  <Icon>arrow_upward</Icon>
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Move this card down">
+              <span>
+                <IconButton
+                  size="small"
+                  disabled={i === testDetails.data.items.length - 1}
+                  onClick={() => handleReorder(i, i + 1, true)}>
+                  <Icon>arrow_downward</Icon>
+                </IconButton>
+              </span>
+            </Tooltip>
+          </>
+        )}
+      </Box>
+      <TestItemCard itemIndex={i} testUrl={testUrl} />
+    </Grid>
+  ));
 });

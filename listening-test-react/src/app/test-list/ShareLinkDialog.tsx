@@ -1,14 +1,16 @@
 import React, { forwardRef, useContext, useImperativeHandle } from 'react';
-import { IconButtonProps } from '@mui/material/IconButton';
+
 import { Button, DialogActions, Link, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import { testItemsValidateIncomplete } from '../../shared/validators/ErrorValidators';
-import { getCurrentHost } from '../../shared/tools/UncategorizedTools';
-import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { IconButtonProps } from '@mui/material/IconButton';
+
 import { GlobalDialog } from '../../shared/ReactContexts';
 import { TestUrl } from '../../shared/enums/test-urls';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
+import { getCurrentHost } from '../../shared/tools/UncategorizedTools';
+import { testItemsValidateIncomplete } from '../../shared/validators/ErrorValidators';
 
 export const ShareLinkDialog = forwardRef<
   HTMLElement & { openShareLinkDialog: () => void },
@@ -49,7 +51,7 @@ export const ShareLinkDialog = forwardRef<
     <Dialog open={open} onClose={handleClose} fullWidth>
       <DialogTitle>Share and Copy the URL (Link)</DialogTitle>
       <DialogContent>
-        <TextField value={url} variant="standard" fullWidth onFocus={(event) => event.target.select()} />
+        <TextField value={url} variant="standard" fullWidth onFocus={event => event.target.select()} />
         <Link target="_blank" href={url}>
           View In New Tab
         </Link>

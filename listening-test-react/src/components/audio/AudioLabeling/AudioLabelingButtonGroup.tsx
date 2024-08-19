@@ -6,11 +6,11 @@ import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
 
+import { AddQuestionButton } from '../../../app/test-details/add-buttons/AddQuestionButton';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { TestItemType } from '../../../shared/enums/test-items';
 import { SurveyControlType } from '../../../shared/enums/test-items';
 import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
-import { AddQuestionButton } from '../../utils/AddQuestionButton';
 
 export const AudioLabelingButtonGroup = observer(function (props: { onAdd: (_: AudioTestItemModel) => void }) {
   const { onAdd } = props;

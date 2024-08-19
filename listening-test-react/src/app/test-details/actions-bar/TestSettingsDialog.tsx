@@ -1,25 +1,25 @@
+import { useFormik } from 'formik';
+import { observer } from 'mobx-react';
 import React from 'react';
+
+import { Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Checkbox, FormControlLabel, FormGroup, IconButton, Tooltip } from '@mui/material';
 import Icon from '@mui/material/Icon';
-import { useFormik } from 'formik';
-import { TestSettingsModel } from '../../shared/models/BasicTaskModel';
-import { observer } from 'mobx-react';
 
-export const TestSettingsDialog = observer(function (props: {
-  settings: TestSettingsModel;
-  onConfirm: (settings: TestSettingsModel) => void;
-}) {
+import { TestSettingsModel } from '../../../shared/models/BasicTaskModel';
+import { testDetails } from '../test-details-store';
+
+export default observer(function TestSettingsDialog(props: { settings: TestSettingsModel }) {
   const [open, setOpen] = React.useState(false);
   const formik = useFormik<TestSettingsModel>({
     initialValues: { isIndividual: false, isTimed: false },
-    onSubmit: (values) => {
-      props.onConfirm(values);
+    onSubmit: values => {
+      testDetails.updateSettings(values);
       setOpen(false);
     },
   });

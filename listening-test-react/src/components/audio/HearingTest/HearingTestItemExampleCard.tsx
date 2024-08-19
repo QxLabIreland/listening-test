@@ -1,46 +1,60 @@
-import IconButton from "@mui/material/IconButton";
-import Icon from "@mui/material/Icon";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import {CardContent, Collapse, Slider, TextField, Tooltip} from "@mui/material";
-import {SurveyControl} from "../../forms/SurveyControl";
-import React, {ReactNode, useEffect, useState} from "react";
-import {TagsGroup} from "../../forms/TagsGroup";
-import Grid from "@mui/material/Grid";
-import {observer} from "mobx-react";
-import {createOscillatorAndGain, disposeOscillatorAndGain} from "./OscillatorAngGain";
-import {AudioExampleModel, AudioFileModel} from "../../../shared/models/AudioTestModel";
+import { observer } from 'mobx-react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
-export const HearingTestItemExampleCard = observer((props: React.PropsWithChildren<{
-  example: AudioExampleModel, title: ReactNode, action: ReactNode, collapsed?: boolean
-}>) => {
-  const {example, title, action, collapsed} = props;
+import { CardContent, Collapse, Slider, TextField, Tooltip } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
 
-  return <Card style={{borderTop: '3px solid dodgerblue'}}>
-    <CardHeader title={title} action={action}/>
-    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
-      <CardContent style={{paddingTop: 0}}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TagsGroup value={example.tags} onChange={newTags => example.tags = newTags}/>
-          </Grid>
-          {/*Description for this example*/}
-          {example.fields?.map((q, qi) => <Grid item xs={12} key={qi}>
-            <SurveyControl control={q}/>
-          </Grid>)}
+import { TagsGroup } from '../../../app/test-details/test-items/components/TagsGroup';
+import { SurveyControl } from '../../../app/test-details/test-items/survery/SurveyControl';
+import { AudioExampleModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
+import { createOscillatorAndGain, disposeOscillatorAndGain } from './OscillatorAngGain';
 
-          {/*Audios*/}
-          {example.medias.map((a, i) => <Grid key={i} item xs={12} md={12}>
-            <AudioSettingsView audio={a}/>
-          </Grid>)}
+export const HearingTestItemExampleCard = observer(
+  (
+    props: React.PropsWithChildren<{
+      example: AudioExampleModel;
+      title: ReactNode;
+      action: ReactNode;
+      collapsed?: boolean;
+    }>,
+  ) => {
+    const { example, title, action, collapsed } = props;
 
-        </Grid>
-      </CardContent>
-    </Collapse>
-  </Card>;
-})
+    return (
+      <Card style={{ borderTop: '3px solid dodgerblue' }}>
+        <CardHeader title={title} action={action} />
+        <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+          <CardContent style={{ paddingTop: 0 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TagsGroup value={example.tags} onChange={newTags => (example.tags = newTags)} />
+              </Grid>
+              {/*Description for this example*/}
+              {example.fields?.map((q, qi) => (
+                <Grid item xs={12} key={qi}>
+                  <SurveyControl control={q} />
+                </Grid>
+              ))}
 
-const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel }) {
+              {/*Audios*/}
+              {example.medias.map((a, i) => (
+                <Grid key={i} item xs={12} md={12}>
+                  <AudioSettingsView audio={a} />
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </Collapse>
+      </Card>
+    );
+  },
+);
+
+const AudioSettingsView = observer(function ({ audio }: { audio: AudioFileModel }) {
   // Go means Gain and Oscillator
   const [go, setGo] = useState(null);
   // Make sure go will be disposed
@@ -55,38 +69,59 @@ const AudioSettingsView = observer(function ({audio}: { audio: AudioFileModel })
     const newGos = createOscillatorAndGain(audio.settings.initVolume, audio.settings.frequency);
     newGos.oscillator.start();
     setGo(newGos);
-  }
+  };
   // When frequency changed, the oscillator will be stopped
   const handleFrequencyChange = (event: any) => {
     audio.settings.frequency = +event.target.value;
     if (go) setGo(disposeOscillatorAndGain(go));
-  }
+  };
   // When volume changed, the oscillator sound volume changed
   const handleSliderChange = (_: any, nv: number | number[]) => {
     audio.settings.initVolume = +nv;
     if (!go?.gainNode) return;
-    go.gainNode.gain.value = Math.pow(10, (+nv - 1) * 100 / 20);
-  }
+    go.gainNode.gain.value = Math.pow(10, ((+nv - 1) * 100) / 20);
+  };
 
-  return <Grid container spacing={1} alignItems="center">
-    <Grid item>
-      <Tooltip title={go == null ? 'Play ocsillator' : 'Stop'}>
-        <IconButton onClick={handlePlay} size="small"><Icon>{go == null ? 'play_arrow' : 'pause'}</Icon></IconButton>
-      </Tooltip>
-    </Grid>
-    <Grid item xs>
-      <TextField variant="outlined" size="small" label="Frequency in Hz" fullWidth type="number"
-                 defaultValue={audio.settings.frequency} required
-                 onChange={handleFrequencyChange}/>
-    </Grid>
+  return (
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
+        <Tooltip title={go == null ? 'Play ocsillator' : 'Stop'}>
+          <IconButton onClick={handlePlay} size="small">
+            <Icon>{go == null ? 'play_arrow' : 'pause'}</Icon>
+          </IconButton>
+        </Tooltip>
+      </Grid>
+      <Grid item xs>
+        <TextField
+          variant="outlined"
+          size="small"
+          label="Frequency in Hz"
+          fullWidth
+          type="number"
+          defaultValue={audio.settings.frequency}
+          required
+          onChange={handleFrequencyChange}
+        />
+      </Grid>
 
-    <Grid item><Icon>volume_down</Icon></Grid>
-    <Grid item xs>
-      Initial Volume:
-      <Slider value={audio.settings.initVolume} step={0.01} min={0} max={1} valueLabelDisplay="auto"
-              onChange={handleSliderChange}
-              aria-labelledby="continuous-slider"/>
+      <Grid item>
+        <Icon>volume_down</Icon>
+      </Grid>
+      <Grid item xs>
+        Initial Volume:
+        <Slider
+          value={audio.settings.initVolume}
+          step={0.01}
+          min={0}
+          max={1}
+          valueLabelDisplay="auto"
+          onChange={handleSliderChange}
+          aria-labelledby="continuous-slider"
+        />
+      </Grid>
+      <Grid item>
+        <Icon>volume_up</Icon>
+      </Grid>
     </Grid>
-    <Grid item><Icon>volume_up</Icon></Grid>
-  </Grid>
-})
+  );
+});

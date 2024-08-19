@@ -12,20 +12,22 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import SearchInput from '../../components/utils/SearchInput';
 import { globalStore } from '../../global/globalStore';
 import Loading from '../../shared/components/Loading';
+import SearchInput from '../../shared/components/SearchInput';
+import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { UserModel } from '../../shared/models/UserModel';
 import { ManagePermissionDialog } from './ManagePermissionDialog';
 import { ManageWhitelist } from './ManageWhitelistDialog';
 import { StorageLimitDialog } from './StorageLimitDialog';
 
-export const ManageUsers = observer(function () {
+export default observer(function ManageUsers() {
   const [data, setData] = useState<UserModel[]>();
   const [searchStr, setSearchStr] = useState<string>('');
   const [error, setError] = useState();
 
   useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE['people']);
     Axios.get<UserModel[]>('/api/users').then(
       res => {
         setData(observable(res.data));
@@ -108,17 +110,12 @@ export const ManageUsers = observer(function () {
 
 const ActivationCheckbox = observer(({ user }: { user: UserModel }) => {
   const handleActivatedChange = (event: ChangeEvent<HTMLInputElement>, user: UserModel) => {
-    Axios.patch(`/api/user/${user._id.$oid}`).then(
-      () => {
+    Axios.patch(`/api/user/${user._id.$oid}`)
+      .then(() => {
         user.activated = !user.activated;
-        globalStore.showSnackbar(
-          `The user has been ${user.activated ? 'activated' : 'deactivated'}.`,
-          6_000,
-          'success',
-        );
-      },
-      () => globalStore.showSnackbar('Activation failed.', 6_000, 'error'),
-    );
+        globalStore.showSnackbar(`The user has been ${user.activated ? 'activated' : 'deactivated'}.`, 'success');
+      })
+      .catch(() => globalStore.showSnackbar('Activation failed.', 'error'));
   };
   return <Checkbox checked={user.activated ?? false} onChange={event => handleActivatedChange(event, user)} />;
 });

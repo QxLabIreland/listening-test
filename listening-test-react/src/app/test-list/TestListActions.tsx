@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { Box, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 
-import { globalStore } from '../../global/globalStore';
+import { axiosErrorHandler, globalStore } from '../../global/globalStore';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { AudioExampleModel } from '../../shared/models/AudioTestModel';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
-import { tasksStore } from '../task-list-store';
 import { DeleteButtonAndDialog } from './DeleteButtonAndDialog';
 import { ShareLinkDialog } from './ShareLinkDialog';
+import { tasksStore } from './task-list-store';
 
 /** When width is less than md, the button will be put into a menu*/
 export default function TestListActions({
@@ -35,15 +35,15 @@ export default function TestListActions({
       if (value.example?.hasOwnProperty('playedOnce')) delete (value.example as AudioExampleModel).playedOnce;
       if (value.example?.fields) value.example.fields.forEach(value1 => (value1.value = undefined));
     });
-    axios.post<BasicTaskModel>('/api/' + testUrl, { ...task, name: task.name + ' copy' }).then(
-      ({ data }) => {
+    axios
+      .post<BasicTaskModel>('/api/' + testUrl, { ...task, name: task.name + ' copy' })
+      .then(({ data }) => {
         // Give a 0 responseNum and put at the top of the list
         data.responseNum = 0;
         tasksStore.unshift(data);
-        globalStore.showSnackbar('Duplicate successfully', undefined, 'success');
-      },
-      reason => globalStore.showSnackbar('Something went wrong: ' + reason.response.data),
-    );
+        globalStore.showSnackbar('Duplicate successfully', 'success');
+      })
+      .catch(axiosErrorHandler);
   };
 
   return (

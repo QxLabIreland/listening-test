@@ -14,17 +14,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 
-import SearchInput from '../../components/utils/SearchInput';
+import { globalStore } from '../../global/globalStore';
 import Loading from '../../shared/components/Loading';
+import SearchInput from '../../shared/components/SearchInput';
 import { AppPermissions } from '../../shared/enums/permissions';
-import { TestUrl } from '../../shared/enums/test-urls';
+import { TestUrl, URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 import { formatDate } from '../../shared/tools/dateUtils';
 import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
 import { useTemplateList } from '../general/TemplatesPage';
-import { tasksStore } from '../task-list-store';
 import AddTestMenu from './AddTestMenu';
 import TestListActions from './TestListActions';
+import { tasksStore } from './task-list-store';
 
 export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl }) {
   // Authenticate if user has permission to template
@@ -32,6 +33,7 @@ export default observer(function TestListPage({ testUrl }: { testUrl: TestUrl })
   const { templates, handleIsTemplateChange, handleTemplateEdit } = useTemplateList(testUrl);
 
   useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE[testUrl]);
     Axios.get<BasicTaskModel[]>('/api/' + testUrl, { withCredentials: true }).then(
       ({ data }) => tasksStore.setData(data),
       tasksStore.setError,

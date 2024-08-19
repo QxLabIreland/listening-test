@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 
-import { globalStore } from '../../global/globalStore';
+import { axiosErrorHandler } from '../../global/globalStore';
 import { FULL_PERMISSIONS } from '../../shared/enums/permissions';
 import { UserModel } from '../../shared/models/UserModel';
 
@@ -25,16 +25,15 @@ export const ManagePermissionDialog = observer(function ({ user }: { user: UserM
   const handleAddPermission = (newPermission: string, user: UserModel) => {
     // Adding processing prevents user click too many times
     setProcessing(true);
-    Axios.post('/api/users', { newPermission, _id: user._id }).then(
-      res => {
+    Axios.post('/api/users', { newPermission, _id: user._id })
+      .then(res => {
         user.permissions = res.data;
         setProcessing(false);
-      },
-      reason => {
-        globalStore.showSnackbar(reason.response.data, undefined, 'error');
+      })
+      .catch(reason => {
+        axiosErrorHandler(reason);
         setProcessing(false);
-      },
-    );
+      });
   };
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

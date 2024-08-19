@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { PropsWithChildren, forwardRef, useContext, useImperativeHandle, useState } from 'react';
+import React, { PropsWithChildren, forwardRef, useImperativeHandle, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { Divider, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem } from '@mui/material';
@@ -7,11 +7,11 @@ import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
 import { makeStyles } from '@mui/styles';
 
-import { DetailTaskModel } from '../../shared/ReactContexts';
-import { TestItemType } from '../../shared/enums/test-items';
-import { SurveyControlType } from '../../shared/enums/test-items';
-import { BasicTaskItemModel } from '../../shared/models/BasicTaskModel';
-import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
+import { TestItemType } from '../../../shared/enums/test-items';
+import { SurveyControlType } from '../../../shared/enums/test-items';
+import { BasicTaskItemModel } from '../../../shared/models/BasicTaskModel';
+import { SurveyControlModel } from '../../../shared/models/SurveyControlModel';
+import { testDetails } from '../test-details-store';
 
 export type AddQuestionButtonType = { closeMenu: () => void };
 
@@ -34,7 +34,7 @@ export const AddQuestionButton = observer(
     useImperativeHandle(forwardedRef, () => ({
       closeMenu: () => setAnchorEl(null),
     }));
-    const taskModel = useContext(DetailTaskModel);
+    const taskModel = testDetails.data;
     const classes = useStyles();
 
     // When menu clicked

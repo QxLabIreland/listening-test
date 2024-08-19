@@ -12,7 +12,7 @@ import { globalStore } from '../../global/globalStore';
 import { GlobalDialog } from '../../shared/ReactContexts';
 import { TestUrl } from '../../shared/enums/test-urls';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
-import { tasksStore } from '../task-list-store';
+import { tasksStore } from './task-list-store';
 
 export function DeleteButtonAndDialog({
   testUrl,
@@ -34,7 +34,7 @@ export function DeleteButtonAndDialog({
     const openRequest = () =>
       axios.delete('/api/' + testUrl, { params: { _id: task._id.$oid } }).then(() => {
         tasksStore.delete(task);
-        globalStore.showSnackbar('Delete successfully', undefined, 'success');
+        globalStore.showSnackbar('Delete successfully', 'success');
       });
     if (task.isTemplate)
       openDialog(

@@ -14,13 +14,13 @@ import AppBarLayout, { DRAWER_WIDTH } from './AppBarDrawer/AppBarLayout';
 import AuthRoute from './AppBarDrawer/AuthRoute';
 import { useUserAuthResult } from './AppBarDrawer/AuthRoute';
 import { ListItemNavLink } from './AppBarDrawer/ListItemNavLink';
+import TestTabPage from './TestTabPage';
 import DashboardPage from './general/DashboardPage';
 import ManageStorage from './general/ManageStorage';
 import SettingsPage from './general/SettingsPage';
 import TemplatesPage from './general/TemplatesPage';
-import TestTabPage from './test-details/TestTabPage';
 import TestListPage from './test-list/TestListPage';
-import { ManageUsers } from './users/ManageUsers';
+import ManageUsers from './users/ManageUsers';
 
 const DrawerList = () => {
   const videoPermission = useUserAuthResult(AppPermissions.Veido);

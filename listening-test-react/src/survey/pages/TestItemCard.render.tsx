@@ -3,9 +3,9 @@ import React from 'react';
 
 import { AbTestItemExampleRender } from '../../components/audio/AbTest/AbTestItemExample.render';
 import { AcrTestItemExampleRender } from '../../components/audio/AcrTest/AcrTestItemExample.render';
-import { AudioTestItemTraining } from '../../components/audio/AudioTestItemTraining.render';
 import { HearingTestItemExampleRender } from '../../components/audio/HearingTest/HearingTestItemExample.render';
 import { MushraTestItemExampleRender } from '../../components/audio/Mushra/MushraTestItemExample.render';
+import { AudioTestItemTraining } from '../../components/audio/training/AudioTestItemTraining.render';
 import { SurveyControlRender } from '../../components/forms/SurveyControl.render';
 import { ImageAbExampleRender } from '../../components/image/ImageAb/ImageAbExample.render';
 import { ImageLabelingExampleRender } from '../../components/image/ImageLabeling/ImageLabelingExample.render';

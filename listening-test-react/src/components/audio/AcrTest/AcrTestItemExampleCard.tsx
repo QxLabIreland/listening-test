@@ -6,14 +6,14 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 
+import { TagsGroup } from '../../../app/test-details/test-items/components/TagsGroup';
+import { RemovableSurveyControl } from '../../../app/test-details/test-items/survery/RemovableSurveyControl';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { SurveyControlType } from '../../../shared/enums/test-items';
 import { AudioExampleModel, AudioExampleSettingsModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
-import { FileUploadDropBox } from '../../forms/FileUploadDropBox';
-import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
-import { TagsGroup } from '../../forms/TagsGroup';
+import { AudioFileDropGrid } from '../../file-boxs/AudioFileDropGrid';
+import { FileUploadDropBox } from '../../file-boxs/FileUploadDropBox';
 import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
-import { AudioFileDropGrid } from '../AudioFileDropGrid';
 
 export const AcrTestItemExampleCard = observer(
   (

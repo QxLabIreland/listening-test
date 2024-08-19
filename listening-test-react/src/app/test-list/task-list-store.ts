@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { BasicTaskModel } from '../shared/models/BasicTaskModel';
+import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 
 export const tasksStore = makeAutoObservable({
   data: undefined as BasicTaskModel[] | undefined,

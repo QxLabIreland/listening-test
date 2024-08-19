@@ -17,11 +17,11 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
 import { globalStore } from '../../global/globalStore';
 import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
 import { useMatStyles } from '../../shared/SharedStyles';
 import Loading from '../../shared/components/Loading';
+import { useSimpleAlert } from '../../shared/components/UseSimpleAlert';
 import { DEFAULT_STORAGE_LIMIT } from '../../shared/constants';
 import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';

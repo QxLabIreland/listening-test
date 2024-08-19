@@ -7,8 +7,8 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import { createStyles, makeStyles } from '@mui/styles';
 
-import { SurveyControlType } from '../../shared/enums/test-items';
-import { GotoQuestionItemModel, SurveyControlModel } from '../../shared/models/SurveyControlModel';
+import { SurveyControlType } from '../../../../shared/enums/test-items';
+import { GotoQuestionItemModel, SurveyControlModel } from '../../../../shared/models/SurveyControlModel';
 
 export const SurveyControl = observer(function (props: {
   control: SurveyControlModel;

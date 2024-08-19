@@ -5,18 +5,20 @@ import { Box, Chip } from '@mui/material';
 import Icon from '@mui/material/Icon';
 import { createStyles, makeStyles } from '@mui/styles';
 
-import { useMatStyles } from '../../shared/SharedStyles';
+import { useMatStyles } from '../../../../shared/SharedStyles';
 
-const useStyles = makeStyles(() => createStyles({
-  chipIcon: {fontSize: '1.1rem', cursor: 'pointer'},
-  input: {border: 'none', outline: 'none', width: 53, background: 'transparent'}
-}))
+const useStyles = makeStyles(() =>
+  createStyles({
+    chipIcon: { fontSize: '1.1rem', cursor: 'pointer' },
+    input: { border: 'none', outline: 'none', width: 53, background: 'transparent' },
+  }),
+);
 
-export const TagsGroup = observer((props: {value: string, onChange: (value: string) => void}) => {
+export const TagsGroup = observer((props: { value: string; onChange: (value: string) => void }) => {
   const classes = useMatStyles();
   const classes1 = useStyles();
   const [newLabel, setNewLabel] = useState('Add Tag');
-  const {value, onChange} = props;
+  const { value, onChange } = props;
   const inputRef = useRef<HTMLInputElement>();
 
   const handleEnter = (event: React.KeyboardEvent) => {
@@ -39,24 +41,41 @@ export const TagsGroup = observer((props: {value: string, onChange: (value: stri
       tagsArr.push(newLabel);
       onChange(tagsArr.toString());
     }
-  }
+  };
   const handleLabelDelete = (index: number) => {
     const tagsArr = value.split(',');
     tagsArr.splice(index, 1);
     onChange(tagsArr.toString());
-  }
+  };
   const handleIconClick = () => {
     inputRef.current.focus();
-  }
+  };
 
-  return <Box className={classes.elementGroup}>
-    {value && value.split(',').map((l, i) =>
-      <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l}/>)}
+  return (
+    <Box className={classes.elementGroup}>
+      {value &&
+        value.split(',').map((l, i) => <Chip size="small" label={l} onDelete={() => handleLabelDelete(i)} key={l} />)}
 
-    <Chip size="small" variant="outlined" icon={<Icon className={classes1.chipIcon} onClick={handleIconClick}>add</Icon>}
-          label={<input onKeyUp={handleEnter} value={newLabel} onChange={(e => setNewLabel(e.target.value))}
-                        onFocus={() => setNewLabel('')} onBlur={() => setNewLabel('Add Tag')}
-                        className={classes1.input} ref={inputRef}/>}
-    />
-  </Box>
-})
+      <Chip
+        size="small"
+        variant="outlined"
+        icon={
+          <Icon className={classes1.chipIcon} onClick={handleIconClick}>
+            add
+          </Icon>
+        }
+        label={
+          <input
+            onKeyUp={handleEnter}
+            value={newLabel}
+            onChange={e => setNewLabel(e.target.value)}
+            onFocus={() => setNewLabel('')}
+            onBlur={() => setNewLabel('Add Tag')}
+            className={classes1.input}
+            ref={inputRef}
+          />
+        }
+      />
+    </Box>
+  );
+});

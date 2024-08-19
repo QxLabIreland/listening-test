@@ -3,10 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Grid, Typography } from '@mui/material';
 
-import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
 import { globalStore } from '../../global/globalStore';
 import { GlobalDialog } from '../../shared/ReactContexts';
 import Loading from '../../shared/components/Loading';
+import { useSimpleAlert } from '../../shared/components/UseSimpleAlert';
 import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';
 import { fmtFileSize } from '../../shared/tools/UncategorizedTools';

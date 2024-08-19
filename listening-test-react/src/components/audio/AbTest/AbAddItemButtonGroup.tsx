@@ -5,11 +5,11 @@ import { v4 } from 'uuid';
 import { Box, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import Icon from '@mui/material/Icon';
 
+import { AddQuestionButton, AddQuestionButtonType } from '../../../app/test-details/add-buttons/AddQuestionButton';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { TestItemType } from '../../../shared/enums/test-items';
 import { SurveyControlType } from '../../../shared/enums/test-items';
 import { AudioTestItemModel } from '../../../shared/models/AudioTestModel';
-import { AddQuestionButton, AddQuestionButtonType } from '../../utils/AddQuestionButton';
 
 export const AbAddItemButtonGroup = observer(function (props: { onAdd: (type: AudioTestItemModel) => void }) {
   const { onAdd } = props;
