@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Alert,
   AlertTitle,
+  Box,
   Button,
   Card,
   CardActions,
@@ -16,9 +17,11 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
+import { globalStore } from '../../global/globalStore';
 import { CurrentUser } from '../../shared/ReactContexts';
 import { AppPermissions } from '../../shared/enums/permissions';
+import { URL_TO_TITLE } from '../../shared/enums/test-urls';
+import { useUserAuthResult } from '../AppBarDrawer/AuthRoute';
 
 interface StatisticModel {
   userNumber: number;
@@ -31,6 +34,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function DashboardPage() {
+  useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE['dashboard']);
+  }, []);
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -76,7 +83,7 @@ function StatisticCard() {
   const [statistic, setStatistics] = useState<StatisticModel>();
   const userPermission = useUserAuthResult(AppPermissions.User);
   useEffect(() => {
-    if (userPermission) Axios.get<StatisticModel>('/api/dashboard').then((res) => setStatistics(res.data));
+    if (userPermission) Axios.get<StatisticModel>('/api/dashboard').then(res => setStatistics(res.data));
   }, []);
 
   if (userPermission && statistic)

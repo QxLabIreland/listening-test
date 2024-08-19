@@ -4,8 +4,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Grid, Typography } from '@mui/material';
 
 import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
+import { globalStore } from '../../global/globalStore';
 import { GlobalDialog } from '../../shared/ReactContexts';
 import Loading from '../../shared/components/Loading';
+import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';
 import { fmtFileSize } from '../../shared/tools/UncategorizedTools';
 
@@ -14,7 +16,9 @@ export default function ManageStorage() {
   const [alert, setAlert, alertMessage] = useSimpleAlert();
   const [processing, setProcessing] = useState<boolean>();
   const openDialog = useContext(GlobalDialog);
+
   useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE['storage']);
     Axios.get<StorageStatusModel>('/api/storage').then(
       res => setStorageStatus(res.data),
       res => setAlert('error', res.response.data),

@@ -18,15 +18,21 @@ import {
 } from '@mui/material';
 
 import { useSimpleAlert } from '../../components/utils/UseSimpleAlert';
+import { globalStore } from '../../global/globalStore';
 import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
 import { useMatStyles } from '../../shared/SharedStyles';
 import Loading from '../../shared/components/Loading';
 import { DEFAULT_STORAGE_LIMIT } from '../../shared/constants';
+import { URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { StorageStatusModel } from '../../shared/models/StorageStatusModel';
 import { fmtFileSize } from '../../shared/tools/UncategorizedTools';
 import { minLength, password, pipeValidator, required } from '../../shared/validators/FormikValidator';
 
 export default function SettingsPage() {
+  useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE['settings']);
+  }, []);
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>

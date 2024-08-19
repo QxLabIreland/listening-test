@@ -12,17 +12,20 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 
-import { globalStore } from '../../global/globalStore';
+import { axiosErrorHandler, globalStore } from '../../global/globalStore';
 import { CurrentUser, GlobalDialog } from '../../shared/ReactContexts';
 import Loading from '../../shared/components/Loading';
-import { TestUrl } from '../../shared/enums/test-urls';
+import { TestUrl, URL_TO_TITLE } from '../../shared/enums/test-urls';
 import { BasicTaskModel } from '../../shared/models/BasicTaskModel';
 
-export default function () {
+export default function TemplatesPage() {
   // Change Test URL and the active tab will change
   const [testUrl, setTestUrl] = useState<TestUrl>('ab-test');
+  useEffect(() => {
+    globalStore.setAppBarTitle(URL_TO_TITLE['template']);
+  }, []);
 
-  const handleChange = (event: React.ChangeEvent<any>, newValue: TestUrl) => setTestUrl(newValue);
+  const handleChange = (_: React.ChangeEvent<any>, newValue: TestUrl) => setTestUrl(newValue);
 
   return (
     <>
@@ -32,7 +35,7 @@ export default function () {
         <Tab label="Mushra Test" value="mushra-test" />
         <Tab label="Hearing Sensitivity Test" value="hearing-test" />
       </Tabs>
-      <Box paddingTop={2}>{testUrl && <TemplatesList testUrl={testUrl} />}</Box>
+      <Box>{testUrl && <TemplatesList testUrl={testUrl} />}</Box>
     </>
   );
 }
@@ -120,8 +123,8 @@ export function useTemplateList(testUrl: TestUrl) {
   const handleIsTemplateChange = (test: BasicTaskModel) => {
     // Create a request method for reusing purpose
     const openRequest = () =>
-      Axios.put<boolean>('/api/template', { _id: test._id }, { params: { testType: testUrl } }).then(
-        res => {
+      Axios.put<boolean>('/api/template', { _id: test._id }, { params: { testType: testUrl } })
+        .then(res => {
           test.isTemplate = res.data;
           // Append test at the end
           if (test.isTemplate) setTemplates([...templates, test]);
@@ -133,9 +136,8 @@ export function useTemplateList(testUrl: TestUrl) {
             );
             setTemplates([...templates]);
           }
-        },
-        reason => globalStore.showSnackbar('Something went wrong: ' + reason.response.data),
-      );
+        })
+        .catch(axiosErrorHandler);
     // If it is a template, the dialog will be opened for warning
     if (test.isTemplate)
       openDialog(
