@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
 import { v7 } from 'uuid';
 
@@ -10,7 +11,7 @@ export const globalStore = makeAutoObservable({
   globalDialog: {},
   appBarTitle: '',
 
-  showSnackbar(message: string, time = 6_000, severity?: AlertColor) {
+  showSnackbar(message: string, severity?: AlertColor, time = 6_000) {
     globalStore.snackbarList.unshift({ id: v7(), message, time, severity, isOpen: true });
   },
   closeSnakeBar(index: number) {
@@ -24,3 +25,6 @@ export const globalStore = makeAutoObservable({
     globalStore.appBarTitle = newTitle;
   },
 });
+
+export const axiosErrorHandler = (reason: AxiosError) =>
+  globalStore.showSnackbar('Something went wrong: ' + reason.response?.data, 'error');

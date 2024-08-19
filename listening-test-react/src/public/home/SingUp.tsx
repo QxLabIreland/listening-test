@@ -35,8 +35,6 @@ export default function SignUp() {
         () => {
           globalStore.showSnackbar(
             "The confirmation link has been sent. If you didn't receive anything please check your spam inbox",
-            undefined,
-            'info',
           );
           // Get state where user has been blocked by authentication
           navigate('/sign-in', { state: { email: values.email } });
