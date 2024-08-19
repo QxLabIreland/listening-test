@@ -6,9 +6,9 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 
-import { useMatStyles } from '../../../../shared/SharedStyles';
-import { SurveyControlModel } from '../../../../shared/models/SurveyControlModel';
-import { SurveyControl } from './SurveyControl';
+import { SurveyControl } from '../../app/test-details/test-items/survery/SurveyControl';
+import { useMatStyles } from '../../shared/SharedStyles';
+import { SurveyControlModel } from '../../shared/models/SurveyControlModel';
 
 const useStyles = makeStyles(() => ({
   controlGroup: { alignItems: 'start' },

@@ -8,11 +8,11 @@ import Grid from '@mui/material/Grid';
 
 import { AddQuestionButton } from '../../../app/test-details/add-buttons/AddQuestionButton';
 import { TagsGroup } from '../../../app/test-details/test-items/components/TagsGroup';
-import { RemovableSurveyControl } from '../../../app/test-details/test-items/survery/RemovableSurveyControl';
 import { SurveyControl } from '../../../app/test-details/test-items/survery/SurveyControl';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { ImageExampleModel, ImageTestItemModel } from '../../../shared/models/ImageTaskModel';
 import { TestItemDropGridList } from '../../file-boxs/TestItemDropGridList';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 
 export const ImageLabelingExampleItem = observer(
   (

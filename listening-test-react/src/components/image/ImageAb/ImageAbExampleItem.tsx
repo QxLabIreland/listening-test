@@ -7,11 +7,11 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 
 import { TagsGroup } from '../../../app/test-details/test-items/components/TagsGroup';
-import { RemovableSurveyControl } from '../../../app/test-details/test-items/survery/RemovableSurveyControl';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { SurveyControlType } from '../../../shared/enums/test-items';
 import { ImageExampleModel } from '../../../shared/models/ImageTaskModel';
 import { TestItemDropGridList } from '../../file-boxs/TestItemDropGridList';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 import { ImageAbExampleSettings } from './ImageAbExampleSettings';
 
 export const ImageAbExampleItem = observer(

@@ -10,13 +10,13 @@ import Icon from '@mui/material/Icon';
 import { AddQuestionButton } from '../../../app/test-details/add-buttons/AddQuestionButton';
 import HeaderIconButtons from '../../../app/test-details/test-items/components/HeaderIconButtons';
 import TitleInput from '../../../app/test-details/test-items/components/TitleInput';
-import { RemovableSurveyControl } from '../../../app/test-details/test-items/survery/RemovableSurveyControl';
 import { SurveyControl } from '../../../app/test-details/test-items/survery/SurveyControl';
 import { useMatStyles } from '../../../shared/SharedStyles';
 import { AudioExampleSettingsModel, AudioFileModel } from '../../../shared/models/AudioTestModel';
 import { BasicTaskItemModel } from '../../../shared/models/BasicTaskModel';
 import { AudioFileDropGrid } from '../../file-boxs/AudioFileDropGrid';
 import { FileUploadDropBox } from '../../file-boxs/FileUploadDropBox';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
 
 /** Training Test Item: Audios will play synchronously*/

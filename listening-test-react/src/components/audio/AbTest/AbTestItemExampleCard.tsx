@@ -7,10 +7,10 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 
 import { TagsGroup } from '../../../app/test-details/test-items/components/TagsGroup';
-import { RemovableSurveyControl } from '../../../app/test-details/test-items/survery/RemovableSurveyControl';
 import { SurveyControlType } from '../../../shared/enums/test-items';
 import { AudioExampleModel } from '../../../shared/models/AudioTestModel';
 import { AudioFileDropGrid } from '../../file-boxs/AudioFileDropGrid';
+import { RemovableSurveyControl } from '../../forms/RemovableSurveyControl';
 import { AudioExampleSettingsDialog } from '../AudioExampleSettingsDialog';
 
 export const AbTestItemExampleCard = observer(
