@@ -33,7 +33,7 @@ export const VideoAbExampleRender = observer(function (props: { item: ImageTestI
   return <Grid container spacing={2}>
     {/*Videos*/}
     {item.example.medias.map((v, i) =>
-      <video width="50%" src={v.src} ref={r => refs[i] = r}/>
+      <video controls width="50%" src={v.src} ref={r => refs[i] = r}/>
     )}
     <Grid item xs>
       <Button color="primary" size="large" variant={playing ? 'contained' : 'outlined'}
