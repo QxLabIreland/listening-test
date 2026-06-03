@@ -30,6 +30,7 @@ export function useAudioPlayer(audios: AudioFileModel[], sample: AudioFileModel,
   const handlePlay = (current: AudioFileModel) => {
     setPrevPlayedAudio(current);
     const { allAudio, allRefs } = includeAll();
+    if (example.settings?.alwaysStartFrom0) resetCurrentTime();
     allAudio.forEach((a, i: number) => {
       // Adjust properties
       allAudio[i].isActive = a === current;

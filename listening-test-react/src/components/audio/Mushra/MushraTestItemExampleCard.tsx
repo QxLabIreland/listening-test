@@ -24,7 +24,7 @@ export const MushraTestItemExampleCard = observer((props: React.PropsWithChildre
 
   return <Card style={{borderTop: '3px solid dodgerblue'}}>
     <CardHeader title={title} action={<>
-      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange}/>
+      <AudioExampleSettingsDialog settings={example.settings} onConfirm={handleSettingChange} enableAlwaysStartFrom0/>
       {action}</>}/>
     <Collapse in={!collapsed} timeout="auto" unmountOnExit>
       <CardContent style={{paddingTop: 0}}>
