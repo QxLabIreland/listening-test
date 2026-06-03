@@ -31,6 +31,12 @@ export const MushraTestItemExampleRender = observer(function (props: { example: 
         <SurveyControlRender control={value}/>
       </Grid>)}
 
+      {/*Reference*/}
+      {example.mediaRef && <Grid item style={ratingAreaStyle}>
+        <AudioButton ref={sampleRef} audio={example.mediaRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
+        {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
+      </Grid>}
+
       {randomAudios.map((v, i) => <Grid item key={i} style={ratingAreaStyle}>
         <MusharaRatingBar audio={v}/>
         <AudioButton ref={refs[i]} audio={v} onPlay={handlePlay} onPause={handlePause}
@@ -38,12 +44,6 @@ export const MushraTestItemExampleRender = observer(function (props: { example: 
                      onTimeUpdate={i === 0 ? onTimeUpdate ? onTimeUpdate : handleTimeUpdate : undefined}>{i + 1}</AudioButton>
         {/*{isDevMode() && <span>{refs[i].current?.currentTime}</span>}*/}
       </Grid>)}
-
-      {/*Reference*/}
-      {example.mediaRef && <Grid item style={ratingAreaStyle}>
-        <AudioButton ref={sampleRef} audio={example.mediaRef} onPlay={handlePlay} onPause={handlePause}>Ref</AudioButton>
-        {/*{isDevMode() && <span>{sampleRef?.current?.currentTime}</span>}*/}
-      </Grid>}
 
       <Grid item xs={12}>
         <AudioController refs={refs} sampleRef={sampleRef} currentTime={currentTime}
